@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="left_sliding_list_string">
+        <item>我的钱包</item>
+        <item>用户归属</item>
+        <item>公告通知</item>
+        <item>分享</item>
+        <item>设置</item>
+    </string-array>
+
+    <string-array name="setup_list_string">
+        <item>常见问题</item>
+        <item>服务协议</item>
+        <item>关于我们</item>
+    </string-array>
+
+    <string-array name="enter_info_content">
+        <item>企业名称</item>
+        <item>企业联系电话</item>
+        <item>联系人</item>
+        <item>联系人电话</item>
+        <item>地址</item>
+        <item>简介</item>
+        <item>认证状态</item>
+    </string-array>
+    <string-array name="personal_info_title">
+        <item>联系人</item>
+        <item>用户名</item>
+        <item>性别</item>
+        <item>生日</item>
+        <item>认证状态</item>
+    </string-array>
+    <string-array name="enter_info_content_sec">
+        <item>修改密码</item>
+    </string-array>
+    <string-array name="my_way_bill">
+        <item>待运输</item>
+        <item>运输中</item>
+        <item>已完成</item>
+    </string-array>
+    <string-array name="order_detail">
+        <item>下单时间</item>
+        <item>订单状态</item>
+        <item>订单编号</item>
+        <item>货物名称</item>
+        <item>货物总体积</item>
+        <item>货物总数量</item>
+        <item>货物总重量</item>
+        <item>收货方名称</item>
+        <item>发货方名称</item>
+        <item>状态</item>
+    </string-array>
+    <string-array name="sex">
+        <item>男</item>
+        <item>女</item>
+        <item>保密</item>
+    </string-array>
+
+    <string-array name="receive_order">
+        <item>上海南京东路外滩中心江西中路135撞11号</item>
+        <item>厦门市思明区</item>
+        <item>发货人</item>
+        <item>张三</item>
+        <item>联系人电话</item>
+        <item>15080212174</item>
+        <item>建材10吨</item>
+        <item>普通车型</item>
+        <item>备注</item>
+        <item>不限车型</item>
+        <item>不限车长</item>
+    </string-array>
+</resources>

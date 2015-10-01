@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--android:interpolator 被用来修饰动画效果，定义动画的变化率
+        android:pivotX="50%"这种方法相对于控件本身定位，相当于代码中的 Animation.RELATIVE_TO_SELF
+        android:fromDegrees属性代表起始角度，浮点值，单位：度；
+        android:toDegrees属性代表结尾角度，浮点值，单位：度；
+        android:startOffset设置动画执行之前等待的时间
+        android:repeatCount设置动画重复的次数-->
+    <rotate
+        android:interpolator="@android:anim/linear_interpolator"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:fromDegrees="0"
+        android:toDegrees="+360"
+        android:duration="1500"
+        android:startOffset="-1"
+        android:repeatCount="-1"
+        android:repeatMode="restart">
+
+    </rotate>
+</set>

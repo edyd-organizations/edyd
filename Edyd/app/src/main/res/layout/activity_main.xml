@@ -1,0 +1,80 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--模拟ActionBar-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/user_icon_8">
+    <ImageButton
+        android:id="@+id/actionbar_left_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:background="@mipmap/main_actionbar_show_right"
+        android:onClick="showLeftMenu"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+    <!--右边菜单-->
+    <!--        <ImageButton
+                android:id="@+id/id_iv_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="3dp"
+                android:onClick="showRightMenu"
+                android:background="@mipmap/ic_person" />-->
+    </RelativeLayout>
+
+    <!--自定义ViewPager-->
+    <com.oto.edyd.widget.CustomViewPager
+        android:id="@+id/content_viewpager"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white">
+    </com.oto.edyd.widget.CustomViewPager>
+
+    <RadioGroup
+        android:id="@+id/main_menu_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/main_home"
+            style="@style/MainBottomMenu"
+            android:checked="true"
+            android:drawableTop="@drawable/bg_bottom_menu_index_main"
+            android:text="@string/index" />
+        <RadioButton
+            android:id="@+id/main_market"
+            style="@style/MainBottomMenu"
+            android:drawableTop="@drawable/bg_bottom_menu_market_main"
+            android:text="@string/market" />
+        <RadioButton
+            android:id="@+id/main_vehicle_server"
+            style="@style/MainBottomMenu"
+            android:drawableTop="@drawable/bg_bottom_menu_vehicle_server_main"
+            android:text="@string/vehicle_service"/>
+        <RadioButton
+            android:id="@+id/main_box"
+            style="@style/MainBottomMenu"
+            android:drawableTop="@drawable/bg_bottom_menu_box_main"
+            android:text="@string/box"/>
+    </RadioGroup>
+
+</LinearLayout>

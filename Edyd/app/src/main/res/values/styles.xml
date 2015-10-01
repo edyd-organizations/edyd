@@ -1,0 +1,58 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="MainBottomMenu">
+        <item name="android:textSize">12dp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_bottom_menu</item>
+        <item name="android:button">@null</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:paddingTop">2dp</item>
+    </style>
+
+    <!--
+        自定义loading dialog
+        android:windowFrame Dialog的windowFrame框为无
+        android:windowIsFloating 是否悬浮在activity之上
+        是否半透明
+        是否显示title
+        设置dialog的背景
+        背景是否模糊显示
+    -->
+    <style name="LoadingDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">#ffffff</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/bg_checkbox_protocol</item>
+    </style>
+
+    <style name="ViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TextViewStyle" parent="ViewStyle">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/user_icon_default_white</item>
+        <item name="android:text">@string/default_text</item>
+    </style>
+
+
+</resources>

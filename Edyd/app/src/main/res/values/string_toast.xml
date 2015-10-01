@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_have_been_register">帐号已注册</string>
+    <string name="not_internet_connect">无网络连接</string>
+    <string name="internet_request_abnormal">网络异常</string>
+    <string name="invalid_username_password">用户名和密码错误</string>
+    <string name="not_null_username">用户名不能为空</string>
+    <string name="not_null_password">密码不能为空</string>
+    <string name="user_info_save_fail">用户信息保存失败</string>
+    <string name="account_type_info_request_fail">账户类型信息保存失败</string>
+    <string name="confirm_user_info_fail">验证用户信息失败</string>
+    <string name="pull_info_exception">订单操纵数据返回失败</string>
+    <string name="role_type_info_save_error">角色类型信息保存失败</string>
+</resources>

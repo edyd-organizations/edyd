@@ -1,0 +1,95 @@
+package com.oto.edyd.utils;
+
+import com.amap.api.maps.model.LatLng;
+
+/**
+ * Created by yql on 2015/8/27.
+ */
+public  class Constant {
+
+    //地理位置
+    public final static double LATITUDE = 24.5004978985;
+    public final static double LONGITUDE = 118.0877469228;
+
+    public static final LatLng XIAMEN = new LatLng(24.5004978985, 118.0877469228);// 厦门市经纬度
+
+    //存储文件
+    public final static String USER_NAME = "user_name"; //偏好设置用户名key
+    public final static String PASSWORD = "password"; //偏好设置密码key
+    public final static String ENTERPRISE_ID = "enterprise_id"; //企业ID
+    public final static String TENANT_ID = "tenant_id"; //租户ID
+    public final static String ENTERPRISE_NAME = "enterprise_name"; //企业名称
+    public final static String LOGIN_PREFERENCES_FILE = "login.xml"; //登入信息保存文件
+    public final static String SESSION_UUID = "session_uuid";
+
+    //网络地址
+    public final static String ENTRANCE_PREFIX = "http://120.24.236.223/api/v1.0/"; //接口前缀地址
+    public final static String EDYD = "http://www.edyd.cn/";
+
+    //系统状态码
+    public final static String LOGIN_SUCCESS_STATUS = "200";  //请求成功
+    public final static String NOT_SETTING_SESSION_ID = "401"; //没有设置会话ID
+    public final static String USER_ALREADY_EXIST = "504"; //用户已存在
+    public final static String USER_REGISTER_EXCEPTION = "700"; //用户注册异常
+    public final static int NETWORK_EXCEPTION = 701; //网络异常
+
+
+    //短信运营商状态吗
+    public final static String INVALID_VERIFICATION_CODE = "520"; //无效验证码
+
+    //Activity返回码
+    public final static int ACTIVITY_RETURN_CODE = 0x10; //Activity返回码
+    public final static int LOGIN_ACTIVITY_RETURN_CODE = 1; //LOGIN_ACTIVITY返回码
+    public final static int REGISTER_ACTIVITY_RETURN_CODE = 2; //REGISTER_ACTIVITY返回码
+    public final static int ACCOUNT_TYPE_RESULT_CODE = 3; //账户类型返回码
+
+    //等待时间
+    public final static int WAITING_TIME_VERIFICATION = 60; //获取验证码等待时间
+    public final static int THREAD_WAITING_TIME = 1000; //线程等待时间
+    public final static String RETURN_SUCCESS = "SUCCESS"; //Android异步线程执行成功
+    public final static String THREAD_CANCEL = "CANCEL"; //Android异步线程停止
+
+    //switch 码
+    public final static int loginThreadResultCode = 700;
+
+    //系统变量长度
+    public final static int VERIFICATION_LENGTH = 4; //验证码长度
+    public final static int PASSWORD_LENGTH = 6; //密码长度
+
+    //账户类型
+    public final static int ENTERPRISE_TYPE_PERSONAL = 0; //个人信息
+
+    //角色类型
+    public final static int SUPER_ADMIN = 0;//超级管理员
+    public final static int ENTER_ADMIN = 1; //企业管理员
+    public final static int ENTER_STAFF = 2; //企业员工
+    public final static int PERSON = 3; //个人信息
+
+    //认证类别
+    public final static String NOT_AUTHENTICATED = "未认证"; //0
+    public final static String FAIL_AUTHENTICATED = "认证失败"; //1
+    public final static String HAS_BEEN_AUTHENTICATED = "已认证"; //2
+
+    //男女
+    public final static String UNKNOWN_SEX = "未知";
+    public final static String MALE = "男";
+    public final static String FEMALE = "女";
+    public final static String SECRECY_SEX ="保密";
+
+    //Toast提示
+    public final static String NOT_INTERNET_CONNECT = "网络不可用";
+    public final static String INTERNET_REQUEST_ABNORMAL = "网络异常";
+    public final static String INVALID_USERNAME_PASSWORD = "用户名和密码错误";
+    public final static String NOT_NULL_USERNAME = "用户名不能为空";
+    public final static String NOT_NULL_PASSWORD = "密码不能为空";
+    public final static String USER_INFO_SAVE_FAIL = "用户信息保存失败";
+    public final static String ACCOUNT_TYPE_INFO_REQUEST_FAIL = "账户类型信息请求失败";
+    public final static String ACCOUNT_TYPE_INFO_SAVE_FAIL = "账户类型信息保存失败";
+    public final static String CONFIRM_USER_INFO_FAIL = "验证用户信息失败";
+
+    //服务总集
+    //短信
+    public final static String APPKEY = "98c434e66c87"; // 填写从短信SDK应用后台注册得到的APPKEY
+    public final static String APPSECRET = "63d9051492bf34576212710e76e7f94d";// 填写从短信SDK应用后台注册得到的APPSECRET
+
+}

@@ -1,0 +1,137 @@
+<resources>
+    <string name="app_name">多一点</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    
+    <!-- 主界面 -->
+    <string name="index">首页</string>
+    <string name="market">商场</string>
+    <string name="vehicle_service">运输服务</string>
+    <string name="box">百宝箱</string>
+    <string name="order_main">商品订单</string>
+    <string name="collection_main">我的收藏</string>
+    <string name="position_main">我的定位</string>
+    <string name="weather_main">本地天气</string>
+    <string name="oil_server_main">油品服务</string>
+    <string name="insurance_main">保险</string>
+    <string name="finance_main">金融</string>
+    <string name="my_vehicle_order">我的车辆订单(10)</string>
+    <string name="today_order">今日订单</string>
+    <string name="panorama">全景图</string>
+    <string name="latest">最新</string>
+    <string name="super_substantial">超实惠!</string>
+    <string name="advertisement">超低价抢精品，不亏</string>
+
+    <!-- 左侧滑栏 -->
+    <string name="no_login">未登录</string>
+    <string name="has_login">已登录</string>
+    <string name="exit">退出登录</string>
+
+    <!--导航navigation-->
+    <string name="return_text">返回</string>
+
+    <!--用户登入-->
+    <string name="user_login">用户登录</string>
+    <string name="phone_number">手机号</string>
+
+    <!--用户注册-->
+    <string name="register_text">注册</string>
+    <string name="register_title">多一点注册</string>
+    <string name="p_input_phone_number">请输入手机号</string>
+    <string name="confirm_code_text">获取验证码</string>
+    <string name="p_input_confirm_code">请输入验证码</string>
+    <string name="p_input_password">请输入密码</string>
+    <string name="protocol">阅读并同意《软件许可及服务协议》</string>
+    <string name="already_account">已有账号？去登录</string>
+    <string name="user_alias">昵称</string>
+
+    <!-- 关于我们 -->
+    <string name="about_title">关于我们</string>
+    <string name="about_sub_theme">多一点智能物流平台</string>
+    <string name="about_theme_content">厦门多一点智能物流科技有限公司位于厦门市湖里区殿前街道长浩路223号东附楼5楼561单元交通便利。厦门多一点智能物流科技有限公司本着“客户第一，诚信至上”的原则，欢迎国内外企业/公司/机构与本单位建立长期的合作关系。公司拥有一支较强的技术研发队伍并和国内多家机构强强联手，研发出拥有自主知识产权。热诚欢迎各界朋友前来参观、考察、洽谈业务。戴刚代表厦门多一点智能物流科技有限公司欢迎新老客户来电咨询。</string>
+    <string name="about_sub_address">地址</string>
+    <string name="about_navigation">一键导航</string>
+    <string name="about_access">一键访问</string>
+    <string name="about_sub_url">网址</string>
+    <string name="anout_url_content">www.edyd.cn</string>
+    <string name="about_sub_telephone">电话</string>
+    <string name="about_dial">一键拨打</string>
+    <string name="about_telephone_content">4008-761-167</string>
+    <string name="about_address_1">福建省厦门市湖里区东渡路258号银龙大厦20层</string>
+    <string name="about_address_2">弘信物流集团有限公司（Hongxin Loaistics Group）</string>
+    <string name="about_address_3">厦门弘信智能物流科技有限公司</string>
+    <string name="about_address_4">厦门多一点智能物流科技有限公司</string>
+    <!-- 设置 -->
+    <string name="setup_title">设置</string>
+
+    <!--百宝箱-->
+    <string name="tx_surrounding_oil">周边加油</string>
+    <string name="tx_surrounding_sparking">周边停车</string>
+    <string name="tx_violate_check">违章查询</string>
+    <string name="tx_violate_payment">违章缴费</string>
+    <string name="tx_vehicle_navigation">车辆导航</string>
+    <string name="tx_phone_pay">手机充值</string>
+    
+    <!-- 天气 -->
+    <string name="weather_default_value">*_*</string>
+    <string name="today">今天</string>
+    <string name="tomorrow">明天</string>
+    <string name="after_tomorrow">后天</string>
+    <string name="pm">PM2.5</string>
+    <string name="default_text">_ _</string>
+    <string name="forecast">预报</string>
+    <string name="information">详细信息</string>
+    <string name="felt_air_temp">体感温度</string>
+    <string name="humidity">湿度</string>
+    <string name="wind">风向风力</string>
+    <string name="uv_index">紫外线指数</string>
+    <string name="dressing_index">穿衣指数</string>
+    <string name="title_city">城市选择</string>
+
+    <!-- 下拉刷新 -->
+    <string name="pull_to_refresh_pull_label">下拉刷新…</string>
+    <string name="pull_to_refresh_release_label">放开以刷新…</string>
+    <string name="pull_to_refresh_refreshing_label">正在载入…</string>
+    <string name="pull_to_refresh_from_bottom_pull_label">@string/pull_to_refresh_pull_label</string>
+    <string name="pull_to_refresh_from_bottom_release_label">@string/pull_to_refresh_release_label</string>
+    <string name="pull_to_refresh_from_bottom_refreshing_label">@string/pull_to_refresh_refreshing_label</string>
+
+    <!-- 网络请求 -->
+
+    <!-- 个人信息 -->
+    <string name="tv_personal_information">个人信息</string>
+    <string name="contact_number">手机号码</string>
+    <string name="username">用户名</string>
+    <string name="sex">性别</string>
+    <string name="birthday">生日</string>
+    <string name="activate_status">认证状态</string>
+    <string name="modify_password">修改密码</string>
+
+    <string name="old_password">旧密码</string>
+    <string name="new_password">新密码</string>
+    <string name="confirm_password">确认密码</string>
+    
+    <!-- 企业信息 -->
+    <string name="enterprise_info_title">企业信息</string>
+    <string name="enterprise_legal_person">企业法人</string>
+    <string name="legal_person_contact">法人联系电话</string>
+    <string name="enterprise_name">企业名称</string>
+    <string name="enterprise_introduction">企业简介</string>
+
+    <!--我的运单-->
+    <string name="text_my_way_bill">我的运单</string>
+
+    <!--订单详情-->
+    <string name="order_detail_title">订单详情</string>
+    <string name="executing_order">执行中的订单</string>
+    <string name="transport_service">运输服务</string>
+    <string name="receive_order_title">订单操作</string>
+    <string name="history_transport_order">历史运单</string>
+
+    <string name="receive_order">接单</string>
+
+    <!-- 角色iD-->
+    <string name="role_id">role_id</string>
+
+</resources>
