@@ -19,10 +19,6 @@ import com.oto.edyd.widget.CustomViewPager;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 应用主入口
- *
- */
 public class MainActivity extends SlidingFragmentActivity implements View.OnClickListener{
 
     private CustomViewPager customViewPager;
@@ -33,7 +29,6 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     private RadioButton vehicleServer; //车辆服务
     private RadioButton box; //百宝箱
     public FragmentManager fragmentManager; //fragment管理器
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
