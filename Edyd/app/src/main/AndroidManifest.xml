@@ -103,5 +103,6 @@
             </intent-filter>
         </receiver>
         <service android:name=".service.WeatherService"></service>
+        <service android:name=".service.TimerService"></service>
     </application>
 </manifest>
