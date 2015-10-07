@@ -13,6 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
+ * 定时获得经纬度
  * Created by yql on 2015/10/7.
  */
 public class TimerService extends Service {
