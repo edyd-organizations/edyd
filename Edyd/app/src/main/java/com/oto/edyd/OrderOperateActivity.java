@@ -41,7 +41,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.Inflater;
 
 /**
@@ -77,8 +79,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
     private Button loadMoreButton;
 
     private final static int ROWS = 10; //分页加载数据每页10
-
     private boolean loadFlag = false;
+    private Common common;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,16 +89,6 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
         requestData(1, 10, 1); //请求数据
         String receiveOrderContent[] = getResources().getStringArray(R.array.receive_order);
         receiveOrderBack.setOnClickListener(this);
-//        mPullToRefreshScrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
-//            /**
-//             * 刷新要做的操作
-//             * @param refreshView
-//             */
-//            @Override
-//            public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
-//                requestData(1, 10, 2);
-//            }
-//        });
         mPullToRefreshScrollView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
             /**
              * 刷新要做的操作
@@ -129,6 +121,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
         loadMoreView = getLayoutInflater().inflate(R.layout.load_more, null);
         loadMoreButton = (Button)loadMoreView.findViewById(R.id.load_more_button);
         receiveOrderList.addFooterView(loadMoreView);
+        common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
 
         mPullToRefreshScrollView = (SwipeRefreshLayout)findViewById(R.id.swipe_container);
     }
@@ -252,29 +245,40 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
             switch (orderStatusList.get(position)) {
                 case 17: //未接单
                     receiveOrder.setText(getString(R.string.receive_order));
+                    String controlNum = common.getStringByKey("CONTROL_NUM"); //判断是否执行了调度单
+                    if(controlNum != null && (!controlNum.equals(""))) {
+                        receiveOrder.setBackgroundResource(R.drawable.border_corner_login);
+                        receiveOrder.setEnabled(false);
+                    }
                     break;
                 case 20: //已接单
-                    orderStatus.setImageResource(R.mipmap.ic_have_been_receive);
-                    receiveOrder.setText("到达装货地");
+                    orderStatus.setImageResource(R.mipmap.tts_loading_way);
+                    receiveOrder.setText("到达装货");
+                    Map<Object, Object> map = new HashMap<Object, Object>();
+                    map.put("CONTROL_NUM", String.valueOf(20));
+                    if (!common.isSave(map)) {
+                        //用户信息保存失败
+                        Toast.makeText(getApplicationContext(), "已结单状态更新失败", Toast.LENGTH_SHORT).show();
+                    }
                     break;
                 case 30: //	到达装货
-                    orderStatus.setImageResource(R.mipmap.ic_have_been_receive);
+                    orderStatus.setImageResource(R.mipmap.tts_arrived_load);
                     receiveOrder.setText("装货完成");
                     break;
                 case 40: //装货完成
-                    orderStatus.setImageResource(R.mipmap.ic_have_been_receive);
+                    orderStatus.setImageResource(R.mipmap.tts_completion_load);
                     receiveOrder.setText("送货在途");
                     break;
                 case 50: //送货在途
-                    orderStatus.setImageResource(R.mipmap.ic_have_been_receive);
+                    orderStatus.setImageResource(R.mipmap.tts_delivery_way);
                     receiveOrder.setText("到达收货");
                     break;
                 case 60: //到达收货
-                    orderStatus.setImageResource(R.mipmap.ic_have_been_receive);
+                    orderStatus.setImageResource(R.mipmap.tts_arrived_receive);
                     receiveOrder.setText("收货完成");
                     break;
                 case 99: //收货完成
-                    orderStatus.setImageResource(R.mipmap.ic_have_been_receive);
+                    //orderStatus.setImageResource(R.mipmap.ic_have_been_receive);
                     receiveOrder.setText("完成订单");
                     break;
             }
@@ -336,13 +340,19 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
     };
 
 
-
+    /**
+     * 加载数据
+     * @param page 第几页
+     * @param rows 每页几条
+     * @param loadType 加载类型
+     */
     private void requestData(int page, int rows, final int loadType) {
-        String url = Constant.ENTRANCE_PREFIX + "appQueryOrderList.json?sessionUuid=7edc1d1d83f3487d88337b87ff6752d4&page=1&rows=10";
+        String sessionUUID = getSessionUUID();
+        String url = Constant.ENTRANCE_PREFIX + "appQueryOrderList.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows;
         OkHttpClientManager.getAsyn(url, new ReceiveOrderCallback<String>(loadType) {
             @Override
             public void onError(Request request, Exception e) {
-                Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "获取订单数据异常", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -496,13 +506,17 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
         }
     }
 
+    /**
+     * 更新订单
+     * @param position
+     * @param view
+     */
     private void operationOrder(final int position, final View view) {
-
         int controlId = idList.get(position);
         String controlNum = orderList.get(position);
         final int controlStatus = orderStatusList.get(position);
-
-        String url = Constant.ENTRANCE_PREFIX + "appUpdateOrderStatus.json?sessionUuid=8fe80b0852e848fabbcea08d333bd9d4&controlId="+controlId+"&controlStatus="+controlStatus+"&controlNum="+controlNum;
+        String sessionUUID = getSessionUUID();
+        String url = Constant.ENTRANCE_PREFIX + "appUpdateOrderStatus.json?sessionUuid="+sessionUUID+"&controlId="+controlId+"&controlStatus="+controlStatus+"&controlNum="+controlNum;
         OkHttpClientManager.getAsyn(url, new ReceiveOrderCallback<String>(2) {
             @Override
             public void onError(Request request, Exception e) {
@@ -524,32 +538,32 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                     TextView textView = (TextView) view.findViewById(R.id.receive_order); //订单操作
                     switch (controlStatus) {
                         case 17: //下一个状态
-                            imageView.setImageResource(R.mipmap.ic_have_been_receive); //装货在途icon
+                            imageView.setImageResource(R.mipmap.tts_loading_way); //装货在途icon
                             textView.setText("到达装货");
                             orderStatusList.set(position, 20);
                             break;
                         case 20:
-                            imageView.setImageResource(R.mipmap.ic_have_been_unload); //到达装货icon
+                            imageView.setImageResource(R.mipmap.tts_arrived_load); //到达装货icon
                             textView.setText("装货完成");
                             orderStatusList.set(position, 30);
                             break;
                         case 30:
-                            imageView.setImageResource(R.mipmap.ic_have_been_unload); //装货完成icon
+                            imageView.setImageResource(R.mipmap.tts_completion_load); //装货完成icon
                             textView.setText("送货在途");
                             orderStatusList.set(position, 40);
                             break;
                         case 40:
-                            imageView.setImageResource(R.mipmap.ic_have_been_unload); //送货在途icon
+                            imageView.setImageResource(R.mipmap.tts_delivery_way); //送货在途icon
                             textView.setText("到达收货");
                             orderStatusList.set(position, 50);
                             break;
                         case 50: //送货在途
-                            imageView.setImageResource(R.mipmap.ic_have_been_unload); //到达收货icon
+                            imageView.setImageResource(R.mipmap.tts_arrived_receive); //到达收货icon
                             textView.setText("收货完成");
                             orderStatusList.set(position, 60);
                             break;
                         case 60: //到达收货
-                            imageView.setImageResource(R.mipmap.ic_have_been_unload); //收货完成
+                            //imageView.setImageResource(R.mipmap.tts); //收货完成
                             textView.setText("完成订单");
                             break;
                     }
@@ -565,7 +579,6 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
      * @return
      */
     private String getSessionUUID() {
-        Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         return common.getStringByKey(Constant.SESSION_UUID);
     }
 
@@ -587,8 +600,14 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
     }
 
 
+    /**
+     * 分页加载数据
+     * @param page
+     * @param rows
+     */
     private void loadOrderData(int page, int rows) {
-        String url = Constant.ENTRANCE_PREFIX + "appQueryOrderList.json?sessionUuid=7edc1d1d83f3487d88337b87ff6752d4&page="+page+"&rows="+ROWS;
+        String sessionUUID = getSessionUUID();
+        String url = Constant.ENTRANCE_PREFIX + "appQueryOrderList.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows;
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {

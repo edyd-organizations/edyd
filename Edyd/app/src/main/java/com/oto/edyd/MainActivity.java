@@ -1,5 +1,6 @@
 package com.oto.edyd;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import com.oto.edyd.lib.slidingmenu.SlidingMenu;
 import com.oto.edyd.lib.slidingmenu.app.SlidingFragmentActivity;
+import com.oto.edyd.utils.Common;
+import com.oto.edyd.utils.Constant;
 import com.oto.edyd.widget.CustomViewPager;
 
 import java.util.ArrayList;
@@ -81,10 +84,19 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 customViewPager.setCurrentItem(0);
                 break;
             case R.id.main_market:
-                customViewPager.setCurrentItem(1);
+                //customViewPager.setCurrentItem(1);
+                intent = new Intent(MainActivity.this, LocationActivity.class);
+                startActivity(intent);
                 break;
             case R.id.main_vehicle_server:
                 //customViewPager.setCurrentItem(2);
+                Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                if (!common.isLogin()) {
+                    Toast.makeText(getApplicationContext(), "用户未登录，请先登录", Toast.LENGTH_LONG).show();
+                    //intent = new Intent(MainActivity.this, LoginActivity.class);
+                    //startActivity(intent);
+                    return;
+                }
                 intent = new Intent(MainActivity.this, OrderOperateActivity.class);
                 startActivity(intent);
                 break;

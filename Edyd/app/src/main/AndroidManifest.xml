@@ -90,6 +90,8 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".HistoryTransportOrderActivity"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".LocationActivity"
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -103,6 +105,8 @@
             </intent-filter>
         </receiver>
         <service android:name=".service.WeatherService"></service>
-        <service android:name=".service.TimerService"></service>
+        <service android:name=".service.TimerService"
+            android:enabled="true"
+            android:process="system"></service>
     </application>
 </manifest>

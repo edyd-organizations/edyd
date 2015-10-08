@@ -87,7 +87,7 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order_detail);
         initFields();
-        String primaryId = getIntent().getExtras().getString("primaryId");
+        String primaryId = getIntent().getStringExtra("primaryId");
         requestOrderDetailData(primaryId);
         orderDetailBack.setOnClickListener(this);
     }

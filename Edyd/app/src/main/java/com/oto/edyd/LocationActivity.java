@@ -1,15 +1,10 @@
-package com.oto.edyd.service;
+package com.oto.edyd;
 
-import android.app.Service;
-import android.content.Intent;
+import android.app.Activity;
 import android.location.Location;
-import android.os.Binder;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.support.annotation.Nullable;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
@@ -18,36 +13,33 @@ import com.amap.api.location.LocationProviderProxy;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
-import com.oto.edyd.utils.Constant;
-import com.oto.edyd.utils.OkHttpClientManager;
-import com.squareup.okhttp.Request;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
- * 定时获得经纬度
- * Created by yql on 2015/10/7.
+ * Created by yql on 2015/10/8.
  */
-public class TimerService extends Service implements LocationSource, AMapLocationListener {
-
-    private Timer timer; //定时对象
-    private final int PERIOD = 30*1000;
+public class LocationActivity extends Activity implements LocationSource, AMapLocationListener {
 
     private AMap aMap;
     private MapView mapView;
     private OnLocationChangedListener mListener;
     private LocationManagerProxy mAMapLocationManager;
-    private TimerServiceBinder binder = new TimerServiceBinder();
+    private Button reActivateLocation;
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        timer = new Timer();
-        timer.schedule(new TimerGetLongitudeAndLatitude(), 0, PERIOD); //每隔十五秒执行一次
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.location);
         mapView = new MapView(getApplicationContext());
         init();
+        reActivateLocation = (Button) findViewById(R.id.re_activate_location);
+        reActivateLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reActivate(mListener);
+            }
+        });
     }
+
     /**
      * 初始化AMap对象
      */
@@ -57,6 +49,7 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
             setUpMap();
         }
     }
+
     /**
      * 设置一些amap的属性
      */
@@ -67,17 +60,13 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
         // 设置定位的类型为定位模式 ，可以由定位、跟随或地图根据面向方向旋转几种
         aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
     }
-
-    @Nullable
+    /**
+     * 方法必须重写
+     */
     @Override
-    public IBinder onBind(Intent intent) {
-        return binder;
-    }
-
-    @Override
-    public void onDestroy() {
-        timer.cancel();
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
+        deactivate();
     }
 
     /**
@@ -87,10 +76,11 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
     public void onLocationChanged(AMapLocation amapLocation) {
         if (mListener != null && amapLocation != null) {
             if (amapLocation != null && amapLocation.getAMapException().getErrorCode() == 0) {
-                //sendLocationInfo(amapLocation); //发送定位类型
+                //mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
+                sendLocationInfo(amapLocation);
                 deactivate();
             } else {
-                Log.e("AmapErr","Location ERR:" + amapLocation.getAMapException().getErrorCode());
+                //Log.e("AmapErr","Location ERR:" + amapLocation.getAMapException().getErrorCode());
             }
         }
     }
@@ -132,7 +122,6 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
                     LocationProviderProxy.AMapNetwork, -1, 10, this);
         }
     }
-
     /**
      * 再次激活定位
      * @param listener
@@ -153,81 +142,21 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
         }
         mAMapLocationManager = null;
     }
-
-    class TimerGetLongitudeAndLatitude extends TimerTask {
-        @Override
-        public void run() {
-            Message message = new Message();
-            message.what = 0x10;
-            handler.sendMessage(message);
-        }
-    }
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if(msg.what == 0x10) {
-                //执行定时操作
-                reActivate(mListener);
-            }
-        }
-    };
-
-    public class TimerServiceBinder extends Binder {
-        //返回本地服务
-        public TimerService getService() {
-            return TimerService.this;
-        }
-    }
-
     /**
      * 发送定位信息
      * @param amapLocation
      */
     private void sendLocationInfo(AMapLocation amapLocation) {
-        String url = ""; //访问地址
-        String accountId= ""; //登录用户ID
-        String controlNum = ""; //调度单号
-        String tel = ""; //电话号码
         String provider = amapLocation.getProvider(); //定位类型
         double longitude = amapLocation.getLongitude(); //经度
         double latitude = amapLocation.getLatitude(); //纬度
         float speed = 0f;
-        float direction = 0f;
+        float bearing = 0f;
         if(provider.equals("lbs")) { //网格定位
-            url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?lng="+longitude+"&lat="+latitude+"&accountId="+accountId
-                    +"&controlNum"+controlNum+"&tel"+tel;
+
         } else if(provider.equals("gps")) { //定位
             speed = amapLocation.getSpeed(); //速度
-            direction = amapLocation.getBearing(); //定位方向
-            url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?lng="+longitude+"&lat="+latitude+"&accountId="+accountId+"&controlNum"
-                    +controlNum+"&tel"+tel+"&speed="+speed+"&direction"+direction;
+            bearing = amapLocation.getBearing(); //定位方向
         }
-
-        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
-            @Override
-            public void onError(Request request, Exception e) {
-
-            }
-
-            @Override
-            public void onResponse(String response) {
-
-            }
-        });
-    }
-
-    /**
-     * 启动定时器
-     */
-    private void startTimer() {
-        timer.schedule(new TimerGetLongitudeAndLatitude(), 0, PERIOD); //每隔十五秒执行一次
-    }
-
-    /**
-     * 停止定时器
-     */
-    private void stopTimer() {
-        timer.cancel();
     }
 }

@@ -191,6 +191,8 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if(!isLogin()) {
                 Toast.makeText(getActivity(), "用户未登录，请先登录", Toast.LENGTH_SHORT).show();
+                //intent = new Intent(getActivity(), LoginActivity.class);
+                //startActivity(intent);
                 return;
             }
             switch (position) {
