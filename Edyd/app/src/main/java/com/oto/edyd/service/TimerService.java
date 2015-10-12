@@ -1,6 +1,7 @@
 package com.oto.edyd.service;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Binder;
@@ -10,6 +11,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
@@ -18,10 +20,17 @@ import com.amap.api.location.LocationProviderProxy;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,27 +40,32 @@ import java.util.TimerTask;
  */
 public class TimerService extends Service implements LocationSource, AMapLocationListener {
 
-    private Timer timer; //定时对象
-    private final int PERIOD = 30*1000;
+    private Timer timer = new Timer(); //定时对象
+    private final int PERIOD = 20*60*1000;
 
     private AMap aMap;
     private MapView mapView;
-    private OnLocationChangedListener mListener;
+    public static OnLocationChangedListener mListener;
     private LocationManagerProxy mAMapLocationManager;
     private TimerServiceBinder binder = new TimerServiceBinder();
 
+    private Common common;
+    private List<Integer> controlIDList = new ArrayList<Integer>(); //用于存储调度单号
+    private AMapLocation location;
     @Override
     public void onCreate() {
         super.onCreate();
-        timer = new Timer();
-        timer.schedule(new TimerGetLongitudeAndLatitude(), 0, PERIOD); //每隔十五秒执行一次
-        mapView = new MapView(getApplicationContext());
+        Log.e("M_SERVICE", "onCreate");
         init();
     }
     /**
      * 初始化AMap对象
      */
     private void init() {
+        common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        startTimer(); //每隔十五秒执行一次
+        mapView = new MapView(getApplicationContext());
+
         if (aMap == null) {
             aMap = mapView.getMap();
             setUpMap();
@@ -68,26 +82,16 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
         aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
     }
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return binder;
-    }
-
-    @Override
-    public void onDestroy() {
-        timer.cancel();
-        super.onDestroy();
-    }
-
     /**
      * 定位成功后回调函数
      */
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
+        location = amapLocation;
         if (mListener != null && amapLocation != null) {
             if (amapLocation != null && amapLocation.getAMapException().getErrorCode() == 0) {
                 //sendLocationInfo(amapLocation); //发送定位类型
+                getTimerOrder();
                 deactivate();
             } else {
                 Log.e("AmapErr","Location ERR:" + amapLocation.getAMapException().getErrorCode());
@@ -134,14 +138,6 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
     }
 
     /**
-     * 再次激活定位
-     * @param listener
-     */
-    public void reActivate(OnLocationChangedListener listener) {
-        activate(listener);
-    }
-
-    /**
      * 停止定位
      */
     @Override
@@ -154,6 +150,29 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
         mAMapLocationManager = null;
     }
 
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        Log.e("M_SERVICE", "onBind");
+        return binder;
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        Log.e("M_SERVICE", "onUnbind");
+        return super.onUnbind(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+        //timer.cancel();
+        Log.e("M_SERVICE", "onDestroy");
+        super.onDestroy();
+    }
+
+    /**
+     * 定时任务执行类
+     */
     class TimerGetLongitudeAndLatitude extends TimerTask {
         @Override
         public void run() {
@@ -166,9 +185,16 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what == 0x10) {
-                //执行定时操作
-                reActivate(mListener);
+            switch (msg.what) {
+                case 0x10:
+                    //执行定时操作
+                    reActivate(mListener);
+                    break;
+                case 0x11:
+                    if (controlIDList.size() > 0) {
+                        sendLocationInfo(location);
+                    }
+                    break;
             }
         }
     };
@@ -181,29 +207,11 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
     }
 
     /**
-     * 发送定位信息
-     * @param amapLocation
+     * 查询订单数据
      */
-    private void sendLocationInfo(AMapLocation amapLocation) {
-        String url = ""; //访问地址
-        String accountId= ""; //登录用户ID
-        String controlNum = ""; //调度单号
-        String tel = ""; //电话号码
-        String provider = amapLocation.getProvider(); //定位类型
-        double longitude = amapLocation.getLongitude(); //经度
-        double latitude = amapLocation.getLatitude(); //纬度
-        float speed = 0f;
-        float direction = 0f;
-        if(provider.equals("lbs")) { //网格定位
-            url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?lng="+longitude+"&lat="+latitude+"&accountId="+accountId
-                    +"&controlNum"+controlNum+"&tel"+tel;
-        } else if(provider.equals("gps")) { //定位
-            speed = amapLocation.getSpeed(); //速度
-            direction = amapLocation.getBearing(); //定位方向
-            url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?lng="+longitude+"&lat="+latitude+"&accountId="+accountId+"&controlNum"
-                    +controlNum+"&tel"+tel+"&speed="+speed+"&direction"+direction;
-        }
-
+    private void getTimerOrder() {
+        String sessionUUID = getSessionUUID();
+        String url = Constant.ENTRANCE_PREFIX + "appQueryOrderList.json?sessionUuid="+sessionUUID+"&page="+1+"&rows="+10;
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
@@ -212,22 +220,134 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
 
             @Override
             public void onResponse(String response) {
-
+                JSONObject jsonObject;
+                JSONArray jsonArray;
+                try {
+                    jsonObject = new JSONObject(response);
+                    if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        Toast.makeText(getApplicationContext(), "定时器订单列表数据获取失败", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    jsonArray = jsonObject.getJSONArray("rows");
+                    if (controlIDList != null) {
+                        controlIDList.clear();
+                    }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject JSONOrder = jsonArray.getJSONObject(i);
+                        int controlStatus = JSONOrder.getInt("controlStatus");
+                        if (controlStatus > 17 && controlStatus < 99) {
+                            controlIDList.add(JSONOrder.getInt("ID"));
+                        }
+                    }
+                    Message message = new Message();
+                    message.what = 0x11;
+                    handler.sendMessage(message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
     /**
+     * 发送定位信息
+     * @param amapLocation
+     */
+    private void sendLocationInfo(AMapLocation amapLocation) {
+        String url = ""; //访问地址
+        // String accountId= common.getStringByKey("ACCOUNT_ID"); //登录用户ID
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID); //会话ID
+        String tel = common.getStringByKey("user_name"); //电话号码
+        String provider = amapLocation.getProvider(); //定位类型
+        double longitude = amapLocation.getLongitude(); //经度
+        double latitude = amapLocation.getLatitude(); //纬度
+        float speed = 0f;
+        float direction = 0f;
+        if(provider.equals("lbs")) { //网格定位
+            for(int i = 0; i < controlIDList.size(); i++) {
+                url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?sessionUuid="+sessionUuid+"&lng="+longitude+"&lat="+latitude+"&controlId="+controlIDList.get(i)+"&tel="+tel;
+                OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jsonObject;
+                        JSONArray jsonArray;
+                        try {
+                            jsonObject = new JSONObject(response);
+                            if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                                Toast.makeText(getApplicationContext(), "lib定位数据异常", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            //Toast.makeText(getApplicationContext(), "发送经纬度", Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+            }
+        } else if(provider.equals("gps")) { //定位
+            speed = amapLocation.getSpeed(); //速度
+            direction = amapLocation.getBearing(); //定位方向
+
+            for(int i = 0; i < controlIDList.size(); i++) {
+                url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?lng="+longitude+"&lat="+latitude+"&controlNum"
+                        +controlIDList.get(i)+"&tel"+tel+"&speed="+speed+"&direction"+direction;
+                OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jsonObject;
+                        JSONArray jsonArray;
+                        try {
+                            jsonObject = new JSONObject(response);
+                            if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                                Toast.makeText(getApplicationContext(), "gps定位数据异常", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+            }
+        }
+    }
+    /**
      * 启动定时器
      */
-    private void startTimer() {
+    public void startTimer() {
         timer.schedule(new TimerGetLongitudeAndLatitude(), 0, PERIOD); //每隔十五秒执行一次
     }
 
     /**
      * 停止定时器
      */
-    private void stopTimer() {
+    public void stopTimer() {
         timer.cancel();
+    }
+    /**
+     * 再次激活定位
+     * @param listener
+     */
+    public void reActivate(OnLocationChangedListener listener) {
+        activate(listener);
+    }
+
+    /**
+     * 获取sessionid
+     * @return
+     */
+    private String getSessionUUID() {
+        return common.getStringByKey(Constant.SESSION_UUID);
     }
 }

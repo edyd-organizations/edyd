@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,8 +14,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -24,27 +21,26 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.oto.edyd.lib.swiperefresh.PullToRefreshScrollView;
+import com.amap.api.maps.LocationSource;
+import com.oto.edyd.service.TimerService;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
-import com.oto.edyd.widget.MenuListView;
 import com.squareup.okhttp.Request;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.zip.Inflater;
 
 /**
  * Created by yql on 2015/9/18.
@@ -104,8 +100,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(OrderOperateActivity.this, OrderDetailActivity.class);
-                intent.putExtra("primaryId", primaryIdList.get(position));
-                startActivity(intent);
+                intent.putExtra("primaryId", String.valueOf(primaryIdList.get(position)));
+                startActivityForResult(intent, 0x21);
             }
         });
         historyOrder.setOnClickListener(this);
@@ -245,21 +241,10 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
             switch (orderStatusList.get(position)) {
                 case 17: //未接单
                     receiveOrder.setText(getString(R.string.receive_order));
-                    String controlNum = common.getStringByKey("CONTROL_NUM"); //判断是否执行了调度单
-                    if(controlNum != null && (!controlNum.equals(""))) {
-                        receiveOrder.setBackgroundResource(R.drawable.border_corner_login);
-                        receiveOrder.setEnabled(false);
-                    }
                     break;
                 case 20: //已接单
                     orderStatus.setImageResource(R.mipmap.tts_loading_way);
                     receiveOrder.setText("到达装货");
-                    Map<Object, Object> map = new HashMap<Object, Object>();
-                    map.put("CONTROL_NUM", String.valueOf(20));
-                    if (!common.isSave(map)) {
-                        //用户信息保存失败
-                        Toast.makeText(getApplicationContext(), "已结单状态更新失败", Toast.LENGTH_SHORT).show();
-                    }
                     break;
                 case 30: //	到达装货
                     orderStatus.setImageResource(R.mipmap.tts_arrived_load);
@@ -377,7 +362,19 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                         idList.add(tempJSON.getInt("ID"));
                         primaryIdList.add(tempJSON.getInt("primaryId"));
                         orderList.add(tempJSON.getString("controlNum"));
-                        dateList.add(tempJSON.getString("controlDate"));
+                        String tDate = tempJSON.getString("controlDate");
+                        if(tDate != null && !(tDate.equals(""))) {
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            Date date = null;
+                            try {
+                                date = sdf.parse(tempJSON.getString("controlDate"));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            dateList.add(sdf.format(date));
+                        } else {
+                            dateList.add("");
+                        }
                         senderAddressList.add(tempJSON.getString("senderAddr"));
                         receiveAddressList.add(tempJSON.getString("receiverAddr"));
                         senderList.add(tempJSON.getString("senderContactPerson"));
@@ -512,6 +509,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
      * @param view
      */
     private void operationOrder(final int position, final View view) {
+
         int controlId = idList.get(position);
         String controlNum = orderList.get(position);
         final int controlStatus = orderStatusList.get(position);
@@ -565,6 +563,9 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                         case 60: //到达收货
                             //imageView.setImageResource(R.mipmap.tts); //收货完成
                             textView.setText("完成订单");
+                            textView.setBackgroundResource(R.drawable.border_corner_login);
+                            textView.setEnabled(false);
+                            imageView.setVisibility(View.GONE);
                             break;
                     }
                 } catch (JSONException e) {
@@ -572,6 +573,13 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                 }
             }
         });
+        //EdydApplication.timerService.reActivate(TimerService.mListener);
+
+        TimerService timerService= EdydApplication.timerService;
+        LocationSource.OnLocationChangedListener listener = TimerService.mListener;
+        timerService.stopTimer();
+        timerService.stopTimer();
+        timerService.reActivate(listener);
     }
 
     /**
@@ -647,5 +655,10 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

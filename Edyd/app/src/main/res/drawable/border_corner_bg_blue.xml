@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- solid填充，android:color指定填充的颜色 55E6DA -->
+    <solid android:color="#55e6da"></solid>
+    <!-- 圆角 -->
+    <corners
+        android:bottomLeftRadius="4dp"
+        android:bottomRightRadius="4dp"
+        android:topLeftRadius="4dp"
+        android:topRightRadius="4dp" /> <!-- 设置四个角的半径 -->
+</shape>

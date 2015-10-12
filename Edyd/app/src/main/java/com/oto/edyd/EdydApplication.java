@@ -2,6 +2,7 @@ package com.oto.edyd;
 
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,32 +12,36 @@ import android.os.Bundle;
 import android.os.IBinder;
 
 import com.oto.edyd.service.TimerService;
-import com.oto.edyd.service.WeatherService;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.thinkland.sdk.android.JuheSDKInitializer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
-
 
 public class EdydApplication extends Application {
 
-	private boolean isRunningTimerService = false;
-	private TimerService timerService;
+	public static TimerService timerService;
 	private List<Activity> activityList = new ArrayList<Activity>();
+	private Common common;
+	private List<String> controlNumList = new ArrayList<String>(); //用于存储调度单号
 
+	private boolean isServer = false;
+	private boolean mIsBound = false; //判断服务是否绑定
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
+		//判断服务是否启动
 		JuheSDKInitializer.initialize(getApplicationContext());
 		startTimerService(); //开启定时服务
 		this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
 			@Override
 			public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
 				activityList.add(activity);
+				if(activityList.size() == 1) {
+
+				}
 			}
 
 			@Override
@@ -67,8 +72,16 @@ public class EdydApplication extends Application {
 			@Override
 			public void onActivityDestroyed(Activity activity) {
 				activityList.remove(activity);
-				if(activityList.size() == 0) {
-
+				if (activityList.size() == 0) {
+					//
+					// timerService.unbindService(conn);
+					if(mIsBound) {
+						//timerService.unbindService(conn);
+						timerService.stopTimer();
+						unbindService(conn);
+						mIsBound = false;
+						System.exit(0); //结束整个应用程序
+					}
 				}
 			}
 		});
@@ -78,14 +91,12 @@ public class EdydApplication extends Application {
 	 * 开启定时服务
 	 */
 	private void startTimerService() {
-		Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+		common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
 		if(common.isLogin()) {
-			String controlNum = common.getStringByKey("CONTROL_NUM"); //判断是否执行了调度单
-			if(controlNum != null && (!controlNum.equals(""))) {
-				Intent intent = new Intent(getApplicationContext(), TimerService.class);
-				startService(intent);
-				bindService(intent, conn, Context.BIND_AUTO_CREATE);
-			}
+			Intent intent = new Intent(getApplicationContext(), TimerService.class);
+			//startService(intent);
+			bindService(intent, conn, Context.BIND_AUTO_CREATE);
+			mIsBound = true;
 		}
 	}
 

@@ -307,6 +307,36 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         }
                     });
 
+                    //获取用户ID
+                    String accountIDUrl = Constant.ENTRANCE_PREFIX + "getAccountIdBySessionUuid.json?sessionUuid="+sessionUuid;
+                    OkHttpClientManager.getAsyn(accountIDUrl, new OkHttpClientManager.ResultCallback<String>() {
+                        @Override
+                        public void onError(Request request, Exception e) {
+
+                        }
+                        @Override
+                        public void onResponse(String response) {
+                            JSONObject accountIDJSON;
+                            JSONArray accountIDArray;
+                            try {
+                                accountIDJSON = new JSONObject(response);
+                                accountIDArray = accountIDJSON.getJSONArray("rows");
+                                int accountID = accountIDArray.getInt(0);
+
+                                Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                                Map<Object, Object> accountIDMap = new HashMap<Object, Object>();
+                                accountIDMap.put("ACCOUNT_ID", accountID);
+                                //保存账户ID
+                                if (!common.isSave(accountIDMap)) {
+                                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.role_type_info_save_error), Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
                     //登录成功之后做的操作
                     Intent intent = new Intent();
                     intent.putExtra("username", username);

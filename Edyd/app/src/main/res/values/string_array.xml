@@ -4,8 +4,8 @@
         <item>我的钱包</item>
         <item>用户归属</item>
         <item>公告通知</item>
-        <item>分享</item>
-        <item>设置</item>
+        <item>社交分享</item>
+        <item>系统设置</item>
     </string-array>
 
     <string-array name="setup_list_string">

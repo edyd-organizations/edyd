@@ -58,6 +58,11 @@ public class Common {
         return cusSharedPreferences.clearAccount();
     }
 
+    /**
+     * 判断网络连通性
+     * @param context
+     * @return
+     */
     public boolean isNetworkAvailable(Context context) {
         ConnectivityManager netWorkManager = (ConnectivityManager )context.getSystemService(context.CONNECTIVITY_SERVICE);
         if(netWorkManager == null ){

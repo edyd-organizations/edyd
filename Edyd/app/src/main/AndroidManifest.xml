@@ -105,8 +105,6 @@
             </intent-filter>
         </receiver>
         <service android:name=".service.WeatherService"></service>
-        <service android:name=".service.TimerService"
-            android:enabled="true"
-            android:process="system"></service>
+        <service android:name=".service.TimerService"></service>
     </application>
 </manifest>
