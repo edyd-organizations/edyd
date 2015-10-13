@@ -529,7 +529,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
         String controlNum = orderList.get(position);
         final int controlStatus = orderStatusList.get(position);
         String sessionUUID = getSessionUUID();
-        String url = Constant.ENTRANCE_PREFIX + "appAutoUpdateOrderStatus.json?sessionUuid="+sessionUUID+"&primaryId=" + primaryIdList.get(0);
+        String url = Constant.ENTRANCE_PREFIX + "appAutoUpdateOrderStatus.json?sessionUuid="+sessionUUID+"&controlId=" + idList.get(0);
         OkHttpClientManager.getAsyn(url, new ReceiveOrderCallback<String>(2) {
             @Override
             public void onError(Request request, Exception e) {

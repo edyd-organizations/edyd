@@ -90,7 +90,7 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
     private Common common; //common偏好设置
     private int reOrderStatus; //订单状态
     private String position; //保存位置
-    private String primaryId;
+    private String primaryId; //订单主键ID
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -597,10 +597,9 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
      */
     private void operationOrder(final OrderDetail orderDetail) {
         int controlId = orderDetail.getControlId();
-        String controlNum = orderDetail.getControlNum();
         final int controlStatus = orderDetail.getOrderStatusLists().get(0);
         String sessionUUID = getSessionUUID();
-        String url = Constant.ENTRANCE_PREFIX + "appAutoUpdateOrderStatus.json?sessionUuid="+sessionUUID+"&primaryId=" + primaryId;
+        String url = Constant.ENTRANCE_PREFIX + "appAutoUpdateOrderStatus.json?sessionUuid="+sessionUUID+"&controlId=" + controlId;
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
