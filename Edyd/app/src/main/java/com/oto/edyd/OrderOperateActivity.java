@@ -101,6 +101,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
 
                 Intent intent = new Intent(OrderOperateActivity.this, OrderDetailActivity.class);
                 intent.putExtra("primaryId", String.valueOf(primaryIdList.get(position)));
+                intent.putExtra("position", String.valueOf(position));
                 startActivityForResult(intent, 0x21);
             }
         });
@@ -170,10 +171,19 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
 
         private Context context;
         private LayoutInflater inflater;
+        private int tOrderStatus = -1;
+        private int tPosition = -2;
 
         public ReceiveOrderListAdapter(Context context) {
             this.context = context;
             this.inflater = LayoutInflater.from(context);
+        }
+
+        public void mNotifyDataChanged(int tPosition, int tOrderStatus) {
+            this.tPosition = tPosition;
+            this.tOrderStatus = tOrderStatus;
+            orderStatusList.set(tPosition, tOrderStatus);
+            receiveOrderListAdapter.notifyDataSetChanged();
         }
 
         @Override
@@ -264,7 +274,12 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                     break;
                 case 99: //收货完成
                     //orderStatus.setImageResource(R.mipmap.ic_have_been_receive);
+                    //receiveOrder.setText("完成订单");
+
+                    orderStatus.setImageResource(R.mipmap.finished_receive); //收货完成
                     receiveOrder.setText("完成订单");
+                    receiveOrder.setBackgroundResource(R.drawable.border_corner_login);
+                    receiveOrder.setEnabled(false);
                     break;
             }
 
@@ -514,7 +529,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
         String controlNum = orderList.get(position);
         final int controlStatus = orderStatusList.get(position);
         String sessionUUID = getSessionUUID();
-        String url = Constant.ENTRANCE_PREFIX + "appUpdateOrderStatus.json?sessionUuid="+sessionUUID+"&controlId="+controlId+"&controlStatus="+controlStatus+"&controlNum="+controlNum;
+        String url = Constant.ENTRANCE_PREFIX + "appAutoUpdateOrderStatus.json?sessionUuid="+sessionUUID+"&primaryId=" + primaryIdList.get(0);
         OkHttpClientManager.getAsyn(url, new ReceiveOrderCallback<String>(2) {
             @Override
             public void onError(Request request, Exception e) {
@@ -561,11 +576,11 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                             orderStatusList.set(position, 60);
                             break;
                         case 60: //到达收货
-                            //imageView.setImageResource(R.mipmap.tts); //收货完成
+                            imageView.setImageResource(R.mipmap.finished_receive); //收货完成
                             textView.setText("完成订单");
                             textView.setBackgroundResource(R.drawable.border_corner_login);
                             textView.setEnabled(false);
-                            imageView.setVisibility(View.GONE);
+                            //imageView.setVisibility(View.GONE);
                             break;
                     }
                 } catch (JSONException e) {
@@ -659,6 +674,10 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 0x15){
+            int position = Integer.valueOf(data.getStringExtra("position"));
+            int controlStatus = data.getIntExtra("controlStatus", 0);
+            receiveOrderListAdapter.mNotifyDataChanged(position, controlStatus);
+        }
     }
 }

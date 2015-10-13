@@ -50,8 +50,9 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
 
     private boolean isRuning = true;
     private CusProgressDialog exitProgressDialog;
-
     private Intent intent;
+    private SimpleAdapter simpleAdapter;
+    List<Map<String, Object>> dataSets = new ArrayList<Map<String, Object>>();
 
 
     @Nullable
@@ -59,6 +60,17 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         leftSlidingView = inflater.inflate(R.layout.left_sliding, null);
         initField(leftSlidingView);
+
+        for(int i = 0; i < textResources.length; i++) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("list_image", imageResources[i]);
+            map.put("list_text", textResources[i]);
+            map.put("list_arrow", R.mipmap.right_arrow);
+            dataSets.add(map);
+        }
+        simpleAdapter = new SimpleAdapter(getActivity().getApplicationContext(), dataSets, R.layout.left_sliding_item,
+                new String[]{"list_image", "list_text", "list_arrow"}, idResources); //ListView适配器
+        leftSlidingListView.setAdapter(simpleAdapter); //设置适配器
 
         /**
          * 是否登入控制退出按钮是否可用,以及登录后更新侧边栏信息
@@ -75,23 +87,14 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                 accountType.setText(enterpriseName);
             }
         }else {
+            dataSets.remove(0);
+            dataSets.remove(0);
+            simpleAdapter.notifyDataSetChanged();
             exit.setVisibility(View.GONE);
         }
-        List<Map<String, Object>> dataSets = new ArrayList<Map<String, Object>>();
-        for(int i = 0; i < textResources.length; i++) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("list_image", imageResources[i]);
-            map.put("list_text", textResources[i]);
-            map.put("list_arrow", R.mipmap.right_arrow);
-            dataSets.add(map);
-        }
-        SimpleAdapter simpleAdapter = new SimpleAdapter(getActivity().getApplicationContext(), dataSets, R.layout.left_sliding_item,
-                new String[]{"list_image", "list_text", "list_arrow"}, idResources); //ListView适配器
-        leftSlidingListView.setAdapter(simpleAdapter); //设置适配器
 
         userLogin.setOnClickListener(this);
         exit.setOnClickListener(this);
-
         leftSlidingListView.setOnItemClickListener(new SlidingListItemOnClickListener());
         return leftSlidingView;
     }
@@ -119,7 +122,6 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                     Toast.makeText(getActivity().getApplicationContext(), "清除账户异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                accountType.setText("");
                 new Thread(new ExitDialogThread(exitProgressDialog)).start(); //弹出对话框线程
                 break;
             default:
@@ -145,6 +147,16 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
             //if(enterpriseName != null) {
                 accountType.setText("个人");
             //}
+
+            dataSets.clear();
+            for(int i = 0; i < textResources.length; i++) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("list_image", imageResources[i]);
+                map.put("list_text", textResources[i]);
+                map.put("list_arrow", R.mipmap.right_arrow);
+                dataSets.add(map);
+            }
+            simpleAdapter.notifyDataSetChanged();
         }
         //注册返回
         if(resultCode == Constant.REGISTER_ACTIVITY_RETURN_CODE) {
@@ -152,6 +164,16 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
             userAlias.setText(username);
             accountType.setText("个人");
             exit.setVisibility(View.VISIBLE);
+
+            dataSets.clear();
+            for(int i = 0; i < textResources.length; i++) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("list_image", imageResources[i]);
+                map.put("list_text", textResources[i]);
+                map.put("list_arrow", R.mipmap.right_arrow);
+                dataSets.add(map);
+            }
+            simpleAdapter.notifyDataSetChanged();
         }
         //账户类型返回
         if(resultCode == Constant.ACCOUNT_TYPE_RESULT_CODE) {
@@ -189,30 +211,46 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
     private class SlidingListItemOnClickListener implements AdapterView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if(!isLogin()) {
-                Toast.makeText(getActivity(), "用户未登录，请先登录", Toast.LENGTH_SHORT).show();
-                //intent = new Intent(getActivity(), LoginActivity.class);
-                //startActivity(intent);
-                return;
+//            if(!isLogin()) {
+//                Toast.makeText(getActivity(), "用户未登录，请先登录", Toast.LENGTH_SHORT).show();
+//                //intent = new Intent(getActivity(), LoginActivity.class);
+//                //startActivity(intent);
+//                return;
+//            }
+            TextView textView = (TextView) view.findViewById(R.id.list_text);
+            String menuDes = textView.getText().toString();
+            if(menuDes.equals("我的钱包")) {
+
+            } else if(menuDes.equals("用户归属")){
+                intent = new Intent(getActivity(), AccountTypeActivity.class);
+                startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
+            } else if(menuDes.equals("公告通知")){
+
+            } else if(menuDes.equals("社交分享")){
+
+            } else if(menuDes.equals("系统设置")){
+                intent = new Intent(getActivity(), SetUpActivity.class);
+                startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
             }
-            switch (position) {
-                case 0:
-                    break;
-                case 1: //选择账户类型
-                    intent = new Intent(getActivity(), AccountTypeActivity.class);
-                    startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4: //设置
-                    intent = new Intent(getActivity(), SetUpActivity.class);
-                    startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
-                    break;
-                case 5:
-                    break;
-            }
+//            switch (position) {
+//                case 0:
+//                    break;
+//                case 1: //选择账户类型
+//                    intent = new Intent(getActivity(), AccountTypeActivity.class);
+//                    startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
+//                    break;
+//                case 2:
+//                    break;
+//                case 3:
+//                    break;
+//                case 4: //设置
+//                    intent = new Intent(getActivity(), SetUpActivity.class);
+//                    startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
+//                    break;
+//                case 5:
+//                    break;
+//            }
+
         }
     }
 
@@ -223,6 +261,10 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                 case Constant.loginThreadResultCode: //退出登录
                     userAlias.setText("未登录");
                     exit.setVisibility(View.GONE);
+                    accountType.setText("");
+                    dataSets.remove(0);
+                    dataSets.remove(0);
+                    simpleAdapter.notifyDataSetChanged();
                     exitProgressDialog.dismissDialog();
                     Toast.makeText(getActivity().getApplicationContext(), "退出成功", Toast.LENGTH_SHORT).show();
                     break;
@@ -243,12 +285,12 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
         public void run() {
             try {
                 Thread.sleep(1000);
+                Message message = new Message();
+                message.what = 700;
+                handler.sendMessage(message);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Message message = new Message();
-            message.what = 700;
-            handler.sendMessage(message);
         }
     }
 }

@@ -108,7 +108,7 @@ public class HistoryTransportOrderActivity extends Activity implements View.OnCl
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(HistoryTransportOrderActivity.this, OrderDetailActivity.class);
+                Intent intent = new Intent(HistoryTransportOrderActivity.this, OrderDetailHistoryActivity.class);
                 intent.putExtra("primaryId", String.valueOf(primaryIdList.get(position)));
                 startActivityForResult(intent, 0x21);
             }
@@ -214,13 +214,6 @@ public class HistoryTransportOrderActivity extends Activity implements View.OnCl
             //TextView receiveOrder; //接单
             ImageView orderStatus; //单子状态
 
-            //    if (convertView == null) {
-//                ViewHolder viewHolder = new ViewHolder();
-//                convertView = inflater.inflate(R.layout.receive_order_item, null);
-//                viewHolder.startPoint = (TextView) convertView.findViewById(R.id.receive_order_start_address);
-//                viewHolder.endPoint = (TextView) convertView.findViewById(R.id.receive_order_end_address);
-//                viewHolder.shipper = (TextView) convertView.findViewById(R.id.shipper_name);
-//                viewHolder.phoneNumber = (TextView) convertView.findViewById(R.id.phone_number_one);
             convertView = inflater.inflate(R.layout.history_order_operation_item, null);
 
             orderNumber = (TextView) convertView.findViewById(R.id.tv_order_number);
@@ -229,17 +222,9 @@ public class HistoryTransportOrderActivity extends Activity implements View.OnCl
             endPoint = (TextView) convertView.findViewById(R.id.receive_order_end_address); //收货地址
             shipper = (TextView) convertView.findViewById(R.id.shipper_name); //发货人
             phoneNumber = (TextView) convertView.findViewById(R.id.phone_number_one); //发货人联系电话
-            //dial = (TextView) convertView.findViewById(R.id.dialog_one); //拨打电话
             consignee = (TextView) convertView.findViewById(R.id.consignee); //收货人
             consigneePhoneNumber = (TextView) convertView.findViewById(R.id.consignee_phone_number); //收货人联系电话
-            //consigneeDial = (TextView) convertView.findViewById(R.id.consignee_dial);
-            //receiveOrder = (TextView) convertView.findViewById(R.id.receive_order); //接单
             orderStatus = (ImageView) convertView.findViewById(R.id.order_status); //订单状态
-
-//            Animation mAnimationRight = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_textview_one);
-//            mAnimationRight.setFillAfter(true);
-//            orderStatus.setAnimation(mAnimationRight); //旋转
-//            otherVersion(orderStatus);
 
             switch (orderStatusList.get(position)) {
 //                case 17: //未接单
@@ -280,18 +265,6 @@ public class HistoryTransportOrderActivity extends Activity implements View.OnCl
             consigneePhoneNumber.setText(consigneePhoneList.get(position));
             shipper.setText(senderList.get(position));
             phoneNumber.setText(phoneNumberList.get(position));
-            //dial.setOnClickListener(new CusOnClickListener(position, convertView));
-            //consigneeDial.setOnClickListener(new CusOnClickListener(position, convertView));
-            //receiveOrder.setOnClickListener(new CusOnClickListener(position, convertView));
-
-            // convertView.setTag(viewHolder);
-//            } else {
-//                ViewHolder viewHolder = (ViewHolder)convertView.getTag();
-//                viewHolder.startPoint.setText(senderAddressList.get(position));
-//                viewHolder.endPoint.setText(receiveAddressList.get(position));
-//                viewHolder.shipper.setText(senderList.get(position));
-//                viewHolder.phoneNumber.setText(phoneNumberList.get(position));
-//            }
             return convertView;
         }
     }
@@ -449,50 +422,6 @@ public class HistoryTransportOrderActivity extends Activity implements View.OnCl
                                 }
                             }).show();
                     break;
-//                case R.id.dialog_one:
-//                    final String content = phoneNumberList.get(position);
-//                    if(content != null && (!content.equals(""))) {
-//                        new AlertDialog.Builder(HistoryTransportOrderActivity.this).setTitle("拨打电话")
-//                                .setMessage("确认拨打"+phoneNumberList.get(position).toString()+"吗?")
-//                                .setPositiveButton("是", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + content));
-//                                        startActivity(intent);
-//                                    }
-//                                })
-//                                .setNegativeButton("否", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//
-//                                    }
-//                                }).show();
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), "电话号码不能为空", Toast.LENGTH_SHORT).show();
-//                    }
-//                    break;
-//                case R.id.consignee_dial:
-//                    final String consignee = consigneePhoneList.get(position);
-//                    if(consignee != null && (!consignee.equals(""))) {
-//                        new AlertDialog.Builder(HistoryTransportOrderActivity.this).setTitle("拨打电话")
-//                                .setMessage("确认拨打"+consigneePhoneList.get(position).toString()+"吗?")
-//                                .setPositiveButton("是", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + consignee));
-//                                        startActivity(intent);
-//                                    }
-//                                })
-//                                .setNegativeButton("否", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//
-//                                    }
-//                                }).show();
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), "电话号码不能为空", Toast.LENGTH_SHORT).show();
-//                    }
-//                    break;
             }
         }
     }

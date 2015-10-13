@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,10 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amap.api.maps.LocationSource;
 import com.oto.edyd.model.OrderDetail;
 import com.oto.edyd.model.OrderPerTime;
-import com.oto.edyd.service.TimerService;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -39,10 +35,10 @@ import java.util.Set;
 /**
  * Created by yql on 2015/9/15.
  */
-public class OrderDetailActivity extends Activity implements View.OnClickListener{
+public class OrderDetailHistoryActivity extends Activity implements View.OnClickListener{
 
     private LinearLayout orderDetailBack; //返回
-    private Button receiveOrder; //按钮
+    //private Button receiveOrder; //按钮
 
     private TextView tvFirstTime, tvSecondTime, tvThirdTime, tvFourTime, tvFiveTime, tvSixTime;
     private ImageView executeFirstPoint, //接单点
@@ -82,58 +78,30 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
 
     private int controlId; //订单ID
     private String controlNum; //订单号
-    private int tControlStatus; //订单状态
+    private int controlStatus; //订单状态
 
     NumberFormat numberFormat = new NumberFormat(); //格式化时间
     private CusProgressDialog loadingDialog; //页面切换过度
 
     private Common common; //common偏好设置
     private int reOrderStatus; //订单状态
-    private String position; //保存位置
-    private String primaryId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.order_detail);
+        setContentView(R.layout.history_order_detail);
         initFields();
-        primaryId = getIntent().getStringExtra("primaryId");
-        position = getIntent().getStringExtra("position");
-//        TranView tView = (TranView)getIntent().getSerializableExtra("S_VIEW");
-//        View view = tView.getView();
-
+        String primaryId = getIntent().getStringExtra("primaryId");
         requestOrderDetailData(primaryId);
         orderDetailBack.setOnClickListener(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.order_detail_back:
-                Intent intent = new Intent();
-                intent.putExtra("position", position);
-                intent.putExtra("controlStatus", tControlStatus);
-                setResult(0x15, intent);
                 finish();
                 break;
-        }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Intent intent = new Intent();
-            intent.putExtra("position", position);
-            setResult(0x15, intent);
-            intent.putExtra("controlStatus", tControlStatus);
-            finish();
-            return false;
-        } else {
-            return super.onKeyDown(keyCode, event);
         }
     }
 
@@ -142,7 +110,7 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
      */
     private void initFields() {
         orderDetailBack = (LinearLayout) findViewById(R.id.order_detail_back);
-        receiveOrder = (Button) findViewById(R.id.detail_receive_order); //接单按钮
+        //receiveOrder = (Button) findViewById(R.id.detail_receive_order); //接单按钮
         orderStatus = (ImageView) findViewById(R.id.order_status); //接单状态
 
         executeFirstPoint = (ImageView) findViewById(R.id.execute_first_point);
@@ -246,7 +214,6 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
                     for(int i = 0; i < orderStatusArray.length(); i++) {
                         orderStatusLists.add(orderStatusArray.getInt(i));
                     }
-                    tControlStatus = orderStatusLists.get(0);
                     orderDetail.setOrderStatusLists(orderStatusLists);
 
                     orderDetail.setStartPoint(rowJson.getString("senderAddr")); //起始地点
@@ -317,7 +284,7 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
                     setOrderDetailInfo(orderDetail);
                     break;
                 case 0x13:
-                    primaryId = getIntent().getStringExtra("primaryId");
+                    String primaryId = getIntent().getStringExtra("primaryId");
                     requestOrderDetailData(primaryId);
             }
         }
@@ -525,54 +492,50 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
         consignee.setText(orderDetail.getConsignee());
         consigneePhoneNumber.setText(orderDetail.getConsigneePhoneNumber());
 
-        switch (orderStatusLists.get(0)) {
-            case 17: //未接单
-                receiveOrder.setText(getString(R.string.receive_order));
-                break;
-            case 20: //已接单
-                orderStatus.setImageResource(R.mipmap.tts_loading_way);
-                receiveOrder.setText("到达装货");
-                break;
-            case 30: //	到达装货
-                orderStatus.setImageResource(R.mipmap.tts_arrived_load);
-                receiveOrder.setText("装货完成");
-                break;
-            case 40: //装货完成
-                orderStatus.setImageResource(R.mipmap.tts_completion_load);
-                receiveOrder.setText("送货在途");
-                break;
-            case 50: //送货在途
-                orderStatus.setImageResource(R.mipmap.tts_delivery_way);
-                receiveOrder.setText("到达收货");
-                break;
-            case 60: //到达收货
-                orderStatus.setImageResource(R.mipmap.tts_arrived_receive);
-                receiveOrder.setText("收货完成");
-                break;
-            case 99: //收货完成
-                orderStatus.setImageResource(R.mipmap.finished_receive);
-                receiveOrder.setBackgroundResource(R.drawable.border_corner_login);
-                receiveOrder.setText("完成订单");
-                receiveOrder.setEnabled(false);
-                //orderStatus.setVisibility(View.GONE);
-                break;
-        }
+//        switch (orderStatusLists.get(0)) {
+//            case 17: //未接单
+//                receiveOrder.setText(getString(R.string.receive_order));
+//                break;
+//            case 20: //已接单
+//                orderStatus.setImageResource(R.mipmap.tts_loading_way);
+//                receiveOrder.setText("到达装货");
+//                break;
+//            case 30: //	到达装货
+//                orderStatus.setImageResource(R.mipmap.tts_arrived_load);
+//                receiveOrder.setText("装货完成");
+//                break;
+//            case 40: //装货完成
+//                orderStatus.setImageResource(R.mipmap.tts_completion_load);
+//                receiveOrder.setText("送货在途");
+//                break;
+//            case 50: //送货在途
+//                orderStatus.setImageResource(R.mipmap.tts_delivery_way);
+//                receiveOrder.setText("到达收货");
+//                break;
+//            case 60: //到达收货
+//                orderStatus.setImageResource(R.mipmap.tts_arrived_receive);
+//                receiveOrder.setText("收货完成");
+//                break;
+//            case 99: //收货完成
+//                orderStatus.setImageResource(R.mipmap.finished_receive);
+//                receiveOrder.setBackgroundResource(R.drawable.border_corner_login);
+//                receiveOrder.setText("完成订单");
+//                receiveOrder.setEnabled(false);
+//                //orderStatus.setVisibility(View.GONE);
+//                break;
+//        }
 
         List<String> goodNameList = orderDetail.getGoodNameLists();
         String goods = "";
         for(int i = 0; i < goodNameList.size(); i++) {
-            if(i == goodNameList.size() - 1) {
-                goods = goods + goodNameList.get(i);
-            } else{
-                goods = goods + goodNameList.get(i)+ "、";
-            }
+            goods = goods + goodNameList.get(i);
         }
         goodsName.setText(goods);
         goodsTotalVolume.setText(orderDetail.getGoodsTotalVolume());
         goodsTotalQuantity.setText(orderDetail.getGoodsTotalQuantity());
         goodsTotalWeight.setText(orderDetail.getGoodsTotalWeight());
 
-        receiveOrder.setOnClickListener(new CusOnClickListener(orderDetail)); //给接单按钮添加监听事件
+        //receiveOrder.setOnClickListener(new CusOnClickListener(orderDetail)); //给接单按钮添加监听事件
         //loadingDialog.getLoadingDialog().dismiss();
     }
 
@@ -580,7 +543,7 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
         @Override
         public void onBefore() {
             //请求之前操作
-            loadingDialog = new CusProgressDialog(OrderDetailActivity.this, "正在拼命加载...");
+            loadingDialog = new CusProgressDialog(OrderDetailHistoryActivity.this, "正在拼命加载...");
             loadingDialog.getLoadingDialog().show();
         }
 
@@ -600,7 +563,7 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
         String controlNum = orderDetail.getControlNum();
         final int controlStatus = orderDetail.getOrderStatusLists().get(0);
         String sessionUUID = getSessionUUID();
-        String url = Constant.ENTRANCE_PREFIX + "appAutoUpdateOrderStatus.json?sessionUuid="+sessionUUID+"&primaryId=" + primaryId;
+        String url = Constant.ENTRANCE_PREFIX + "appUpdateOrderStatus.json?sessionUuid="+sessionUUID+"&controlId="+controlId+"&controlStatus="+controlStatus+"&controlNum="+controlNum;
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
@@ -618,33 +581,6 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
                         Toast.makeText(getApplicationContext(), "接单异常异常", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    TimerService timerService= EdydApplication.timerService;
-                    LocationSource.OnLocationChangedListener listener = TimerService.mListener;
-                    timerService.stopTimer();
-                    timerService.stopTimer();
-                    timerService.reActivate(listener);
-
-                    switch (controlStatus) {
-                        case 17:
-                            tControlStatus = 20;
-                            break;
-                        case 20:
-                            tControlStatus = 30;
-                            break;
-                        case 30:
-                            tControlStatus = 40;
-                            break;
-                        case 40:
-                            tControlStatus = 50;
-                            break;
-                        case 50:
-                            tControlStatus = 60;
-                            break;
-                        case 60:
-                            tControlStatus = 99;
-                            break;
-                    }
-
                     Message message = new Message();
                     message.what = 0x13;
                     handler.sendMessage(message);
@@ -676,7 +612,7 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
                         Toast.makeText(getApplicationContext(), "订单已完成，不能操作", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    new AlertDialog.Builder(OrderDetailActivity.this).setTitle("接单")
+                    new AlertDialog.Builder(OrderDetailHistoryActivity.this).setTitle("接单")
                             .setMessage("确认"+((TextView)v).getText().toString()+"吗？")
                             .setPositiveButton("是", new DialogInterface.OnClickListener() {
                                 @Override

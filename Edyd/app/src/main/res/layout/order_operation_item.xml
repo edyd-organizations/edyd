@@ -229,7 +229,6 @@
                             android:background="@drawable/border_corner_bg_blue"
                             android:text="拨打电话"/>
                     </RelativeLayout>
-
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -252,7 +251,6 @@
                         android:background="@drawable/border_corner_order"
                         android:textSize="16sp"
                         android:gravity="center"
-                        android:layout_marginRight="5dp"
                         android:layout_weight="1"/>
                 </LinearLayout>
             </LinearLayout>

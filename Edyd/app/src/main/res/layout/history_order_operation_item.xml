@@ -46,8 +46,7 @@
                     android:layout_alignParentRight="true"
                     android:textColor="@color/gray_999999"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="40dp"
-                    android:text="2015-9-22"/>
+                    android:layout_marginRight="40dp" />
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -132,7 +131,6 @@
                             android:id="@+id/phone_number_one"
                             android:layout_width="wrap_content"
                             android:layout_marginLeft="8dp"
-                            android:text="15080212174"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:textColor="@color/black"/>
@@ -142,6 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:orientation="vertical">
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -175,13 +174,11 @@
                                 android:id="@+id/consignee_phone_number"
                                 android:layout_width="wrap_content"
                                 android:layout_marginLeft="8dp"
-                                android:text="15080212174"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/black"/>
                         </LinearLayout>
                     </RelativeLayout>
-
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

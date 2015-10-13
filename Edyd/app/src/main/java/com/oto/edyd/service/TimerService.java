@@ -41,7 +41,7 @@ import java.util.TimerTask;
 public class TimerService extends Service implements LocationSource, AMapLocationListener {
 
     private Timer timer = new Timer(); //定时对象
-    private final int PERIOD = 20*60*1000;
+    private final int PERIOD = 2*60*1000;
 
     private AMap aMap;
     private MapView mapView;
@@ -51,11 +51,12 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
 
     private Common common;
     private List<Integer> controlIDList = new ArrayList<Integer>(); //用于存储调度单号
+    private List<Integer> controlStatusList = new ArrayList<Integer>(); //用于存储调度单号
     private AMapLocation location;
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.e("M_SERVICE", "onCreate");
+        //Log.e("M_SERVICE", "onCreate");
         init();
     }
     /**
@@ -153,20 +154,19 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        Log.e("M_SERVICE", "onBind");
+        //Log.e("M_SERVICE", "onBind");
         return binder;
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        Log.e("M_SERVICE", "onUnbind");
+        //Log.e("M_SERVICE", "onUnbind");
         return super.onUnbind(intent);
     }
 
     @Override
     public void onDestroy() {
-        //timer.cancel();
-        Log.e("M_SERVICE", "onDestroy");
+        //Log.e("M_SERVICE", "onDestroy");
         super.onDestroy();
     }
 
@@ -237,6 +237,7 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
                         int controlStatus = JSONOrder.getInt("controlStatus");
                         if (controlStatus > 17 && controlStatus < 99) {
                             controlIDList.add(JSONOrder.getInt("ID"));
+                            controlStatusList.add(JSONOrder.getInt("controlStatus"));
                         }
                     }
                     Message message = new Message();
@@ -265,7 +266,8 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
         float direction = 0f;
         if(provider.equals("lbs")) { //网格定位
             for(int i = 0; i < controlIDList.size(); i++) {
-                url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?sessionUuid="+sessionUuid+"&lng="+longitude+"&lat="+latitude+"&controlId="+controlIDList.get(i)+"&tel="+tel;
+                url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?sessionUuid="+sessionUuid+"&lng="+longitude+"&lat="+latitude+"&controlId="+controlIDList.get(i)+"&tel="+tel
+                +"&controlStatus="+controlStatusList.get(i);
                 OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
                     @Override
                     public void onError(Request request, Exception e) {
@@ -286,7 +288,6 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
                 });
             }
@@ -322,6 +323,7 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
             }
         }
     }
+
     /**
      * 启动定时器
      */

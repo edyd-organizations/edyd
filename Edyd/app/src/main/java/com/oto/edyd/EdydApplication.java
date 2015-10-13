@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.oto.edyd.service.TimerService;
 import com.oto.edyd.utils.Common;
@@ -32,6 +33,7 @@ public class EdydApplication extends Application {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
+		Log.e("M_SERVICE", "Application_onCreate");
 		//判断服务是否启动
 		JuheSDKInitializer.initialize(getApplicationContext());
 		startTimerService(); //开启定时服务

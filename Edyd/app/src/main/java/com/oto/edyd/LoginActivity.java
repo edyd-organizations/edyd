@@ -16,6 +16,11 @@ public class LoginActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_frame);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         this.loginFragmentManager = getSupportFragmentManager();
         loginFragmentManager.beginTransaction().replace(R.id.common_frame, new LoginFragment()).commit();
     }

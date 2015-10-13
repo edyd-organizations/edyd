@@ -49,7 +49,7 @@
         android:id="@+id/left_sliding_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:choiceMode="singleChoice"/>
     <View
         android:layout_width="match_parent"

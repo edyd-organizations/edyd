@@ -24,6 +24,7 @@ public  class Constant {
 
     //网络地址
     public final static String ENTRANCE_PREFIX = "http://120.24.236.223/api/v1.0/"; //接口前缀地址
+    //public final static String ENTRANCE_PREFIX = "http://192.168.1.22:8080/api/v1.0/"; //接口前缀地址
     public final static String EDYD = "http://www.edyd.cn/";
 
     //系统状态码

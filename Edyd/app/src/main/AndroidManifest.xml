@@ -92,6 +92,8 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".LocationActivity"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".OrderDetailHistoryActivity"
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name="com.mob.tools.MobUIShell"
