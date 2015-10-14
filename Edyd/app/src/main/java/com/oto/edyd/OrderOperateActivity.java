@@ -1,6 +1,5 @@
 package com.oto.edyd;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -44,6 +43,7 @@ import java.util.List;
 
 /**
  * Created by yql on 2015/9/18.
+ * 订单详情页
  */
 public class OrderOperateActivity extends Activity implements View.OnClickListener, AbsListView.OnScrollListener{
 
@@ -530,7 +530,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
         String controlNum = orderList.get(position);
         final int controlStatus = orderStatusList.get(position);
         String sessionUUID = getSessionUUID();
-        String url = Constant.ENTRANCE_PREFIX + "appAutoUpdateOrderStatus.json?sessionUuid="+sessionUUID+"&controlId=" + idList.get(0);
+        String url = Constant.ENTRANCE_PREFIX + "appAutoUpdateOrderStatus.json?sessionUuid="+sessionUUID+"&controlId=" + controlId;
         OkHttpClientManager.getAsyn(url, new ReceiveOrderCallback<String>(2) {
             @Override
             public void onError(Request request, Exception e) {
@@ -594,7 +594,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
         TimerService timerService= EdydApplication.timerService;
         LocationSource.OnLocationChangedListener listener = TimerService.mListener;
         timerService.stopTimer();
-        timerService.stopTimer();
+        timerService.startTimer();
         timerService.reActivate(listener);
     }
 

@@ -492,7 +492,7 @@ public class OrderDetailHistoryActivity extends Activity implements View.OnClick
         consignee.setText(orderDetail.getConsignee());
         consigneePhoneNumber.setText(orderDetail.getConsigneePhoneNumber());
 
-//        switch (orderStatusLists.get(0)) {
+        switch (orderStatusLists.get(0)) {
 //            case 17: //未接单
 //                receiveOrder.setText(getString(R.string.receive_order));
 //                break;
@@ -516,14 +516,14 @@ public class OrderDetailHistoryActivity extends Activity implements View.OnClick
 //                orderStatus.setImageResource(R.mipmap.tts_arrived_receive);
 //                receiveOrder.setText("收货完成");
 //                break;
-//            case 99: //收货完成
-//                orderStatus.setImageResource(R.mipmap.finished_receive);
+            case 99: //收货完成
+                orderStatus.setImageResource(R.mipmap.finished_receive);
 //                receiveOrder.setBackgroundResource(R.drawable.border_corner_login);
 //                receiveOrder.setText("完成订单");
 //                receiveOrder.setEnabled(false);
-//                //orderStatus.setVisibility(View.GONE);
-//                break;
-//        }
+                //orderStatus.setVisibility(View.GONE);
+                break;
+        }
 
         List<String> goodNameList = orderDetail.getGoodNameLists();
         String goods = "";

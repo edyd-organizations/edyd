@@ -41,7 +41,7 @@ import java.util.TimerTask;
 public class TimerService extends Service implements LocationSource, AMapLocationListener {
 
     private Timer timer = new Timer(); //定时对象
-    private final int PERIOD = 2*60*1000;
+    private final int PERIOD = 1*60*1000; //定时间隔
 
     private AMap aMap;
     private MapView mapView;
@@ -328,6 +328,7 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
      * 启动定时器
      */
     public void startTimer() {
+        timer = new Timer();
         timer.schedule(new TimerGetLongitudeAndLatitude(), 0, PERIOD); //每隔十五秒执行一次
     }
 

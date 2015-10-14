@@ -620,7 +620,7 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
                     TimerService timerService= EdydApplication.timerService;
                     LocationSource.OnLocationChangedListener listener = TimerService.mListener;
                     timerService.stopTimer();
-                    timerService.stopTimer();
+                    timerService.startTimer();
                     timerService.reActivate(listener);
 
                     switch (controlStatus) {
