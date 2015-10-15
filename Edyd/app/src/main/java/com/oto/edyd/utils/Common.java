@@ -59,6 +59,14 @@ public class Common {
     }
 
     /**
+     * 删除SharedPreferences文件
+     * @param packName
+     */
+    public boolean isDeleteSharedPreferencesFile(String packName, String fileName) {
+        return cusSharedPreferences.deleteSharedPreferencesFile(packName, fileName);
+    }
+
+    /**
      * 判断网络连通性
      * @param context
      * @return

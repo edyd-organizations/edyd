@@ -3,6 +3,8 @@ package com.oto.edyd;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,11 +17,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oto.edyd.greendao.login.DaoMaster;
+import com.oto.edyd.greendao.login.DaoSession;
+import com.oto.edyd.greendao.login.UserInfo;
+import com.oto.edyd.greendao.login.UserInfoDao;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -33,6 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,8 +57,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private EditText etPassword; //密码
     private Button btLogin; //登录
     private TextView forgetPassword; //忘记密码
+    private CheckBox rememberPassword; //记住密码
 
     private CusProgressDialog loadingDialog; //页面切换过度
+    private Common common;
+
+    //数据库
+    private DaoMaster.DevOpenHelper helper;
+    private SQLiteDatabase db;
+    private DaoMaster daoMaster;
+    private DaoSession daoSession;
+    private UserInfoDao userInfoDao;
+    private Cursor cursor;
 
     @Nullable
     @Override
@@ -58,6 +76,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         loginFragmentView = inflater.inflate(R.layout.login, null);
 
         initFields(loginFragmentView); //初始化数据
+
         loginBack.setOnClickListener(this);
         btLogin.setOnClickListener(this);
         loginUserRegister.setOnClickListener(this);
@@ -117,6 +136,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 }
             }
         });
+
+        //记住密码
+        Common userCommon = new Common(getActivity().getSharedPreferences(Constant.USER_INFO_FILE, Context.MODE_PRIVATE));
+        String t_username = userCommon.getStringByKey(Constant.USER_NAME);
+        if(t_username != null && (!t_username.equals(""))) {
+            String t_password = userCommon.getStringByKey(Constant.PASSWORD);
+            etUserName.setText(t_username);
+            etPassword.setText(t_password);
+            rememberPassword.setChecked(true);
+        } else{
+            rememberPassword.setChecked(false);
+        }
         return loginFragmentView;
     }
     @Override
@@ -170,6 +201,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         etPassword = (EditText) view.findViewById(R.id.login_password);
         btLogin = (Button) view.findViewById(R.id.bt_login);
         forgetPassword = (TextView) view.findViewById(R.id.forget_password);
+        rememberPassword = (CheckBox) view.findViewById(R.id.remember_password);
+
+        common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+
+        helper = new DaoMaster.DevOpenHelper(getActivity(), "USER_INFO", null);
+        db = helper.getWritableDatabase();
+        daoMaster = new DaoMaster(db);
+        daoSession = daoMaster.newSession();
+        userInfoDao = daoSession.getUserInfoDao();
+        String orderBy = "_id COLLATE LOCALIZED ASC";
+        cursor = db.query(userInfoDao.getTablename(), userInfoDao.getAllColumns(), null, null, null, null, orderBy);
     }
 
     /**
@@ -220,13 +262,26 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                     Map<Object, Object> loginMap = new HashMap<Object, Object>();
                     loginMap.put(Constant.USER_NAME, username);
                     loginMap.put(Constant.SESSION_UUID, sessionUuid);
-
-                    Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                    //Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
                     if (!common.isSave(loginMap)) {
                         //用户信息保存失败
                         Toast.makeText(getActivity().getApplicationContext(), Constant.USER_INFO_SAVE_FAIL, Toast.LENGTH_SHORT).show();
                         return;
                     }
+
+                    Map<Object, Object> rememberMap = new HashMap<Object, Object>();
+                    rememberMap.put(Constant.USER_NAME, username);
+                    rememberMap.put(Constant.PASSWORD, etPassword.getText().toString());
+                    isRememberPassword(rememberPassword, rememberMap); //是否保存用户信息
+
+//                    List sessionUUIDList = userInfoDao.queryBuilder()
+//                            .where(UserInfoDao.Properties.Session_uuid.eq(sessionUuid))
+//                            .list();
+//                    if(sessionUUIDList.size() == 0) {
+//                        String password = etPassword.getText().toString();
+//                        UserInfo userInfo = new UserInfo(null, sessionUuid, username, password);
+//                        userInfoDao.insertOrReplace(userInfo);
+//                    }
 
                     //获取账户类型信息
                     String accountUrl = Constant.ENTRANCE_PREFIX + "SubmitEnter.json?sessionUuid="+sessionUuid+"&enterprisesId="+Constant.ENTERPRISE_TYPE_PERSONAL;
@@ -259,7 +314,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                                 accountTypeMap.put(Constant.ENTERPRISE_ID, enterpriseId);
                                 accountTypeMap.put(Constant.ENTERPRISE_NAME, enterpriseName);
 
-                                Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                                //Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
                                 //保存账户类型信息
                                 if (!common.isSave(accountTypeMap)) {
                                     Toast.makeText(getActivity().getApplicationContext(), Constant.ACCOUNT_TYPE_INFO_SAVE_FAIL, Toast.LENGTH_SHORT).show();
@@ -289,8 +344,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                                             JSONObject rowsJson = roleArray.getJSONObject(0);
                                             int roleID = rowsJson.getInt("role");
                                             Map<Object, Object> roleTypeMap = new HashMap<Object, Object>();
-                                            roleTypeMap.put(getString(R.string.role_id), roleID);
-                                            Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                                            roleTypeMap.put("role_id", roleID);
+                                            //Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
                                             //保存角色类型信息
                                             if (!common.isSave(roleTypeMap)) {
                                                 Toast.makeText(getActivity().getApplicationContext(), getString(R.string.role_type_info_save_error), Toast.LENGTH_SHORT).show();
@@ -322,8 +377,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                                 accountIDJSON = new JSONObject(response);
                                 accountIDArray = accountIDJSON.getJSONArray("rows");
                                 int accountID = accountIDArray.getInt(0);
-
-                                Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
                                 Map<Object, Object> accountIDMap = new HashMap<Object, Object>();
                                 accountIDMap.put("ACCOUNT_ID", accountID);
                                 //保存账户ID
@@ -348,4 +401,24 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             }
         });
     }
+
+    /**
+     * 是否记住密码
+     * @param checkBox
+     */
+    private void isRememberPassword(CheckBox checkBox, Map<Object, Object> loginMap) {
+        boolean isChecked = checkBox.isChecked();
+        Common userCommon = userCommon = new Common(getActivity().getSharedPreferences(Constant.USER_INFO_FILE, Context.MODE_PRIVATE));
+        if(isChecked) {
+
+            if(!userCommon.isSave(loginMap)) {
+                Toast.makeText(getActivity(), "保存偏好用户信息失败！", Toast.LENGTH_SHORT);
+            }
+        } else {
+            if(!userCommon.isClearAccount()) {
+                Toast.makeText(getActivity(), "清除偏好用户信息失败！", Toast.LENGTH_SHORT);
+            }
+        }
+    }
+
 }

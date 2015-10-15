@@ -25,6 +25,7 @@ import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.NumberFormat;
 import com.oto.edyd.utils.OkHttpClientManager;
+import com.oto.edyd.utils.ServiceUtil;
 import com.squareup.okhttp.Request;
 
 import org.json.JSONArray;
@@ -617,11 +618,15 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
                         Toast.makeText(getApplicationContext(), "接单异常异常", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    TimerService timerService= EdydApplication.timerService;
-                    LocationSource.OnLocationChangedListener listener = TimerService.mListener;
-                    timerService.stopTimer();
-                    timerService.startTimer();
-                    timerService.reActivate(listener);
+
+//                    TimerService timerService= EdydApplication.timerService;
+//                    LocationSource.OnLocationChangedListener listener = TimerService.mListener;
+//                    timerService.stopTimer();
+//                    timerService.startTimer();
+//                    timerService.reActivate(listener);
+
+                    ServiceUtil.cancelAlarmManager(getApplicationContext());
+                    ServiceUtil.invokeTimerPOIService(getApplicationContext());
 
                     switch (controlStatus) {
                         case 17:

@@ -2,6 +2,7 @@ package com.oto.edyd.utils;
 
 import android.content.SharedPreferences;
 
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -11,6 +12,7 @@ import java.util.Map;
 public class CustomSharedPreferences {
 
     private SharedPreferences sharedPreferences; //偏好类
+    public String DATA_URL = "/data/data/";
 
     public CustomSharedPreferences(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
@@ -82,6 +84,18 @@ public class CustomSharedPreferences {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         return editor.commit();
+    }
+
+    /**
+     * 删除SharedPreferences文件
+     * @param packName
+     */
+    public boolean deleteSharedPreferencesFile(String packName, String fileName) {
+        File file = new File(DATA_URL + packName + "/shared_prefs", fileName);
+        if (file.exists()) {
+            return file.delete();
+        }
+        return false;
     }
 
 }

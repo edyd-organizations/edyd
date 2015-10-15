@@ -29,6 +29,7 @@ import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
+import com.oto.edyd.utils.ServiceUtil;
 import com.squareup.okhttp.Request;
 
 import org.json.JSONArray;
@@ -589,13 +590,15 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                 }
             }
         });
-        //EdydApplication.timerService.reActivate(TimerService.mListener);
 
-        TimerService timerService= EdydApplication.timerService;
-        LocationSource.OnLocationChangedListener listener = TimerService.mListener;
-        timerService.stopTimer();
-        timerService.startTimer();
-        timerService.reActivate(listener);
+        //EdydApplication.timerService.reActivate(TimerService.mListener);
+//        TimerService timerService= EdydApplication.timerService;
+//        LocationSource.OnLocationChangedListener listener = TimerService.mListener;
+//        timerService.stopTimer();
+//        timerService.startTimer();
+//        timerService.reActivate(listener);
+        ServiceUtil.cancelAlarmManager(getApplicationContext());
+        ServiceUtil.invokeTimerPOIService(getApplicationContext());
     }
 
     /**

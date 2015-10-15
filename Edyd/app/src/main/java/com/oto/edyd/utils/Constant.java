@@ -20,6 +20,7 @@ public  class Constant {
     public final static String TENANT_ID = "tenant_id"; //租户ID
     public final static String ENTERPRISE_NAME = "enterprise_name"; //企业名称
     public final static String LOGIN_PREFERENCES_FILE = "login.xml"; //登入信息保存文件
+    public final static String USER_INFO_FILE = "users.xml"; //用户信息
     public final static String SESSION_UUID = "session_uuid";
 
     //网络地址
@@ -92,5 +93,14 @@ public  class Constant {
     //短信
     public final static String APPKEY = "98c434e66c87"; // 填写从短信SDK应用后台注册得到的APPKEY
     public final static String APPSECRET = "63d9051492bf34576212710e76e7f94d";// 填写从短信SDK应用后台注册得到的APPSECRET
+
+
+    public static final int ELAPSED_TIME = 10*60 * 1000;
+    public static final int RETRIVE_SERVICE_COUNT = 50;
+    public static final int ELAPSED_TIME_DELAY = 2*60*1000;//get GPS delayed
+    public static final int BROADCAST_ELAPSED_TIME_DELAY = 2*60*1000;
+    public static final String WORKER_SERVICE = "com.coder80.timer.service.WorkService";
+    public static final String TIMER_SERVICE = "com.oto.edyd.service.TimerService";
+    public static final String ALARM_SERVICE_ACTION = "com.oto.edyd.service.TimerService.action";
 
 }

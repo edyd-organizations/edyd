@@ -498,11 +498,11 @@ public class HistoryTransportOrderActivity extends Activity implements View.OnCl
         });
         //EdydApplication.timerService.reActivate(TimerService.mListener);
 
-        TimerService timerService= EdydApplication.timerService;
-        LocationSource.OnLocationChangedListener listener = TimerService.mListener;
-        timerService.stopTimer();
-        timerService.stopTimer();
-        timerService.reActivate(listener);
+//        TimerService timerService= EdydApplication.timerService;
+//        LocationSource.OnLocationChangedListener listener = TimerService.mListener;
+//        timerService.stopTimer();
+//        timerService.stopTimer();
+//        timerService.reActivate(listener);
     }
 
     /**

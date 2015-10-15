@@ -1,5 +1,6 @@
 package com.oto.edyd.service;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import com.amap.api.maps.MapView;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.OkHttpClientManager;
+import com.oto.edyd.utils.ServiceUtil;
 import com.squareup.okhttp.Request;
 
 import org.json.JSONArray;
@@ -40,12 +42,12 @@ import java.util.TimerTask;
  */
 public class TimerService extends Service implements LocationSource, AMapLocationListener {
 
-    private Timer timer = new Timer(); //定时对象
-    private final int PERIOD = 1*60*1000; //定时间隔
+    //private Timer timer = new Timer(); //定时对象
+    //private final int PERIOD = 1*60*1000; //定时间隔
 
     private AMap aMap;
     private MapView mapView;
-    public static OnLocationChangedListener mListener;
+    public static OnLocationChangedListener mListener = null;
     private LocationManagerProxy mAMapLocationManager;
     private TimerServiceBinder binder = new TimerServiceBinder();
 
@@ -53,18 +55,30 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
     private List<Integer> controlIDList = new ArrayList<Integer>(); //用于存储调度单号
     private List<Integer> controlStatusList = new ArrayList<Integer>(); //用于存储调度单号
     private AMapLocation location;
+
+    private static int count = 0;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        //Log.e("M_SERVICE", "onCreate");
+//        count++;
         init();
     }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if(mListener != null) {
+            reActivate(mListener);
+        }
+        return super.onStartCommand(intent, flags, startId);
+    }
+
     /**
      * 初始化AMap对象
      */
     private void init() {
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-        startTimer(); //每隔十五秒执行一次
+        //startTimer(); //每隔十五秒执行一次
         mapView = new MapView(getApplicationContext());
 
         if (aMap == null) {
@@ -211,6 +225,9 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
      */
     private void getTimerOrder() {
         String sessionUUID = getSessionUUID();
+        if(sessionUUID == null || sessionUUID.equals("")) {
+            return;
+        }
         String url = Constant.ENTRANCE_PREFIX + "appQueryOrderList.json?sessionUuid="+sessionUUID+"&page="+1+"&rows="+10;
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
@@ -225,7 +242,7 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
                 try {
                     jsonObject = new JSONObject(response);
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        Toast.makeText(getApplicationContext(), "定时器订单列表数据获取失败", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "定时器订单列表数据获取失败", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
@@ -281,7 +298,7 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
                         try {
                             jsonObject = new JSONObject(response);
                             if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                                Toast.makeText(getApplicationContext(), "lib定位数据异常", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "lib定位数据异常", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             //Toast.makeText(getApplicationContext(), "发送经纬度", Toast.LENGTH_SHORT).show();
@@ -327,17 +344,17 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
     /**
      * 启动定时器
      */
-    public void startTimer() {
-        timer = new Timer();
-        timer.schedule(new TimerGetLongitudeAndLatitude(), 0, PERIOD); //每隔十五秒执行一次
-    }
+//    public void startTimer() {
+//        timer = new Timer();
+//        timer.schedule(new TimerGetLongitudeAndLatitude(), 0, PERIOD); //每隔十五秒执行一次
+//    }
 
     /**
      * 停止定时器
      */
-    public void stopTimer() {
-        timer.cancel();
-    }
+//    public void stopTimer() {
+//        timer.cancel();
+//    }
     /**
      * 再次激活定位
      * @param listener
