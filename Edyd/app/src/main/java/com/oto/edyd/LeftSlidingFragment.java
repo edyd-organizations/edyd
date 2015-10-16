@@ -221,7 +221,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
             String menuDes = textView.getText().toString();
             if(menuDes.equals("我的钱包")) {
 
-            } else if(menuDes.equals("用户归属")){
+            } else if(menuDes.equals("账户类型")){
                 intent = new Intent(getActivity(), AccountTypeActivity.class);
                 startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
             } else if(menuDes.equals("公告通知")){

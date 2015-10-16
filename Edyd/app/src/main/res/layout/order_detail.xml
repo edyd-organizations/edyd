@@ -368,8 +368,7 @@
                             android:layout_alignParentRight="true"
                             android:textColor="@color/gray_999999"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="40dp"
-                            android:text="2015-9-22"/>
+                            android:layout_marginRight="40dp" />
                     </RelativeLayout>
                     <RelativeLayout
                         android:layout_width="match_parent"

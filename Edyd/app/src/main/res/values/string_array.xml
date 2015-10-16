@@ -2,7 +2,7 @@
 <resources>
     <string-array name="left_sliding_list_string">
         <item>我的钱包</item>
-        <item>用户归属</item>
+        <item>账户类型</item>
         <item>公告通知</item>
         <item>社交分享</item>
         <item>系统设置</item>
@@ -10,7 +10,7 @@
 
     <string-array name="no_login_left_sliding_list_string">
         <item>我的钱包</item>
-        <item>用户归属</item>
+        <item>账户类型</item>
         <item>公告通知</item>
         <item>社交分享</item>
         <item>系统设置</item>
@@ -32,7 +32,7 @@
         <item>认证状态</item>
     </string-array>
     <string-array name="personal_info_title">
-        <item>联系人</item>
+        <item>手机号码</item>
         <item>用户名</item>
         <item>性别</item>
         <item>生日</item>

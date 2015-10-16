@@ -38,21 +38,19 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <TextView
+                <ImageView
                     android:id="@+id/tv_order_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:textSize="15sp"
-                    android:textColor="@color/black"
-                    android:text="订单号:"/>
+                    android:src="@mipmap/order_number"/>
                 <TextView
                     android:id="@+id/order_number"
                     android:layout_toRightOf="@+id/tv_order_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
                     android:textColor="@color/black" />
                 <TextView
                     android:id="@+id/order_date"

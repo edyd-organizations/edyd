@@ -216,7 +216,7 @@ public class HistoryTransportOrderActivity extends Activity implements View.OnCl
 
             convertView = inflater.inflate(R.layout.history_order_operation_item, null);
 
-            orderNumber = (TextView) convertView.findViewById(R.id.tv_order_number);
+            orderNumber = (TextView) convertView.findViewById(R.id.order_number);
             orderDate = (TextView) convertView.findViewById(R.id.order_date);
             startPoint = (TextView) convertView.findViewById(R.id.receive_order_start_address); //发货地址
             endPoint = (TextView) convertView.findViewById(R.id.receive_order_end_address); //收货地址

@@ -45,17 +45,21 @@
             android:layout_marginRight="20dp"
             android:src="@mipmap/right_arrow" />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/gray_DDDDDD"/>
     <ListView
         android:id="@+id/left_sliding_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:choiceMode="singleChoice"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="15dp"
         android:layout_marginTop="5dp"
-        android:background="#CCCCCC"/>
+        android:background="@color/gray_AAAAAA"/>
     <LinearLayout
         android:id="@+id/exit"
         android:layout_width="match_parent"

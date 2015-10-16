@@ -56,12 +56,9 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
     private List<Integer> controlStatusList = new ArrayList<Integer>(); //用于存储调度单号
     private AMapLocation location;
 
-    private static int count = 0;
-
     @Override
     public void onCreate() {
         super.onCreate();
-//        count++;
         init();
     }
 

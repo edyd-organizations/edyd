@@ -85,8 +85,7 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
         accountTypeList = (ListView) findViewById(R.id.common_list);
         commonListTitle = (TextView) findViewById(R.id.common_list_title);
         idResources = new int[]{R.id.account_type_id, R.id.account_type_text, R.id.common_list_arrow};
-
-        commonListTitle.setText("选择用户归属");
+        commonListTitle.setText("账户类型");
     }
 
     @Override

@@ -38,17 +38,16 @@ public class EdydApplication extends Application {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-		Log.e("M_SERVICE", "Application_onCreate");
 		//判断服务是否启动
 		JuheSDKInitializer.initialize(getApplicationContext());
 		//startTimerService(); //开启定时服务
-		ServiceUtil.invokeTimerPOIService(getApplicationContext());
 		this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
 			@Override
 			public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
 				activityList.add(activity);
 				if(activityList.size() == 1) {
-
+					ServiceUtil.cancelAlarmManager(getApplicationContext());
+					ServiceUtil.invokeTimerPOIService(getApplicationContext());
 				}
 			}
 
@@ -92,7 +91,7 @@ public class EdydApplication extends Application {
 //					}
 
 					ServiceUtil.cancelAlarmManager(getApplicationContext());
-					System.exit(0); //结束整个应用程序
+					//System.exit(0); //结束整个应用程序
 				}
 			}
 		});

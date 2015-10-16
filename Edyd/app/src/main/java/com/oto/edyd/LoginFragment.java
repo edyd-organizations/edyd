@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,7 +58,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private EditText etPassword; //密码
     private Button btLogin; //登录
     private TextView forgetPassword; //忘记密码
-    private CheckBox rememberPassword; //记住密码
+    private ImageView rememberPassword; //记住密码
+    private LinearLayout linearLayoutRemember;
 
     private CusProgressDialog loadingDialog; //页面切换过度
     private Common common;
@@ -79,6 +81,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
         loginBack.setOnClickListener(this);
         btLogin.setOnClickListener(this);
+        linearLayoutRemember.setOnClickListener(this);
         loginUserRegister.setOnClickListener(this);
         etUserName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -144,9 +147,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             String t_password = userCommon.getStringByKey(Constant.PASSWORD);
             etUserName.setText(t_username);
             etPassword.setText(t_password);
-            rememberPassword.setChecked(true);
+            rememberPassword.setImageResource(R.mipmap.ic_agree_protocol);
+            rememberPassword.setTag(R.id.remember_password, true);
         } else{
-            rememberPassword.setChecked(false);
+            //rememberPassword.setChecked(false);
+            rememberPassword.setImageResource(R.mipmap.ic_not_agree_protocol);
+            rememberPassword.setTag(R.id.remember_password, false);
         }
         return loginFragmentView;
     }
@@ -171,6 +177,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             case R.id.forget_password:
                 //忘记密码
                 break;
+            case R.id.ll_remember:
+                boolean tag = (boolean)rememberPassword.getTag(R.id.remember_password);
+                if(tag) {
+                    rememberPassword.setImageResource(R.mipmap.ic_not_agree_protocol);
+                    rememberPassword.setTag(R.id.remember_password, false);
+                } else {
+                    rememberPassword.setImageResource(R.mipmap.ic_agree_protocol);
+                    rememberPassword.setTag(R.id.remember_password, true);
+                }
             default:
                 break;
         }
@@ -201,7 +216,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         etPassword = (EditText) view.findViewById(R.id.login_password);
         btLogin = (Button) view.findViewById(R.id.bt_login);
         forgetPassword = (TextView) view.findViewById(R.id.forget_password);
-        rememberPassword = (CheckBox) view.findViewById(R.id.remember_password);
+        rememberPassword = (ImageView) view.findViewById(R.id.remember_password);
+        linearLayoutRemember = (LinearLayout) view.findViewById(R.id.ll_remember);
 
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
 
@@ -404,10 +420,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     /**
      * 是否记住密码
-     * @param checkBox
      */
-    private void isRememberPassword(CheckBox checkBox, Map<Object, Object> loginMap) {
-        boolean isChecked = checkBox.isChecked();
+    private void isRememberPassword(ImageView imageView, Map<Object, Object> loginMap) {
+        //boolean isChecked = checkBox.isChecked();
+        boolean isChecked = (boolean)imageView.getTag(R.id.remember_password);
         Common userCommon = userCommon = new Common(getActivity().getSharedPreferences(Constant.USER_INFO_FILE, Context.MODE_PRIVATE));
         if(isChecked) {
 

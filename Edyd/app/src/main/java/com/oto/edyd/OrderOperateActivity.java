@@ -233,7 +233,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
 //                viewHolder.phoneNumber = (TextView) convertView.findViewById(R.id.phone_number_one);
             convertView = inflater.inflate(R.layout.order_operation_item, null);
 
-            orderNumber = (TextView) convertView.findViewById(R.id.tv_order_number);
+            orderNumber = (TextView) convertView.findViewById(R.id.order_number);
             orderDate = (TextView) convertView.findViewById(R.id.order_date);
             startPoint = (TextView) convertView.findViewById(R.id.receive_order_start_address); //发货地址
             endPoint = (TextView) convertView.findViewById(R.id.receive_order_end_address); //收货地址
