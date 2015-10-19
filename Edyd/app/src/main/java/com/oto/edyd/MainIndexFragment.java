@@ -105,7 +105,7 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.order_today: //今日订单
-                intent = new Intent(getActivity(), WaitBuild.class);
+                intent = new Intent(getActivity(), OrderOperateActivity.class);
                 startActivity(intent);
                 break;
             case R.id.panorama: //全景图

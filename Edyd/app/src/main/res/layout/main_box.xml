@@ -35,28 +35,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="center">
-            <ImageButton
-                android:id="@+id/violate_check"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:src="@mipmap/ic_violate_check"
-                android:background="#fe8f22"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5sp"
-                android:textSize="14dp"
-                android:text="@string/tx_violate_check"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
             android:orientation="vertical"
@@ -73,6 +51,28 @@
                 android:layout_marginTop="5dp"
                 android:textSize="14sp"
                 android:text="@string/tx_surrounding_sparking"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="center">
+            <ImageButton
+                android:id="@+id/violate_check"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:src="@mipmap/ic_violate_check"
+                android:background="#fe8f22"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:textSize="14dp"
+                android:text="@string/tx_violate_check"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -162,14 +162,14 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:src="@mipmap/ic_violate_payment"
-                android:background="#86a5e4"/>
+                android:src="@mipmap/continued"
+                android:background="#19d9f0"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textSize="14sp"
-                android:text="@string/tx_violate_payment"/>
+                android:text="未完待续"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -189,6 +189,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
             android:gravity="center">
+
         </LinearLayout>
     </LinearLayout>
 
