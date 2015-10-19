@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.util.Log;
 
 import com.oto.edyd.service.TimerService;
@@ -34,10 +35,16 @@ public class EdydApplication extends Application {
 	private boolean mIsBound = false; //判断服务是否绑定
 
 	private PendingIntent alarmSender;
+
+	PowerManager powerManager = null;
+	PowerManager.WakeLock wakeLock = null;
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
+		powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		wakeLock = this.powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Lock");
+
 		//判断服务是否启动
 		JuheSDKInitializer.initialize(getApplicationContext());
 		//startTimerService(); //开启定时服务
@@ -46,8 +53,9 @@ public class EdydApplication extends Application {
 			public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
 				activityList.add(activity);
 				if(activityList.size() == 1) {
-					ServiceUtil.cancelAlarmManager(getApplicationContext());
+					//ServiceUtil.cancelAlarmManager(getApplicationContext());
 					ServiceUtil.invokeTimerPOIService(getApplicationContext());
+					wakeLock.acquire();
 				}
 			}
 
@@ -89,9 +97,9 @@ public class EdydApplication extends Application {
 //						mIsBound = false;
 //						System.exit(0); //结束整个应用程序
 //					}
-
 					ServiceUtil.cancelAlarmManager(getApplicationContext());
-					//System.exit(0); //结束整个应用程序
+					wakeLock.release();
+					System.exit(0); //结束整个应用程序
 				}
 			}
 		});

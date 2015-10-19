@@ -32,6 +32,9 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
+    <!-- 屏幕常亮 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <!-- 聚合官网 -->
 
 
@@ -93,6 +96,14 @@
         <activity android:name=".LocationActivity"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".OrderDetailHistoryActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".OilServiceActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".InsuranceActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".FinancialActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".WaitBuild"
             android:screenOrientation="portrait"></activity>
 
         <activity

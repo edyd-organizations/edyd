@@ -133,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/my_vehicle_order"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textColor="@android:color/white" />
             </LinearLayout>
             <LinearLayout
@@ -145,6 +145,7 @@
                 android:layout_marginLeft="3dp"
                 android:layout_weight="1">
                 <LinearLayout
+                    android:id="@+id/order_today"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
@@ -165,6 +166,7 @@
                         android:text="@string/today_order"/>
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/panorama"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"

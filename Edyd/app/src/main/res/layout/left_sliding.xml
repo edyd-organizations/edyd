@@ -59,7 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="15dp"
         android:layout_marginTop="5dp"
-        android:background="@color/gray_AAAAAA"/>
+        android:background="@color/gray_DDDDDD"/>
     <LinearLayout
         android:id="@+id/exit"
         android:layout_width="match_parent"
@@ -78,4 +78,9 @@
             android:textColor="@android:color/black"
             android:textSize="14sp" />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/gray_DDDDDD"/>
 </LinearLayout>

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,15 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
     private LinearLayout locationWeather; //本地天气
     private LinearLayout locationPosition;
     private TextView latestNews; //最新旋转效果
+    private LinearLayout oilService; //油品服务
+    private LinearLayout insuranceService; //保险
+    private LinearLayout financialService; //金融服务
+    private LinearLayout vehicleOrder; //我的车辆订单
+    private LinearLayout orderMain; //商品订单
+    private LinearLayout collectionMain; //我的收藏
+    private LinearLayout todayOrder; //今日订单
+    private LinearLayout panorama; //全景图
+    private RelativeLayout discountMain; //打折
 
     private Intent intent; //跳转
 
@@ -45,6 +55,16 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
         playSlides(); //播放幻灯片
         locationWeather.setOnClickListener(this);
         locationPosition.setOnClickListener(this);
+        oilService.setOnClickListener(this);
+        insuranceService.setOnClickListener(this);
+        financialService.setOnClickListener(this);
+        vehicleOrder.setOnClickListener(this);
+        orderMain.setOnClickListener(this);
+        collectionMain.setOnClickListener(this);
+        todayOrder.setOnClickListener(this);
+        orderMain.setOnClickListener(this);
+        panorama.setOnClickListener(this);
+        discountMain.setOnClickListener(this);
         return mainIndexView;
     }
 
@@ -60,6 +80,42 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
                 intent = new Intent(getActivity(), MultyLocationActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.oil_server_main: //油品服务
+                intent = new Intent(getActivity(), OilServiceActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.insurance_main: //保险服务
+                intent = new Intent(getActivity(), InsuranceActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.finance_main: //保险服务
+                intent = new Intent(getActivity(), FinancialActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.guidepost_main: //我的车辆订单
+                intent = new Intent(getActivity(), OrderOperateActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.order_main: //商品订单
+                intent = new Intent(getActivity(), WaitBuild.class);
+                startActivity(intent);
+                break;
+            case R.id.collection_main: //我的收藏
+                intent = new Intent(getActivity(), WaitBuild.class);
+                startActivity(intent);
+                break;
+            case R.id.order_today: //今日订单
+                intent = new Intent(getActivity(), WaitBuild.class);
+                startActivity(intent);
+                break;
+            case R.id.panorama: //全景图
+                intent = new Intent(getActivity(), WaitBuild.class);
+                startActivity(intent);
+                break;
+            case R.id.discount_main: //打折
+                intent = new Intent(getActivity(), WaitBuild.class);
+                startActivity(intent);
+                break;
         }
     }
 
@@ -72,6 +128,15 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
         locationWeather = (LinearLayout) view.findViewById(R.id.weather_main); //本地天气
         locationPosition = (LinearLayout) view.findViewById(R.id.position_main); //本地位置
         latestNews = (TextView) view.findViewById(R.id.latest_news); //最新
+        oilService = (LinearLayout) view.findViewById(R.id.oil_server_main); //油品服务
+        insuranceService = (LinearLayout) view.findViewById(R.id.insurance_main); //保险服务
+        financialService = (LinearLayout) view.findViewById(R.id.finance_main); //金融服务
+        vehicleOrder = (LinearLayout) view.findViewById(R.id.guidepost_main); //我的车辆订单
+        orderMain = (LinearLayout) view.findViewById(R.id.order_main); //商品订单
+        collectionMain = (LinearLayout) view.findViewById(R.id.collection_main); //我的收藏
+        todayOrder = (LinearLayout) view.findViewById(R.id.order_today); //今日订单
+        panorama = (LinearLayout) view.findViewById(R.id.panorama); //全景图
+        discountMain = (RelativeLayout) view.findViewById(R.id.discount_main);
 
         Animation mAnimationRight = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_textview);
         mAnimationRight.setFillAfter(true);
@@ -81,7 +146,7 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
      * 图片轮播
      */
     private void playSlides() {
-        Integer[] resArray = new Integer[] { R.mipmap.slide_02, R.mipmap.slide_01 };
+        Integer[] resArray = new Integer[] { R.mipmap.slide_01, R.mipmap.slide_02 };
         imageIndicatorView.setupLayoutByDrawable(resArray);
         imageIndicatorView.setIndicateStyle(ImageIndicatorView.INDICATE_ARROW_ROUND_STYLE);
         imageIndicatorView.show();

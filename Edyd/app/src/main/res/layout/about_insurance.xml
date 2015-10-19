@@ -15,7 +15,7 @@
             android:layout_height="45dp"
             android:background="@color/user_icon_8">
             <LinearLayout
-                android:id="@+id/setup_detail_back"
+                android:id="@+id/insurance_back"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
@@ -37,6 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:text="保险服务"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
@@ -45,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="fitXY"
-            android:src="@mipmap/ic_about"
+            android:src="@mipmap/insurance"
             android:adjustViewBounds="true"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,12 +60,13 @@
                 android:textSize="15sp"
                 android:textStyle="bold"/>
             <TextView
-                android:id="@+id/about_theme_content"
+                android:id="@+id/about_oil_service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5sp"
                 android:layout_marginBottom="5dp"
-                android:textSize="12dp"/>
+                android:textSize="12dp"
+                android:text="@string/about_insurance_service"/>
             <View
                 android:layout_width="match_parent"
                 android:background="@android:color/darker_gray"

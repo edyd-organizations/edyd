@@ -16,7 +16,7 @@
     <string name="oil_server_main">油品服务</string>
     <string name="insurance_main">保险</string>
     <string name="finance_main">金融</string>
-    <string name="my_vehicle_order">我的车辆订单(10)</string>
+    <string name="my_vehicle_order">我的车辆订单</string>
     <string name="today_order">今日订单</string>
     <string name="panorama">全景图</string>
     <string name="latest">最新</string>
@@ -48,7 +48,7 @@
 
     <!-- 关于我们 -->
     <string name="about_title">关于我们</string>
-    <string name="about_sub_theme">多一点智能物流平台</string>
+    <string name="about_sub_theme">多一点智能物流电商平台</string>
     <string name="about_theme_content">
         厦门多一点智能物流科技有限公司（以下简称多一点科技）成立于2015年，总部位于美丽花园城市的厦门，是在弘信物流集团有限公司支持下稳健发展的高科技企业。
  多一点科技致力于货运管家服务平台/一体化物流服务（车货信息交易平台、物流流程透明可视化、免费云端存储）和汽车保姆服务平台/客制化专业服务（供应链融资服务、车辆服务精细化、大数据分析）等领域的互联网运用和运营，业务涵盖软件研发、系统集成、互联网销售、成品油批发零售、保险业务、金融业务、代收代付等，为物流的买卖方双方打造一个智能物流平台，为更多的行业合作伙伴、草根车主和小微企业打造互联网时代的物流新生态圈。
@@ -66,9 +66,25 @@
     <string name="about_dial">一键拨打</string>
     <string name="about_telephone_content">4008-761-167</string>
     <string name="about_address_1">福建省厦门市湖里区东渡路258号银龙大厦20层</string>
-    <string name="about_address_2">弘信物流集团有限公司（Hongxin Loaistics Group）</string>
-    <string name="about_address_3">厦门弘信智能物流科技有限公司</string>
     <string name="about_address_4">厦门多一点智能物流科技有限公司</string>
+
+    <!-- 油品服务 -->
+    <string name="about_oil_service">
+        多一点与中石化、中石油合作，为车主提供跨品牌、跨区域、便利、优惠的加油站供应网络；客户充值只能通过“多一点”客服或者“多一点”的PC端，无法自行在加油站充值。客户可通过多一点进行充值和消费对账，且对每家公司或个人进行按月按区域的充值和消费分析和图形展现。
+    </string>
+
+    <!--保险服务-->
+    <string name="about_insurance_service">
+        多一点致力于建立一个全国性的货运保险平台，与中国人民保险、中国平安保险、中国太平洋保险三大保险企业签署合作协议，为多一点平台用户提供专业、便捷、安全、可靠的车险、货运险、仓储财产险等险种服务。
+对接保险公司投保系统，网上直接下单投保实时生效，费率可控，帮企业最大程度的规避货运风险。
+    </string>
+
+    <!--保险服务-->
+    <string name="about_financial_service">
+        多一点与招商银行、平安银行、交通银行、华厦银行、民生银行等银行合作，打造一体化金融服务平台，提供代收、代付运费、货款等金融收付款解决方案；
+结合客户在平台的运营状况，提供金融机构授信贷款，用于油品、保险、经营等，为企业生产运营提供强有力的金融保障。
+对接金融公司金融系统，网上对接，通过透明管理来保障金融安全，以获取更为优惠的金融服务。
+    </string>
     <!-- 设置 -->
     <string name="setup_title">设置</string>
 
