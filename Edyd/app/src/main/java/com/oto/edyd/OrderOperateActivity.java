@@ -598,7 +598,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
 //        timerService.startTimer();
 //        timerService.reActivate(listener);
         ServiceUtil.cancelAlarmManager(getApplicationContext());
-        ServiceUtil.invokeTimerPOIService(getApplicationContext());
+        ServiceUtil.invokeTimerPOIService(getApplicationContext(), String.valueOf(controlId), String.valueOf(controlStatus));
     }
 
     /**

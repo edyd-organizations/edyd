@@ -1,5 +1,6 @@
 package com.oto.edyd;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.oto.edyd.lib.imageindicator.AutoPlayManager;
 import com.oto.edyd.lib.imageindicator.ImageIndicatorView;
+import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 
@@ -70,6 +72,7 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        Common common;
         switch (v.getId()) {
             case R.id.weather_main: //本地天气
                 //weatherProgressDialog.getLoadingDialog().show();
@@ -93,6 +96,15 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.guidepost_main: //我的车辆订单
+//                intent = new Intent(getActivity(), OrderOperateActivity.class);
+//                startActivity(intent);
+                common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                if (!common.isLogin()) {
+                    Toast.makeText(getActivity(), "用户未登录，请先登录", Toast.LENGTH_LONG).show();
+                    //intent = new Intent(MainActivity.this, LoginActivity.class);
+                    //startActivity(intent);
+                    return;
+                }
                 intent = new Intent(getActivity(), OrderOperateActivity.class);
                 startActivity(intent);
                 break;
@@ -105,6 +117,15 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.order_today: //今日订单
+//                intent = new Intent(getActivity(), OrderOperateActivity.class);
+//                startActivity(intent);
+                common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                if (!common.isLogin()) {
+                    Toast.makeText(getActivity(), "用户未登录，请先登录", Toast.LENGTH_LONG).show();
+                    //intent = new Intent(MainActivity.this, LoginActivity.class);
+                    //startActivity(intent);
+                    return;
+                }
                 intent = new Intent(getActivity(), OrderOperateActivity.class);
                 startActivity(intent);
                 break;

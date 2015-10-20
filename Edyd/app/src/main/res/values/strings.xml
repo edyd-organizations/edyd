@@ -6,7 +6,7 @@
     
     <!-- 主界面 -->
     <string name="index">首页</string>
-    <string name="market">商场</string>
+    <string name="market">商城</string>
     <string name="vehicle_service">运输服务</string>
     <string name="box">百宝箱</string>
     <string name="order_main">商品订单</string>

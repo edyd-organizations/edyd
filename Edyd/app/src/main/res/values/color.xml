@@ -172,4 +172,9 @@
 
     <!--黑色-->
     <color name="black_44444">#444444</color>
+
+    <!-- 绿色 -->
+    <color name="green_00FF66">#00FF66</color>
+    <color name="green_339933">#339933</color>
+    <color name="green_55e6ac">#55e6ac</color>
 </resources>

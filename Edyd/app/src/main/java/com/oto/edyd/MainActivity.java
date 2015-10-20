@@ -85,7 +85,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 break;
             case R.id.main_market:
                 customViewPager.setCurrentItem(1);
-                //intent = new Intent(MainActivity.this, LocationActivity.class);
+                //intent = new Intent(MainActivity.this, WaitBuild.class);
                 //startActivity(intent);
                 break;
             case R.id.main_vehicle_server:

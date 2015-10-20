@@ -34,6 +34,32 @@ public class ServiceUtil {
         return isRunning;
     }
 
+    /**
+     * 定时器，订单状态
+     * @param context
+     * @param controlId
+     * @param controlStatus
+     */
+    public static void invokeTimerPOIService(Context context, String controlId, String controlStatus){
+        //Log.i("ServiceUtil-AlarmManager", "invokeTimerPOIService wac called.." );
+        PendingIntent alarmSender = null;
+        Intent startIntent = new Intent(context, TimerService.class);
+        startIntent.putExtra("control_status", controlStatus);
+        startIntent.putExtra("control_id", controlId);
+        startIntent.setAction(Constant.ALARM_SERVICE_ACTION);
+        try {
+            alarmSender = PendingIntent.getService(context, 0, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        } catch (Exception e) {
+           // Log.i("ServiceUtil-AlarmManager", "failed to start " + e.toString());
+        }
+        AlarmManager am = (AlarmManager) context.getSystemService(Activity.ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), Constant.ELAPSED_TIME, alarmSender);
+    }
+
+    /**
+     * 定时器，订单状态
+     * @param context
+     */
     public static void invokeTimerPOIService(Context context){
         //Log.i("ServiceUtil-AlarmManager", "invokeTimerPOIService wac called.." );
         PendingIntent alarmSender = null;
@@ -42,7 +68,7 @@ public class ServiceUtil {
         try {
             alarmSender = PendingIntent.getService(context, 0, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         } catch (Exception e) {
-           // Log.i("ServiceUtil-AlarmManager", "failed to start " + e.toString());
+            // Log.i("ServiceUtil-AlarmManager", "failed to start " + e.toString());
         }
         AlarmManager am = (AlarmManager) context.getSystemService(Activity.ALARM_SERVICE);
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), Constant.ELAPSED_TIME, alarmSender);

@@ -1,0 +1,313 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:padding="15dp"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+        <ImageView
+            android:id="@+id/execute_first_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@mipmap/execute_gray"/>
+        <TextView
+            android:id="@+id/execute_first_line"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_height="3dp"
+            android:layout_alignLeft="@id/execute_first_point"
+
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@color/gray_999999" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/execute_first_point"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:id="@+id/tv_first_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="接单"/>
+            <TextView
+                android:id="@+id/execute_first_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="12sp" />
+            <TextView
+                android:id="@+id/execute_first_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+   <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2" >
+       <TextView
+           android:id="@+id/execute_second_line"
+           android:layout_width="match_parent"
+           android:layout_height="3dp"
+           android:layout_centerVertical="true"
+           android:background="@color/gray_999999" />
+        <ImageView
+            android:id="@+id/execute_second_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@mipmap/execute_gray"/>
+        <TextView
+            android:id="@+id/execute_third_line"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_toRightOf="@id/execute_second_point"
+            android:layout_centerVertical="true"
+            android:background="@color/gray_999999" />
+       <LinearLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           android:layout_above="@id/execute_second_point"
+           android:layout_centerHorizontal="true"
+           android:gravity="center"
+           android:layout_marginBottom="10dp">
+           <TextView
+               android:id="@+id/execute_second_date"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="5dp"
+               android:textSize="10sp" />
+           <TextView
+               android:id="@+id/execute_second_time"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="12sp" />
+           <TextView
+               android:id="@+id/tv_second_time"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="10dp"
+               android:text="到达装货" />
+       </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2" >
+        <TextView
+            android:id="@+id/execute_four_line"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_centerVertical="true"
+            android:background="@color/gray_999999" />
+        <ImageView
+            android:id="@+id/execute_third_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@mipmap/execute_gray"/>
+        <TextView
+            android:id="@+id/execute_five_line"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_toRightOf="@id/execute_third_point"
+            android:layout_centerVertical="true"
+            android:background="@color/gray_999999" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/execute_third_point"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
+        <TextView
+            android:id="@+id/tv_third_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="装货完成" />
+        <TextView
+            android:id="@+id/execute_third_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/execute_third_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:layout_marginTop="5dp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2" >
+        <TextView
+            android:id="@+id/execute_six_line"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_centerVertical="true"
+            android:background="@color/gray_999999" />
+        <ImageView
+            android:id="@+id/execute_four_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@mipmap/execute_gray"/>
+        <TextView
+            android:id="@+id/execute_seven_line"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_toRightOf="@id/execute_four_point"
+            android:layout_centerVertical="true"
+            android:background="@color/gray_999999" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_above="@id/execute_four_point"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:id="@+id/execute_four_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="10sp" />
+            <TextView
+                android:id="@+id/execute_four_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp" />
+            <TextView
+                android:id="@+id/tv_four_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="送货在途" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2" >
+        <TextView
+            android:id="@+id/execute_eight_line"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_centerVertical="true"
+            android:background="@color/gray_999999" />
+        <ImageView
+            android:id="@+id/execute_five_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@mipmap/execute_gray"/>
+        <TextView
+            android:id="@+id/execute_nige_line"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_toRightOf="@id/execute_five_point"
+            android:layout_centerVertical="true"
+            android:background="@color/gray_999999" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/execute_five_point"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:id="@+id/tv_five_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="到达收货" />
+            <TextView
+                android:id="@+id/execute_five_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="12sp" />
+            <TextView
+                android:id="@+id/execute_five_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:layout_marginTop="5dp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <TextView
+            android:id="@+id/execute_ten_line"
+            android:layout_width="25dp"
+            android:layout_height="3dp"
+            android:layout_centerVertical="true"
+            android:background="@color/gray_999999" />
+
+        <ImageView
+            android:id="@+id/execute_six_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/execute_ten_line"
+            android:background="@mipmap/execute_gray" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_above="@id/execute_six_point"
+            android:layout_toLeftOf="@id/execute_six_point"
+            android:gravity="center"
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:id="@+id/execute_six_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="10sp" />
+            <TextView
+                android:id="@+id/execute_six_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp" />
+            <TextView
+                android:id="@+id/tv_six_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="收货完成" />
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>

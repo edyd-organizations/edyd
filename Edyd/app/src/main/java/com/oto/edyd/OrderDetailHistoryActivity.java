@@ -55,11 +55,16 @@ public class OrderDetailHistoryActivity extends Activity implements View.OnClick
             executeFiveTime, executeFiveDate, //到达卸货时间
             executeSixTime, executeSixDate; //完成卸货时间
 
-    private ImageView executeFirstLine, //第一条线
+    private TextView executeFirstLine, //第一条线
             executeSecondLine, //第二条线
             executeThirdLine, //第三条线
             executeFourLine, //第四条线
-            executeFiveLine; //第五条线
+            executeFiveLine, //第五条线
+            executeSixLine, //第六条线
+            executeSevenLine, //第七条线
+            executeEightLine, //第八条线
+            executeNineLine, //第九条线
+            executeTenLine; //第十条线
 
     private TextView orderNumber; //订单号
     private TextView orderDate; //订单日期
@@ -133,11 +138,16 @@ public class OrderDetailHistoryActivity extends Activity implements View.OnClick
         executeSixTime = (TextView) findViewById(R.id.execute_six_time);
         executeSixDate = (TextView) findViewById(R.id.execute_six_date);
 
-        executeFirstLine = (ImageView) findViewById(R.id.execute_first_line);
-        executeSecondLine = (ImageView) findViewById(R.id.execute_second_line);
-        executeThirdLine = (ImageView) findViewById(R.id.execute_third_line);
-        executeFourLine = (ImageView) findViewById(R.id.execute_four_line);
-        executeFiveLine = (ImageView) findViewById(R.id.execute_five_line);
+        executeFirstLine = (TextView) findViewById(R.id.execute_first_line);
+        executeSecondLine = (TextView) findViewById(R.id.execute_second_line);
+        executeThirdLine = (TextView) findViewById(R.id.execute_third_line);
+        executeFourLine = (TextView) findViewById(R.id.execute_four_line);
+        executeFiveLine = (TextView) findViewById(R.id.execute_five_line);
+        executeSixLine = (TextView) findViewById(R.id.execute_six_line);
+        executeSevenLine = (TextView) findViewById(R.id.execute_seven_line);
+        executeEightLine = (TextView) findViewById(R.id.execute_eight_line);
+        executeNineLine = (TextView) findViewById(R.id.execute_nine_line);
+        executeTenLine = (TextView) findViewById(R.id.execute_ten_line);
 
         orderNumber = (TextView) findViewById(R.id.order_number);
         orderDate = (TextView) findViewById(R.id.order_date);
@@ -323,7 +333,8 @@ public class OrderDetailHistoryActivity extends Activity implements View.OnClick
                 break;
             case 3: //到达装货
                 executeFirstPoint.setImageResource(R.mipmap.execute_green);
-                executeFirstLine.setImageResource(R.mipmap.line_green);
+                executeFirstLine.setBackgroundResource(R.color.green_55e6ac);
+                executeSecondLine.setBackgroundResource(R.color.green_55e6ac);
                 executeSecondPoint.setImageResource(R.mipmap.line_car);
                 for(int i = 0; i < 2; i++) {
                     if(i == 0) {
@@ -345,9 +356,11 @@ public class OrderDetailHistoryActivity extends Activity implements View.OnClick
                 break;
             case 4: //装货完成
                 executeFirstPoint.setImageResource(R.mipmap.execute_green);
-                executeFirstLine.setImageResource(R.mipmap.line_green);
+                executeFirstLine.setBackgroundResource(R.color.green_55e6ac);
+                executeSecondLine.setBackgroundResource(R.color.green_55e6ac);
                 executeSecondPoint.setImageResource(R.mipmap.execute_green);
-                executeSecondLine.setImageResource(R.mipmap.line_green);
+                executeThirdLine.setBackgroundResource(R.color.green_55e6ac);
+                executeFourLine.setBackgroundResource(R.color.green_55e6ac);
                 executeThirdPoint.setImageResource(R.mipmap.line_car);
                 for(int i = 0; i < 3; i++) {
                     if(i == 0) {
@@ -372,11 +385,17 @@ public class OrderDetailHistoryActivity extends Activity implements View.OnClick
                 break;
             case 5: //送货在途
                 executeFirstPoint.setImageResource(R.mipmap.execute_green);
-                executeFirstLine.setImageResource(R.mipmap.line_green);
+                executeFirstLine.setBackgroundResource(R.color.green_55e6ac);
+                executeSecondLine.setBackgroundResource(R.color.green_55e6ac);
+
                 executeSecondPoint.setImageResource(R.mipmap.execute_green);
-                executeSecondLine.setImageResource(R.mipmap.line_green);
+                executeThirdLine.setBackgroundResource(R.color.green_55e6ac);
+                executeFourLine.setBackgroundResource(R.color.green_55e6ac);
+
                 executeThirdPoint.setImageResource(R.mipmap.execute_green);
-                executeThirdLine.setImageResource(R.mipmap.line_green);
+                executeFiveLine.setBackgroundResource(R.color.green_55e6ac);
+                executeSixLine.setBackgroundResource(R.color.green_55e6ac);
+
                 executeFourPoint.setImageResource(R.mipmap.line_car);
                 for(int i = 0; i < 4; i++) {
                     if(i == 0) {
@@ -404,13 +423,21 @@ public class OrderDetailHistoryActivity extends Activity implements View.OnClick
                 break;
             case 6: //到达收货
                 executeFirstPoint.setImageResource(R.mipmap.execute_green);
-                executeFirstLine.setImageResource(R.mipmap.line_green);
+                executeFirstLine.setBackgroundResource(R.color.green_55e6ac);
+                executeSecondLine.setBackgroundResource(R.color.green_55e6ac);
+
                 executeSecondPoint.setImageResource(R.mipmap.execute_green);
-                executeSecondLine.setImageResource(R.mipmap.line_green);
+                executeThirdLine.setBackgroundResource(R.color.green_55e6ac);
+                executeFourLine.setBackgroundResource(R.color.green_55e6ac);
+
                 executeThirdPoint.setImageResource(R.mipmap.execute_green);
-                executeThirdLine.setImageResource(R.mipmap.line_green);
+                executeFiveLine.setBackgroundResource(R.color.green_55e6ac);
+                executeSixLine.setBackgroundResource(R.color.green_55e6ac);
+
                 executeFourPoint.setImageResource(R.mipmap.execute_green);
-                executeFourLine.setImageResource(R.mipmap.line_green);
+                executeSevenLine.setBackgroundResource(R.color.green_55e6ac);
+                executeEightLine.setBackgroundResource(R.color.green_55e6ac);
+
                 executeFivePoint.setImageResource(R.mipmap.line_car);
                 for(int i = 0; i < 5; i++) {
                     if(i == 0) {
@@ -441,15 +468,25 @@ public class OrderDetailHistoryActivity extends Activity implements View.OnClick
                 break;
             case 7: //收货完成
                 executeFirstPoint.setImageResource(R.mipmap.execute_green);
-                executeFirstLine.setImageResource(R.mipmap.line_green);
+                executeFirstLine.setBackgroundResource(R.color.green_55e6ac);
+                executeSecondLine.setBackgroundResource(R.color.green_55e6ac);
+
                 executeSecondPoint.setImageResource(R.mipmap.execute_green);
-                executeSecondLine.setImageResource(R.mipmap.line_green);
+                executeThirdLine.setBackgroundResource(R.color.green_55e6ac);
+                executeFourLine.setBackgroundResource(R.color.green_55e6ac);
+
                 executeThirdPoint.setImageResource(R.mipmap.execute_green);
-                executeThirdLine.setImageResource(R.mipmap.line_green);
+                executeFiveLine.setBackgroundResource(R.color.green_55e6ac);
+                executeSixLine.setBackgroundResource(R.color.green_55e6ac);
+
                 executeFourPoint.setImageResource(R.mipmap.execute_green);
-                executeFourLine.setImageResource(R.mipmap.line_green);
+                executeSevenLine.setBackgroundResource(R.color.green_55e6ac);
+                executeEightLine.setBackgroundResource(R.color.green_55e6ac);
+
                 executeFivePoint.setImageResource(R.mipmap.execute_green);
-                executeFiveLine.setImageResource(R.mipmap.line_green);
+                executeNineLine.setBackgroundResource(R.color.green_55e6ac);
+                executeTenLine.setBackgroundResource(R.color.green_55e6ac);
+
                 executeSixPoint.setImageResource(R.mipmap.line_car);
                 for(int i = 0; i < 6; i++) {
                     if(i == 0) {
