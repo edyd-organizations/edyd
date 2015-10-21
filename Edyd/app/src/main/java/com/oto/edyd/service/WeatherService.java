@@ -145,7 +145,7 @@ public class WeatherService extends Service {
          */
         Parameters params_city = new Parameters();
         params_city.add("cityname", defaultCityName);
-        params_city.add("key", "ee749676b4246fdd3cd1f9566868b00e");
+        params_city.add("key", "98f49c9e717cad4f0ae88e10065e09b3");
 
         /**
          * 数据ID：39
@@ -201,7 +201,7 @@ public class WeatherService extends Service {
          **/
         Parameters params_forecast3h = new Parameters();
         params_forecast3h.add("cityname", defaultCityName);
-        params_forecast3h.add("key", "ee749676b4246fdd3cd1f9566868b00e");
+        params_forecast3h.add("key", "98f49c9e717cad4f0ae88e10065e09b3");
 
         /**
          * 数据ID：39
@@ -240,7 +240,7 @@ public class WeatherService extends Service {
          */
         Parameters params_pm = new Parameters();
         params_pm.add("city", defaultCityName);
-        params_pm.add("key", "a0356dc89e60940ce50102a876ad3c35");
+        params_pm.add("key", "6b45e0d9868f4775dd5a03d16ad46842");
         /**
          * 数据ID：33
          * 接口地址：http://web.juhe.cn:8080/environment/air/pm

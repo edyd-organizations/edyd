@@ -51,7 +51,7 @@
         <!-- 聚合数据 -->
         <meta-data
             android:name="com.thinkland.juheapi.openid"
-            android:value="JH5a2427812fb55d29e478171470e4f965" />
+            android:value="JH5ba55e75578ecf0b44c6d8a4de432b52" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
