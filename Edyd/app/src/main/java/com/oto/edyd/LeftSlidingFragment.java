@@ -39,21 +39,21 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
     private View leftSlidingView; //取得左侧滑布局文件
     private ListView leftSlidingListView; //左侧划ListView
     private LinearLayout userLogin; //用户登入
-    private LinearLayout exit; //退出登入
-    private TextView userAlias;
-    private TextView accountType; //账户类型
-    private View slidingBottomLine; //侧滑底部线条
+    public LinearLayout exit; //退出登入
+    public TextView userAlias;
+    public TextView accountType; //账户类型
+    public View slidingBottomLine; //侧滑底部线条
 
     //ListView资源
-    private String[] textResources; //文字资源
-    private int[] imageResources; //图片资源
-    private int[] idResources; //ID资源
+    public String[] textResources; //文字资源
+    public int[] imageResources; //图片资源
+    public int[] idResources; //ID资源
 
     private boolean isRuning = true;
     private CusProgressDialog exitProgressDialog;
     private Intent intent;
-    private SimpleAdapter simpleAdapter;
-    List<Map<String, Object>> dataSets = new ArrayList<Map<String, Object>>();
+    public SimpleAdapter simpleAdapter;
+    public List<Map<String, Object>> dataSets = new ArrayList<Map<String, Object>>();
 
 
     @Nullable
@@ -134,60 +134,60 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    /**
-     * 用于接收Activity返回数据
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //登录返回
-        if(resultCode == Constant.LOGIN_ACTIVITY_RETURN_CODE){
-            String username = data.getExtras().getString("username");
-            userAlias.setText(username);
-            exit.setVisibility(View.VISIBLE);
-            slidingBottomLine.setVisibility(View.VISIBLE);
-            //Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-            //String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
-            //if(enterpriseName != null) {
-                accountType.setText("个人");
-            //}
-
-            dataSets.clear();
-            for(int i = 0; i < textResources.length; i++) {
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("list_image", imageResources[i]);
-                map.put("list_text", textResources[i]);
-                map.put("list_arrow", R.mipmap.right_arrow);
-                dataSets.add(map);
-            }
-            simpleAdapter.notifyDataSetChanged();
-        }
-        //注册返回
-        if(resultCode == Constant.REGISTER_ACTIVITY_RETURN_CODE) {
-            String username = data.getExtras().getString("username");
-            userAlias.setText(username);
-            accountType.setText("个人");
-            exit.setVisibility(View.VISIBLE);
-            slidingBottomLine.setVisibility(View.VISIBLE);
-            dataSets.clear();
-            for(int i = 0; i < textResources.length; i++) {
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("list_image", imageResources[i]);
-                map.put("list_text", textResources[i]);
-                map.put("list_arrow", R.mipmap.right_arrow);
-                dataSets.add(map);
-            }
-            simpleAdapter.notifyDataSetChanged();
-        }
-        //账户类型返回
-        if(resultCode == Constant.ACCOUNT_TYPE_RESULT_CODE) {
-            String accountTypeStr = data.getExtras().getString("account_type");
-            accountType.setText(accountTypeStr);
-
-        }
-    }
+//    /**
+//     * 用于接收Activity返回数据
+//     * @param requestCode
+//     * @param resultCode
+//     * @param data
+//     */
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        //登录返回
+//        if(resultCode == Constant.LOGIN_ACTIVITY_RETURN_CODE){
+//            String username = data.getExtras().getString("username");
+//            userAlias.setText(username);
+//            exit.setVisibility(View.VISIBLE);
+//            slidingBottomLine.setVisibility(View.VISIBLE);
+//            //Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+//            //String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
+//            //if(enterpriseName != null) {
+//                accountType.setText("个人");
+//            //}
+//
+//            dataSets.clear();
+//            for(int i = 0; i < textResources.length; i++) {
+//                Map<String, Object> map = new HashMap<String, Object>();
+//                map.put("list_image", imageResources[i]);
+//                map.put("list_text", textResources[i]);
+//                map.put("list_arrow", R.mipmap.right_arrow);
+//                dataSets.add(map);
+//            }
+//            simpleAdapter.notifyDataSetChanged();
+//        }
+//        //注册返回
+//        if(resultCode == Constant.REGISTER_ACTIVITY_RETURN_CODE) {
+//            String username = data.getExtras().getString("username");
+//            userAlias.setText(username);
+//            accountType.setText("个人");
+//            exit.setVisibility(View.VISIBLE);
+//            slidingBottomLine.setVisibility(View.VISIBLE);
+//            dataSets.clear();
+//            for(int i = 0; i < textResources.length; i++) {
+//                Map<String, Object> map = new HashMap<String, Object>();
+//                map.put("list_image", imageResources[i]);
+//                map.put("list_text", textResources[i]);
+//                map.put("list_arrow", R.mipmap.right_arrow);
+//                dataSets.add(map);
+//            }
+//            simpleAdapter.notifyDataSetChanged();
+//        }
+//        //账户类型返回
+//        if(resultCode == Constant.ACCOUNT_TYPE_RESULT_CODE) {
+//            String accountTypeStr = data.getExtras().getString("account_type");
+//            accountType.setText(accountTypeStr);
+//
+//        }
+//    }
 
     /**
      * 初始化数据

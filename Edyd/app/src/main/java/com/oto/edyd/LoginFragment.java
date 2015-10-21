@@ -308,7 +308,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         @Override
                         public void onError(Request request, Exception e) {
                             //请求异常
-                            Toast.makeText(getActivity().getApplicationContext(), Constant.INTERNET_REQUEST_ABNORMAL,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), Constant.INTERNET_REQUEST_ABNORMAL, Toast.LENGTH_SHORT).show();
                         }
                         @Override
                         public void onResponse(String response) {

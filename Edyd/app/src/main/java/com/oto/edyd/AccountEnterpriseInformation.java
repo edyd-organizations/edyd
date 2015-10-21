@@ -166,7 +166,7 @@ public class AccountEnterpriseInformation extends Fragment implements View.OnCli
                     SimpleAdapter simpleAdapter = new SimpleAdapter(getActivity(), dataSets, R.layout.enterprise_information_list_item,
                             new String[]{"enterprise_info_title", "enterprise_info_content"}, idResources); //ListView适配器
                     enterpriseList.setAdapter(simpleAdapter);
-                    SimpleAdapter simpleAdapterSec = new SimpleAdapter(getActivity(), dataSetsSec, R.layout.enterprise_information_list_item,
+                    SimpleAdapter simpleAdapterSec = new SimpleAdapter(getActivity(), dataSetsSec, R.layout.modify_password_item,
                             new String[]{"enterprise_info_title", "enterprise_info_content"}, idResources); //ListView适配器
                     enterpriseListSec.setAdapter(simpleAdapterSec);
                     break;

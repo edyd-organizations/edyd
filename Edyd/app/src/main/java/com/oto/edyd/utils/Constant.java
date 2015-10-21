@@ -24,10 +24,9 @@ public  class Constant {
     public final static String SESSION_UUID = "session_uuid";
 
     //网络地址
-    public final static String ENTRANCE_PREFIX = "http://120.24.236.223/api/v1.0/"; //接口前缀地址
-    //public final static String ENTRANCE_PREFIX = "http://www.edyd.cn/api/v1.0/"; //接口前缀地址
+    //public final static String ENTRANCE_PREFIX = "http://120.24.236.223/api/v1.0/"; //接口前缀地址
+    public final static String ENTRANCE_PREFIX = "http://www.edyd.cn/api/v1.0/"; //接口前缀地址
     public final static String EDYD = "http://www.edyd.cn/";
-
     //系统状态码
     public final static String LOGIN_SUCCESS_STATUS = "200";  //请求成功
     public final static String NOT_SETTING_SESSION_ID = "401"; //没有设置会话ID

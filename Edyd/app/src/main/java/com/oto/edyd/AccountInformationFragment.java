@@ -167,7 +167,7 @@ public class AccountInformationFragment extends Fragment implements View.OnClick
                     map.put("enterprise_info_content", "");
                     dateSetsSec.add(map);
                     String personTitleSec[] = getResources().getStringArray(R.array.enter_info_content_sec);
-                    SimpleAdapter simpleAdapterSec = new SimpleAdapter(getActivity(), dateSetsSec, R.layout.enterprise_information_list_item,
+                    SimpleAdapter simpleAdapterSec = new SimpleAdapter(getActivity(), dateSetsSec, R.layout.modify_password_item,
                             new String[]{"enterprise_info_title", "enterprise_info_content"}, resourcesID); //ListView适配器
                     personListSec.setAdapter(simpleAdapterSec);
                     break;

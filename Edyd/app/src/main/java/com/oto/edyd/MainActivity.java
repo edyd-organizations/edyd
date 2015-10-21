@@ -21,7 +21,9 @@ import com.oto.edyd.utils.Constant;
 import com.oto.edyd.widget.CustomViewPager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends SlidingFragmentActivity implements View.OnClickListener{
 
@@ -35,7 +37,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     public FragmentManager fragmentManager; //fragment管理器
 
     private TextView mainTitle; //标题
-    private Fragment leftMenuFragment;
+    private LeftSlidingFragment leftMenuFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -201,13 +203,68 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         super.onSaveInstanceState(outState);
     }
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        switch (resultCode) {
+//            case Constant.LOGIN_ACTIVITY_RETURN_CODE:
+////                Fragment leftMenuFragment = new LeftSlidingFragment();
+////                getSupportFragmentManager().beginTransaction().replace(R.id.left_sliding, leftMenuFragment).commit();
+//                getSupportFragmentManager().beginTransaction().detach(leftMenuFragment).attach(leftMenuFragment).commitAllowingStateLoss();
+//        }
+//    }
+
+    /**
+     * 用于接收Activity返回数据
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (resultCode) {
-            case Constant.LOGIN_ACTIVITY_RETURN_CODE:
-//                Fragment leftMenuFragment = new LeftSlidingFragment();
-//                getSupportFragmentManager().beginTransaction().replace(R.id.left_sliding, leftMenuFragment).commit();
-                getSupportFragmentManager().beginTransaction().detach(leftMenuFragment).attach(leftMenuFragment).commitAllowingStateLoss();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //登录返回
+        if(resultCode == Constant.LOGIN_ACTIVITY_RETURN_CODE){
+            String username = data.getExtras().getString("username");
+            leftMenuFragment.userAlias.setText(username);
+            leftMenuFragment.exit.setVisibility(View.VISIBLE);
+            leftMenuFragment.slidingBottomLine.setVisibility(View.VISIBLE);
+            //Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+            //String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
+            //if(enterpriseName != null) {
+            leftMenuFragment.accountType.setText("个人");
+            //}
+
+            leftMenuFragment.dataSets.clear();
+            for(int i = 0; i < leftMenuFragment.textResources.length; i++) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("list_image", leftMenuFragment.imageResources[i]);
+                map.put("list_text", leftMenuFragment.textResources[i]);
+                map.put("list_arrow", R.mipmap.right_arrow);
+                leftMenuFragment.dataSets.add(map);
+            }
+            leftMenuFragment.simpleAdapter.notifyDataSetChanged();
+        }
+        //注册返回
+        if(resultCode == Constant.REGISTER_ACTIVITY_RETURN_CODE) {
+            String username = data.getExtras().getString("username");
+            leftMenuFragment.userAlias.setText(username);
+            leftMenuFragment.accountType.setText("个人");
+            leftMenuFragment.exit.setVisibility(View.VISIBLE);
+            leftMenuFragment.slidingBottomLine.setVisibility(View.VISIBLE);
+            leftMenuFragment.dataSets.clear();
+            for(int i = 0; i < leftMenuFragment.textResources.length; i++) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("list_image", leftMenuFragment.imageResources[i]);
+                map.put("list_text", leftMenuFragment.textResources[i]);
+                map.put("list_arrow", R.mipmap.right_arrow);
+                leftMenuFragment.dataSets.add(map);
+            }
+            leftMenuFragment.simpleAdapter.notifyDataSetChanged();
+        }
+        //账户类型返回
+        if(resultCode == Constant.ACCOUNT_TYPE_RESULT_CODE) {
+            String accountTypeStr = data.getExtras().getString("account_type");
+            leftMenuFragment.accountType.setText(accountTypeStr);
+
         }
     }
 }
