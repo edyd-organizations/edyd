@@ -22,6 +22,7 @@ import com.oto.edyd.lib.imageindicator.ImageIndicatorView;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
+import com.oto.edyd.utils.NetWork;
 
 import retrofit.mime.MultipartTypedOutput;
 
@@ -76,6 +77,13 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.weather_main: //本地天气
                 //weatherProgressDialog.getLoadingDialog().show();
+                //判断网络是否有网络
+                NetWork netWork = new NetWork(getContext());
+                if(!netWork.isHaveInternet()){
+                    //无网络访问
+                    Toast.makeText(getActivity().getApplicationContext(), Constant.NOT_INTERNET_CONNECT, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 intent = new Intent(getActivity(), WeatherActivity.class);
                 startActivity(intent);
                 break;
@@ -109,11 +117,13 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.order_main: //商品订单
-                intent = new Intent(getActivity(), WaitBuild.class);
+                intent = new Intent(getActivity().getApplicationContext(), WaitBuild.class);
+                intent.putExtra("wait_title", "商品订单");
                 startActivity(intent);
                 break;
             case R.id.collection_main: //我的收藏
-                intent = new Intent(getActivity(), WaitBuild.class);
+                intent = new Intent(getActivity().getApplicationContext(), WaitBuild.class);
+                intent.putExtra("wait_title", "我的收藏");
                 startActivity(intent);
                 break;
             case R.id.order_today: //今日订单
@@ -130,11 +140,13 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.panorama: //全景图
-                intent = new Intent(getActivity(), WaitBuild.class);
+                intent = new Intent(getActivity().getApplicationContext(), WaitBuild.class);
+                intent.putExtra("wait_title", "全景图");
                 startActivity(intent);
                 break;
             case R.id.discount_main: //打折
-                intent = new Intent(getActivity(), WaitBuild.class);
+                intent = new Intent(getActivity().getApplicationContext(), WaitBuild.class);
+                intent.putExtra("wait_title", "优惠");
                 startActivity(intent);
                 break;
         }

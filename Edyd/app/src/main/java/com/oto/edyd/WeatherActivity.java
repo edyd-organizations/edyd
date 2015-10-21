@@ -35,6 +35,7 @@ import com.oto.edyd.model.WeatherBean;
 import com.oto.edyd.service.WeatherService;
 import com.oto.edyd.lib.swiperefresh.PullToRefreshBase;
 import com.oto.edyd.lib.swiperefresh.PullToRefreshScrollView;
+import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.NetWork;
 
@@ -304,6 +305,13 @@ public class WeatherActivity extends Activity implements LocationSource, AMapLoc
         mPullToRefreshScrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
+                NetWork netWork = new NetWork(getApplicationContext());
+                if(!netWork.isHaveInternet()){
+                    //无网络访问
+                    Toast.makeText(getApplicationContext().getApplicationContext(), Constant.NOT_INTERNET_CONNECT, Toast.LENGTH_SHORT).show();
+                    mPullToRefreshScrollView.onRefreshComplete();
+                    return;
+                }
                 mService.loadData(tv_city.getText().toString());
             }
         });

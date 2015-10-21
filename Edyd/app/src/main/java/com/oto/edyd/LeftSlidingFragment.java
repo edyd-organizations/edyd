@@ -42,6 +42,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
     private LinearLayout exit; //退出登入
     private TextView userAlias;
     private TextView accountType; //账户类型
+    private View slidingBottomLine; //侧滑底部线条
 
     //ListView资源
     private String[] textResources; //文字资源
@@ -60,6 +61,8 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         leftSlidingView = inflater.inflate(R.layout.left_sliding, null);
         initField(leftSlidingView);
+
+        dataSets.clear();
 
         for(int i = 0; i < textResources.length; i++) {
             Map<String, Object> map = new HashMap<String, Object>();
@@ -81,6 +84,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
             if(!sessionUuid.equals("")) {
                 userAlias.setText(common.getStringByKey(Constant.USER_NAME));
                 exit.setVisibility(View.VISIBLE);
+                slidingBottomLine.setVisibility(View.VISIBLE);
             }
             String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
             if(enterpriseName != null) {
@@ -91,6 +95,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
             dataSets.remove(0);
             simpleAdapter.notifyDataSetChanged();
             exit.setVisibility(View.GONE);
+            slidingBottomLine.setVisibility(View.GONE);
         }
 
         userLogin.setOnClickListener(this);
@@ -142,6 +147,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
             String username = data.getExtras().getString("username");
             userAlias.setText(username);
             exit.setVisibility(View.VISIBLE);
+            slidingBottomLine.setVisibility(View.VISIBLE);
             //Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
             //String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
             //if(enterpriseName != null) {
@@ -164,7 +170,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
             userAlias.setText(username);
             accountType.setText("个人");
             exit.setVisibility(View.VISIBLE);
-
+            slidingBottomLine.setVisibility(View.VISIBLE);
             dataSets.clear();
             for(int i = 0; i < textResources.length; i++) {
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -193,6 +199,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
         userLogin = (LinearLayout)view.findViewById(R.id.user_login);
         userAlias = (TextView) view.findViewById(R.id.user_alias);
         accountType = (TextView) view.findViewById(R.id.account_type);
+        slidingBottomLine = (View) view.findViewById(R.id.sliding_bottom_line);
 
         imageResources = new int[]{R.mipmap.my_purse, R.mipmap.select_user_type, R.mipmap.notice,
                 R.mipmap.share, R.mipmap.setting};
@@ -220,14 +227,20 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
             TextView textView = (TextView) view.findViewById(R.id.list_text);
             String menuDes = textView.getText().toString();
             if(menuDes.equals("我的钱包")) {
-
+                intent = new Intent(getActivity().getApplicationContext(), WaitBuild.class);
+                intent.putExtra("wait_title", "我的钱包");
+                startActivity(intent);
             } else if(menuDes.equals("账户类型")){
                 intent = new Intent(getActivity(), AccountTypeActivity.class);
                 startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
             } else if(menuDes.equals("公告通知")){
-
+                intent = new Intent(getActivity().getApplicationContext(), WaitBuild.class);
+                intent.putExtra("wait_title", "公告通知");
+                startActivity(intent);
             } else if(menuDes.equals("社交分享")){
-
+                intent = new Intent(getActivity().getApplicationContext(), WaitBuild.class);
+                intent.putExtra("wait_title", "社交分享");
+                startActivity(intent);
             } else if(menuDes.equals("系统设置")){
                 intent = new Intent(getActivity(), SetUpActivity.class);
                 startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
@@ -261,6 +274,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                 case Constant.loginThreadResultCode: //退出登录
                     userAlias.setText("未登录");
                     exit.setVisibility(View.GONE);
+                    slidingBottomLine.setVisibility(View.GONE);
                     accountType.setText("");
                     dataSets.remove(0);
                     dataSets.remove(0);

@@ -42,7 +42,7 @@
     <string name="confirm_code_text">获取验证码</string>
     <string name="p_input_confirm_code">请输入验证码</string>
     <string name="p_input_password">请输入密码</string>
-    <string name="protocol">阅读并同意《软件许可及服务协议》</string>
+    <string name="protocol">阅读并同意《软件许可及注册协议》</string>
     <string name="already_account">已有账号？去登录</string>
     <string name="user_alias">昵称</string>
 

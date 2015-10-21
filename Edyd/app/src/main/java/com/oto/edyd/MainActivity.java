@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.lib.slidingmenu.SlidingMenu;
@@ -32,6 +33,9 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     private RadioButton vehicleServer; //车辆服务
     private RadioButton box; //百宝箱
     public FragmentManager fragmentManager; //fragment管理器
+
+    private TextView mainTitle; //标题
+    private Fragment leftMenuFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,9 +85,11 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         switch (v.getId()){
             case R.id.main_home:
+                mainTitle.setText("首页");
                 customViewPager.setCurrentItem(0);
                 break;
             case R.id.main_market:
+                mainTitle.setText("商城");
                 customViewPager.setCurrentItem(1);
                 //intent = new Intent(MainActivity.this, WaitBuild.class);
                 //startActivity(intent);
@@ -93,14 +99,15 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
                 if (!common.isLogin()) {
                     Toast.makeText(getApplicationContext(), "用户未登录，请先登录", Toast.LENGTH_LONG).show();
-                    //intent = new Intent(MainActivity.this, LoginActivity.class);
-                    //startActivity(intent);
+                    intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivityForResult(intent, 0x03);
                     return;
                 }
                 intent = new Intent(MainActivity.this, OrderOperateActivity.class);
                 startActivity(intent);
                 break;
             case R.id.main_box:
+                mainTitle.setText("百宝箱");
                 customViewPager.setCurrentItem(3);
                 break;
             default:
@@ -120,6 +127,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         customViewPager = (CustomViewPager)findViewById(R.id.content_viewpager); //获取ViewPager实现多页面滑动
         customViewPager.setIsScrollable(false); //设置不能滚动
         fragmentManager = getSupportFragmentManager();
+        mainTitle = (TextView) findViewById(R.id.main_title);
     }
     /**
      * 初始化左侧菜单
@@ -142,7 +150,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         slidingMenu.setBehindOffsetRes(R.dimen.slidingmenu_offset); //SlidingMenu划出时主页面显示的剩余宽度
         // 设置渐入渐出效果的值
         slidingMenu.setFadeDegree(0.35f);
-        Fragment leftMenuFragment = new LeftSlidingFragment();
+        leftMenuFragment = new LeftSlidingFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.left_sliding, leftMenuFragment).commit(); //页面添加到FrameLayout
 
         //设置右边（二级）侧滑菜单
@@ -186,5 +194,20 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
      */
     public void showLeftMenu(View view) {
         getSlidingMenu().showMenu();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode) {
+            case Constant.LOGIN_ACTIVITY_RETURN_CODE:
+//                Fragment leftMenuFragment = new LeftSlidingFragment();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.left_sliding, leftMenuFragment).commit();
+                getSupportFragmentManager().beginTransaction().detach(leftMenuFragment).attach(leftMenuFragment).commitAllowingStateLoss();
+        }
     }
 }

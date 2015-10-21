@@ -72,7 +72,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
     private int visibleLastIndex = 0; //最后可视项索引
     private int visibleItemCount; //当前窗口可见总数
     private ReceiveOrderListAdapter receiveOrderListAdapter; //自定义适配器
-    private View loadMoreView; //加载更多
+    //private View loadMoreView; //加载更多
     private Button loadMoreButton;
 
     private final static int ROWS = 10; //分页加载数据每页10
@@ -117,9 +117,9 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
         receiveOrderBack = (LinearLayout) findViewById(R.id.receive_order_back);
         historyOrder = (TextView) findViewById(R.id.history_order);
         receiveOrderList = (ListView) findViewById(R.id.receive_order_list);
-        loadMoreView = getLayoutInflater().inflate(R.layout.load_more, null);
-        loadMoreButton = (Button)loadMoreView.findViewById(R.id.load_more_button);
-        receiveOrderList.addFooterView(loadMoreView);
+        //loadMoreView = getLayoutInflater().inflate(R.layout.load_more, null);
+        //loadMoreButton = (Button)loadMoreView.findViewById(R.id.load_more_button);
+        //receiveOrderList.addFooterView(loadMoreView);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
 
         mPullToRefreshScrollView = (SwipeRefreshLayout)findViewById(R.id.swipe_container);

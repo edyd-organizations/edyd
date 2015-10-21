@@ -121,9 +121,9 @@ public class HistoryTransportOrderActivity extends Activity implements View.OnCl
     private void initFields() {
         historyTransportOrderBack = (LinearLayout) findViewById(R.id.history_transport_order_back);
         receiveOrderList = (ListView) findViewById(R.id.receive_order_list);
-        loadMoreView = getLayoutInflater().inflate(R.layout.load_more, null);
-        loadMoreButton = (Button)loadMoreView.findViewById(R.id.load_more_button);
-        receiveOrderList.addFooterView(loadMoreView);
+        //loadMoreView = getLayoutInflater().inflate(R.layout.load_more, null);
+        //loadMoreButton = (Button)loadMoreView.findViewById(R.id.load_more_button);
+        //receiveOrderList.addFooterView(loadMoreView);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
 
         mPullToRefreshScrollView = (SwipeRefreshLayout)findViewById(R.id.swipe_container);

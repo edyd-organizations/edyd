@@ -79,6 +79,7 @@
             android:textSize="14sp" />
     </LinearLayout>
     <View
+        android:id="@+id/sliding_bottom_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="20dp"
