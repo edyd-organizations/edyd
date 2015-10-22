@@ -19,6 +19,7 @@ import com.oto.edyd.lib.slidingmenu.app.SlidingFragmentActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.widget.CustomViewPager;
+import com.umeng.update.UmengUpdateAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +54,9 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         market.setOnClickListener(this);
         vehicleServer.setOnClickListener(this);
         box.setOnClickListener(this);
+
+        UmengUpdateAgent.setUpdateOnlyWifi(false);
+        UmengUpdateAgent.update(this);
     }
 
 /*    @Override

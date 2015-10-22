@@ -52,6 +52,8 @@
         <meta-data
             android:name="com.thinkland.juheapi.openid"
             android:value="JH5ba55e75578ecf0b44c6d8a4de432b52" />
+
+        <meta-data android:value="561deb56e0f55aa2430029a0" android:name="UMENG_APPKEY"/>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
@@ -105,6 +107,15 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".WaitBuild"
             android:screenOrientation="portrait"></activity>
+
+        <service
+            android:name="com.umeng.update.net.DownloadingService"
+            android:process=":DownloadingService" >
+        </service>
+        <activity
+            android:name="com.umeng.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
 
         <activity
             android:name="com.mob.tools.MobUIShell"
