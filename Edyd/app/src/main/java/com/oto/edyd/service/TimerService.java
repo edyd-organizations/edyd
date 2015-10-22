@@ -66,8 +66,10 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        controlStatus = intent.getStringExtra("control_status");
-        controlId = intent.getStringExtra("control_id");
+        if(intent != null) {
+            controlStatus = intent.getStringExtra("control_status");
+            controlId = intent.getStringExtra("control_id");
+        }
         if(mListener != null) {
             reActivate(mListener);
         }

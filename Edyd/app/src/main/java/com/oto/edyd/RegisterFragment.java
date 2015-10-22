@@ -69,6 +69,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     private boolean asyncIsOver = false; //异步线程是否结束
 
     private CusProgressDialog registerSuccessDialog;
+    private Common common;
 
     @Nullable
     @Override
@@ -341,6 +342,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         btRegister = (Button) view.findViewById(R.id.bt_register);
         btAlreadyRegister = (Button) view.findViewById(R.id.bt_already_register);
         this.loginFragmentManager = ((LoginActivity)getActivity()).loginFragmentManager;
+        common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
     }
 
     private void setStatus(Button btVerificationCode) {
@@ -475,7 +477,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onResponse(String response) {
                 JSONObject registerJson;
-                String sessionUuid; //用户唯一标识UUID
+                final String sessionUuid; //用户唯一标识UUID
                 String userName = registerPhoneNumber.getText().toString();
 
                 try {
@@ -526,6 +528,115 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                         }
                     });
 
+                    //获取账户类型信息
+                    String accountUrl = Constant.ENTRANCE_PREFIX + "SubmitEnter.json?sessionUuid="+sessionUuid+"&enterprisesId="+Constant.ENTERPRISE_TYPE_PERSONAL;
+                    OkHttpClientManager.getAsyn(accountUrl, new OkHttpClientManager.ResultCallback<String>() {
+                        JSONObject accountTypeJson;
+                        JSONArray accountTypeArray;
+
+                        @Override
+                        public void onError(Request request, Exception e) {
+                            //请求异常
+                            Toast.makeText(getActivity(), Constant.INTERNET_REQUEST_ABNORMAL, Toast.LENGTH_SHORT).show();
+                        }
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                accountTypeJson = new JSONObject(response);
+                                String status = accountTypeJson.getString("status");
+                                if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                                    //账户类型请求失败
+                                    Toast.makeText(getActivity().getApplicationContext(), Constant.ACCOUNT_TYPE_INFO_REQUEST_FAIL, Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                accountTypeArray = accountTypeJson.getJSONArray("rows");
+                                JSONObject rowsJson = accountTypeArray.getJSONObject(0);
+
+                                int enterpriseId = rowsJson.getInt("enterpriseId");
+                                int tenantId = rowsJson.getInt("tenantId");
+                                String enterpriseName = rowsJson.getString("enterpriseName");
+                                Map<Object, Object> accountTypeMap = new HashMap<Object, Object>();
+                                accountTypeMap.put(Constant.ENTERPRISE_ID, enterpriseId);
+                                accountTypeMap.put(Constant.ENTERPRISE_NAME, enterpriseName);
+
+                                //Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                                //保存账户类型信息
+                                if (!common.isSave(accountTypeMap)) {
+                                    Toast.makeText(getActivity().getApplicationContext(), Constant.ACCOUNT_TYPE_INFO_SAVE_FAIL, Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
+                                //获取角色用户
+                                String roleUrl = Constant.ENTRANCE_PREFIX + "Compare.json?sessionUuid="+sessionUuid+"&enterpriseId="+enterpriseId;
+                                OkHttpClientManager.getAsyn(roleUrl, new OkHttpClientManager.ResultCallback<String>() {
+                                    @Override
+                                    public void onError(Request request, Exception e) {
+
+                                    }
+                                    @Override
+                                    public void onResponse(String response) {
+                                        JSONObject roleJSON;
+                                        JSONArray roleArray;
+                                        try {
+                                            roleJSON = new JSONObject(response);
+                                            String status = roleJSON.getString("status");
+                                            if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                                                //角色类型请求失败
+                                                //Toast.makeText(getActivity().getApplicationContext(), "角色用户请求失败", Toast.LENGTH_SHORT).show();
+                                                return;
+                                            }
+                                            roleArray = roleJSON.getJSONArray("rows");
+                                            JSONObject rowsJson = roleArray.getJSONObject(0);
+                                            int roleID = rowsJson.getInt("role");
+                                            Map<Object, Object> roleTypeMap = new HashMap<Object, Object>();
+                                            roleTypeMap.put("role_id", roleID);
+                                            //Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                                            //保存角色类型信息
+                                            if (!common.isSave(roleTypeMap)) {
+                                                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.role_type_info_save_error), Toast.LENGTH_SHORT).show();
+                                                return;
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                    //获取用户ID
+                    String accountIDUrl = Constant.ENTRANCE_PREFIX + "getAccountIdBySessionUuid.json?sessionUuid="+sessionUuid;
+                    OkHttpClientManager.getAsyn(accountIDUrl, new OkHttpClientManager.ResultCallback<String>() {
+                        @Override
+                        public void onError(Request request, Exception e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(String response) {
+                            JSONObject accountIDJSON;
+                            JSONArray accountIDArray;
+                            try {
+                                accountIDJSON = new JSONObject(response);
+                                accountIDArray = accountIDJSON.getJSONArray("rows");
+                                int accountID = accountIDArray.getInt(0);
+                                Map<Object, Object> accountIDMap = new HashMap<Object, Object>();
+                                accountIDMap.put("ACCOUNT_ID", accountID);
+                                //保存账户ID
+                                if (!common.isSave(accountIDMap)) {
+                                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.role_type_info_save_error), Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+
                     Map<Object, Object> registerMap = new HashMap<Object, Object>();
                     registerMap.put(Constant.USER_NAME, userName);
                     registerMap.put(Constant.SESSION_UUID, sessionUuid);
@@ -536,7 +647,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                         registerSuccessDialog.dismissDialog();
                         return;
                     }
-
+                    Common userCommon = userCommon = new Common(getActivity().getSharedPreferences(Constant.USER_INFO_FILE, Context.MODE_PRIVATE));
+                    if(!userCommon.isClearAccount()) {
+                        Toast.makeText(getActivity(), "清除偏好用户信息失败！", Toast.LENGTH_SHORT);
+                    }
                     //登录成功之后做的操作
                     registerSuccessDialog.dismissDialog();
                     Intent intent = new Intent();

@@ -157,4 +157,8 @@
     <!-- 角色iD-->
     <string name="role_id">role_id</string>
 
+    <string name="register_protocol_text_one">
+        本协议是您与多一点智能物流电商平台（包相应的网站和APP，简称"本平台"，网址：www.edyd.cn）所有者（以下简称为"多一点"）之间就多一点网站服务等相关事宜所订立的契约，请您仔细阅读本注册协议，您点击"同意并继续"按钮后，本协议即构成对双方有约束力的法律文件。
+    </string>
+
 </resources>

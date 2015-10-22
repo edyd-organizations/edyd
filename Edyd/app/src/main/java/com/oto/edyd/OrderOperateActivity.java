@@ -545,7 +545,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                 try {
                     jsonObject = new JSONObject(response);
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        Toast.makeText(getApplicationContext(), "接单异常异常", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "接单异常", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     //Toast.makeText(getApplicationContext(), "成功接单", Toast.LENGTH_SHORT).show();

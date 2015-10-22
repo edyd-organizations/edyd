@@ -46,7 +46,7 @@ public class SetUpDetailFragment extends Fragment implements View.OnClickListene
                     initField(setupDetailFragmentView, position);
                     break;
                 case 1: //
-                    setupDetailFragmentView = inflater.inflate(R.layout.setup_content_detail, null);
+                    setupDetailFragmentView = inflater.inflate(R.layout.register_protocol, null);
                     initField(setupDetailFragmentView, position);
                     break;
                 case 2: //关于我们
@@ -75,6 +75,7 @@ public class SetUpDetailFragment extends Fragment implements View.OnClickListene
         setupDetailText = (TextView) view.findViewById(R.id.setup_detail_text);
         switch (position) {
             case 0:
+
                 break;
             case 1:
                 break;
