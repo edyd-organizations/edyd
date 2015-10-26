@@ -122,6 +122,8 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".ForgetPasswordActivity"
+            android:screenOrientation="portrait"></activity>
 
         <receiver android:name=".components.SmsReceiver">
             <intent-filter android:priority="800">

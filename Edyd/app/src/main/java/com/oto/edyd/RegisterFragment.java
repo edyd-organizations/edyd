@@ -408,6 +408,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         SMSSDK.unregisterAllEventHandler();
     }
 
+    /**
+     * 注册验证
+     */
     private void register() {
         String userName = registerPhoneNumber.getText().toString(); //用户名
         String code = registerVerificationCode.getText().toString(); //验证码

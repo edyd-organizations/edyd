@@ -612,6 +612,11 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
         goodsTotalWeight.setText(orderDetail.getGoodsTotalWeight());
 
         receiveOrder.setOnClickListener(new CusOnClickListener(orderDetail)); //给接单按钮添加监听事件
+
+        if(!(orderStatusLists.get(0) == 99)) {
+            receiveOrder.setBackgroundResource(R.drawable.border_corner_order);
+            receiveOrder.setEnabled(true);
+        }
         //loadingDialog.getLoadingDialog().dismiss();
     }
 
@@ -635,6 +640,10 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
      * @param orderDetail
      */
     private void operationOrder(final OrderDetail orderDetail) {
+
+        receiveOrder.setBackgroundResource(R.drawable.border_corner_order);
+        receiveOrder.setEnabled(false);
+
         int controlId = orderDetail.getControlId();
         final int controlStatus = orderDetail.getOrderStatusLists().get(0);
         String sessionUUID = getSessionUUID();
@@ -642,7 +651,8 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
-
+                receiveOrder.setBackgroundResource(R.drawable.border_corner_order);
+                receiveOrder.setEnabled(true);
             }
 
             @Override
@@ -663,7 +673,7 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
 //                    timerService.startTimer();
 //                    timerService.reActivate(listener);
 
-                    ServiceUtil.cancelAlarmManager(getApplicationContext());
+                    //ServiceUtil.cancelAlarmManager(getApplicationContext());
                     ServiceUtil.invokeTimerPOIService(getApplicationContext(), String.valueOf(orderDetail.getControlId()), String.valueOf(controlStatus));
 
                     switch (controlStatus) {

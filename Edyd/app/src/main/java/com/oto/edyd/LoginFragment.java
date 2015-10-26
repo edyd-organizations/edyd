@@ -83,6 +83,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         btLogin.setOnClickListener(this);
         linearLayoutRemember.setOnClickListener(this);
         loginUserRegister.setOnClickListener(this);
+        forgetPassword.setOnClickListener(this);
         etUserName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -158,6 +159,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     }
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()){
             case R.id.login_back:
                 getActivity().finish(); //结束LoginActivity
@@ -176,6 +178,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.forget_password:
                 //忘记密码
+                intent = new Intent(getActivity(), ForgetPasswordActivity.class);
+                startActivity(intent);
                 break;
             case R.id.ll_remember:
                 boolean tag = (boolean)rememberPassword.getTag(R.id.remember_password);

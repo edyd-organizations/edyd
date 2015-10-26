@@ -34,7 +34,6 @@ public  class Constant {
     public final static String USER_REGISTER_EXCEPTION = "700"; //用户注册异常
     public final static int NETWORK_EXCEPTION = 701; //网络异常
 
-
     //短信运营商状态吗
     public final static String INVALID_VERIFICATION_CODE = "520"; //无效验证码
 

@@ -120,7 +120,7 @@ public class WeatherActivity extends Activity implements LocationSource, AMapLoc
         super.onCreate(savedInstanceState);
         weatherProgressDialog = new CusProgressDialog(this, "正在加载天气...");
         weatherProgressDialog.getLoadingDialog().show();
-        new Thread(new WeatherDialogThread(weatherProgressDialog)).start(); //弹出对话框线程
+        //new Thread(new WeatherDialogThread(weatherProgressDialog)).start(); //弹出对话框线程
 
         setContentView(R.layout.current_weather);
         NetWork netWork = new NetWork(this);
@@ -156,6 +156,9 @@ public class WeatherActivity extends Activity implements LocationSource, AMapLoc
                 @Override
                 public void OnParserComplete(List<HoursWeatherBean> hoursWeatherBeanList, PMBean pmBean, WeatherBean weatherBean) {
 
+                    if(weatherProgressDialog != null) {
+                        weatherProgressDialog.dismissDialog();
+                    }
                     mPullToRefreshScrollView.onRefreshComplete();
                     if (hoursWeatherBeanList != null && hoursWeatherBeanList.size() >= 5) {
                         setHourViews(hoursWeatherBeanList);

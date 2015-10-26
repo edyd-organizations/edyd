@@ -57,6 +57,7 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
     private AMapLocation location;
     private String controlStatus;
     private String controlId;
+    private Intent intent;
 
     @Override
     public void onCreate() {
@@ -66,6 +67,7 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        this.intent = intent;
         if(intent != null) {
             controlStatus = intent.getStringExtra("control_status");
             controlId = intent.getStringExtra("control_id");
@@ -111,15 +113,17 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
                 //sendLocationInfo(amapLocation); //发送定位类型
                 if(controlStatus != null && !controlStatus.equals("")) {
                     if(controlStatus.equals("60")) {
-                        sendEndStatusLocationInfo(location, controlId);
+//                        controlStatus = null;
+//                        intent.removeExtra("control_status");
+//                        intent.removeExtra("control_id");
+//                        sendEndStatusLocationInfo(location, controlId);
+                        isInsertLA(); //检查是否插入状态为60的经纬度经纬度
                     } else {
                         getTimerOrder();
                     }
                 } else {
                     getTimerOrder();
                 }
-
-
                 deactivate();
             } else {
                 Log.e("AmapErr","Location ERR:" + amapLocation.getAMapException().getErrorCode());
@@ -221,6 +225,9 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
                     if (controlIDList.size() > 0) {
                         sendLocationInfo(location);
                     }
+                    break;
+                case 0x12:
+                    sendEndStatusLocationInfo(location, controlId);
                     break;
             }
         }
@@ -331,7 +338,7 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
             direction = amapLocation.getBearing(); //定位方向
 
             for(int i = 0; i < controlIDList.size(); i++) {
-                url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?lng="+longitude+"&lat="+latitude+"&controlNum"
+                url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?lng="+longitude+"&lat="+latitude+"&controlId"
                         +controlIDList.get(i)+"&tel"+tel+"&speed="+speed+"&direction"+direction;
                 OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
                     @Override
@@ -360,6 +367,7 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
     }
 
     private void sendEndStatusLocationInfo(AMapLocation amapLocation, String controlId) {
+
         String url = ""; //访问地址
         // String accountId= common.getStringByKey("ACCOUNT_ID"); //登录用户ID
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID); //会话ID
@@ -370,6 +378,7 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
         float speed = 0f;
         float direction = 0f;
 
+        getTimerOrder();
         url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?sessionUuid="+sessionUuid+"&lng="+longitude+"&lat="+latitude+"&controlId="+controlId+"&tel="+tel
                 +"&controlStatus="+ 99;
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
@@ -424,5 +433,45 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
      */
     private String getSessionUUID() {
         return common.getStringByKey(Constant.SESSION_UUID);
+    }
+
+    /**
+     * 检查是否插入经纬度
+     */
+    private void isInsertLA() {
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID); //会话ID
+        String url = Constant.ENTRANCE_PREFIX + "appJudgeLatestStatus.json?sessionUuid="+sessionUuid+"&controlId="+controlId;
+        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+            JSONObject jsonObject;
+            JSONArray jsonArray;
+            @Override
+            public void onError(Request request, Exception e) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    jsonObject = new JSONObject(response);
+                    if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        //Toast.makeText(getApplicationContext(), "lib定位数据异常", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    jsonArray = jsonObject.getJSONArray("rows");
+                    boolean isInsert = jsonArray.getBoolean(0); //是否有插入
+
+                    if(!isInsert) {
+                        Message message = new Message();
+                        message.what = 0x12;
+                        handler.sendMessage(message);
+                    }
+
+                    //Toast.makeText(getApplicationContext(), "发送经纬度", Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

@@ -42,13 +42,15 @@ public class ServiceUtil {
      */
     public static void invokeTimerPOIService(Context context, String controlId, String controlStatus){
         //Log.i("ServiceUtil-AlarmManager", "invokeTimerPOIService wac called.." );
+
         PendingIntent alarmSender = null;
         Intent startIntent = new Intent(context, TimerService.class);
         startIntent.putExtra("control_status", controlStatus);
         startIntent.putExtra("control_id", controlId);
         startIntent.setAction(Constant.ALARM_SERVICE_ACTION);
+
         try {
-            alarmSender = PendingIntent.getService(context, 0, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmSender = PendingIntent.getService(context, 0, startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         } catch (Exception e) {
            // Log.i("ServiceUtil-AlarmManager", "failed to start " + e.toString());
         }
@@ -65,8 +67,9 @@ public class ServiceUtil {
         PendingIntent alarmSender = null;
         Intent startIntent = new Intent(context, TimerService.class);
         startIntent.setAction(Constant.ALARM_SERVICE_ACTION);
+        // FLAG_UPDATE_CURRENT
         try {
-            alarmSender = PendingIntent.getService(context, 0, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmSender = PendingIntent.getService(context, 0, startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         } catch (Exception e) {
             // Log.i("ServiceUtil-AlarmManager", "failed to start " + e.toString());
         }
@@ -78,7 +81,7 @@ public class ServiceUtil {
         //Log.i("ServiceUtil-AlarmManager", "cancleAlarmManager to start ");
         Intent intent = new Intent(context,TimerService.class);
         intent.setAction(Constant.ALARM_SERVICE_ACTION);
-        PendingIntent pendingIntent=PendingIntent.getService(context, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent=PendingIntent.getService(context, 0, intent,PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarm=(AlarmManager)context.getSystemService(Activity.ALARM_SERVICE);
         alarm.cancel(pendingIntent);
     }

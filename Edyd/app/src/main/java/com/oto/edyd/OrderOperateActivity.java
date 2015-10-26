@@ -527,15 +527,22 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
      */
     private void operationOrder(final int position, final View view) {
 
+        TextView textView = (TextView) view.findViewById(R.id.receive_order); //订单操作
+        textView.setBackgroundResource(R.drawable.border_corner_order);
+        textView.setEnabled(false);
+
         int controlId = idList.get(position);
-        String controlNum = orderList.get(position);
-        final int controlStatus = orderStatusList.get(position);
         String sessionUUID = getSessionUUID();
         String url = Constant.ENTRANCE_PREFIX + "appAutoUpdateOrderStatus.json?sessionUuid="+sessionUUID+"&controlId=" + controlId;
         OkHttpClientManager.getAsyn(url, new ReceiveOrderCallback<String>(2) {
+            TextView textView = null;
+            int controlId = idList.get(position);
+            int controlStatus = orderStatusList.get(position);
             @Override
             public void onError(Request request, Exception e) {
-
+                textView = (TextView) view.findViewById(R.id.receive_order); //订单操作
+                textView.setBackgroundResource(R.drawable.border_corner_order);
+                textView.setEnabled(true);
             }
 
             @Override
@@ -585,6 +592,15 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                             //imageView.setVisibility(View.GONE);
                             break;
                     }
+                    //ServiceUtil.cancelAlarmManager(getApplicationContext());
+                    if(!(controlStatus == 60)) {
+                        ServiceUtil.invokeTimerPOIService(getApplicationContext(), String.valueOf(controlId), String.valueOf(controlStatus));
+                        textView = (TextView) view.findViewById(R.id.receive_order); //订单操作
+                        textView.setBackgroundResource(R.drawable.border_corner_order);
+                        textView.setEnabled(true);
+                    } else if(controlStatus == 60) {
+                        ServiceUtil.invokeTimerPOIService(getApplicationContext(), String.valueOf(controlId), String.valueOf(controlStatus));
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -597,8 +613,6 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
 //        timerService.stopTimer();
 //        timerService.startTimer();
 //        timerService.reActivate(listener);
-        ServiceUtil.cancelAlarmManager(getApplicationContext());
-        ServiceUtil.invokeTimerPOIService(getApplicationContext(), String.valueOf(controlId), String.valueOf(controlStatus));
     }
 
     /**

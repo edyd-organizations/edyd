@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -39,6 +40,8 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
     private TextView mainTitle; //标题
     private LeftSlidingFragment leftMenuFragment;
+    // 定义一个变量，来标识退出时间
+    private long exitTime = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -269,6 +272,25 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             String accountTypeStr = data.getExtras().getString("account_type");
             leftMenuFragment.accountType.setText(accountTypeStr);
 
+        }
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void exit() {
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        } else {
+            finish();
         }
     }
 }
