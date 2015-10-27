@@ -34,6 +34,7 @@ public class UpdatePasswordFragment extends Fragment implements View.OnClickList
     private EditText etConfirmPassword; //确认密码
     private Button btSave; //保存
     private FragmentManager AccountFragmentManager; //LoginActivity布局管理器
+    private CusProgressDialog updatePasswordDialog; //过度画面
 
     @Nullable
     @Override
@@ -85,7 +86,6 @@ public class UpdatePasswordFragment extends Fragment implements View.OnClickList
         OkHttpClientManager.getAsyn(url, new UpdatePasswordResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
-
             }
             @Override
             public void onResponse(String response) {
@@ -108,14 +108,14 @@ public class UpdatePasswordFragment extends Fragment implements View.OnClickList
         @Override
         public void onBefore() {
             //请求之前操作
-            //loadingDialog = new CusProgressDialog(getActivity(), "正在登录...");
-            //loadingDialog.getLoadingDialog().show();
+            updatePasswordDialog = new CusProgressDialog(getActivity(), "正在修改...");
+            updatePasswordDialog.getLoadingDialog().show();
         }
 
         @Override
         public void onAfter() {
             //请求之后要做的操作
-            //loadingDialog.getLoadingDialog().dismiss();
+            updatePasswordDialog.getLoadingDialog().dismiss();
         }
     }
 }

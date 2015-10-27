@@ -23,6 +23,7 @@ import com.oto.edyd.service.TimerService;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
+import com.oto.edyd.utils.MLocation;
 import com.oto.edyd.utils.NumberFormat;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.oto.edyd.utils.ServiceUtil;
@@ -674,8 +675,8 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
 //                    timerService.reActivate(listener);
 
                     //ServiceUtil.cancelAlarmManager(getApplicationContext());
-                    ServiceUtil.invokeTimerPOIService(getApplicationContext(), String.valueOf(orderDetail.getControlId()), String.valueOf(controlStatus));
-
+                   // ServiceUtil.invokeTimerPOIService(getApplicationContext(), String.valueOf(orderDetail.getControlId()), String.valueOf(controlStatus));
+                    MLocation mLocation;
                     switch (controlStatus) {
                         case 17:
                             tControlStatus = 20;
@@ -696,6 +697,7 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
                             tControlStatus = 99;
                             break;
                     }
+                    mLocation = new MLocation(getApplicationContext(), common, String.valueOf(orderDetail.getControlId()), String.valueOf(tControlStatus));
 
                     Message message = new Message();
                     message.what = 0x13;

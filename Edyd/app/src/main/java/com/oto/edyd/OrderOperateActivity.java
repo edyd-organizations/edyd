@@ -28,6 +28,7 @@ import com.oto.edyd.service.TimerService;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
+import com.oto.edyd.utils.MLocation;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.oto.edyd.utils.ServiceUtil;
 import com.squareup.okhttp.Request;
@@ -558,6 +559,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                     //Toast.makeText(getApplicationContext(), "成功接单", Toast.LENGTH_SHORT).show();
                     ImageView imageView = (ImageView) view.findViewById(R.id.order_status); //订单状态
                     TextView textView = (TextView) view.findViewById(R.id.receive_order); //订单操作
+                    MLocation mLocation;
                     switch (controlStatus) {
                         case 17: //下一个状态
                             imageView.setImageResource(R.mipmap.tts_loading_way); //装货在途icon
@@ -594,12 +596,14 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                     }
                     //ServiceUtil.cancelAlarmManager(getApplicationContext());
                     if(!(controlStatus == 60)) {
-                        ServiceUtil.invokeTimerPOIService(getApplicationContext(), String.valueOf(controlId), String.valueOf(controlStatus));
+                        //ServiceUtil.invokeTimerPOIService(getApplicationContext(), String.valueOf(controlId), String.valueOf(controlStatus));
                         textView = (TextView) view.findViewById(R.id.receive_order); //订单操作
                         textView.setBackgroundResource(R.drawable.border_corner_order);
                         textView.setEnabled(true);
+                        mLocation = new MLocation(getApplicationContext(), common, String.valueOf(controlId), String.valueOf(orderStatusList.get(position)));
                     } else if(controlStatus == 60) {
-                        ServiceUtil.invokeTimerPOIService(getApplicationContext(), String.valueOf(controlId), String.valueOf(controlStatus));
+                        //ServiceUtil.invokeTimerPOIService(getApplicationContext(), String.valueOf(controlId), String.valueOf(controlStatus));
+                        mLocation = new MLocation(getApplicationContext(), common, String.valueOf(controlId), String.valueOf(99));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

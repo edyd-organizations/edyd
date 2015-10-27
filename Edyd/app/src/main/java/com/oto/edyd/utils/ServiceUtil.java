@@ -12,6 +12,7 @@ import com.oto.edyd.service.TimerService;
 import java.util.List;
 
 /**
+ * 定时启动发送经纬度service
  * Created by yql on 2015/10/15.
  */
 public class ServiceUtil {
@@ -37,30 +38,6 @@ public class ServiceUtil {
     /**
      * 定时器，订单状态
      * @param context
-     * @param controlId
-     * @param controlStatus
-     */
-    public static void invokeTimerPOIService(Context context, String controlId, String controlStatus){
-        //Log.i("ServiceUtil-AlarmManager", "invokeTimerPOIService wac called.." );
-
-        PendingIntent alarmSender = null;
-        Intent startIntent = new Intent(context, TimerService.class);
-        startIntent.putExtra("control_status", controlStatus);
-        startIntent.putExtra("control_id", controlId);
-        startIntent.setAction(Constant.ALARM_SERVICE_ACTION);
-
-        try {
-            alarmSender = PendingIntent.getService(context, 0, startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        } catch (Exception e) {
-           // Log.i("ServiceUtil-AlarmManager", "failed to start " + e.toString());
-        }
-        AlarmManager am = (AlarmManager) context.getSystemService(Activity.ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), Constant.ELAPSED_TIME, alarmSender);
-    }
-
-    /**
-     * 定时器，订单状态
-     * @param context
      */
     public static void invokeTimerPOIService(Context context){
         //Log.i("ServiceUtil-AlarmManager", "invokeTimerPOIService wac called.." );
@@ -69,7 +46,7 @@ public class ServiceUtil {
         startIntent.setAction(Constant.ALARM_SERVICE_ACTION);
         // FLAG_UPDATE_CURRENT
         try {
-            alarmSender = PendingIntent.getService(context, 0, startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            alarmSender = PendingIntent.getService(context, 0, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         } catch (Exception e) {
             // Log.i("ServiceUtil-AlarmManager", "failed to start " + e.toString());
         }
@@ -81,7 +58,7 @@ public class ServiceUtil {
         //Log.i("ServiceUtil-AlarmManager", "cancleAlarmManager to start ");
         Intent intent = new Intent(context,TimerService.class);
         intent.setAction(Constant.ALARM_SERVICE_ACTION);
-        PendingIntent pendingIntent=PendingIntent.getService(context, 0, intent,PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent=PendingIntent.getService(context, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarm=(AlarmManager)context.getSystemService(Activity.ALARM_SERVICE);
         alarm.cancel(pendingIntent);
     }
