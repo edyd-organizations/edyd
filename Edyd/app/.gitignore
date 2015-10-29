@@ -1,1 +1,4 @@
 /build
+
+#忽略app-release.apk文件
+app-release.apk
