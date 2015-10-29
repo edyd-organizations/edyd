@@ -167,6 +167,8 @@
     <!-- 蓝色 -->
     <color name="holo_blue_bright">#26ddfd</color>
     <color name="blue_c3f9e4">#c3f9e4</color>
+    <color name="blue_106ab8">#106ab8</color>
+
     <!--白色-->
     <color name="white_f3f3f3">#f3f3f3</color>
 

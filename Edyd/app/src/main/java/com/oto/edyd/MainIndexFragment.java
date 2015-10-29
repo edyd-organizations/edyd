@@ -3,8 +3,6 @@ package com.oto.edyd;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,10 +19,7 @@ import com.oto.edyd.lib.imageindicator.AutoPlayManager;
 import com.oto.edyd.lib.imageindicator.ImageIndicatorView;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
-import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.NetWork;
-
-import retrofit.mime.MultipartTypedOutput;
 
 /**
  * Created by yql on 2015/8/25.
@@ -92,7 +87,17 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.oil_server_main: //油品服务
-                intent = new Intent(getActivity(), OilServiceActivity.class);
+//                intent = new Intent(getActivity(), OilServiceActivity.class);
+//                startActivity(intent);
+                common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                if (!common.isLogin()) {
+                    Toast.makeText(getActivity(), "用户未登录，请先登录", Toast.LENGTH_LONG).show();
+                    //intent = new Intent(MainActivity.this, LoginActivity.class);
+                    return;
+                }
+                //intent = new Intent(getActivity(), OilCardApplicationActivity.class);
+                intent = new Intent(getActivity(), OilCardAmountDistributeActivity.class);
+                //intent = new Intent(getActivity(), OilServiceActivity.class);
                 startActivity(intent);
                 break;
             case R.id.insurance_main: //保险服务
