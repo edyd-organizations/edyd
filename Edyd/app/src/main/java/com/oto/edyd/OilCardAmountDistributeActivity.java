@@ -96,6 +96,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
             }
         }
     };
+
     /**
      * 请求预分配用户列表
      */

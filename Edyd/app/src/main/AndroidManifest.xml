@@ -114,6 +114,10 @@
             android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".AddOilActivity"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".OilDistributeDetailActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".OilTransactionDetailActivity"
+            android:screenOrientation="portrait"></activity>
 
         <service
             android:name="com.umeng.update.net.DownloadingService"

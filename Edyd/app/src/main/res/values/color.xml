@@ -167,6 +167,7 @@
     <!-- 蓝色 -->
     <color name="holo_blue_bright">#26ddfd</color>
     <color name="blue_c3f9e4">#c3f9e4</color>
+    <color name="blue_6699FF">#6699FF</color>
     <color name="blue_106ab8">#106ab8</color>
 
     <!--白色-->
@@ -179,4 +180,7 @@
     <color name="green_00FF66">#00FF66</color>
     <color name="green_339933">#339933</color>
     <color name="green_55e6ac">#55e6ac</color>
+
+    <color name="orange_FFCC66">#FFCC66</color>
+    <color name="orange_FF6600">#FF6600</color>
 </resources>

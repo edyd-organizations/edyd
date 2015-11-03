@@ -166,4 +166,6 @@
     <string name="oil_card_amount_distribute">油卡金额分配</string>
     <string name="my_add_oil_title">我的油卡</string>
     <string name="oil_service_title">油品服务</string>
+    <string name="oil_card_distribute_detail">分配明细</string>
+    <string name="oil_card_transaction_detail">交易明细</string>
 </resources>
