@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <!--模拟ActionBar-->
     <RelativeLayout
         android:layout_width="match_parent"
@@ -35,120 +34,131 @@
             android:textSize="20sp"
             android:textStyle="bold"/>
     </RelativeLayout>
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
+        android:layout_height="match_parent"
+        android:background="@color/gray_DDDDDD"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_margin="5dp">
+            <EditText
+                android:id="@+id/type_car_number"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:hint="请输入车牌号"
+                android:singleLine="true"
+                android:drawableLeft="@mipmap/search"
+                android:textColorHint="#CCCCCC"
+                android:textSize="14sp"
+                android:drawablePadding="5dp"
+                android:padding="5dp"
+                android:background="@color/white"/>
+            <Button
+                android:id="@+id/search"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="4"
+                android:text="查找"
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="2dp"
+                android:background="@drawable/border_corner_login_enable"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@color/white">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="额度账余额："/>
+                <TextView
+                    android:id="@+id/amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/red_fe020e"
+                    android:text="1000.0"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="16sp"
+                    android:text="元"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/average_distribute"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:text="等额预分配"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:background="@drawable/border_corner_login_enable"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/gray_DDDDDD"
-            android:orientation="vertical"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:background="@color/white"
+            android:layout_marginTop="2dp"
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:orientation="horizontal"
-                android:layout_margin="5dp">
-                <EditText
-                    android:id="@+id/type_car_number"
+                android:layout_weight="2">
+                <android.support.v4.widget.SwipeRefreshLayout
+                    android:id="@+id/swipe_container"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_weight="1"
-                    android:hint="请输入车牌号"
-                    android:singleLine="true"
-                    android:drawableLeft="@mipmap/search"
-                    android:textColorHint="#CCCCCC"
-                    android:textSize="14sp"
-                    android:drawablePadding="5dp"
-                    android:padding="5dp"
-                    android:background="@color/white"/>
-                <Button
-                    android:id="@+id/search"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_weight="4"
-                    android:text="查找"
-                    android:textSize="15sp"
-                    android:textColor="@color/white"
-                    android:layout_marginLeft="2dp"
-                    android:background="@drawable/border_corner_login_enable"/>
-            </LinearLayout>
+                    android:layout_height="match_parent">
+                    <ListView
+                        android:id="@+id/list_distribute_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="none"
+                        android:descendantFocusability="beforeDescendants">
 
+                    </ListView>
+                </android.support.v4.widget.SwipeRefreshLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray_DDDDDD"/>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:paddingTop="20dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:background="@color/white">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:text="额度账余额："/>
-                    <TextView
-                        android:id="@+id/amount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textColor="@color/red_fe020e"
-                        android:text="1000.0"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:textSize="16sp"
-                        android:text="元"/>
-                </LinearLayout>
-                <TextView
-                    android:id="@+id/average_distribute"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="10dp"
-                    android:text="等额预分配"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:textColor="@color/white"
-                    android:background="@drawable/border_corner_login_enable"/>
-            </LinearLayout>
-
-            <ListView
-                android:id="@+id/list_distribute_user"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginTop="5dp"
-                android:choiceMode="singleChoice"
-                android:background="@color/white">
-
-            </ListView>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:orientation="vertical">
+                android:layout_weight="1">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="5dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="本次预分配卡数："
-                        android:textColor="@color/black"
                         android:textSize="14sp" />
                     <TextView
                         android:id="@+id/current_distribute_card_number"
@@ -167,7 +177,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="本次预分配金额："
-                        android:textColor="@color/black"
                         android:textSize="14sp" />
                     <TextView
                         android:id="@+id/current_prediction_distribute_amount"
@@ -177,12 +186,11 @@
                         android:textSize="14sp"
                         android:textColor="@color/red_fe020e" />
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp">
                     <LinearLayout
                         android:layout_width="0dp"
@@ -224,20 +232,17 @@
                             android:paddingLeft="20dp"/>
                     </LinearLayout>
                 </LinearLayout>
-                <RelativeLayout
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/gray_DDDDDD"
-                        android:layout_alignParentBottom="true"
-                        android:padding="10dp"
-                        android:textSize="12sp"
-                        android:textColor="@color/red_FF0000"
-                        android:text="注：使用查找车牌号完成金额分配操作以后，请按次点击提交"/>
-                </RelativeLayout>
+                    android:layout_height="match_parent"
+                    android:background="@color/gray_DDDDDD"
+                    android:paddingLeft="10dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/red_FF0000"
+                    android:text="注：使用查找车牌号完成金额分配操作以后，请按次点击提交"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"/>
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 </LinearLayout>

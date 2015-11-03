@@ -24,8 +24,8 @@ public  class Constant {
     public final static String SESSION_UUID = "session_uuid";
 
     //网络地址
-    public final static String ENTRANCE_PREFIX = "http://120.24.236.223/api/v1.0/"; //接口前缀地址
-    //public final static String ENTRANCE_PREFIX = "http://www.edyd.cn/api/v1.0/"; //接口前缀地址
+    //public final static String ENTRANCE_PREFIX = "http://120.24.236.223/api/v1.0/"; //接口前缀地址
+    public final static String ENTRANCE_PREFIX = "http://www.edyd.cn/api/v1.0/"; //接口前缀地址
     public final static String EDYD = "http://www.edyd.cn/";
     //系统状态码
     public final static String LOGIN_SUCCESS_STATUS = "200";  //请求成功
@@ -93,7 +93,7 @@ public  class Constant {
     public final static String APPSECRET = "63d9051492bf34576212710e76e7f94d";// 填写从短信SDK应用后台注册得到的APPSECRET
 
 
-    public static final int ELAPSED_TIME = 10*60 * 1000;
+    public static final int ELAPSED_TIME = 10 * 60 * 1000;
     public static final int RETRIVE_SERVICE_COUNT = 50;
     public static final int ELAPSED_TIME_DELAY = 2*60*1000;//get GPS delayed
     public static final int BROADCAST_ELAPSED_TIME_DELAY = 2*60*1000;

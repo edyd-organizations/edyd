@@ -7,7 +7,8 @@
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:paddingRight="20dp"
+    android:focusable="false">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -24,21 +25,18 @@
                 <TextView
                     android:id="@+id/distribute_name"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="戴刚"/>
+                    android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/car_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="桂ABC123"
                     android:layout_marginLeft="10dp"/>
             </LinearLayout>
             <TextView
                 android:id="@+id/card_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="GTC19473849373"/>
+                android:layout_marginTop="5dp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -52,7 +50,12 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:hint="预分配金额"
+                android:maxLength="9"
+                android:numeric="decimal"
+                android:textColorHint="@color/gray_DDDDDD"
                 android:textSize="12sp"
+                android:textColor="@android:color/black"
+                android:descendantFocusability="beforeDescendants"
                 android:background="@drawable/edittext_border_orange"/>
             <TextView
                 android:layout_width="wrap_content"

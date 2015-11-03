@@ -95,16 +95,13 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
             }
         }
 
-        if(isCheckedSmsRemind) {
-            String phone = (phoneNumber.getText().toString()).trim();
-            phone = phone.replaceAll(" ", "");
-            if(phone != null && phone.equals("")) {
-                Toast.makeText(getApplicationContext(), "手机已设置不能为空", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        String mPhone = (phoneNumber.getText().toString()).trim();
+        mPhone = mPhone.replaceAll(" ", "");
+        if(mPhone != null && mPhone.equals("")) {
+            Toast.makeText(getApplicationContext(), "手机号码不能为空", Toast.LENGTH_SHORT).show();
+            return;
         }
         applyOilCard();
-
     }
     /**
      * 申请油卡

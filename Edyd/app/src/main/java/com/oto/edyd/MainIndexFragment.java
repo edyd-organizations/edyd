@@ -95,9 +95,7 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
                     //intent = new Intent(MainActivity.this, LoginActivity.class);
                     return;
                 }
-                //intent = new Intent(getActivity(), OilCardApplicationActivity.class);
-                intent = new Intent(getActivity(), OilCardAmountDistributeActivity.class);
-                //intent = new Intent(getActivity(), OilServiceActivity.class);
+                intent = new Intent(getActivity(), OilServiceActivity.class);
                 startActivity(intent);
                 break;
             case R.id.insurance_main: //保险服务
