@@ -170,4 +170,5 @@
     <string name="oil_card_distribute_detail">分配明细</string>
     <string name="oil_card_transaction_detail">交易明细</string>
     <string name="oil_card_changed_title">油卡变更</string>
+    <string name="average_distribute_amount">等额预分配</string>
 </resources>

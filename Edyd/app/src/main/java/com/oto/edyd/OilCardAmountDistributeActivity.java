@@ -2,6 +2,7 @@ package com.oto.edyd;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -47,6 +48,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         requestDistributeUserList(); //请求列表数据
 
         back.setOnClickListener(this);
+        averageDistribute.setOnClickListener(this);
         listDistributeUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -79,10 +81,14 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.back: //返回
                 finish();
                 break;
+            case R.id.average_distribute:
+                intent = new Intent(getApplicationContext(), AverageDistributeAmountActivity.class);
+                startActivity(intent);
         }
     }
 
