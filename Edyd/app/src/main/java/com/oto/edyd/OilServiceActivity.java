@@ -72,6 +72,8 @@ public class OilServiceActivity extends Activity implements View.OnClickListener
                 startActivity(intent);
                 break;
             case R.id.ll_oil_card_change: //油卡变更
+                intent = new Intent(getApplicationContext(), OilCardChangeActivity.class); //油卡申请
+                startActivity(intent);
                 break;
         }
     }

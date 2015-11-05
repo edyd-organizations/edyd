@@ -2,6 +2,7 @@ package com.oto.edyd;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -37,6 +38,8 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
     private TextView balance; //余额
     private TextView lastTime; //最后加油时间
     private ExpandableListView distributeDetailList; //分配明细列表
+    private TextView tOilCardApply; //油卡申请
+    private TextView tAmountDistribute; //金额分配
 
     private List<OilTransactionDetail> oilDistributeDetails = new ArrayList<OilTransactionDetail>(); //列表数据
     Map<Integer, OilTransactionDetailItem> oilTransactionDetailItemMap = new HashMap<Integer, OilTransactionDetailItem>();
@@ -49,6 +52,8 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
         requestDistributeUserList(); //请求列表数据
 
         back.setOnClickListener(this);
+        tOilCardApply.setOnClickListener(this);
+        tAmountDistribute.setOnClickListener(this);
     }
 
     /**
@@ -64,13 +69,25 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
         lastTime = (TextView) findViewById(R.id.last_time);
         distributeDetailList = (ExpandableListView) findViewById(R.id.distribute_detail_list);
         distributeDetailList.setGroupIndicator(null);
+        tOilCardApply = (TextView) findViewById(R.id.oil_card_apply);
+        tAmountDistribute = (TextView) findViewById(R.id.oil_card_account_distribute);
     }
 
     @Override
     public void onClick(View v) {
+        Intent intent;
+
         switch (v.getId()) {
             case R.id.back:
                 finish();
+                break;
+            case R.id.oil_card_apply: //油卡申请
+                intent = new Intent(getApplicationContext(), OilCardApplicationActivity.class); //油卡金额分配
+                startActivity(intent);
+                break;
+            case R.id.oil_card_account_distribute: //金额分配
+                intent = new Intent(getApplicationContext(), OilCardAmountDistributeActivity.class); //油卡金额分配
+                startActivity(intent);
                 break;
         }
     }

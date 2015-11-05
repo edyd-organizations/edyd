@@ -118,6 +118,10 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".OilTransactionDetailActivity"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".OilCardChangeActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".OilCardAddDetailActivity"
+            android:screenOrientation="portrait"></activity>
 
         <service
             android:name="com.umeng.update.net.DownloadingService"

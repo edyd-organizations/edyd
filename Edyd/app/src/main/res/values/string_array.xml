@@ -77,4 +77,9 @@
         <item>不限车型</item>
         <item>不限车长</item>
     </string-array>
+    
+    <string-array name="oil_card_change">
+        <item>油卡密码</item>
+        <item>车牌号</item>
+    </string-array>
 </resources>

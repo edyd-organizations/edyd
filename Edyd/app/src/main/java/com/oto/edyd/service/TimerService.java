@@ -95,6 +95,7 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
         location = amapLocation;
+
         if (mListener != null && amapLocation != null) {
             if (amapLocation != null && amapLocation.getAMapException().getErrorCode() == 0) {
                 getTimerOrder();

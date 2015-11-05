@@ -2,12 +2,14 @@ package com.oto.edyd;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,6 +33,9 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
     private TextView apply; //申请
     private TextView accountDistribute; //金额分配
 
+    private TextView tOilCardApply; //油卡申请
+    private TextView tAmountDistribute; //金额分配
+
     private List<AddOilCard> addOilCards = new ArrayList<AddOilCard>(); //我的加油卡数量
 
     @Override
@@ -41,6 +46,16 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
 
         requestAddOilCardList();
         back.setOnClickListener(this);
+        tOilCardApply.setOnClickListener(this);
+        tAmountDistribute.setOnClickListener(this);
+
+        cardNumberList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), OilCardAddDetailActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /**
@@ -53,6 +68,8 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
         cardNumberList = (ListView) findViewById(R.id.card_number_list);
         apply = (TextView) findViewById(R.id.oil_card_apply);
         accountDistribute = (TextView) findViewById(R.id.oil_card_account_distribute);
+        tOilCardApply = (TextView) findViewById(R.id.oil_card_apply);
+        tAmountDistribute = (TextView) findViewById(R.id.oil_card_account_distribute);
     }
 
     /**
@@ -61,10 +78,21 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
+        Intent intent;
+
         switch (v.getId()) {
-            case R.id.back:
+            case R.id.back: //返回
                 finish();
                 break;
+            case R.id.oil_card_apply: //油卡申请
+                intent = new Intent(getApplicationContext(), OilCardApplicationActivity.class); //油卡金额分配
+                startActivity(intent);
+                break;
+            case R.id.oil_card_account_distribute: //金额分配
+                intent = new Intent(getApplicationContext(), OilCardAmountDistributeActivity.class); //油卡金额分配
+                startActivity(intent);
+                break;
+
         }
     }
 
