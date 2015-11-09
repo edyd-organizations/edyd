@@ -13,6 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.oto.edyd.utils.Common;
+import com.oto.edyd.utils.Constant;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class SelectDepartmentActivity extends Activity implements View.OnClickLi
 
     private LinearLayout back; //返回
     private ListView departmentList; //部门列表
+    private Common common;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,7 @@ public class SelectDepartmentActivity extends Activity implements View.OnClickLi
     private void initFields() {
         back = (LinearLayout) findViewById(R.id.back);
         departmentList = (ListView) findViewById(R.id.department_list);
+        common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
     }
 
     @Override
@@ -57,6 +62,7 @@ public class SelectDepartmentActivity extends Activity implements View.OnClickLi
      */
     private void requestDepartmentListData() {
 
+        String url = Constant.ENTRANCE_PREFIX + "";
     }
 
     /**
