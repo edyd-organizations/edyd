@@ -2,12 +2,16 @@ package com.oto.edyd;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.utils.Common;
@@ -32,20 +36,57 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
     private EditText limitOil; //限定油品
     private EditText limitAddOilAmount; //限定每次加油量
     private EditText limitDailyOilAmount; //限日加油金额
-    private Button submit; //提交
-    private CheckBox isNeedPassword; //是否需要密码
-    private CheckBox isSmsRemind; //是否需要短信提醒
+    private TextView submit; //提交
+    private RadioGroup isNeedPassword; //是否需要密码
+    private RadioGroup isSmsRemind; //是否需要短信提醒
+    private EditText company; //公司
+    private EditText department; //部门
+    private LinearLayout companyDepartment; //公司部门布局
 
     private CusProgressDialog oilDialog; //过度
+    private boolean isPassword = false; //是否需要密码
+    private boolean isMessage = false; //是否需要短信
+
+    private Common common;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.oil_card_application);
         initFields();
+        controlShowInterface();
 
         submit.setOnClickListener(this);
         back.setOnClickListener(this);
+        department.setOnClickListener(this);
+        isNeedPassword.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int radioButtonId = group.getCheckedRadioButtonId();
+                RadioButton rb = (RadioButton) findViewById(radioButtonId);
+                String isCheckText = rb.getText().toString();
+
+                if(isCheckText.equals("是")) {
+                    isPassword = true;
+                } else {
+                    isPassword = false;
+                }
+            }
+        });
+        isSmsRemind.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int radioButtonId = group.getCheckedRadioButtonId();
+                RadioButton rb = (RadioButton) findViewById(radioButtonId);
+                String isCheckText = rb.getText().toString();
+
+                if (isCheckText.equals("是")) {
+                    isMessage = true;
+                } else {
+                    isMessage = false;
+                }
+            }
+        });
     }
 
     private void initFields() {
@@ -56,19 +97,27 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
         limitOil = (EditText) findViewById(R.id.limit_oil);
         limitAddOilAmount = (EditText) findViewById(R.id.limit_add_oil_amount);
         limitDailyOilAmount = (EditText) findViewById(R.id.limit_daily_oil_amount);
-        isNeedPassword = (CheckBox) findViewById(R.id.is_need_password);
-        isSmsRemind = (CheckBox) findViewById(R.id.is_sms_remind);
-        submit = (Button) findViewById(R.id.submit);
+        isNeedPassword = (RadioGroup) findViewById(R.id.is_need_password);
+        isSmsRemind = (RadioGroup) findViewById(R.id.is_sms_remind);
+        submit = (TextView) findViewById(R.id.submit);
+        company = (EditText) findViewById(R.id.company);
+        department = (EditText) findViewById(R.id.department);
+        companyDepartment = (LinearLayout) findViewById(R.id.company_department);
     }
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.submit:
                 verify();
                 break;
             case R.id.back:
                 finish();
+            case R.id.department: //部门
+                intent = new Intent(getApplicationContext(), SelectDepartmentActivity.class);
+                startActivityForResult(intent, 0x10);
+                break;
         }
     }
 
@@ -76,8 +125,8 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
      * 校验表单
      */
     private void verify() {
-        boolean isCheckedNeedPassword = isNeedPassword.isChecked(); //检查是否需要密码
-        boolean isCheckedSmsRemind = isSmsRemind.isChecked(); //是否短信提醒
+        boolean isCheckedNeedPassword = isPassword; //检查是否需要密码
+        boolean isCheckedSmsRemind = isMessage; //是否短信提醒
         String carNumber = carId.getText().toString();
 
         carNumber = carNumber.replace(" ", "");
@@ -101,7 +150,7 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
             Toast.makeText(getApplicationContext(), "手机号码不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        applyOilCard();
+       // applyOilCard();
     }
     /**
      * 申请油卡
@@ -114,25 +163,38 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
         String limit_oil = limitOil.getText().toString();
         String every_add_oil = limitAddOilAmount.getText().toString();
         String every_daily_oil_amount = limitDailyOilAmount.getText().toString();
-        if(isSmsRemind.isChecked()) {
-            is_sms = 1;
-        } else {
-            is_sms = 2;
-        }
 
-        if(isNeedPassword.isChecked()) {
+        if(isPassword) { //需要密码
             is_need_password = 1;
-        } else {
+        } else { //不需要密码
             is_need_password = 2;
         }
 
-        Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-        String account_id = common.getStringByKey("ACCOUNT_ID");
+        if(isMessage) { //需要短信
+            is_sms = 1;
+        } else { //不需要短信
+            is_sms = 2;
+        }
+
+        common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
 
+        //个人
+        String accountID = common.getStringByKey("account_id");
+        String userName = common.getStringByKey("user_name"); //用户账号
+
+        //公司
+        int enterpriseID = common.getIntByKey("enterprise_id");
+
         String url = Constant.ENTRANCE_PREFIX + "insertOilCard.json?carId="+car_id+"&sessionUuid="+sessionUuid+"&setPwd="+String.valueOf(is_need_password)+"&pwd="+set_password+
-                "&setMessage="+is_sms+"&mobile="+mobile+"&oilNum="+limit_oil+"&everyTimeOil="+every_add_oil+"&everyDayOil="+every_daily_oil_amount+
-                "&realAccountId="+account_id+"&licencePic=null";
+                "&setMessage="+is_sms+"&mobile="+mobile+"&oilNum="+limit_oil+"&everyTimeOil="+every_add_oil+"&everyDayOil="+every_daily_oil_amount+"&failCause=null"+
+                "&accountType=0";
+
+        if(enterpriseID == 0 || enterpriseID == 3) {
+            url = url + "&realAccountId="+accountID + "&accountMobile="+userName;
+        } else {
+
+        }
 
         OkHttpClientManager.getAsyn(url, new ApplyResultCallback<String>() {
 
@@ -152,12 +214,20 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
                         Toast.makeText(getApplicationContext(), Constant.INVALID_USERNAME_PASSWORD, Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    Toast.makeText(getApplicationContext(),"油品申请操作成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "油品申请操作成功", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+
+    /**
+     * 获取组织信息
+     */
+    private void inquireOrganizations() {
+        String url = "";
     }
 
     public abstract class ApplyResultCallback<T> extends OkHttpClientManager.ResultCallback<T>{
@@ -173,5 +243,50 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
             //请求之后要做的操作
             oilDialog.getLoadingDialog().dismiss();
         }
+    }
+
+    /**
+     * 界面显示控制
+     */
+    private void controlShowInterface() {
+        boolean isHide = true;
+        switch (getEnterpriseAccountType()) {
+            case 0:
+                isHide = true;
+                break;
+            case 1:
+                isHide = false;
+                break;
+            case 2:
+                isHide = false;
+                break;
+            case 3:
+                isHide = true;
+                break;
+        }
+
+        if(isHide) {
+            companyDepartment.setVisibility(View.GONE);
+
+        } else {
+            companyDepartment.setVisibility(View.VISIBLE);
+            String enterpriseName = common.getStringByKey("enterprise_name");
+            company.setText(enterpriseName);
+        }
+    }
+
+    /**
+     * 判断是否是企业用户
+     * @return
+     */
+    private int getEnterpriseAccountType() {
+        common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        // String role = common.getStringByKey(getString(R.string.role_id));
+        String role = common.getStringByKey(getString(R.string.role_id));
+        if(role.equals("")){
+            Toast.makeText(this, "角色错误", Toast.LENGTH_SHORT).show();
+            return 4;
+        }
+        return Integer.valueOf(role);
     }
 }

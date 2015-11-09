@@ -76,7 +76,7 @@
                     <EditText
                         android:id="@+id/car_id"
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
+                        android:layout_height="35dp"
                         android:layout_gravity="center"
                         android:singleLine="true"
                         android:background="@drawable/edittext_border"
@@ -108,10 +108,25 @@
                         android:orientation="horizontal"
                         android:layout_weight="1"
                         android:layout_gravity="center">
-                        <CheckBox
+
+                        <RadioGroup
                             android:id="@+id/is_need_password"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:layout_gravity="center">
+                            <RadioButton
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="是"/>
+                            <RadioButton
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="否"/>
+                        </RadioGroup>
                     </LinearLayout>
                 </LinearLayout>
                 <View
@@ -140,7 +155,7 @@
                     <EditText
                         android:id="@+id/set_password"
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
+                        android:layout_height="35dp"
                         android:padding="3dp"
                         android:layout_gravity="center"
                         android:inputType="textPassword"
@@ -171,10 +186,24 @@
                         android:orientation="horizontal"
                         android:layout_weight="1"
                         android:layout_gravity="center">
-                        <CheckBox
+                        <RadioGroup
                             android:id="@+id/is_sms_remind"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:layout_gravity="center">
+                            <RadioButton
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="是"/>
+                            <RadioButton
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="否"/>
+                        </RadioGroup>
                     </LinearLayout>
                 </LinearLayout>
                 <View
@@ -208,11 +237,12 @@
                     <EditText
                         android:id="@+id/phone_number"
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
+                        android:layout_height="35dp"
                         android:padding="3dp"
                         android:layout_gravity="center"
                         android:singleLine="true"
                         android:numeric="integer"
+                        android:textSize="14sp"
                         android:background="@drawable/edittext_border"
                         android:layout_weight="1"/>
                 </LinearLayout>
@@ -242,10 +272,11 @@
                     <EditText
                         android:id="@+id/limit_oil"
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
+                        android:layout_height="35dp"
                         android:padding="3dp"
                         android:layout_gravity="center"
                         android:singleLine="true"
+                        android:textSize="14sp"
                         android:maxLength="20"
                         android:background="@drawable/edittext_border"
                         android:layout_weight="1"/>
@@ -276,11 +307,12 @@
                     <EditText
                         android:id="@+id/limit_add_oil_amount"
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
+                        android:layout_height="35dp"
                         android:padding="3dp"
                         android:layout_gravity="center"
                         android:singleLine="true"
                         android:numeric="decimal"
+                        android:textSize="14sp"
                         android:maxLength="10"
                         android:background="@drawable/edittext_border"
                         android:layout_weight="1"/>
@@ -311,24 +343,108 @@
                     <EditText
                         android:id="@+id/limit_daily_oil_amount"
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
+                        android:layout_height="35dp"
                         android:padding="3dp"
                         android:layout_gravity="center"
                         android:singleLine="true"
                         android:numeric="decimal"
+                        android:textSize="14sp"
                         android:maxLength="10"
                         android:background="@drawable/edittext_border"
                         android:layout_weight="1"/>
                 </LinearLayout>
 
-                <Button
+                <LinearLayout
+                    android:id="@+id/company_department"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/gray_DDDDDD"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="2"
+                            android:layout_gravity="center">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:text="公司名称"/>
+                        </LinearLayout>
+                        <EditText
+                            android:id="@+id/company"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:padding="3dp"
+                            android:layout_gravity="center"
+                            android:singleLine="true"
+                            android:textSize="14sp"
+                            android:editable="false"
+                            android:background="@drawable/edittext_border"
+                            android:layout_weight="1"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/gray_DDDDDD"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="2"
+                            android:layout_gravity="center">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:text="部门名称"/>
+                        </LinearLayout>
+                        <EditText
+                            android:id="@+id/department"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:padding="3dp"
+                            android:layout_gravity="center"
+                            android:singleLine="true"
+                            android:drawableRight="@mipmap/ic_jump"
+                            android:background="@drawable/edittext_border"
+                            android:textSize="14sp"
+                            android:editable="false"
+                            android:layout_weight="1"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
                     android:id="@+id/submit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:text="提交"
+                    android:textSize="16sp"
                     android:textColor="@color/white"
-                    android:background="@drawable/border_corner_login_enable"/>
+                    android:gravity="center"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:enabled="false"
+                    android:background="@drawable/border_corner_login"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

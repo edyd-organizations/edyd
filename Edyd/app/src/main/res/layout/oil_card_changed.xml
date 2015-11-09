@@ -123,8 +123,8 @@
             android:textSize="16sp"
             android:textColor="@color/white"
             android:gravity="center"
-            android:paddingTop="7dp"
-            android:paddingBottom="7dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:background="@drawable/border_corner_login_enable"/>
     </LinearLayout>
 </LinearLayout>

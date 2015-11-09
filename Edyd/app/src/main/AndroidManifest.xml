@@ -124,6 +124,8 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".AverageDistributeAmountActivity"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".SelectDepartmentActivity"
+            android:screenOrientation="portrait"></activity>
 
         <service
             android:name="com.umeng.update.net.DownloadingService"
