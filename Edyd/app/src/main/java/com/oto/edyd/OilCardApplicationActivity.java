@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oto.edyd.model.SelectDepartment;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -29,7 +32,6 @@ import org.json.JSONObject;
 public class OilCardApplicationActivity extends Activity implements View.OnClickListener{
 
     private LinearLayout back; //返回
-
     private EditText carId; //车牌号
     private EditText setPassword; //设置密码
     private EditText phoneNumber; //联系人电话
@@ -40,9 +42,10 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
     private RadioGroup isNeedPassword; //是否需要密码
     private RadioGroup isSmsRemind; //是否需要短信提醒
     private EditText company; //公司
-    private EditText department; //部门
+    private EditText etDepartment; //部门
     private LinearLayout companyDepartment; //公司部门布局
 
+    private SelectDepartment selectDepartment;
     private CusProgressDialog oilDialog; //过度
     private boolean isPassword = false; //是否需要密码
     private boolean isMessage = false; //是否需要短信
@@ -58,7 +61,7 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
 
         submit.setOnClickListener(this);
         back.setOnClickListener(this);
-        department.setOnClickListener(this);
+        etDepartment.setOnClickListener(this);
         isNeedPassword.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -66,7 +69,7 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
                 RadioButton rb = (RadioButton) findViewById(radioButtonId);
                 String isCheckText = rb.getText().toString();
 
-                if(isCheckText.equals("是")) {
+                if (isCheckText.equals("是")) {
                     isPassword = true;
                 } else {
                     isPassword = false;
@@ -87,6 +90,63 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
                 }
             }
         });
+
+        carId.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!(s == null)) {
+                    String inputContent = s.toString();
+                    if (inputContent != null && !(inputContent.equals(""))) {
+                        String phone = phoneNumber.getText().toString();
+                        if (phone != null && !(phone.equals(""))) {
+                            submit.setEnabled(true); //设置按钮可用
+                            submit.setBackgroundResource(R.drawable.border_corner_login_enable);
+                        }
+                    } else {
+                        submit.setBackgroundResource(R.drawable.border_corner_login);
+                        submit.setEnabled(false); //设置按钮不可用
+                    }
+                }
+            }
+        });
+        phoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!(s == null)) {
+                    String inputContent = s.toString();
+                    if(inputContent != null && !(inputContent.equals(""))){
+                        String card = carId.getText().toString();
+                        if(card != null && !(card.equals(""))){
+                            submit.setEnabled(true); //设置按钮可用
+                            submit.setBackgroundResource(R.drawable.border_corner_login_enable);
+                        }
+                    } else {
+                        submit.setBackgroundResource(R.drawable.border_corner_login);
+                        submit.setEnabled(false); //设置按钮不可用
+                    }
+                }
+            }
+        });
     }
 
     private void initFields() {
@@ -101,7 +161,7 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
         isSmsRemind = (RadioGroup) findViewById(R.id.is_sms_remind);
         submit = (TextView) findViewById(R.id.submit);
         company = (EditText) findViewById(R.id.company);
-        department = (EditText) findViewById(R.id.department);
+        etDepartment = (EditText) findViewById(R.id.department);
         companyDepartment = (LinearLayout) findViewById(R.id.company_department);
     }
 
@@ -112,11 +172,12 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
             case R.id.submit:
                 verify();
                 break;
-            case R.id.back:
+            case R.id.back: //返回
                 finish();
+                break;
             case R.id.department: //部门
                 intent = new Intent(getApplicationContext(), SelectDepartmentActivity.class);
-                startActivityForResult(intent, 0x10);
+                startActivityForResult(intent, 0x20);
                 break;
         }
     }
@@ -150,7 +211,7 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
             Toast.makeText(getApplicationContext(), "手机号码不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-       // applyOilCard();
+        applyOilCard();
     }
     /**
      * 申请油卡
@@ -180,24 +241,25 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
 
         //个人
-        String accountID = common.getStringByKey("account_id");
-        String userName = common.getStringByKey("user_name"); //用户账号
+        String accountID = common.getStringByKey("ACCOUNT_ID");
+        String userName = common.getStringByKey(Constant.USER_NAME); //用户账号
 
         //公司
-        int enterpriseID = common.getIntByKey("enterprise_id");
+        String enterpriseID = common.getStringByKey(Constant.ENTERPRISE_ID);
+        String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
 
         String url = Constant.ENTRANCE_PREFIX + "insertOilCard.json?carId="+car_id+"&sessionUuid="+sessionUuid+"&setPwd="+String.valueOf(is_need_password)+"&pwd="+set_password+
                 "&setMessage="+is_sms+"&mobile="+mobile+"&oilNum="+limit_oil+"&everyTimeOil="+every_add_oil+"&everyDayOil="+every_daily_oil_amount+"&failCause=null"+
                 "&accountType=0";
 
-        if(enterpriseID == 0 || enterpriseID == 3) {
+        if(enterpriseID.equals("0") || enterpriseID.equals("3")) {
             url = url + "&realAccountId="+accountID + "&accountMobile="+userName;
         } else {
-
+            url = url + "&tenantId="+selectDepartment.getTenantId() + "&orgCode="+selectDepartment.getOrgCode()+
+            "&orgName=" + selectDepartment.getText() +"&enterpriseId=" + enterpriseID + "&enterpriseName=" + enterpriseName;
         }
 
         OkHttpClientManager.getAsyn(url, new ApplyResultCallback<String>() {
-
             @Override
             public void onError(Request request, Exception e) {
 
@@ -288,5 +350,21 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
             return 4;
         }
         return Integer.valueOf(role);
+    }
+
+    /**
+     * activity成功返回
+     * @param requestCode 启动码
+     * @param resultCode 返回码
+     * @param data 数据
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode) {
+            case 0x22:
+                selectDepartment = (SelectDepartment) data.getSerializableExtra("department");
+                etDepartment.setText(selectDepartment.getText());
+                break;
+        }
     }
 }
