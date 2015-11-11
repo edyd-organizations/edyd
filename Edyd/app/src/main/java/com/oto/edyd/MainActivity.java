@@ -269,8 +269,13 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         }
         //账户类型返回
         if(resultCode == Constant.ACCOUNT_TYPE_RESULT_CODE) {
-            String accountTypeStr = data.getExtras().getString("account_type");
-            leftMenuFragment.accountType.setText(accountTypeStr);
+            //String accountTypeStr = data.getExtras().getString("account_type");
+            Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+            String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
+            String roleName = common.getStringByKey(Constant.ROLE_NAME);
+
+            leftMenuFragment.accountType.setText(enterpriseName);
+            leftMenuFragment.roleType.setText(roleName);
 
         }
     }

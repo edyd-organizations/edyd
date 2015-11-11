@@ -16,6 +16,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oto.edyd.model.AccountAndRole;
+import com.oto.edyd.model.Role;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -47,6 +49,7 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
     List<Integer> enterpriseIdData = new ArrayList<Integer>(); //企业ID
     List<Map<String, Object>> dataSets = new ArrayList<Map<String, Object>>();
     private int idResources[];
+    private Common common;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +68,19 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
+
+            Intent intent;
             switch (msg.what) {
                 case 1001://请求成功更新界面
                     //accountTypeList.setAdapter(new ArrayAdapter<String>(AccountTypeActivity.this, android.R.layout.simple_expandable_list_item_1, accountTypeData));
-
                     SimpleAdapter simpleAdapter = new SimpleAdapter(AccountTypeActivity.this, dataSets, R.layout.account_type_list_item,
                             new String[]{"account_type_id", "account_type_text", "common_list_arrow"}, idResources); //ListView适配器
                     accountTypeList.setAdapter(simpleAdapter);
                     accountTypeLoadingDialog.getLoadingDialog().dismiss();
+                    break;
+                case 0x21:
+                    finish();
+                    break;
             }
         }
     };
@@ -86,6 +94,8 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
         commonListTitle = (TextView) findViewById(R.id.common_list_title);
         idResources = new int[]{R.id.account_type_id, R.id.account_type_text, R.id.common_list_arrow};
         commonListTitle.setText("账户类型");
+        common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+
     }
 
     @Override
@@ -104,25 +114,43 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
     private class AccountTypeListItemOnClickListener implements AdapterView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Intent intent = new Intent();
-            TextView typeTextView = (TextView)view.findViewById(R.id.account_type_text);
-            String textEnterpriseName = typeTextView.getText().toString();
+            Intent intent;
             TextView enterpriseId = (TextView)view.findViewById(R.id.account_type_id);
+            TextView typeTextView = (TextView)view.findViewById(R.id.account_type_text);
             String textEnterpriseId = enterpriseId.getText().toString();
+            String textEnterpriseName = typeTextView.getText().toString();
 
-            intent.putExtra("account_type", textEnterpriseName);
-            intent.putExtra("enterpriseId", textEnterpriseId);
-            AccountTypeActivity.this.setResult(Constant.ACCOUNT_TYPE_RESULT_CODE, intent);
+            if (position == 0) {
+                intent = new Intent();
+                intent.putExtra("account_type", textEnterpriseName);
+                intent.putExtra("enterpriseId", textEnterpriseId);
 
-            Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-            Map<Object, Object> map = new HashMap<Object, Object>();
-            map.put(Constant.ENTERPRISE_ID, Integer.valueOf(textEnterpriseId));
-            map.put(Constant.ENTERPRISE_NAME, textEnterpriseName);
-            if(!common.isSave(map)) {
-                Toast.makeText(AccountTypeActivity.this, "企业ID更新失败", Toast.LENGTH_SHORT).show();
+                Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                Map<Object, Object> map = new HashMap<Object, Object>();
+                map.put(Constant.ENTERPRISE_ID, Integer.valueOf(textEnterpriseId));
+                map.put(Constant.ENTERPRISE_NAME, textEnterpriseName);
+                map.put(Constant.ORG_CODE, String.valueOf(""));
+                map.put(Constant.ROLE_NAME, "");
+                if(!common.isSave(map)) {
+                    Toast.makeText(AccountTypeActivity.this, "企业ID更新失败", Toast.LENGTH_SHORT).show();
+                }
+                AccountTypeActivity.this.setResult(Constant.ACCOUNT_TYPE_RESULT_CODE, intent);
+                updateRole(textEnterpriseId);
+            } else{
+                intent = new Intent(AccountTypeActivity.this, RoleTypeActivity.class);
+                intent.putExtra("account_type", textEnterpriseName);
+                intent.putExtra("enterpriseId", textEnterpriseId);
+                startActivityForResult(intent, 0x15);
             }
-            updateRole(textEnterpriseId);
-            finish();
+//            AccountTypeActivity.this.setResult(Constant.ACCOUNT_TYPE_RESULT_CODE, intent);
+
+//            Map<Object, Object> map = new HashMap<Object, Object>();
+//            map.put(Constant.ENTERPRISE_ID, Integer.valueOf(textEnterpriseId));
+//            map.put(Constant.ENTERPRISE_NAME, textEnterpriseName);
+//            if(!common.isSave(map)) {
+//                Toast.makeText(AccountTypeActivity.this, "企业ID更新失败", Toast.LENGTH_SHORT).show();
+//            }
+            //updateRole(textEnterpriseId);
         }
     }
 
@@ -210,6 +238,16 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode) {
+            case 0x30: //已选角色，直接退出
+                Intent intent = new Intent();
+                AccountTypeActivity.this.setResult(Constant.ACCOUNT_TYPE_RESULT_CODE, intent);
+                finish();
+                break;
+        }
+    }
     /**
      * 更新角色
      */
@@ -245,6 +283,11 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
                         Toast.makeText(getApplicationContext(), getString(R.string.role_type_info_save_error), Toast.LENGTH_SHORT).show();
                         return;
                     }
+
+                    Message message = new Message();
+                    message.what = 0x21;
+                    handler.sendMessage(message);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
