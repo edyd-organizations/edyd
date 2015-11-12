@@ -349,10 +349,8 @@ public class OilCardChangeActivity extends Activity implements View.OnClickListe
                         message.what = position;
                     } else {
                         message.what = 0x40;
+                        Toast.makeText(getApplicationContext(), "卡不存在或当前用户角色与卡号不对应", Toast.LENGTH_LONG).show();
                     }
-
-
-
                     handler.sendMessage(message);
                 } catch (JSONException e) {
                     e.printStackTrace();

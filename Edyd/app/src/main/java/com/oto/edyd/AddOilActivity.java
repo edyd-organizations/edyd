@@ -44,7 +44,7 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.my_add_oil);
         initFields();
 
-        requestAddOilCardList();
+        requestAddOilCardList(); //请求订单数据
         back.setOnClickListener(this);
         tOilCardApply.setOnClickListener(this);
         tAmountDistribute.setOnClickListener(this);
@@ -111,9 +111,8 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
      * 请求我的加油卡列表
      */
     private void requestAddOilCardList() {
-
         //假数据
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 100; i++) {
             AddOilCard addOilCard = new AddOilCard();
             addOilCard.setCarNumber("闽F" + i);
             addOilCard.setCardNumber("38683958" + i);
@@ -121,7 +120,6 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
             addOilCard.setBalance("43"+i);
             addOilCards.add(addOilCard);
         }
-
 
         Message message = new Message();
         message.what = 0x12;
@@ -159,26 +157,39 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            TextView carNumber; //车牌号
-            TextView time; //时间
-            TextView cardNumber; //车牌号
-            TextView balance; //金额
+            ViewHolder viewHolder;
 
-            View view = inflater.inflate(R.layout.my_add_oil_item, null);
-            carNumber = (TextView) view.findViewById(R.id.car_number);
-            time = (TextView) view.findViewById(R.id.time);
-            cardNumber = (TextView) view.findViewById(R.id.card_number);
-            balance = (TextView) view.findViewById(R.id.balance);
+            if(convertView == null) {
+                viewHolder = new ViewHolder();
+                convertView = inflater.inflate(R.layout.my_add_oil_item, null);
+                viewHolder.carNumber = (TextView) convertView.findViewById(R.id.car_number);
+                viewHolder.time = (TextView) convertView.findViewById(R.id.time);
+                viewHolder.cardNumber = (TextView) convertView.findViewById(R.id.card_number);
+                viewHolder.balance = (TextView) convertView.findViewById(R.id.balance);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
 
             AddOilCard addOilCard = addOilCards.get(position);
-            carNumber.setText(addOilCard.getCarNumber());
-            time.setText(addOilCard.getTime());
-            cardNumber.setText(addOilCard.getCardNumber());
-            balance.setText(addOilCard.getBalance());
 
-            return view;
+            viewHolder.carNumber.setText(addOilCard.getCarNumber());
+            viewHolder.time.setText(addOilCard.getTime());
+            viewHolder.cardNumber.setText(addOilCard.getCardNumber());
+            viewHolder.balance.setText(addOilCard.getBalance());
+
+            return convertView;
         }
     }
 
+    /**
+     * ListView Item项对应数据
+     */
+    static class ViewHolder {
+        TextView carNumber; //车牌号
+        TextView time; //时间
+        TextView cardNumber; //车牌号
+        TextView balance; //金额
+    }
 
 }
