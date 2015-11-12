@@ -63,6 +63,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
     private Context mActivity;
     String getMoneyUrl;//得到总金额url
    private SwipeRefreshLayout swipe_container;//下拉刷新
+    private String OrgCode;
 
     private List<OilAmountDistribute> oilAmountDistributeList = new ArrayList<OilAmountDistribute>(); //列表数据
 
@@ -97,7 +98,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
             @Override
             public void onRefresh() {
               getAllMoney(getMoneyUrl);
-                getCarNum();
+             seachCar("");
 
             }
         });
@@ -127,14 +128,14 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
-        //String OrgCode = common.getStringByKey(Constant);
+         OrgCode = common.getStringByKey(Constant.ORG_CODE);
         //iqueryOilShengByEnterpriseInfo.json?sessionUuid=&enterpriseId=54&OrgCode=1&sysFullName=bgwl
         getMoneyUrl = Constant.ENTRANCE_PREFIX + "iqueryOilShengByEnterpriseInfo.json?sessionUuid="
                 + sessionUuid + "&enterpriseId=" + enterpriseId + "&OrgCode=" + OrgCode;
 
         getAllMoney(getMoneyUrl);
         //获取车牌信息
-        getCarNum();
+        seachCar("");
 
         //提交url
         submitUrl = Constant.ENTRANCE_PREFIX + "inquerePredistribution.json";
@@ -148,40 +149,6 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         back.setOnClickListener(this);
     }
 
-    private void getCarNum() {
-        // inqueryOilBalanceExprot.json?sessionUuid=6a7ca347b9914bcb909b54a88b4d555d&enterpriseId=54&OrgCode=1
-        String carUrl = Constant.ENTRANCE_PREFIX + "inqueryOilBalanceExprot.json?sessionUuid="
-                + sessionUuid + "&enterpriseId=" + enterpriseId + "&carId=" + "";
-//        String carUrl = Constant.ENTRANCE_PREFIX + "inqueryOilBalanceExprot.json?sessionUuid="
-//                + sessionUuid + "&enterpriseId=" + enterpriseId + "&OrgCode=" + OrgCode;
-
-        OkHttpClientManager.getAsyn(carUrl, new OkHttpClientManager.ResultCallback<String>() {
-            @Override
-            public void onError(Request request, Exception e) {
-                Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onResponse(String response) {
-                Common.printErrLog("获取车牌信息" + response);
-                JSONObject jsonObject;
-                JSONArray jsonArray;
-                try {
-                    jsonObject = new JSONObject(response);
-                    if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        Toast.makeText(getApplicationContext(), "获取车牌失败", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    jsonArray = jsonObject.getJSONArray("rows");
-                    requestDistributeUserList(jsonArray);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        swipe_container.setRefreshing(false);
-    }
 
     private void getAllMoney(String url) {
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
@@ -223,8 +190,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
 
     private void seachCar(String carNumber) {
         String url = Constant.ENTRANCE_PREFIX + "inqueryOilBalanceExprot.json?sessionUuid="
-                + sessionUuid + "&enterpriseId=" + enterpriseId + "&carId=" + carNumber;
-        Common.printLog("aaaaaaaaaaaaa" + url);
+                + sessionUuid + "&enterpriseId=" + enterpriseId + "&carId=" + carNumber+"&OrgCode=" + OrgCode;
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
@@ -250,6 +216,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
                 }
             }
         });
+        swipe_container.setRefreshing(false);
     }
 
     public void clearAll(View view) {
