@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:textColor="@color/red_fe020e"
-                    android:text="1000.0"/>
+                    android:text="0"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -157,7 +157,7 @@
                         android:id="@+id/current_distribute_card_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="5"
+                        android:text="0"
                         android:textSize="14sp"
                         android:textColor="@color/red_fe020e" />
                 </LinearLayout>
