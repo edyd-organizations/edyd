@@ -1,11 +1,14 @@
 package com.oto.edyd;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -45,6 +48,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
     private EditText inputCarNumber; //车牌号
     //    private Button search; //搜索
     private TextView amount; //总金额
+    private int amountString;
     //    private TextView averageDistribute; //等额预分配
     private ListView listDistributeUser; //分配用户列表
     private TextView distributeCardNumber; //本次预分配卡数
@@ -57,6 +61,8 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
     String sessionUuid;
     String enterpriseId;
     private Context mActivity;
+    String getMoneyUrl;//得到总金额url
+   private SwipeRefreshLayout swipe_container;//下拉刷新
 
     private List<OilAmountDistribute> oilAmountDistributeList = new ArrayList<OilAmountDistribute>(); //列表数据
 
@@ -83,9 +89,37 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
 
 
     private void initFields() {
+        swipe_container= (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+            /**
+             * 刷新要做的操作
+             */
+            @Override
+            public void onRefresh() {
+              getAllMoney(getMoneyUrl);
+                getCarNum();
+
+            }
+        });
 
         back = (LinearLayout) findViewById(R.id.back);
         inputCarNumber = (EditText) findViewById(R.id.type_car_number);
+        inputCarNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+               seachCar(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 //        search = (Button) findViewById(R.id.search);
         amount = (TextView) findViewById(R.id.amount);
         listDistributeUser = (ListView) findViewById(R.id.list_distribute_user);
@@ -93,38 +127,28 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
-        String OrgCode = null;
+        String OrgCode = "";
         //iqueryOilShengByEnterpriseInfo.json?sessionUuid=&enterpriseId=54&OrgCode=1&sysFullName=bgwl
-        final String url = Constant.ENTRANCE_PREFIX + "iqueryOilShengByEnterpriseInfo.json?sessionUuid="
+        getMoneyUrl = Constant.ENTRANCE_PREFIX + "iqueryOilShengByEnterpriseInfo.json?sessionUuid="
                 + sessionUuid + "&enterpriseId=" + enterpriseId + "&OrgCode=" + OrgCode;
-        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
-            @Override
-            public void onError(Request request, Exception e) {
-                Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
-            }
 
-            //            {"status":"200","flag":"SUCCESS","message":"操作成功",
-//                    "action":"iqueryOilShengByEnterpriseInfo","version":"v1.0","format":"json","rows":[2000]}
-            @Override
-            public void onResponse(String response) {
-                Common.printErrLog("金额数据" + response);
-                JSONObject jsonObject;
-                JSONArray jsonArray;
-                try {
-                    jsonObject = new JSONObject(response);
-                    if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.pull_orgcode_exception), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    jsonArray = jsonObject.getJSONArray("rows");
-                    int mon = (Integer) jsonArray.get(0);
-                    amount.setText(mon + "");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        getAllMoney(getMoneyUrl);
         //获取车牌信息
+        getCarNum();
+
+        //提交url
+        submitUrl = Constant.ENTRANCE_PREFIX + "inquerePredistribution.json";
+
+
+        distributeCardNumber = (TextView) findViewById(R.id.current_distribute_card_number);
+        predictionDistributeAmount = (TextView) findViewById(R.id.current_prediction_distribute_amount);
+        //提交
+        submit = (TextView) findViewById(R.id.submit);
+        submit.setOnClickListener(this);
+        back.setOnClickListener(this);
+    }
+
+    private void getCarNum() {
         // inqueryOilBalanceExprot.json?sessionUuid=6a7ca347b9914bcb909b54a88b4d555d&enterpriseId=54&OrgCode=1
         String carUrl = Constant.ENTRANCE_PREFIX + "inqueryOilBalanceExprot.json?sessionUuid="
                 + sessionUuid + "&enterpriseId=" + enterpriseId + "&carId=" + "";
@@ -156,22 +180,48 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
                 }
             }
         });
-        //提交url
-        submitUrl = Constant.ENTRANCE_PREFIX + "inquerePredistribution.json";
+        swipe_container.setRefreshing(false);
+    }
 
+    private void getAllMoney(String url) {
+        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+            @Override
+            public void onError(Request request, Exception e) {
+                Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
+            }
 
-        distributeCardNumber = (TextView) findViewById(R.id.current_distribute_card_number);
-        predictionDistributeAmount = (TextView) findViewById(R.id.current_prediction_distribute_amount);
-        //提交
-        submit = (TextView) findViewById(R.id.submit);
-        submit.setOnClickListener(this);
-        back.setOnClickListener(this);
+            //            {"status":"200","flag":"SUCCESS","message":"操作成功",
+//                    "action":"iqueryOilShengByEnterpriseInfo","version":"v1.0","format":"json","rows":[2000]}
+            @Override
+            public void onResponse(String response) {
+                Common.printErrLog("金额数据" + response);
+                JSONObject jsonObject;
+                JSONArray jsonArray;
+                try {
+                    jsonObject = new JSONObject(response);
+                    if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.pull_orgcode_exception), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    jsonArray = jsonObject.getJSONArray("rows");
+                    int mon = (Integer) jsonArray.get(0);
+                    amountString = mon;
+                    amount.setText(mon + "");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void searchCarName(View view) {
         String carNumber = inputCarNumber.getText().toString().trim();
         //查找
         // inqueryOilBalanceExprot.json?sessionUuid=6a7ca347b9914bcb909b54a88b4d555d&enterpriseId=0&carId=%E9%97%BDD39698
+        seachCar(carNumber);
+    }
+
+    private void seachCar(String carNumber) {
         String url = Constant.ENTRANCE_PREFIX + "inqueryOilBalanceExprot.json?sessionUuid="
                 + sessionUuid + "&enterpriseId=" + enterpriseId + "&carId=" + carNumber;
         Common.printLog("aaaaaaaaaaaaa" + url);
@@ -194,7 +244,6 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
-                    oilAmountDistributeList.clear();
                     requestDistributeUserList(jsonArray);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -204,6 +253,10 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
     }
 
     public void clearAll(View view) {
+        clearALLAmount();
+    }
+
+    private void clearALLAmount() {
         for (OilAmountDistribute oad : oilAmountDistributeList) {
             oad.setAmount(null);
         }
@@ -218,48 +271,66 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
                 finish();
                 break;
             case R.id.submit: //提交
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("sessionUuid", sessionUuid);
-                sendDataList = new ArrayList<OilDataBean>();
-                fillSendData(sendDataList);
-                String sendData = common.createJsonString(sendDataList);
-                Common.printErrLog("bbbbbbbbbb" + sendData);
-                params.put("sendData", sendData);
-                Common.printErrLog("submitUrl" + submitUrl);
-                OkHttpClientManager.postAsyn(submitUrl, params, new OkHttpClientManager.ResultCallback<String>() {
+                AlertDialog.Builder builder=new AlertDialog.Builder(mActivity);
+                builder.setTitle("提交");
+                builder.setMessage("你确定要提交吗？");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onError(Request request, Exception e) {
-                        Toast.makeText(mActivity, "提交失败", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onResponse(String response) {
-                        JSONObject jsonObject;
-                        try {
-                            jsonObject = new JSONObject(response);
-                            if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                                Toast.makeText(getApplicationContext(), "提交失败", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            Toast.makeText(getApplicationContext(), "提交成功", Toast.LENGTH_SHORT).show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        submitResult();
                     }
                 });
+                builder.setNegativeButton("取消",null);
+                builder.show();
                 break;
         }
+    }
+
+    private void submitResult() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("sessionUuid", sessionUuid);
+        sendDataList = new ArrayList<OilDataBean>();
+        fillSendData(sendDataList);
+        String sendData = common.createJsonString(sendDataList);
+        Common.printErrLog("bbbbbbbbbb" + sendData);
+        params.put("sendData", sendData);
+        Common.printErrLog("submitUrl" + submitUrl);
+        OkHttpClientManager.postAsyn(submitUrl, params, new OkHttpClientManager.ResultCallback<String>() {
+            @Override
+            public void onError(Request request, Exception e) {
+                Toast.makeText(mActivity, "提交失败", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(String response) {
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(response);
+                    if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        Toast.makeText(getApplicationContext(), "提交失败", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    Toast.makeText(getApplicationContext(), "提交成功", Toast.LENGTH_SHORT).show();
+                    clearALLAmount();
+                    getAllMoney(getMoneyUrl);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void fillSendData(List<OilDataBean> list) {
 //        private List<OilAmountDistribute> oilAmountDistributeList
         for (OilAmountDistribute oad : oilAmountDistributeList) {
-            OilDataBean bean = new OilDataBean();
-            bean.setReleationId(oad.getReleationId());
-            bean.setOilCardId(oad.getOilCardId());
-            bean.setCardId(oad.getCardNumber());
-            bean.setAllocatedamount("3");
-            list.add(bean);
+            if(!TextUtils.isEmpty(oad.getAmount())) {
+                OilDataBean bean = new OilDataBean();
+                bean.setReleationId(oad.getReleationId());
+                bean.setOilCardId(oad.getOilCardId());
+                bean.setCardId(oad.getCardNumber());
+                bean.setAllocatedamount(oad.getAmount());
+                list.add(bean);
+            }
         }
     }
 
@@ -283,7 +354,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
      * 请求预分配用户列表
      */
     private void requestDistributeUserList(JSONArray jsonArray) throws JSONException {
-
+            oilAmountDistributeList.clear();
         //假数据
 //        for (int i = 0; i < 5; i++) {
 //            OilAmountDistribute oilAmountDistribute = new OilAmountDistribute();
@@ -387,19 +458,29 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         }
     }
 
+
+
     /**
      * 设置分配总金额
      */
-    private void sumMoneyNum() {
+    private boolean sumMoneyNum() {
         int mon = 0;
         for (OilAmountDistribute oad : oilAmountDistributeList) {
             String amount = oad.getAmount();
             if (!TextUtils.isEmpty(amount)) {
+
                 mon=mon+Integer.parseInt(amount);
+                if (mon>amountString){
+                    Toast.makeText(mActivity,"你的余额不够",Toast.LENGTH_SHORT).show();
+                    oad.setAmount("");
+                    adapter.notifyDataSetChanged();
+                    return false;
+                }
             }
         }
-        predictionDistributeAmount.setText(mon+"");
-
+        predictionDistributeAmount.setText(mon + "");
+        amount.setText((amountString-mon)+"");
+        return true;
     }
 
     private void sumCardNum() {
