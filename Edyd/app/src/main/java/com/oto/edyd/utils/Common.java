@@ -3,9 +3,25 @@ package com.oto.edyd.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.os.Environment;
 import android.support.v4.net.ConnectivityManagerCompat;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by yql on 2015/8/27.
@@ -79,4 +95,105 @@ public class Common {
         boolean isActive = netWorkManager.getActiveNetworkInfo().isAvailable();
         return isActive;
     }
+
+    public static void showToastMsg(Context context, String Msg) {
+        Toast.makeText(context.getApplicationContext(), Msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void printLog(String content) {
+        if (content != null) {
+            Log.i(android.os.Build.MODEL, content);
+        }
+
+    }
+
+    public static void printErrLog(String content) {
+        if (content != null) {
+                Log.e(android.os.Build.MODEL, content);
+        }
+    }
+
+    public static void printLog(String tag, String content) {
+        if (content != null) {
+            Log.i(tag, content);
+        }
+    }
+
+
+
+    public static boolean checkDataIsJson(String value) {
+        try {
+            new JSONObject(value);
+        } catch (JSONException e) {
+            return false;
+        }
+        return true;
+    }
+    public static String createJsonString(Object value)
+    {
+        Gson gson = new Gson();
+        String str = gson.toJson(value);
+        return str;
+    }
+
+    public static String readFromStream(InputStream is) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        while ((len = is.read(buffer)) != -1) {
+            baos.write(buffer, 0, len);
+        }
+        is.close();
+        String result = baos.toString();
+        baos.close();
+        return result;
+    }
+
+
+    public static String getStringByUrl(String urlStr) {
+        HttpURLConnection urlConnection = null;
+        String result = "";
+
+        try {
+            URL url = new URL(urlStr);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(30000);
+            urlConnection.setReadTimeout(30000);
+            InputStream in = new BufferedInputStream(
+                    urlConnection.getInputStream());
+            result = readFromStream(in);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+        return result;
+    }
+
+    public static boolean hasSdcard() {
+        String state = Environment.getExternalStorageState();
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isEmail(String eml) {
+        String str = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
+        Pattern eml_p = Pattern.compile(str);
+        Matcher eml_m = eml_p.matcher(eml);
+
+        return eml_m.matches();
+    }
+
+
+    public static boolean isPhoneNum(String phone) {
+        Pattern p = Pattern.compile("^(13|15|18|14)[0-9]{9}$");
+        Matcher m = p.matcher(phone);
+        return m.find();
+    }
+
 }

@@ -10,6 +10,24 @@ public class OilAmountDistribute {
     private String carNumber; //车牌号
     private String cardNumber; //卡号
     private String amount; //金额
+    private String releationId;//关联id
+    private String oilCardId;
+
+    public String getOilCardId() {
+        return oilCardId;
+    }
+
+    public void setOilCardId(String oilCardId) {
+        this.oilCardId = oilCardId;
+    }
+
+    public String getReleationId() {
+        return releationId;
+    }
+
+    public void setReleationId(String releationId) {
+        this.releationId = releationId;
+    }
 
     public String getCardUser() {
         return cardUser;
