@@ -11,4 +11,5 @@
     <string name="confirm_user_info_fail">验证用户信息失败</string>
     <string name="pull_info_exception">订单操纵数据返回失败</string>
     <string name="role_type_info_save_error">角色类型信息保存失败</string>
+    <string name="pull_orgcode_exception">获得预分配金额失败</string>
 </resources>
