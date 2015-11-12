@@ -113,7 +113,7 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
     private void requestAddOilCardList() {
 
         //假数据
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 100; i++) {
             AddOilCard addOilCard = new AddOilCard();
             addOilCard.setCarNumber("闽F" + i);
             addOilCard.setCardNumber("38683958" + i);
