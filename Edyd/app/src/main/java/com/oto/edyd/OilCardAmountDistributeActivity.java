@@ -127,7 +127,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
-        String OrgCode = common.getStringByKey(Constant);
+        //String OrgCode = common.getStringByKey(Constant);
         //iqueryOilShengByEnterpriseInfo.json?sessionUuid=&enterpriseId=54&OrgCode=1&sysFullName=bgwl
         getMoneyUrl = Constant.ENTRANCE_PREFIX + "iqueryOilShengByEnterpriseInfo.json?sessionUuid="
                 + sessionUuid + "&enterpriseId=" + enterpriseId + "&OrgCode=" + OrgCode;
