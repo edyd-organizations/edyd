@@ -280,6 +280,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                     exit.setVisibility(View.GONE);
                     slidingBottomLine.setVisibility(View.GONE);
                     accountType.setText("");
+                    roleType.setText("");
                     dataSets.remove(0);
                     dataSets.remove(0);
                     simpleAdapter.notifyDataSetChanged();

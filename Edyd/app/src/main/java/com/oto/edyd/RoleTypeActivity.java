@@ -16,7 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.oto.edyd.model.AddOilCard;
 import com.oto.edyd.model.Role;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
