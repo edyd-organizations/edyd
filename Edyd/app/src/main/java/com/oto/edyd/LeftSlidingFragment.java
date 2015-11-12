@@ -42,6 +42,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
     public LinearLayout exit; //退出登入
     public TextView userAlias;
     public TextView accountType; //账户类型
+    public TextView roleType; //角色类型
     public View slidingBottomLine; //侧滑底部线条
 
     //ListView资源
@@ -87,8 +88,10 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                 slidingBottomLine.setVisibility(View.VISIBLE);
             }
             String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
+            String txRoleType = common.getStringByKey(Constant.ROLE_NAME);
             if(enterpriseName != null) {
                 accountType.setText(enterpriseName);
+                roleType.setText(txRoleType);
             }
         }else {
             dataSets.remove(0);
@@ -199,6 +202,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
         userLogin = (LinearLayout)view.findViewById(R.id.user_login);
         userAlias = (TextView) view.findViewById(R.id.user_alias);
         accountType = (TextView) view.findViewById(R.id.account_type);
+        roleType = (TextView) view.findViewById(R.id.role_type);
         slidingBottomLine = (View) view.findViewById(R.id.sliding_bottom_line);
 
         imageResources = new int[]{R.mipmap.my_purse, R.mipmap.select_user_type, R.mipmap.notice,

@@ -405,7 +405,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        SMSSDK.unregisterAllEventHandler();
+        //SMSSDK.unregisterEventHandler(eh); //取消单个
+        SMSSDK.unregisterAllEventHandler(); //取消所有
     }
 
     /**
@@ -468,7 +469,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         }
 
         OkHttpClientManager.Param[] params =null;
-        OkHttpClientManager.postAsyn(Constant.ENTRANCE_PREFIX+"register.json?mobile=" + userName + "&password=" + password + "&verificationCode=000000" + "&fullName=123" + "&appKey=null", params, new RegisterResultCallback<String>() {
+        OkHttpClientManager.postAsyn(Constant.ENTRANCE_PREFIX+"register.json?mobile=" + userName + "&password=" + password + "&verificationCode=000000" + "&fullName="+ alias + "&appKey=null", params, new RegisterResultCallback<String>() {
 
             @Override
             public void onError(Request request, Exception e) {

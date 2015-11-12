@@ -18,10 +18,13 @@ public  class Constant {
     public final static String PASSWORD = "password"; //偏好设置密码key
     public final static String ENTERPRISE_ID = "enterprise_id"; //企业ID
     public final static String TENANT_ID = "tenant_id"; //租户ID
+    public final static String ORG_CODE = "org_code"; //组织ID
+    public final static String ROLE_NAME = "role_name"; //组织名称
     public final static String ENTERPRISE_NAME = "enterprise_name"; //企业名称
     public final static String LOGIN_PREFERENCES_FILE = "login.xml"; //登入信息保存文件
     public final static String USER_INFO_FILE = "users.xml"; //用户信息
     public final static String SESSION_UUID = "session_uuid";
+    //public final static String ACCOUNT_ID = "account_id";
 
     //网络地址
     public final static String ENTRANCE_PREFIX = "http://120.24.236.223/api/v1.0/"; //接口前缀地址

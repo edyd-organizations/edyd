@@ -79,7 +79,12 @@
     </string-array>
     
     <string-array name="oil_card_change">
-        <item>油卡密码</item>
-        <item>车牌号</item>
+        <item>请选择</item>
+        <item>挂失</item>
+        <item>限车号</item>
+        <item>限油品</item>
+        <item>卡号密码</item>
+        <item>日加油金额</item>
+        <item>每次加油量</item>
     </string-array>
 </resources>
