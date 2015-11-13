@@ -151,6 +151,13 @@
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
                             android:text="密码设置"/>
+                        <TextView
+                            android:id="@+id/tx_password_flag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#ffff4444"
+                            android:visibility="gone"
+                            android:text="*"/>
                     </LinearLayout>
                     <EditText
                         android:id="@+id/set_password"
@@ -228,7 +235,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
-                            android:text="联系方式"/>
+                            android:text="手机号码"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -243,7 +250,7 @@
                         android:layout_gravity="center"
                         android:singleLine="true"
                         android:numeric="integer"
-                        android:maxLength="12"
+                        android:maxLength="11"
                         android:textSize="14sp"
                         android:background="@drawable/edittext_border"
                         android:layout_weight="1"/>
