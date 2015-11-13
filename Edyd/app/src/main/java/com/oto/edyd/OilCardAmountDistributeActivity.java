@@ -56,13 +56,13 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
     private TextView submit; //提交
     private String submitUrl;
     private Common common;
-    List<OilDataBean> sendDataList;
+    private List<OilDataBean> sendDataList;
     private OilCardAmountDistributeAdapter adapter;
-    String sessionUuid;
-    String enterpriseId;
+    private String sessionUuid;
+    private String enterpriseId;
     private Context mActivity;
-    String getMoneyUrl;//得到总金额url
-   private SwipeRefreshLayout swipe_container;//下拉刷新
+    private String getMoneyUrl;//得到总金额url
+    private SwipeRefreshLayout swipe_container;//下拉刷新
     private String OrgCode;
 
     private List<OilAmountDistribute> oilAmountDistributeList = new ArrayList<OilAmountDistribute>(); //列表数据
@@ -90,15 +90,15 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
 
 
     private void initFields() {
-        swipe_container= (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-        swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+        swipe_container = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             /**
              * 刷新要做的操作
              */
             @Override
             public void onRefresh() {
-              getAllMoney(getMoneyUrl);
-             seachCar("");
+                getAllMoney(getMoneyUrl);
+                seachCar("");
 
             }
         });
@@ -113,7 +113,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
 
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
-               seachCar(s.toString());
+                seachCar(s.toString());
             }
 
             @Override
@@ -128,7 +128,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
-         OrgCode = common.getStringByKey(Constant.ORG_CODE);
+        OrgCode = common.getStringByKey(Constant.ORG_CODE);
         //iqueryOilShengByEnterpriseInfo.json?sessionUuid=&enterpriseId=54&OrgCode=1&sysFullName=bgwl
         getMoneyUrl = Constant.ENTRANCE_PREFIX + "iqueryOilShengByEnterpriseInfo.json?sessionUuid="
                 + sessionUuid + "&enterpriseId=" + enterpriseId + "&OrgCode=" + OrgCode;
@@ -190,7 +190,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
 
     private void seachCar(String carNumber) {
         String url = Constant.ENTRANCE_PREFIX + "inqueryOilBalanceExprot.json?sessionUuid="
-                + sessionUuid + "&enterpriseId=" + enterpriseId + "&carId=" + carNumber+"&OrgCode=" + OrgCode;
+                + sessionUuid + "&enterpriseId=" + enterpriseId + "&carId=" + carNumber + "&OrgCode=" + OrgCode;
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
@@ -238,7 +238,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
                 finish();
                 break;
             case R.id.submit: //提交
-                AlertDialog.Builder builder=new AlertDialog.Builder(mActivity);
+                AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
                 builder.setTitle("提交");
                 builder.setMessage("你确定要提交吗？");
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -247,7 +247,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
                         submitResult();
                     }
                 });
-                builder.setNegativeButton("取消",null);
+                builder.setNegativeButton("取消", null);
                 builder.show();
                 break;
         }
@@ -290,7 +290,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
     private void fillSendData(List<OilDataBean> list) {
 //        private List<OilAmountDistribute> oilAmountDistributeList
         for (OilAmountDistribute oad : oilAmountDistributeList) {
-            if(!TextUtils.isEmpty(oad.getAmount())) {
+            if (!TextUtils.isEmpty(oad.getAmount())) {
                 OilDataBean bean = new OilDataBean();
                 bean.setReleationId(oad.getReleationId());
                 bean.setOilCardId(oad.getOilCardId());
@@ -321,18 +321,8 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
      * 请求预分配用户列表
      */
     private void requestDistributeUserList(JSONArray jsonArray) throws JSONException {
-            oilAmountDistributeList.clear();
-        //假数据
-//        for (int i = 0; i < 5; i++) {
-//            OilAmountDistribute oilAmountDistribute = new OilAmountDistribute();
-//            oilAmountDistribute.setCardUser("米诺" + i);
-//            oilAmountDistribute.setCardNumber("闽F324" + i);
-//            oilAmountDistribute.setCarNumber("535734673" + i);
-//            oilAmountDistributeList.add(oilAmountDistribute);
-//        }
-        //{"ID":50,"accountId":0,"cardBalance":1502.31,"cardHolder":"闽DSM908","cardId":"1000113500003339072","checkCode":"",
-        // "effTime":"2015-11-11 10:27:50","expTime":"","exportStatus":0,"fullName":"","integralBalance":0,"integralProvisions":0,
-        // "oilId":331,"oilShengId":0,"primaryId":51,"provisionsMoney":0,"status":1}
+        oilAmountDistributeList.clear();
+
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
             OilAmountDistribute oilAmountDistribute = new OilAmountDistribute();
@@ -426,7 +416,6 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
     }
 
 
-
     /**
      * 设置分配总金额
      */
@@ -436,9 +425,9 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
             String amount = oad.getAmount();
             if (!TextUtils.isEmpty(amount)) {
 
-                mon=mon+Integer.parseInt(amount);
-                if (mon>amountString){
-                    Toast.makeText(mActivity,"你的余额不够",Toast.LENGTH_SHORT).show();
+                mon = mon + Integer.parseInt(amount);
+                if (mon > amountString) {
+                    Toast.makeText(mActivity, "你的余额不够", Toast.LENGTH_SHORT).show();
                     oad.setAmount("");
                     adapter.notifyDataSetChanged();
                     return false;
@@ -446,7 +435,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
             }
         }
         predictionDistributeAmount.setText(mon + "");
-        amount.setText((amountString-mon)+"");
+        amount.setText((amountString - mon) + "");
         return true;
     }
 

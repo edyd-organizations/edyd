@@ -16,9 +16,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.oto.edyd.model.DistributionBean;
 import com.oto.edyd.model.OilDistributeDetail;
 import com.oto.edyd.model.OilDistributeDetailTime;
+import com.oto.edyd.utils.Common;
+import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.OkHttpClientManager;
+import com.squareup.okhttp.Request;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,20 +51,74 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
 
     private TextView tOilCardApply; //油卡申请
     private TextView tAmountDistribute; //金额分配
-
+    DistributionBean bean;
     private List<OilDistributeDetail> oilDistributeDetails = new ArrayList<OilDistributeDetail>(); //列表数据
     Map<Integer, OilDistributeDetailTime> oilDistributeDetailTimeMap = new HashMap<Integer, OilDistributeDetailTime>();
+    private String orgCode;
+    private String sessionUuid;
+    private String enterpriseId;
+    List<AllocationBean> allocationBeanlist = new ArrayList<AllocationBean>();
+    OilCardDistributeDetailAdapter adapter;
+    Context mActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.oil_card_distribute_detail);
-        initFields(); //初始化数据
-        requestDistributeUserList(); //请求列表数据
+        mActivity=this;
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        bean = (DistributionBean) bundle.getSerializable("detailBean");
+        if (bean != null) {
+            Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+            orgCode = common.getStringByKey(Constant.ORG_CODE);
+            sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+            enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
 
-        back.setOnClickListener(this);
-        tOilCardApply.setOnClickListener(this);
-        tAmountDistribute.setOnClickListener(this);
+            initFields(); //初始化数据
+            getDate(bean.getCardId());
+
+            back.setOnClickListener(this);
+            tOilCardApply.setOnClickListener(this);
+            tAmountDistribute.setOnClickListener(this);
+            adapter=new OilCardDistributeDetailAdapter(mActivity);
+            distributeDetailList.setAdapter(adapter);
+
+        }
+    }
+
+    private void getDate(String cardId) {
+        /**
+         * inqueryOilBalanceDetailList.json?sessionUuid=&page=1&rows=8&
+         */
+        String url = Constant.ENTRANCE_PREFIX + "inqueryOilBalanceDetailList.json?sessionUuid="
+                + sessionUuid + "&enterpriseId=" + enterpriseId + "&cardId=" + cardId + "&orgCode=" + orgCode;
+//                + "&page=1&rows=30";
+        Common.printErrLog("uuuuuuuuu"+url);
+        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+            @Override
+            public void onError(Request request, Exception e) {
+                Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(String response) {
+                Common.printErrLog("uuuuuuuuu"+response);
+                JSONObject jsonObject;
+                JSONArray jsonArray;
+                try {
+                    jsonObject = new JSONObject(response);
+                    if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        Toast.makeText(getApplicationContext(), "获取查询信息失败", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    jsonArray = jsonObject.getJSONArray("rows");
+                    requestDistributeUserList(jsonArray);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**
@@ -65,9 +129,13 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         typeCardOrCarNumber = (TextView) findViewById(R.id.type_car_number_or_card);
         search = (TextView) findViewById(R.id.search);
         cardNumber = (TextView) findViewById(R.id.card_number);
+        cardNumber.setText(bean.getCardId());
         carNumber = (TextView) findViewById(R.id.car_number);
+        carNumber.setText(bean.getCarId());
         balance = (TextView) findViewById(R.id.balance);
+        balance.setText(bean.getCardBalance()+"");
         lastTime = (TextView) findViewById(R.id.last_time);
+        lastTime.setText(bean.getOilBindingDateTime());
         distributeDetailList = (ExpandableListView) findViewById(R.id.distribute_detail_list);
         distributeDetailList.setGroupIndicator(null);
 
@@ -93,12 +161,22 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         }
     }
 
-    Handler handler = new Handler(){
+    //    Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case 0x12: //油卡金额数据返回执行
+//                    distributeDetailList.setAdapter(new OilCardDistributeDetailAdapter(getApplicationContext()));
+//                    break;
+//            }
+//        }
+//    };
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0x12: //油卡金额数据返回执行
-                    distributeDetailList.setAdapter(new OilCardDistributeDetailAdapter(getApplicationContext()));
+                    adapter.notifyDataSetChanged();
                     break;
             }
         }
@@ -107,24 +185,25 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
     /**
      * 请求预分配用户列表
      */
-    private void requestDistributeUserList() {
+    private void requestDistributeUserList(JSONArray jsonArray) throws JSONException {
+        allocationBeanlist.clear();
+        /**
+         "accountId" : 创建人ID //Long,
+         "achieveTime" : 完成时间 //String,
+         "applyTime" : 申请时间 //String,
+         "provisionsMoney" : 分配备付金余额 //Double,
+         */
 
-        //假数据
-        for(int i = 0; i < 10; i++) {
-            OilDistributeDetail oilDistributeDetail = new OilDistributeDetail();
-            oilDistributeDetail.setCar("闽F324" + i);
-            oilDistributeDetail.setCard("535734673" + i);
-            oilDistributeDetail.setBalance("300" + i);
-            oilDistributeDetail.setStatus("完成");
-            oilDistributeDetails.add(oilDistributeDetail);
-
-            OilDistributeDetailTime oilDistributeDetailTime = new OilDistributeDetailTime();
-            oilDistributeDetailTime.setApplyTime("2015-11-3 14:18:07");
-            oilDistributeDetailTime.setCompletedTime("2015-11-3 14:18:07");
-            oilDistributeDetailTimeMap.put(i, oilDistributeDetailTime);
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject obj = jsonArray.getJSONObject(i);
+            AllocationBean bean = new AllocationBean();
+            bean.setCardId(obj.getString("cardId"));
+            bean.setCarId(obj.getString("carId"));
+            bean.setAchieveTime(obj.getString("achieveTime"));
+            bean.setApplyTime(obj.getString("applyTime"));
+            bean.setProvisionsMoney(obj.getString("provisionsMoney"));
+            allocationBeanlist.add(bean);
         }
-
-
         Message message = new Message();
         message.what = 0x12;
         handler.sendMessage(message);
@@ -139,8 +218,10 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
             this.context = context;
             inflater = LayoutInflater.from(context);
         }
+
         /**
          * 获取组的个数
+         *
          * @return
          */
         @Override
@@ -150,6 +231,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
 
         /**
          * 获取指定组中的子元素个数
+         *
          * @param groupPosition
          * @return
          */
@@ -160,6 +242,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
 
         /**
          * 获取指定组中的数据
+         *
          * @param groupPosition
          * @return
          */
@@ -170,6 +253,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
 
         /**
          * 获取指定组中的指定子元素数据。
+         *
          * @param groupPosition
          * @param childPosition
          * @return
@@ -181,6 +265,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
 
         /**
          * 获取指定组中的指定子元素ID，这个ID在组里一定是唯一的。
+         *
          * @param groupPosition
          * @param childPosition
          * @return
@@ -192,6 +277,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
 
         /**
          * 获取指定组的ID，这个组ID必须是唯一的。
+         *
          * @param groupPosition
          * @return
          */
@@ -202,6 +288,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
 
         /**
          * 获取显示指定组的视图对象。
+         *
          * @param groupPosition
          * @param isExpanded
          * @param convertView
@@ -213,24 +300,19 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
             TextView tCarNumber; //车牌号
             TextView tCardNumber; //卡号
             TextView tAmount; //金额
-            TextView status; //状态
             ImageView iUpOrDown;// 图标指示器
 
             View view = inflater.inflate(R.layout.oil_card_distribute_detail_parent_item, null);
             tCarNumber = (TextView) view.findViewById(R.id.car_number);
             tCardNumber = (TextView) view.findViewById(R.id.card_number);
             tAmount = (TextView) view.findViewById(R.id.balance);
-            status = (TextView) view.findViewById(R.id.oil_status);
             iUpOrDown = (ImageView) view.findViewById(R.id.ic_up_or_down);
-
-            OilDistributeDetail oilDistributeDetail = oilDistributeDetails.get(groupPosition);
-            tCarNumber.setText(oilDistributeDetail.getCar());
-            tCardNumber.setText(oilDistributeDetail.getCard());
-            tAmount.setText(oilDistributeDetail.getBalance());
-            status.setText(oilDistributeDetail.getStatus());
-
+            AllocationBean bean = allocationBeanlist.get(groupPosition);
+            tCarNumber.setText(bean.getCarId());
+            tCardNumber.setText(bean.getCardId());
+            tAmount.setText(bean.getProvisionsMoney());
             //是否展开设置不同的图片
-            if(isExpanded) {
+            if (isExpanded) {
                 iUpOrDown.setImageResource(R.mipmap.up_arrow);
             } else {
                 iUpOrDown.setImageResource(R.mipmap.down_arrow);
@@ -240,6 +322,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
 
         /**
          * 获取一个视图对象，显示指定组中的指定子元素数据。
+         *
          * @param groupPosition
          * @param childPosition
          * @param isLastChild
@@ -256,15 +339,16 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
             tApplyTime = (TextView) view.findViewById(R.id.apply_time);
             tCompletedTime = (TextView) view.findViewById(R.id.completed_time);
 
-            OilDistributeDetailTime oilDistributeDetailTime = oilDistributeDetailTimeMap.get(groupPosition);
-            tApplyTime.setText(oilDistributeDetailTime.getApplyTime());
-            tCompletedTime.setText(oilDistributeDetailTime.getCompletedTime());
+            AllocationBean bean = allocationBeanlist.get(groupPosition);
+            tApplyTime.setText(bean.getApplyTime());
+            tCompletedTime.setText(bean.getAchieveTime());
 
             return view;
         }
 
         /**
          * 组和子元素是否持有稳定的ID,也就是底层数据的改变不会影响到它们。
+         *
          * @return
          */
         @Override
@@ -274,6 +358,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
 
         /**
          * 是否选中指定位置上的子元素。
+         *
          * @param groupPosition
          * @param childPosition
          * @return
