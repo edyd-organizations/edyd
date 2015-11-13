@@ -11,7 +11,7 @@
         android:paddingRight="10dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:background="@color/gray_DDDDDD">
+        android:background="@color/gray_EEEEEE">
 
         <LinearLayout
             android:layout_width="0dp"
