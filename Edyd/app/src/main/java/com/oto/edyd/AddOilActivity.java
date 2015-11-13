@@ -221,6 +221,8 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
                             oilCardInfo.setOilBindingDateTime(jsonObject.getString("oilBindingDateTime"));
                             addOilCards.add(oilCardInfo);
                         }
+                    }else {
+                        Toast.makeText(getApplicationContext(), "暂无数据", Toast.LENGTH_SHORT).show();
                     }
 
                     Message message = new Message();

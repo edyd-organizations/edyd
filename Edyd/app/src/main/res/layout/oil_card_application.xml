@@ -158,8 +158,9 @@
                         android:layout_height="35dp"
                         android:padding="3dp"
                         android:layout_gravity="center"
-                        android:inputType="textPassword"
+                        android:inputType="numberPassword"
                         android:singleLine="true"
+                        android:maxLength="6"
                         android:background="@drawable/edittext_border"
                         android:layout_weight="1"/>
                 </LinearLayout>
@@ -242,6 +243,7 @@
                         android:layout_gravity="center"
                         android:singleLine="true"
                         android:numeric="integer"
+                        android:maxLength="12"
                         android:textSize="14sp"
                         android:background="@drawable/edittext_border"
                         android:layout_weight="1"/>
@@ -416,6 +418,11 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="14sp"
                                 android:text="部门名称"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="#ffff4444"
+                                android:text="*"/>
                         </LinearLayout>
                         <EditText
                             android:id="@+id/department"

@@ -46,6 +46,7 @@ public class RoleTypeActivity extends Activity implements View.OnClickListener {
     private String enterpriseName; //企业名称
     private Common common;
     private Map<Object, Object> roleMap;
+    private View line; //线条
 
     private int tPosition;
 
@@ -72,6 +73,7 @@ public class RoleTypeActivity extends Activity implements View.OnClickListener {
     private void initFields() {
         back = (LinearLayout) findViewById(R.id.role_type_back);
         roleList = (ListView) findViewById(R.id.role_list);
+        line = (View) findViewById(R.id.line);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
 
         Intent intent = getIntent();
@@ -85,6 +87,11 @@ public class RoleTypeActivity extends Activity implements View.OnClickListener {
             switch (msg.what) {
                 case 1000: //数据返回成功设置数据
                     roleList.setAdapter(new RoleAdapter(RoleTypeActivity.this));
+                    if(roleDataSet.size() > 0) {
+                        line.setVisibility(View.VISIBLE);
+                    } else {
+                        line.setVisibility(View.GONE);
+                    }
                     break;
                 case 1002: //更新角色
                     updateRoleInfo();

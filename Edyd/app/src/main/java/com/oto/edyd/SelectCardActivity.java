@@ -176,7 +176,7 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
                             oilCardInfoSet.clear();
                             message.what = 0x16;
                             handler.sendMessage(message);
-                            //Toast.makeText(getApplicationContext(), "暂无数据", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "暂无数据", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         oilCardInfoSet.clear();

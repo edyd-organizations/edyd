@@ -194,6 +194,11 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
         if(carNumber != null && carNumber.equals("")) {
             Toast.makeText(getApplicationContext(), "车牌号格式不正确", Toast.LENGTH_SHORT).show();
             return;
+        } else {
+            if(carNumber.length() < 7) {
+                Toast.makeText(getApplicationContext(), "车牌号必须为7位", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
 
         if(isCheckedNeedPassword) {
@@ -202,6 +207,11 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
             if(password != null && password.equals("")) {
                 Toast.makeText(getApplicationContext(), "密码已设置不能为空", Toast.LENGTH_SHORT).show();
                 return;
+            } else {
+                if(password.length() < 4) {
+                    Toast.makeText(getApplicationContext(), "密码位数要求4-6位整数", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
         }
 
@@ -210,6 +220,16 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
         if(mPhone != null && mPhone.equals("")) {
             Toast.makeText(getApplicationContext(), "手机号码不能为空", Toast.LENGTH_SHORT).show();
             return;
+        }
+
+        int accountType = getEnterpriseAccountType();
+        if(accountType == 1 || accountType == 2 ) {
+            String department = (etDepartment.getText().toString()).trim();
+            department = department.replaceAll(" ", "");
+            if(department != null && department.equals("")) {
+                Toast.makeText(getApplicationContext(), "部门不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
         applyOilCard();
     }
@@ -277,6 +297,7 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
                         return;
                     }
                     Toast.makeText(getApplicationContext(), "油品申请操作成功", Toast.LENGTH_SHORT).show();
+                    finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
