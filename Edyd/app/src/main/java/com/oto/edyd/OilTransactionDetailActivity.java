@@ -14,11 +14,21 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.oto.edyd.model.OilCardInfo;
 import com.oto.edyd.model.OilDistributeDetail;
 import com.oto.edyd.model.OilDistributeDetailTime;
 import com.oto.edyd.model.OilTransactionDetail;
 import com.oto.edyd.model.OilTransactionDetailItem;
+import com.oto.edyd.utils.Common;
+import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.OkHttpClientManager;
+import com.squareup.okhttp.Request;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +42,6 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
 
     private LinearLayout back; //返回
     private TextView typeCardOrCarNumber; //卡号或者车牌号
-    private TextView search; //查找
     private TextView cardNumber; //卡号
     private TextView carNumber; //车牌号
     private TextView balance; //余额
@@ -49,7 +58,10 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.oil_card_transaction_detail);
         initFields(); //初始化数据
-        requestDistributeUserList(); //请求列表数据
+
+        Bundle bundle = getIntent().getExtras();
+        OilCardInfo oilCardInfo = (OilCardInfo) bundle.getSerializable("oil_card");
+        requestDistributeUserList(oilCardInfo); //请求列表数据
 
         back.setOnClickListener(this);
         tOilCardApply.setOnClickListener(this);
@@ -62,7 +74,6 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
     private void initFields() {
         back = (LinearLayout) findViewById(R.id.back);
         typeCardOrCarNumber = (TextView) findViewById(R.id.type_car_number_or_card);
-        search = (TextView) findViewById(R.id.search);
         cardNumber = (TextView) findViewById(R.id.card_number);
         carNumber = (TextView) findViewById(R.id.car_number);
         balance = (TextView) findViewById(R.id.balance);
@@ -97,7 +108,16 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0x12: //油卡金额数据返回执行
+                    OilTransactionDetail oilTransactionDetail = oilDistributeDetails.get(0);
+                    cardNumber.setText(oilTransactionDetail.getCardId());
+                    carNumber.setText(oilTransactionDetail.getCarId());
+                    lastTime.setText(oilTransactionDetail.getTransactionTime());
+                    OilTransactionDetailItem oilTransactionDetailItem = oilTransactionDetailItemMap.get(0);
+                    balance.setText(oilTransactionDetailItem.getCardBalance());
                     distributeDetailList.setAdapter(new OilCardDistributeDetailAdapter(getApplicationContext()));
+                    break;
+                case 0x13: //暂无数据
+                    Toast.makeText(OilTransactionDetailActivity.this, "暂无数据", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -106,33 +126,97 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
     /**
      * 请求预分配用户列表
      */
-    private void requestDistributeUserList() {
+    private void requestDistributeUserList(OilCardInfo oilCardInfo) {
+        Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+        String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+        String orgCode = common.getStringByKey(Constant.ORG_CODE);
+        String url = "";
 
-        //假数据
-        for(int i = 0; i < 10; i++) {
-            OilTransactionDetail oilDistributeDetail = new OilTransactionDetail();
-            oilDistributeDetail.setCar("闽F324" + i);
-            oilDistributeDetail.setCard("535734673" + i);
-            oilDistributeDetail.setTime("2015-11-3 17:45:53");
-            oilDistributeDetail.setBalance("300" + i);
-            oilDistributeDetails.add(oilDistributeDetail);
+        if(enterpriseId.equals("0")) {
+            url = Constant.ENTRANCE_PREFIX + "inquireOilCardDetail.json?sessionUuid=" + sessionUuid + "&enterpriseId=" + enterpriseId+
+                    "&cardId=" + oilCardInfo.getCardId();
+        } else {
+            url = Constant.ENTRANCE_PREFIX + "inquireOilCardDetail.json?sessionUuid=" + sessionUuid + "&enterpriseId=" + enterpriseId+
+                    "&orgCode=" + orgCode + "&cardId=" + oilCardInfo.getCardId();
+        }
+        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+            @Override
+            public void onError(Request request, Exception e) {
 
-            OilTransactionDetailItem oilTransactionDetailItem = new OilTransactionDetailItem();
-            oilTransactionDetailItem.setOilCategory("93#汽油");
-            oilTransactionDetailItem.setUnitPrice("￥3" + i);
-            oilTransactionDetailItem.setAddOilQuantity("4" + i + "L");
-            oilTransactionDetailItem.setCardBalance("￥50" + i);
-            oilTransactionDetailItem.setAddress("中国石化福建厦门石油分公司东渡加油站");
-            oilTransactionDetailItemMap.put(i, oilTransactionDetailItem);
+            }
+
+            @Override
+            public void onResponse(String response) {
+                JSONObject transactionDetailJSON;
+                JSONArray transactionDetailArray;
+                try {
+                    transactionDetailJSON = new JSONObject(response);
+                    String status = transactionDetailJSON.getString("status");
+                    if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        //变更列表数据获取失败
+                        Toast.makeText(getApplicationContext(), "交易明细信息获取异常", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    transactionDetailArray = transactionDetailJSON.getJSONArray("rows");
+                    Message message = new Message();
+                    if(transactionDetailArray.length() > 0) {
+                        for(int i = 0; i<transactionDetailArray.length(); i++) {
+                            JSONObject jsonObject = transactionDetailArray.getJSONObject(i);
+                            OilTransactionDetail oilTransactionDetail = new OilTransactionDetail(); //父节点
+                            OilTransactionDetailItem oilTransactionDetailItem = new OilTransactionDetailItem(); //子节点
+
+                            oilTransactionDetail.setCarId(jsonObject.getString("cardHolder")); //车牌号
+                            oilTransactionDetail.setCardId(jsonObject.getString("cardId")); //卡号
+                            oilTransactionDetail.setTransactionTime(jsonObject.getString("detailDT")); //交易时间
+                            oilTransactionDetail.setTurnover(jsonObject.getString("detailMoney")); //交易额
+                            oilTransactionDetail.setTransactionType(jsonObject.getString("detailType")); //交易类型
+                            oilDistributeDetails.add(oilTransactionDetail);
+
+                            oilTransactionDetailItem.setOilType(jsonObject.getString("oilType")); //油品种类
+                            oilTransactionDetailItem.setUnitPrice(jsonObject.getString("detailPrice")); //单价
+                            oilTransactionDetailItem.setAddOilNumber(jsonObject.getString("detailNum")); //加油量
+                            oilTransactionDetailItem.setCardBalance(jsonObject.getString("balance")); //卡余额
+                            oilTransactionDetailItem.setTransactionAddress(jsonObject.getString("address")); //交易地点
+                            oilTransactionDetailItemMap.put(i, oilTransactionDetailItem);
+                        }
+                        message.what = 0x12;
+                    } else {
+                        message.what = 0x13;
+                    }
+                    handler.sendMessage(message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+//        //假数据
+//        for(int i = 0; i < 10; i++) {
+//            OilTransactionDetail oilDistributeDetail = new OilTransactionDetail();
+//            oilDistributeDetail.setCar("闽F324" + i);
+//            oilDistributeDetail.setCard("535734673" + i);
+//            oilDistributeDetail.setTime("2015-11-3 17:45:53");
+//            oilDistributeDetail.setBalance("300" + i);
+//            oilDistributeDetails.add(oilDistributeDetail);
+//
+//            OilTransactionDetailItem oilTransactionDetailItem = new OilTransactionDetailItem();
+//            oilTransactionDetailItem.setOilCategory("93#汽油");
+//            oilTransactionDetailItem.setUnitPrice("￥3" + i);
+//            oilTransactionDetailItem.setAddOilQuantity("4" + i + "L");
+//            oilTransactionDetailItem.setCardBalance("￥50" + i);
+//            oilTransactionDetailItem.setAddress("中国石化福建厦门石油分公司东渡加油站");
+//            oilTransactionDetailItemMap.put(i, oilTransactionDetailItem);
+//        }
+//
+//
+//        Message message = new Message();
+//        message.what = 0x12;
+//        handler.sendMessage(message);
         }
 
-
-        Message message = new Message();
-        message.what = 0x12;
-        handler.sendMessage(message);
-    }
-
-    private class OilCardDistributeDetailAdapter extends BaseExpandableListAdapter {
+        private class OilCardDistributeDetailAdapter extends BaseExpandableListAdapter {
 
         private Context context;
         private LayoutInflater inflater;
@@ -217,19 +301,27 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
             TextView time; //时间
             TextView tAmount; //金额
             ImageView iUpOrDown;// 图标指示器
+            TextView tradeStatus; //交易状态
 
             View view = inflater.inflate(R.layout.oil_card_transaction_detail_parent_item, null);
             tCarNumber = (TextView) view.findViewById(R.id.car_number);
             tCardNumber = (TextView) view.findViewById(R.id.card_number);
             tAmount = (TextView) view.findViewById(R.id.balance);
             time = (TextView) view.findViewById(R.id.time);
+            tradeStatus = (TextView) view.findViewById(R.id.trade_status);
             iUpOrDown = (ImageView) view.findViewById(R.id.ic_up_or_down);
 
             OilTransactionDetail oilTransactionDetail = oilDistributeDetails.get(groupPosition);
-            tCarNumber.setText(oilTransactionDetail.getCar());
-            tCardNumber.setText(oilTransactionDetail.getCard());
-            time.setText(oilTransactionDetail.getTime());
-            tAmount.setText(oilTransactionDetail.getBalance());
+            tCarNumber.setText(oilTransactionDetail.getCarId());
+            tCardNumber.setText(oilTransactionDetail.getCardId());
+            time.setText(oilTransactionDetail.getTransactionTime());
+            tAmount.setText(oilTransactionDetail.getTurnover());
+            String status = oilTransactionDetail.getTransactionType();
+            if(status.equals("圈存")) {
+                tradeStatus.setText("+");
+            }else {
+                tradeStatus.setText("-");
+            }
 
             //是否展开设置不同的图片
             if(isExpanded) {
@@ -265,11 +357,11 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
             tAddress = (TextView) view.findViewById(R.id.address);
 
             OilTransactionDetailItem oilTransactionDetailItem = oilTransactionDetailItemMap.get(groupPosition);
-            tOilCategory.setText(oilTransactionDetailItem.getOilCategory());
+            tOilCategory.setText(oilTransactionDetailItem.getOilType());
             tUnitPrice.setText(oilTransactionDetailItem.getUnitPrice());
-            tAddOilQuantity.setText(oilTransactionDetailItem.getAddOilQuantity());
+            tAddOilQuantity.setText(oilTransactionDetailItem.getAddOilNumber());
             tCardBalance.setText(oilTransactionDetailItem.getCardBalance());
-            tAddress.setText(oilTransactionDetailItem.getAddress());
+            tAddress.setText(oilTransactionDetailItem.getTransactionAddress());
             return view;
         }
 

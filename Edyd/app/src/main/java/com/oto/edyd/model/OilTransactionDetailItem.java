@@ -5,18 +5,18 @@ package com.oto.edyd.model;
  */
 public class OilTransactionDetailItem {
 
-    private String oilCategory; //油品分类
+    private String oilType; //油品种类
     private String unitPrice; //单价
-    private String addOilQuantity; //加油量
+    private String addOilNumber; //加油量
     private String cardBalance; //卡余额
-    private String address; //地址
+    private String transactionAddress; //交易地点
 
-    public String getOilCategory() {
-        return oilCategory;
+    public String getOilType() {
+        return oilType;
     }
 
-    public void setOilCategory(String oilCategory) {
-        this.oilCategory = oilCategory;
+    public void setOilType(String oilType) {
+        this.oilType = oilType;
     }
 
     public String getUnitPrice() {
@@ -27,12 +27,12 @@ public class OilTransactionDetailItem {
         this.unitPrice = unitPrice;
     }
 
-    public String getAddOilQuantity() {
-        return addOilQuantity;
+    public String getAddOilNumber() {
+        return addOilNumber;
     }
 
-    public void setAddOilQuantity(String addOilQuantity) {
-        this.addOilQuantity = addOilQuantity;
+    public void setAddOilNumber(String addOilNumber) {
+        this.addOilNumber = addOilNumber;
     }
 
     public String getCardBalance() {
@@ -43,11 +43,11 @@ public class OilTransactionDetailItem {
         this.cardBalance = cardBalance;
     }
 
-    public String getAddress() {
-        return address;
+    public String getTransactionAddress() {
+        return transactionAddress;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setTransactionAddress(String transactionAddress) {
+        this.transactionAddress = transactionAddress;
     }
 }

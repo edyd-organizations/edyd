@@ -128,8 +128,28 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".RoleTypeActivity"
             android:screenOrientation="portrait"></activity>
+
         <activity android:name=".DistributionDetailedSearchActivity"
             android:screenOrientation="portrait"></activity>
+
+        <activity android:name=".SelectCardActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".FineActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ViolateCheckActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ViolateAddCarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VioDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ViolateNumActivity"
+            android:screenOrientation="portrait" />
+
 
         <service
             android:name="com.umeng.update.net.DownloadingService"

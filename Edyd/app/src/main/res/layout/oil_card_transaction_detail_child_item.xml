@@ -57,30 +57,60 @@
                     android:id="@+id/oil_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="93#汽油"
                     android:layout_gravity="right"/>
-                <TextView
-                    android:id="@+id/unit_price"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="right"
-                    android:text="￥5.76" />
-                <TextView
-                    android:id="@+id/add_oil_quantity"
+                    android:layout_gravity="right">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="￥" />
+                    <TextView
+                        android:id="@+id/unit_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp" />
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="right"
-                    android:text="31.5L" />
-                <TextView
-                    android:id="@+id/card_balance"
+                    android:layout_gravity="right">
+                    <TextView
+                        android:id="@+id/add_oil_quantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="L" />
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="right"
-                    android:textColor="@color/user_icon_8"
-                    android:text="￥300.0元" />
+                    android:layout_gravity="right">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/user_icon_8"
+                        android:text="￥" />
+                    <TextView
+                        android:id="@+id/card_balance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/user_icon_8" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/user_icon_8"
+                        android:text="元" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
