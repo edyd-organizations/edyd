@@ -322,7 +322,11 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
      */
     private void requestDistributeUserList(JSONArray jsonArray) throws JSONException {
         oilAmountDistributeList.clear();
-
+        if (jsonArray.length() == 0) {
+            Toast.makeText(mActivity, "暂无数据", Toast.LENGTH_LONG).show();
+        }
+            oilAmountDistributeList.clear();
+        //假数据
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
             OilAmountDistribute oilAmountDistribute = new OilAmountDistribute();
