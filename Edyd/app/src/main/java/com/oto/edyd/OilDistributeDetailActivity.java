@@ -52,7 +52,6 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
     private TextView tOilCardApply; //油卡申请
     private TextView tAmountDistribute; //金额分配
     DistributionBean bean;
-    private List<OilDistributeDetail> oilDistributeDetails = new ArrayList<OilDistributeDetail>(); //列表数据
     Map<Integer, OilDistributeDetailTime> oilDistributeDetailTimeMap = new HashMap<Integer, OilDistributeDetailTime>();
     private String orgCode;
     private String sessionUuid;
@@ -81,8 +80,6 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
             back.setOnClickListener(this);
             tOilCardApply.setOnClickListener(this);
             tAmountDistribute.setOnClickListener(this);
-            adapter=new OilCardDistributeDetailAdapter(mActivity);
-            distributeDetailList.setAdapter(adapter);
 
         }
     }
@@ -176,7 +173,12 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0x12: //油卡金额数据返回执行
-                    adapter.notifyDataSetChanged();
+                    if (adapter==null) {
+                        adapter = new OilCardDistributeDetailAdapter(mActivity);
+                        distributeDetailList.setAdapter(adapter);
+                    }else {
+                        adapter.notifyDataSetChanged();
+                    }
                     break;
             }
         }
@@ -226,7 +228,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
          */
         @Override
         public int getGroupCount() {
-            return oilDistributeDetails.size();
+            return allocationBeanlist.size();
         }
 
         /**
@@ -248,7 +250,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
          */
         @Override
         public Object getGroup(int groupPosition) {
-            return oilDistributeDetails.get(groupPosition);
+            return allocationBeanlist.get(groupPosition);
         }
 
         /**
