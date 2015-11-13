@@ -4,40 +4,49 @@ package com.oto.edyd.model;
  * Created by yql on 2015/11/3.
  */
 public class OilTransactionDetail {
-    private String car; //车牌号
-    private String card;// 卡号
-    private String time; //状态
-    private String balance; //金额
+    private String carId; //车牌号
+    private String cardId; //卡号ID
+    private String transactionTime; //交易时间
+    private String turnover; //交易额
+    private String transactionType; //交易类型
 
-    public String getCar() {
-        return car;
+    public String getCarId() {
+        return carId;
     }
 
-    public void setCar(String car) {
-        this.car = car;
+    public void setCarId(String carId) {
+        this.carId = carId;
     }
 
-    public String getCard() {
-        return card;
+    public String getCardId() {
+        return cardId;
     }
 
-    public void setCard(String card) {
-        this.card = card;
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
     }
 
-    public String getTime() {
-        return time;
+    public String getTransactionTime() {
+        return transactionTime;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setTransactionTime(String transactionTime) {
+        this.transactionTime = transactionTime;
     }
 
-    public String getBalance() {
-        return balance;
+    public String getTurnover() {
+        return turnover;
     }
 
-    public void setBalance(String balance) {
-        this.balance = balance;
+    public void setTurnover(String turnover) {
+        this.turnover = turnover;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
     }
 }

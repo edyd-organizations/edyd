@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.oto.edyd.model.OilCardInfo;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 
@@ -45,6 +46,7 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
     private Common common;
     private List<OilCardInfo> oilCardInfoSet = new ArrayList<OilCardInfo>(); //油卡集合
     private SelectCardAdapter selectCardAdapter;
+    private CusProgressDialog cusProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -266,5 +268,20 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
         TextView time; //时间
         TextView cardNumber; //车牌号
         TextView balance; //金额
+    }
+
+    public abstract class SelectCardResultCallback<T> extends OkHttpClientManager.ResultCallback<T>{
+        @Override
+        public void onBefore() {
+            //请求之前操作
+            cusProgressDialog = new CusProgressDialog(SelectCardActivity.this, "正在拼命加载...");
+            cusProgressDialog.getLoadingDialog().show();
+        }
+
+        @Override
+        public void onAfter() {
+            //请求之后要做的操作
+            cusProgressDialog.getLoadingDialog().dismiss();
+        }
     }
 }
