@@ -51,7 +51,7 @@
                 android:padding="10dp"
                 android:hint="预分配金额"
                 android:maxLength="9"
-                android:numeric="decimal"
+                android:numeric="integer"
                 android:textColorHint="@color/gray_DDDDDD"
                 android:textSize="12sp"
                 android:textColor="@android:color/black"
