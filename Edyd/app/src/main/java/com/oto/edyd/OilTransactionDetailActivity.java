@@ -15,10 +15,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.oto.edyd.model.OilCardInfo;
 import com.oto.edyd.model.OilDistributeDetail;
 import com.oto.edyd.model.OilDistributeDetailTime;
 import com.oto.edyd.model.OilTransactionDetail;
 import com.oto.edyd.model.OilTransactionDetailItem;
+import com.oto.edyd.utils.Common;
+import com.oto.edyd.utils.Constant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +52,10 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.oil_card_transaction_detail);
         initFields(); //初始化数据
-        requestDistributeUserList(); //请求列表数据
+
+        Bundle bundle = getIntent().getExtras();
+        OilCardInfo oilCardInfo = (OilCardInfo) bundle.getSerializable("oil_card");
+        requestDistributeUserList(oilCardInfo); //请求列表数据
 
         back.setOnClickListener(this);
         tOilCardApply.setOnClickListener(this);
@@ -106,30 +112,42 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
     /**
      * 请求预分配用户列表
      */
-    private void requestDistributeUserList() {
+    private void requestDistributeUserList(OilCardInfo oilCardInfo) {
+        Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+        String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+        String orgCode = common.getStringByKey(Constant.ORG_CODE);
+        String url = "";
 
-        //假数据
-        for(int i = 0; i < 10; i++) {
-            OilTransactionDetail oilDistributeDetail = new OilTransactionDetail();
-            oilDistributeDetail.setCar("闽F324" + i);
-            oilDistributeDetail.setCard("535734673" + i);
-            oilDistributeDetail.setTime("2015-11-3 17:45:53");
-            oilDistributeDetail.setBalance("300" + i);
-            oilDistributeDetails.add(oilDistributeDetail);
+        if(enterpriseId.equals("0")) {
+            url = Constant.ENTRANCE_PREFIX + "";
+        } else {
 
-            OilTransactionDetailItem oilTransactionDetailItem = new OilTransactionDetailItem();
-            oilTransactionDetailItem.setOilCategory("93#汽油");
-            oilTransactionDetailItem.setUnitPrice("￥3" + i);
-            oilTransactionDetailItem.setAddOilQuantity("4" + i + "L");
-            oilTransactionDetailItem.setCardBalance("￥50" + i);
-            oilTransactionDetailItem.setAddress("中国石化福建厦门石油分公司东渡加油站");
-            oilTransactionDetailItemMap.put(i, oilTransactionDetailItem);
         }
 
 
-        Message message = new Message();
-        message.what = 0x12;
-        handler.sendMessage(message);
+//        //假数据
+//        for(int i = 0; i < 10; i++) {
+//            OilTransactionDetail oilDistributeDetail = new OilTransactionDetail();
+//            oilDistributeDetail.setCar("闽F324" + i);
+//            oilDistributeDetail.setCard("535734673" + i);
+//            oilDistributeDetail.setTime("2015-11-3 17:45:53");
+//            oilDistributeDetail.setBalance("300" + i);
+//            oilDistributeDetails.add(oilDistributeDetail);
+//
+//            OilTransactionDetailItem oilTransactionDetailItem = new OilTransactionDetailItem();
+//            oilTransactionDetailItem.setOilCategory("93#汽油");
+//            oilTransactionDetailItem.setUnitPrice("￥3" + i);
+//            oilTransactionDetailItem.setAddOilQuantity("4" + i + "L");
+//            oilTransactionDetailItem.setCardBalance("￥50" + i);
+//            oilTransactionDetailItem.setAddress("中国石化福建厦门石油分公司东渡加油站");
+//            oilTransactionDetailItemMap.put(i, oilTransactionDetailItem);
+//        }
+//
+//
+//        Message message = new Message();
+//        message.what = 0x12;
+//        handler.sendMessage(message);
     }
 
     private class OilCardDistributeDetailAdapter extends BaseExpandableListAdapter {

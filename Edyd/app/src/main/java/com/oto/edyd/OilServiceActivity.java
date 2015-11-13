@@ -60,7 +60,7 @@ public class OilServiceActivity extends Activity implements View.OnClickListener
                 startActivity(intent);
                 break;
             case R.id.ll_transaction_detail: //交易明细
-                intent = new Intent(getApplicationContext(), OilTransactionDetailActivity.class); //油卡金额分配
+                intent = new Intent(getApplicationContext(), SelectCardActivity.class); //油卡金额分配
                 startActivity(intent);
                 break;
             case R.id.ll_distribute_detail: //分配明细

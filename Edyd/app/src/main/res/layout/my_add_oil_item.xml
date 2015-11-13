@@ -18,12 +18,12 @@
             android:textColor="@color/background_dark"
             android:layout_gravity="left"/>
         <TextView
-            android:id="@+id/time"
+            android:id="@+id/card_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_gravity="left"
-            android:textColor="@color/dim_foreground_dark"/>
+            android:textColor="@color/dim_foreground_dark"
+            android:layout_gravity="left"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="0dp"
@@ -43,11 +43,10 @@
                 android:gravity="center"
                 android:layout_marginLeft="5dp">
                 <TextView
-                    android:id="@+id/card_number"
+                    android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/background_dark"
-                    android:layout_gravity="right"/>
+                    android:layout_gravity="right" />
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
