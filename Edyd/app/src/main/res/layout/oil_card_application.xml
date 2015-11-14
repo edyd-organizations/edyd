@@ -117,6 +117,7 @@
                             android:layout_weight="1"
                             android:layout_gravity="center">
                             <RadioButton
+                                android:id="@+id/need_password"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -156,7 +157,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="#ffff4444"
-                            android:visibility="gone"
                             android:text="*"/>
                     </LinearLayout>
                     <EditText
@@ -202,6 +202,7 @@
                             android:layout_weight="1"
                             android:layout_gravity="center">
                             <RadioButton
+                                android:id="@+id/need_message"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
