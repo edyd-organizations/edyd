@@ -104,4 +104,14 @@ public  class Constant {
     public static final String TIMER_SERVICE = "com.oto.edyd.service.TimerService";
     public static final String ALARM_SERVICE_ACTION = "com.oto.edyd.service.TimerService.action";
 
+
+    //友盟
+    public static final String DESCRIPTOR = "com.umeng.share";
+    private static final String TIPS = "请移步官方网站 ";
+    private static final String END_TIPS = ", 查看相关说明.";
+    public static final String TENCENT_OPEN_URL = TIPS + "http://wiki.connect.qq.com/android_sdk使用说明"
+            + END_TIPS;
+    public static final String PERMISSION_URL = TIPS + "http://wiki.connect.qq.com/openapi权限申请"
+            + END_TIPS;
+
 }
