@@ -178,6 +178,7 @@
             android:orientation="vertical"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
+            android:visibility="invisible"
             android:gravity="center">
         </LinearLayout>
 
@@ -188,6 +189,7 @@
             android:orientation="vertical"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
+            android:visibility="invisible"
             android:gravity="center">
 
         </LinearLayout>

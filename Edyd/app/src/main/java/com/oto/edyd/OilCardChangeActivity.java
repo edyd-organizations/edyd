@@ -156,6 +156,8 @@ public class OilCardChangeActivity extends Activity implements View.OnClickListe
                         submit.setEnabled(false); //设置按钮不可用
                     }
                 }
+                changeItem.setSelection(0, true);
+                changeBefore.setText("");
             }
         });
         changeAfter.addTextChangedListener(new TextWatcher() {
