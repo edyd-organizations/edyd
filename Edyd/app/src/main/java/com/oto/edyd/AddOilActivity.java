@@ -167,7 +167,7 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
                     }
                     addOilArray = addOilJSON.getJSONArray("rows");
                     if(addOilArray.length() > 0) {
-                        totalAmount = (double)addOilArray.get(0);
+                        totalAmount = addOilArray.getDouble(0);
                     }
                     Message message = new Message();
                     message.what = 0x11;
