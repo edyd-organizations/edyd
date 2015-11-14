@@ -28,6 +28,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by yql on 2015/11/5.
@@ -202,8 +204,8 @@ public class OilCardChangeActivity extends Activity implements View.OnClickListe
 
                     String txChangeItem = changeItem.getSelectedItem().toString();
                     if (!txChangeItem.equals("请选择")) {
-                        String txCarID = carID.getText().toString();
-                        if (txCarID != null && !(txCarID.equals(""))) {
+                       // String txCarID = carID.getText().toString();
+                        if (carNumber != null && !(carNumber.equals(""))) {
                             String txChangeAfter = changeAfter.getText().toString();
                             if (txChangeAfter != null && !(txChangeAfter.equals(""))) {
                                 submit.setEnabled(true); //设置按钮可用
@@ -212,6 +214,13 @@ public class OilCardChangeActivity extends Activity implements View.OnClickListe
                         }
                         txPosition = position;
                         changeAfter.setText("");
+
+                        Pattern pattern = Pattern.compile("^[\\u4e00-\\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}$");
+                        Matcher matcher = pattern.matcher(carNumber);
+                        if(!matcher.matches()) {
+                            Toast.makeText(getApplicationContext(), "车牌号格式不正确", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         requestDropListItem(position); //请求下拉列表类型对应变更前数据
                     } else {
                         submit.setBackgroundResource(R.drawable.border_corner_login);
@@ -219,7 +228,6 @@ public class OilCardChangeActivity extends Activity implements View.OnClickListe
                     }
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -323,11 +331,11 @@ public class OilCardChangeActivity extends Activity implements View.OnClickListe
      */
     private void requestDropListItem(final int position) {
 
+
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         String cardID = carID.getText().toString();
         String orgCode = common.getStringByKey(Constant.ORG_CODE);
         String enterpriseID = common.getStringByKey(Constant.ENTERPRISE_ID);
-
 
         String url = Constant.ENTRANCE_PREFIX + "inqueryOilCardApp.json?sessionUuid="+sessionUuid+"&carId=" + cardID + "&orgCode=" + orgCode + "&enterpriseId=" + enterpriseID;
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {

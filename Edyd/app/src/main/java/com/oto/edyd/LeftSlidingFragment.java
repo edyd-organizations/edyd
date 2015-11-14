@@ -242,7 +242,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                 intent.putExtra("wait_title", "公告通知");
                 startActivity(intent);
             } else if(menuDes.equals("社交分享")){
-                intent = new Intent(getActivity().getApplicationContext(), WaitBuild.class);
+                intent = new Intent(getActivity().getApplicationContext(), SocialSharedActivity.class);
                 intent.putExtra("wait_title", "社交分享");
                 startActivity(intent);
             } else if(menuDes.equals("系统设置")){

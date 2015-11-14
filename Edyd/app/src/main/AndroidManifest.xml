@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.oto.edyd" >
+    package="com.oto.edyd">
 
     <!--支持多屏-->
     <supports-screens
-        android:smallScreens="true"
-        android:normalScreens="true"
+        android:anyDensity="true"
         android:largeScreens="true"
-        android:xlargeScreens="true"
-        android:anyDensity="true"/>
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
 
     <!--系统权限-->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!--短信服务-->
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <!--拨打电话的权限-->
     <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
 
@@ -34,6 +34,25 @@
 
     <!-- 屏幕常亮 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- 社交分享 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- renren sso Permission for Unit Test -->
+    <!-- QQ、QQ空间所需权限 -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.SET_DEBUG_APP" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
 
     <!-- 聚合官网 -->
 
@@ -43,7 +62,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        >
+
+
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
@@ -53,90 +75,125 @@
             android:name="com.thinkland.juheapi.openid"
             android:value="JH5ba55e75578ecf0b44c6d8a4de432b52" />
 
-        <meta-data android:value="561deb56e0f55aa2430029a0" android:name="UMENG_APPKEY"/>
+        <!-- 友盟AppKey， 需要替换成你自己的 -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="561deb56e0f55aa2430029a0" />
+
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".SetUpActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".MultyLocationActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".CurrentWeatherReportActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
-        <activity android:name=".MarkerActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".WeatherActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".AccountTypeActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".AccountInformationActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".MyWayBillActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".OrderDetailActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".ExecutingOrder"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".TransportServiceActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".OrderOperateActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".HistoryTransportOrderActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".LocationActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".OrderDetailHistoryActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".OilServiceActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".InsuranceActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".FinancialActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".WaitBuild"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".OilCardApplicationActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".OilCardAmountDistributeActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".AddOilActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".OilDistributeDetailActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".OilTransactionDetailActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".OilCardChangeActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".OilCardAddDetailActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".AverageDistributeAmountActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".SelectDepartmentActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".RoleTypeActivity"
-            android:screenOrientation="portrait"></activity>
-
-        <activity android:name=".DistributionDetailedSearchActivity"
-            android:screenOrientation="portrait"></activity>
-
-        <activity android:name=".SelectCardActivity"
+        <activity
+            android:name=".LoginActivity"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".SetUpActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".MultyLocationActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".CurrentWeatherReportActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".MarkerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WeatherActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AccountTypeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AccountInformationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MyWayBillActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ExecutingOrder"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TransportServiceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OrderOperateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HistoryTransportOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LocationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OrderDetailHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OilServiceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".InsuranceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FinancialActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WaitBuild"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OilCardApplicationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OilCardAmountDistributeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".AddOilActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OilDistributeDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OilTransactionDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OilCardChangeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OilCardAddDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AverageDistributeAmountActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SelectDepartmentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RoleTypeActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".DistributionDetailedSearchActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".SelectCardActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".FineActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ViolateCheckActivity"
             android:screenOrientation="portrait" />
@@ -150,29 +207,59 @@
             android:name=".ViolateNumActivity"
             android:screenOrientation="portrait" />
 
+        <!-- 社交分享-->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent100424468" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".SocialSharedActivity"
+            android:screenOrientation="portrait" />
+
 
         <service
             android:name="com.umeng.update.net.DownloadingService"
-            android:process=":DownloadingService" >
-        </service>
+            android:process=":DownloadingService"></service>
+
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-        </activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
 
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".ForgetPasswordActivity"
+        <activity
+            android:name=".ForgetPasswordActivity"
             android:screenOrientation="portrait"></activity>
 
         <receiver android:name=".components.SmsReceiver">
             <intent-filter android:priority="800">
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+
         <service android:name=".service.WeatherService"></service>
         <service android:name=".service.TimerService"></service>
     </application>
