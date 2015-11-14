@@ -42,37 +42,6 @@
         android:layout_height="match_parent"
         android:background="@color/gray_DDDDDD"
         android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:layout_margin="5dp">
-            <EditText
-                android:id="@+id/type_car_number_or_card"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:hint="请输入卡号或者车牌号"
-                android:singleLine="true"
-                android:drawableLeft="@mipmap/search"
-                android:textColorHint="#CCCCCC"
-                android:textSize="14sp"
-                android:drawablePadding="5dp"
-                android:padding="5dp"
-                android:background="@color/white"/>
-            <Button
-                android:id="@+id/search"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="4"
-                android:text="查找"
-                android:textSize="15sp"
-                android:textColor="@color/white"
-                android:layout_marginLeft="2dp"
-                android:background="@drawable/border_corner_login_enable"/>
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -89,6 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="[正常]"/>
+
                 <TextView
                     android:id="@+id/card_number"
                     android:layout_width="wrap_content"

@@ -102,20 +102,20 @@ public class Common {
 
     public static void printLog(String content) {
         if (content != null) {
-            Log.i(android.os.Build.MODEL, content);
+//            Log.i(android.os.Build.MODEL, content);
         }
 
     }
 
     public static void printErrLog(String content) {
         if (content != null) {
-                Log.e(android.os.Build.MODEL, content);
+//                Log.e(android.os.Build.MODEL, content);
         }
     }
 
     public static void printLog(String tag, String content) {
         if (content != null) {
-            Log.i(tag, content);
+//            Log.i(tag, content);
         }
     }
 

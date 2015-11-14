@@ -108,8 +108,11 @@ public class OilCardChangeActivity extends Activity implements View.OnClickListe
         }
 
         if(txPosition == 1) {
-            Toast.makeText(getApplicationContext(), "挂失备注必填", Toast.LENGTH_SHORT).show();
-            return;
+            String txRemark = remark.getText().toString();
+            if(txRemark == null || txRemark.equals("")) {
+                Toast.makeText(getApplicationContext(), "挂失备注必填", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
         if(txPosition == 4) {
             int length = changeAfter.getText().length();
@@ -267,6 +270,15 @@ public class OilCardChangeActivity extends Activity implements View.OnClickListe
         @Override
         public void handleMessage(Message msg) {
             String str = "";
+
+            if(msg.what == 0x40) {
+                changeAfter.setEnabled(false);
+                remark.setEnabled(false);
+            } else {
+                changeAfter.setEnabled(true);
+                remark.setEnabled(true);
+            }
+
             switch (msg.what) {
                 case 1: //挂失
                     changeAfter.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_NORMAL);
@@ -349,7 +361,7 @@ public class OilCardChangeActivity extends Activity implements View.OnClickListe
                         message.what = position;
                     } else {
                         message.what = 0x40;
-                        Toast.makeText(getApplicationContext(), "卡不存在或当前用户角色与卡号不对应", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "卡不存在", Toast.LENGTH_LONG).show();
                     }
                     handler.sendMessage(message);
                 } catch (JSONException e) {

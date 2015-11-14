@@ -26,6 +26,9 @@ import com.squareup.okhttp.Request;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by yql on 2015/10/27.
  */
@@ -44,6 +47,7 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
     private EditText company; //公司
     private EditText etDepartment; //部门
     private LinearLayout companyDepartment; //公司部门布局
+    private TextView txPasswordFlag; //是否需要密码标识
 
     private SelectDepartment selectDepartment;
     private CusProgressDialog oilDialog; //过度
@@ -71,8 +75,13 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
 
                 if (isCheckText.equals("是")) {
                     isPassword = true;
+                    setPassword.setEnabled(true);
+                    txPasswordFlag.setVisibility(View.VISIBLE);
                 } else {
                     isPassword = false;
+                    setPassword.setText("");
+                    setPassword.setEnabled(false);
+                    txPasswordFlag.setVisibility(View.GONE);
                 }
             }
         });
@@ -163,6 +172,7 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
         company = (EditText) findViewById(R.id.company);
         etDepartment = (EditText) findViewById(R.id.department);
         companyDepartment = (LinearLayout) findViewById(R.id.company_department);
+        txPasswordFlag = (TextView) findViewById(R.id.tx_password_flag);
     }
 
     @Override
@@ -194,6 +204,11 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
         if(carNumber != null && carNumber.equals("")) {
             Toast.makeText(getApplicationContext(), "车牌号格式不正确", Toast.LENGTH_SHORT).show();
             return;
+        } else {
+            if(carNumber.length() < 7) {
+                Toast.makeText(getApplicationContext(), "车牌号必须为7位", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
 
         if(isCheckedNeedPassword) {
@@ -202,6 +217,11 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
             if(password != null && password.equals("")) {
                 Toast.makeText(getApplicationContext(), "密码已设置不能为空", Toast.LENGTH_SHORT).show();
                 return;
+            } else {
+                if(password.length() < 4) {
+                    Toast.makeText(getApplicationContext(), "密码位数要求4-6位整数", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
         }
 
@@ -210,6 +230,23 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
         if(mPhone != null && mPhone.equals("")) {
             Toast.makeText(getApplicationContext(), "手机号码不能为空", Toast.LENGTH_SHORT).show();
             return;
+        } else {
+            Pattern pattern = Pattern.compile("^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$"); //匹配手机
+            Matcher matcher = pattern.matcher(mPhone);
+            if(!matcher.matches()) {
+                Toast.makeText(getApplicationContext(), "手机号码格式不对", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        int accountType = getEnterpriseAccountType();
+        if(accountType == 1 || accountType == 2 ) {
+            String department = (etDepartment.getText().toString()).trim();
+            department = department.replaceAll(" ", "");
+            if(department != null && department.equals("")) {
+                Toast.makeText(getApplicationContext(), "部门不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
         applyOilCard();
     }
@@ -273,10 +310,11 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
                     oilSON = new JSONObject(response);
                     if (!oilSON.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         //验证申请油品是否成功
-                        Toast.makeText(getApplicationContext(), Constant.INVALID_USERNAME_PASSWORD, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "油品申请失败", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     Toast.makeText(getApplicationContext(), "油品申请操作成功", Toast.LENGTH_SHORT).show();
+                    finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

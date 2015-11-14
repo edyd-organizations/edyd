@@ -27,8 +27,8 @@ public  class Constant {
     //public final static String ACCOUNT_ID = "account_id";
 
     //网络地址
-    public final static String ENTRANCE_PREFIX = "http://120.24.236.223/api/v1.0/"; //接口前缀地址
-    //public final static String ENTRANCE_PREFIX = "http://www.edyd.cn/api/v1.0/"; //接口前缀地址
+    //public final static String ENTRANCE_PREFIX = "http://120.24.236.223/api/v1.0/"; //接口前缀地址
+    public final static String ENTRANCE_PREFIX = "http://www.edyd.cn/api/v1.0/"; //接口前缀地址
     public final static String EDYD = "http://www.edyd.cn/";
     //系统状态码
     public final static String LOGIN_SUCCESS_STATUS = "200";  //请求成功
