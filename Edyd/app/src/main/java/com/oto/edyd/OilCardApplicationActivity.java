@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -23,6 +25,7 @@ import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,6 +51,8 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
     private EditText etDepartment; //部门
     private LinearLayout companyDepartment; //公司部门布局
     private TextView txPasswordFlag; //是否需要密码标识
+    private RadioButton needPassword; //不需要密码
+    private RadioButton needMessage; //需要短信
 
     private SelectDepartment selectDepartment;
     private CusProgressDialog oilDialog; //过度
@@ -173,6 +178,11 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
         etDepartment = (EditText) findViewById(R.id.department);
         companyDepartment = (LinearLayout) findViewById(R.id.company_department);
         txPasswordFlag = (TextView) findViewById(R.id.tx_password_flag);
+        needPassword = (RadioButton) findViewById(R.id.need_password);
+        needMessage = (RadioButton) findViewById(R.id.need_message);
+
+        isNeedPassword.check(needPassword.getId());
+        isSmsRemind.check(needMessage.getId());
     }
 
     @Override
@@ -180,7 +190,8 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
         Intent intent;
         switch (v.getId()) {
             case R.id.submit:
-                verify();
+                //验证车牌号
+                confirmCarNumber(carId.getText().toString());
                 break;
             case R.id.back: //返回
                 finish();
@@ -201,12 +212,24 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
         String carNumber = carId.getText().toString();
 
         carNumber = carNumber.replace(" ", "");
+//        if(carNumber != null && carNumber.equals("")) {
+//            Toast.makeText(getApplicationContext(), "车牌号格式不正确", Toast.LENGTH_SHORT).show();
+//            return;
+//        } else {
+//            if(carNumber.length() < 7) {
+//                Toast.makeText(getApplicationContext(), "车牌号必须为7位", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//        }
+
         if(carNumber != null && carNumber.equals("")) {
-            Toast.makeText(getApplicationContext(), "车牌号格式不正确", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "车牌号不能为空", Toast.LENGTH_SHORT).show();
             return;
         } else {
-            if(carNumber.length() < 7) {
-                Toast.makeText(getApplicationContext(), "车牌号必须为7位", Toast.LENGTH_SHORT).show();
+            Pattern pattern = Pattern.compile("^[\\u4e00-\\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}$");
+            Matcher matcher = pattern.matcher(carNumber);
+            if(!matcher.matches()) {
+                Toast.makeText(getApplicationContext(), "车牌号格式不正确", Toast.LENGTH_SHORT).show();
                 return;
             }
         }
@@ -310,10 +333,10 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
                     oilSON = new JSONObject(response);
                     if (!oilSON.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         //验证申请油品是否成功
-                        Toast.makeText(getApplicationContext(), "油品申请失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "申请失败", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    Toast.makeText(getApplicationContext(), "油品申请操作成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "申请成功", Toast.LENGTH_SHORT).show();
                     finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -404,5 +427,59 @@ public class OilCardApplicationActivity extends Activity implements View.OnClick
                 etDepartment.setText(selectDepartment.getText());
                 break;
         }
+    }
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0x40: //卡号已存在
+                    Toast.makeText(getApplicationContext(), "卡号已注册", Toast.LENGTH_SHORT).show();
+                    break;
+                case 0x41: //不存在
+                    verify();
+                    break;
+            }
+        }
+    };
+
+    /**
+     * 验证车牌号
+     * @param cardId 车牌号
+     */
+    private void confirmCarNumber(String cardId) {
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+        String url = Constant.ENTRANCE_PREFIX + "inqueryOilCardByCarId.json?sessionUuid=" + sessionUuid + "&carId=" + cardId;
+        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+            @Override
+            public void onError(Request request, Exception e) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                JSONObject roleJSON;
+                JSONArray roleArray;
+                try {
+                    roleJSON = new JSONObject(response);
+                    String status = roleJSON.getString("status");
+                    if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        //角色类型请求失败
+                        //Toast.makeText(getApplicationContext(), "角色用户请求失败", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    roleArray = roleJSON.getJSONArray("rows");
+                    Message message = new Message();
+                    if(roleArray.length() > 0) {
+                        message.what = 0x40; //卡号已存在
+                    } else {
+                        message.what = 0x41; //卡号不存在
+                    }
+                    handler.sendMessage(message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 }
