@@ -172,5 +172,5 @@
     <string name="oil_card_changed_title">油卡变更</string>
     <string name="average_distribute_amount">等额预分配</string>
     <string name="select_department_title">选择部门</string>
-    <string name="select_card_title">查询卡号</string>
+    <string name="select_card_title">交易明细搜索</string>
 </resources>
