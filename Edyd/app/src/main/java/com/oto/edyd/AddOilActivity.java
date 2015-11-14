@@ -52,7 +52,7 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
     private Common common;
     private CusProgressDialog cusProgressDialog;
 
-    private int totalAmount;
+    private double totalAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +167,7 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
                     }
                     addOilArray = addOilJSON.getJSONArray("rows");
                     if(addOilArray.length() > 0) {
-                        totalAmount = (int)addOilArray.get(0);
+                        totalAmount = (double)addOilArray.get(0);
                     }
                     Message message = new Message();
                     message.what = 0x11;
