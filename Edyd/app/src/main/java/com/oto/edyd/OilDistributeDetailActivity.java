@@ -91,7 +91,6 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         String url = Constant.ENTRANCE_PREFIX + "inqueryOilBalanceDetailList.json?sessionUuid="
                 + sessionUuid + "&enterpriseId=" + enterpriseId + "&cardId=" + cardId + "&orgCode=" + orgCode;
 //                + "&page=1&rows=30";
-        Common.printErrLog("uuuuuuuuu"+url);
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
@@ -100,7 +99,6 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
 
             @Override
             public void onResponse(String response) {
-                Common.printErrLog("uuuuuuuuu"+response);
                 JSONObject jsonObject;
                 JSONArray jsonArray;
                 try {
@@ -209,6 +207,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         Message message = new Message();
         message.what = 0x12;
         handler.sendMessage(message);
+
     }
 
     private class OilCardDistributeDetailAdapter extends BaseExpandableListAdapter {
@@ -323,7 +322,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         }
 
         /**
-         * 获取一个视图对象，显示指定组中的指定子元素数据。
+         * 获取一个视图对象，显示指定组中的指定子元素数据
          *
          * @param groupPosition
          * @param childPosition
@@ -340,16 +339,14 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
             View view = inflater.inflate(R.layout.oil_card_distribute_detail_child_item, null);
             tApplyTime = (TextView) view.findViewById(R.id.apply_time);
             tCompletedTime = (TextView) view.findViewById(R.id.completed_time);
-
             AllocationBean bean = allocationBeanlist.get(groupPosition);
             tApplyTime.setText(bean.getApplyTime());
             tCompletedTime.setText(bean.getAchieveTime());
-
             return view;
         }
 
         /**
-         * 组和子元素是否持有稳定的ID,也就是底层数据的改变不会影响到它们。
+         * 组和子元素是否持有稳定的ID,也就是底层数据的改变不会影响到它们
          *
          * @return
          */
@@ -357,7 +354,6 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         public boolean hasStableIds() {
             return true;
         }
-
         /**
          * 是否选中指定位置上的子元素。
          *
