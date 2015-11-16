@@ -10,7 +10,6 @@ public  class Constant {
     //地理位置
     public final static double LATITUDE = 24.5004978985;
     public final static double LONGITUDE = 118.0877469228;
-
     public static final LatLng XIAMEN = new LatLng(24.5004978985, 118.0877469228);// 厦门市经纬度
 
     //存储文件
@@ -27,8 +26,8 @@ public  class Constant {
     //public final static String ACCOUNT_ID = "account_id";
 
     //网络地址
-    public final static String ENTRANCE_PREFIX = "http://120.24.236.223/api/v1.0/"; //接口前缀地址
-    //public final static String ENTRANCE_PREFIX = "http://www.edyd.cn/api/v1.0/"; //接口前缀地址
+    //public final static String ENTRANCE_PREFIX = "http://120.24.236.223/api/v1.0/"; //接口前缀地址
+    public final static String ENTRANCE_PREFIX = "http://www.edyd.cn/api/v1.0/"; //接口前缀地址
     public final static String EDYD = "http://www.edyd.cn/";
     //系统状态码
     public final static String LOGIN_SUCCESS_STATUS = "200";  //请求成功
