@@ -171,8 +171,9 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
-                    int mon = (Integer) jsonArray.get(0);
-                    amountString = mon;
+                    double mon = jsonArray.getDouble(0);
+
+                    amountString = (int)mon;
                     amount.setText(mon + "");
                 } catch (JSONException e) {
                     e.printStackTrace();
