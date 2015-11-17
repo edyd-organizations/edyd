@@ -322,7 +322,6 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
      * 请求预分配用户列表
      */
     private void requestDistributeUserList(JSONArray jsonArray) throws JSONException {
-        oilAmountDistributeList.clear();
         if (jsonArray.length() == 0) {
             Toast.makeText(mActivity, "暂无数据", Toast.LENGTH_LONG).show();
         }
