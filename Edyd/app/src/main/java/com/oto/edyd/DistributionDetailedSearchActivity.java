@@ -141,6 +141,7 @@ public class DistributionDetailedSearchActivity extends Activity {
 
         String url = Constant.ENTRANCE_PREFIX + "inqueryOilBindingListInEnterpriseApp.json?sessionUuid="
                 + sessionUuid + "&enterpriseId=" + enterpriseId + "&cardId=" + cardId + "&OrgCode=" + orgCode;
+        Common.printErrLog(url);
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {

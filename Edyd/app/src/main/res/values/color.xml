@@ -155,6 +155,7 @@
     <color name="red_FF0000">#FF0000</color>
     <color name="red_CC0000">#CC0000</color>
     <color name="red_fe020e">#fe020e</color>
+    <color name="red_FE007F">#FE007F</color> <!-- 玫红 -->
 
     <!--灰色-->
     <color name="gray_e4e4e4">#EEEEEE</color>
