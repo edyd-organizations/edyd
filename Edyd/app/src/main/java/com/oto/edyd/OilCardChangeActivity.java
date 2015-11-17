@@ -204,7 +204,7 @@ public class OilCardChangeActivity extends Activity implements View.OnClickListe
 
                     String txChangeItem = changeItem.getSelectedItem().toString();
                     if (!txChangeItem.equals("请选择")) {
-                       // String txCarID = carID.getText().toString();
+                        // String txCarID = carID.getText().toString();
                         if (carNumber != null && !(carNumber.equals(""))) {
                             String txChangeAfter = changeAfter.getText().toString();
                             if (txChangeAfter != null && !(txChangeAfter.equals(""))) {
@@ -217,7 +217,7 @@ public class OilCardChangeActivity extends Activity implements View.OnClickListe
 
                         Pattern pattern = Pattern.compile("^[\\u4e00-\\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}$");
                         Matcher matcher = pattern.matcher(carNumber);
-                        if(!matcher.matches()) {
+                        if (!matcher.matches()) {
                             Toast.makeText(getApplicationContext(), "车牌号格式不正确", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -228,6 +228,7 @@ public class OilCardChangeActivity extends Activity implements View.OnClickListe
                     }
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -262,7 +263,7 @@ public class OilCardChangeActivity extends Activity implements View.OnClickListe
                 try {
                     changeItemJSON = new JSONObject(response);
                     String status = changeItemJSON.getString("status");
-                    if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                    if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         //变更列表数据获取失败
                         Toast.makeText(getApplicationContext(), "变更失败", Toast.LENGTH_SHORT).show();
                         return;
