@@ -3,33 +3,12 @@ package com.oto.edyd;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.text.InputType;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
-import com.oto.edyd.utils.CusProgressDialog;
-import com.oto.edyd.utils.CustomSharedPreferences;
-import com.oto.edyd.utils.OkHttpClientManager;
-import com.squareup.okhttp.Request;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 /**
  * Created by yql on 2015/9/10.
