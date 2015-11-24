@@ -38,6 +38,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     private RadioButton box; //百宝箱
     public FragmentManager fragmentManager; //fragment管理器
 
+    private Common common;
     private TextView mainTitle; //标题
     private LeftSlidingFragment leftMenuFragment;
     // 定义一个变量，来标识退出时间
@@ -104,16 +105,17 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 //startActivity(intent);
                 break;
             case R.id.main_vehicle_server:
-                //customViewPager.setCurrentItem(2);
-                Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                mainTitle.setText("运输服务");
+               // Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
                 if (!common.isLogin()) {
                     Toast.makeText(getApplicationContext(), "用户未登录，请先登录", Toast.LENGTH_LONG).show();
                     intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivityForResult(intent, 0x03);
                     return;
                 }
-                intent = new Intent(MainActivity.this, OrderOperateActivity.class);
-                startActivity(intent);
+                //intent = new Intent(MainActivity.this, OrderOperateActivity.class);
+                //startActivity(intent);
+                customViewPager.setCurrentItem(2);
                 break;
             case R.id.main_box:
                 mainTitle.setText("百宝箱");
@@ -137,6 +139,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         customViewPager.setIsScrollable(false); //设置不能滚动
         fragmentManager = getSupportFragmentManager();
         mainTitle = (TextView) findViewById(R.id.main_title);
+        common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
     }
     /**
      * 初始化左侧菜单
@@ -210,16 +213,6 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         super.onSaveInstanceState(outState);
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        switch (resultCode) {
-//            case Constant.LOGIN_ACTIVITY_RETURN_CODE:
-////                Fragment leftMenuFragment = new LeftSlidingFragment();
-////                getSupportFragmentManager().beginTransaction().replace(R.id.left_sliding, leftMenuFragment).commit();
-//                getSupportFragmentManager().beginTransaction().detach(leftMenuFragment).attach(leftMenuFragment).commitAllowingStateLoss();
-//        }
-//    }
-
     /**
      * 用于接收Activity返回数据
      * @param requestCode
@@ -270,13 +263,36 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         //账户类型返回
         if(resultCode == Constant.ACCOUNT_TYPE_RESULT_CODE) {
             //String accountTypeStr = data.getExtras().getString("account_type");
-            Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+            //Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
             String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
             String roleName = common.getStringByKey(Constant.ROLE_NAME);
 
             leftMenuFragment.accountType.setText(enterpriseName);
             leftMenuFragment.roleType.setText(roleName);
+            TransportServiceFragment transportServiceFragment = (TransportServiceFragment)listFragment.get(2);
+            if(!(transportServiceFragment.enterpriseName == null)) {
+                transportServiceFragment.enterpriseName.setText(enterpriseName);
+            }
+        }
 
+        //运输服务角色选择返回更新
+        if(resultCode == Constant.TRANSPORT_ROLE_CODE) {
+            TransportServiceFragment transportServiceFragment = (TransportServiceFragment)listFragment.get(2);
+            int transportRoleId = Integer.valueOf(common.getStringByKey(Constant.TRANSPORT_ROLE));
+            switch (transportRoleId) {
+                case 0: //司机
+                    transportServiceFragment.transportRole.setText("司机");
+                    break;
+                case 1: //发货方
+                    transportServiceFragment.transportRole.setText("发货方");
+                    break;
+                case 2: //收货方
+                    transportServiceFragment.transportRole.setText("收货方");
+                    break;
+                case 3: //承运方
+                    transportServiceFragment.transportRole.setText("承运方");
+                    break;
+            }
         }
     }
 
