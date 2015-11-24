@@ -398,6 +398,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                                 accountIDArray = accountIDJSON.getJSONArray("rows");
                                 int accountID = accountIDArray.getInt(0);
                                 Map<Object, Object> accountIDMap = new HashMap<Object, Object>();
+                                accountIDMap.put(Constant.TRANSPORT_ROLE, 0); //默认运输角色，设置为司机，标识0
                                 accountIDMap.put("ACCOUNT_ID", accountID);
                                 //保存账户ID
                                 if (!common.isSave(accountIDMap)) {
@@ -428,7 +429,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private void isRememberPassword(ImageView imageView, Map<Object, Object> loginMap) {
         //boolean isChecked = checkBox.isChecked();
         boolean isChecked = (boolean)imageView.getTag(R.id.remember_password);
-        Common userCommon = userCommon = new Common(getActivity().getSharedPreferences(Constant.USER_INFO_FILE, Context.MODE_PRIVATE));
+        Common userCommon = new Common(getActivity().getSharedPreferences(Constant.USER_INFO_FILE, Context.MODE_PRIVATE));
         if(isChecked) {
 
             if(!userCommon.isSave(loginMap)) {
