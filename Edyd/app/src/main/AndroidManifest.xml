@@ -239,11 +239,11 @@
 
         <service
             android:name="com.umeng.update.net.DownloadingService"
-            android:process=":DownloadingService"></service>
+            android:process=":DownloadingService"/>
 
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -252,7 +252,7 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ForgetPasswordActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
 
         <receiver android:name=".components.SmsReceiver">
             <intent-filter android:priority="800">
@@ -260,7 +260,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".service.WeatherService"></service>
-        <service android:name=".service.TimerService"></service>
+        <service android:name=".service.WeatherService"/>
+        <service android:name=".service.TimerService"/>
     </application>
 </manifest>
