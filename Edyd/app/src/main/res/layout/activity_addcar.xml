@@ -94,6 +94,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="3"
+            android:maxLength="7"
+            android:textColorHint="#CCCCCC"
             android:background="@null"
             android:hint="请输入车牌号"
             android:id="@+id/ed_carnumber"
@@ -122,8 +124,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="3"
+            android:textColor="#CCCCCC"
             android:id="@+id/te_cicy"
-            android:text="厦门" />
+            android:text="选择城市" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -165,7 +168,9 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:background="@null"
-                android:hint="请先选择城市"
+                android:hint="先选择城市"
+                android:textColorHint="#CCCCCC"
+                android:enabled="false"
                 android:id="@+id/et_classno"
                 android:textColor="@color/hint_color"
                 android:textSize="14dp" />
@@ -194,7 +199,9 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="3"
             android:background="@null"
-            android:hint="请先选择城市"
+            android:textColorHint="#CCCCCC"
+            android:hint="先选择城市"
+            android:enabled="false"
             android:id="@+id/et_engineno"
             android:textColor="@color/hint_color"
             android:textSize="14dp" />
@@ -219,8 +226,9 @@
         android:layout_height="35dp"
         android:layout_margin="17dp"
         android:layout_marginTop="8dp"
-        android:background="@color/user_icon_8"
+        android:background="@color/user_icon_default_gray"
         android:text="保存并查询"
         android:id="@+id/submit"
+        android:enabled="false"
         android:textColor="@color/user_icon_default_white" />
 </LinearLayout>

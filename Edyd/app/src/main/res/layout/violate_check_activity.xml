@@ -65,7 +65,7 @@
             android:layout_marginLeft="6dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/dingwei"
-            android:text="厦门"
+            android:text="先添加城市"
             android:textSize="@dimen/violate_textsize" />
 
         <TextView
@@ -134,6 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="1dp"
                 android:id="@+id/te_number"
+                android:textColor="@color/user_icon_8"
                 android:text="0"
                 android:textSize="30dp" />
 
@@ -160,6 +161,7 @@
             android:layout_height="20dp"
             android:layout_marginTop="18dp"
             android:layout_toRightOf="@id/no_vio"
+            android:id="@+id/imagen"
             android:src="@mipmap/xiaolian" />
     </RelativeLayout>
 

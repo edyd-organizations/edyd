@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 
@@ -31,6 +32,7 @@ public class ChooseCity extends Activity {
     ListView tlistview;
     Intent intent;
     Mybase mybase;
+    CusProgressDialog dialog;
     ArrayList<String> mlist=new ArrayList<String>();//城市的容器
     ArrayList<String> mlistcode=new ArrayList<String>();//城市代码容器
     ArrayList<String> mengineno=new ArrayList<String>();//发动机号容器
@@ -49,6 +51,8 @@ public class ChooseCity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_city);
+        dialog = new CusProgressDialog(this,"正在加载数据");
+        dialog.showDialog();
         LinearLayout back = (LinearLayout) findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,9 +105,10 @@ public class ChooseCity extends Activity {
                     Message msg = Message.obtain();
                     msg.what = 1;
                     handler.sendMessage(msg);
-
+                    dialog.dismissDialog();
                 } catch (JSONException e) {
                     Toast.makeText(ChooseCity.this, "暂时未开通查询", Toast.LENGTH_SHORT).show();
+                    dialog.dismissDialog();
                     e.printStackTrace();
                 }
             }

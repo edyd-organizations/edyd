@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.oto.edyd.model.ViolationInfo;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 
@@ -47,14 +49,23 @@ public class ViolateCheckActivity extends Activity implements View.OnClickListen
     TextView te_number;
     ViolationInfo violation;//违章信息对象
     ArrayList<ViolationInfo> violationList=new ArrayList<ViolationInfo>();//违章列表
+    CusProgressDialog dialog;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.violate_check_activity);
+      /*  mActivity=this;
+        intiView();
+        initdata();*/
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
         mActivity=this;
+        dialog = new CusProgressDialog(this,"正在加载数据");
+        dialog.showDialog();
         intiView();
         initdata();
     }
-
     private void initdata() {
         requestServer();//查询服务器
         //requestPort();//请求接口
@@ -66,10 +77,18 @@ public class ViolateCheckActivity extends Activity implements View.OnClickListen
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0x10: //
+                    if (city==null){
+                        return;
+                    }
                     requestPort();
                     break;
              case 0x20:
                     te_number.setText(String.valueOf(violationList.size()));
+                 String s = te_number.getText().toString().trim();
+                 if (!("0".equals(s))){
+                     findViewById(R.id.no_vio).setVisibility(View.GONE);
+                     findViewById(R.id.imagen).setVisibility(View.GONE);
+                 }
             }
         }
     };
@@ -85,12 +104,13 @@ public class ViolateCheckActivity extends Activity implements View.OnClickListen
 
                 @Override
                 public void onResponse(String response) {
-                    Toast.makeText(ViolateCheckActivity.this, "接口请求成功", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(ViolateCheckActivity.this, "接口请求成功", Toast.LENGTH_SHORT).show();
                     JSONObject accountTypeJson;
                     try {
                         accountTypeJson=new JSONObject(response);
                         JSONObject result = accountTypeJson.getJSONObject("result");
                         JSONArray lists = result.getJSONArray("lists");
+                        violationList.clear();
                         for (int i=0;i<lists.length();i++){
                             JSONObject mlist = lists.getJSONObject(i);
                             String date = mlist.getString("date");//违章时间
@@ -111,14 +131,13 @@ public class ViolateCheckActivity extends Activity implements View.OnClickListen
                        Message message =Message.obtain();
                         message.what = 0x20;
                         handler.sendMessage(message);
+                        dialog.dismissDialog();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             });
         }
-
-
     private void requestServer() {
         url= Constant.ENTRANCE_PREFIX_v1 +"inquireAppViolation.json?"+"&accountId="+account_id+"&sessionUuid="+sessionUuid;//查询违章记录
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
@@ -129,7 +148,7 @@ public class ViolateCheckActivity extends Activity implements View.OnClickListen
 
             @Override
             public void onResponse(String response) {
-                Toast.makeText(ViolateCheckActivity.this, "服务器查询成功", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ViolateCheckActivity.this, "服务器查询成功", Toast.LENGTH_SHORT).show();
                 JSONObject accountTypeJson;
                 JSONArray accountTypeArray;
                 try {
@@ -166,9 +185,6 @@ public class ViolateCheckActivity extends Activity implements View.OnClickListen
         violate_detail = (RelativeLayout) findViewById(R.id.violate_detail);
         te_number = (TextView) findViewById(R.id.te_number);
         cityName = (TextView) findViewById(R.id.city_violate);
-        if (city==null){
-            cityName.setText("请先添加车辆");
-        }
         car_number = (TextView) findViewById(R.id.car_number);
         car_number.setVisibility(View.INVISIBLE);
         number = te_number.getText().toString();
@@ -176,9 +192,6 @@ public class ViolateCheckActivity extends Activity implements View.OnClickListen
         common = new Common(this.getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         account_id = common.getStringByKey("ACCOUNT_ID");
-      /*  Message msg = Message.obtain();
-        msg.what = 1;
-        handler.sendMessage(msg);*/
     }
 
     public void back(View view) {
@@ -190,6 +203,10 @@ public class ViolateCheckActivity extends Activity implements View.OnClickListen
             Toast.makeText(this, "用户未登录，请先登录", Toast.LENGTH_LONG).show();
             return;
         }
+        if (city!=null){
+            Toast.makeText(this, "您已经绑定过车辆", Toast.LENGTH_LONG).show();
+            return;
+        }
         Intent intent = new Intent(this, ViolateAddCarActivity.class);
         startActivity(intent);
     }
@@ -199,9 +216,10 @@ public class ViolateCheckActivity extends Activity implements View.OnClickListen
         switch (view.getId()){
             case R.id.violate_detail:
                 //没有违章记录的时候
-              /*  if (number.equals("0")){
+                //if ("0".equals(te_number)){
+                if ((city==null)){
                     return;
-                }*/
+                }
                 Intent intent=new Intent(mActivity,VioDetailActivity.class);
                 Bundle bundle=new Bundle();
                 bundle.putSerializable("info",violationList);

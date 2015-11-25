@@ -30,7 +30,6 @@ public class VioDetailActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.violate_detail_activity);
-
         init();
         initdata();
     }
@@ -51,11 +50,11 @@ public class VioDetailActivity extends Activity {
 
         TextView te_number = (TextView) findViewById(R.id.te_number);
         te_number.setText(String.valueOf(sum));
-        mnumber = te_number.getText().toString();
         te_money = (TextView) findViewById(R.id.te_money);
         te_money.setText("￥"+String.valueOf(amount));
         te_time = (TextView) findViewById(R.id.te_time);
         te_time.setText(String.valueOf(infoList.size()));
+        mnumber = te_number.getText().toString();
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = sdf.format(date);
