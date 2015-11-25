@@ -149,6 +149,13 @@ public class Common {
         return result;
     }
 
+    public static void showToast(Context context, String Msg) {
+        Toast.makeText(context.getApplicationContext(), Msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showToastlong(Context context, String Msg) {
+        Toast.makeText(context.getApplicationContext(), Msg, Toast.LENGTH_LONG).show();
+    }
 
     public static String getStringByUrl(String urlStr) {
         HttpURLConnection urlConnection = null;

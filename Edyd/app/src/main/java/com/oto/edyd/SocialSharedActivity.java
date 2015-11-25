@@ -69,6 +69,9 @@ public class SocialSharedActivity extends Activity implements View.OnClickListen
         SinaShareContent sinaContent = new SinaShareContent();
         sinaContent.setShareContent("厦门多一点智能物流科技有限公司");
         sinaContent.setShareImage(urlImage);
+        sinaContent.setTitle("多一点");
+        sinaContent.setTargetUrl(appUploadUrl);
+        sinaContent.setAppWebSite("多一点智能物流科技有限公司");
         mController.setShareMedia(sinaContent);
 
 
@@ -78,7 +81,6 @@ public class SocialSharedActivity extends Activity implements View.OnClickListen
         qZone.setTitle("多一点");
         qZone.setTargetUrl(appUploadUrl);
         qZone.setAppWebSite("多一点智能物流科技有限公司");
-
         mController.setShareMedia(qZone);
 
 
@@ -128,7 +130,8 @@ public class SocialSharedActivity extends Activity implements View.OnClickListen
     }
 
     private void addSinaPlatform() {
-        SinaSsoHandler sinaHandler= new SinaSsoHandler();
+        SinaSsoHandler sinaHandler= new SinaSsoHandler(mActivity);
+        sinaHandler.addToSocialSDK();
         mController.getConfig().setSsoHandler(sinaHandler);
     }
 
@@ -209,7 +212,7 @@ public class SocialSharedActivity extends Activity implements View.OnClickListen
                 performShare(SHARE_MEDIA.QZONE);
                 break;
             case R.id.sine:
-                directShare();
+               performShare(SHARE_MEDIA.SINA);
                 break;
             case R.id.back:
                 finish();
@@ -227,8 +230,8 @@ public class SocialSharedActivity extends Activity implements View.OnClickListen
 
             @Override
             public void onStart() {
-            }
 
+            }
             @Override
             public void onComplete(SHARE_MEDIA platform, int eCode, SocializeEntity entity) {
                 String showText = "分享成功";
