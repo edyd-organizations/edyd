@@ -30,7 +30,7 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
     private ListView roleList; //运输服务角色列表
 
     private String[] roleArray; //角色集合
-    private Common common;
+    private Common globalCommon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
                         break;
                 }
                 //保存账户ID
-                if (!common.isSave(transportRoleMap)) {
+                if (!globalCommon.isSave(transportRoleMap)) {
                     Toast.makeText(getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -75,7 +75,7 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
         back = (LinearLayout) findViewById(R.id.back);
         roleList = (ListView) findViewById(R.id.role_list);
         roleArray = getResources().getStringArray(R.array.transport_role_list);
-        common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        globalCommon = new Common(getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
     }
 
     @Override

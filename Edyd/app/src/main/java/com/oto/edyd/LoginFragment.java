@@ -398,7 +398,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                                 accountIDArray = accountIDJSON.getJSONArray("rows");
                                 int accountID = accountIDArray.getInt(0);
                                 Map<Object, Object> accountIDMap = new HashMap<Object, Object>();
-                                accountIDMap.put(Constant.TRANSPORT_ROLE, 0); //默认运输角色，设置为司机，标识0
                                 accountIDMap.put("ACCOUNT_ID", accountID);
                                 //保存账户ID
                                 if (!common.isSave(accountIDMap)) {

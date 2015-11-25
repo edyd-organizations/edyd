@@ -50,7 +50,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
     private int visibleLastIndex = 0; //最后可视项索引
     //private int visibleItemCount; //当前窗口可见总数
     private boolean loadFlag = false;
-    private final static int ROWS = 5; //分页加载数据每页10
+    private final static int ROWS = 10; //分页加载数据每页10
     private Common common;
 
     @Override
