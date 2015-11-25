@@ -4,15 +4,7 @@
 #/captures
 
 #idea default setting
-/.idea/copyright
-/.idea/libraries
-/.idea/.name
-/.idea/compiler.xml
-/.idea/misc.xml
-/.idea/modules.xml
-/.idea/runConfigurations.xml
-/.idea/vcs.xml
-/.idea/workspace.xml
+/.idea
 
 
 /build
