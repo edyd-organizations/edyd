@@ -68,11 +68,13 @@
             </LinearLayout>
             <EditText android:id="@+id/car_id"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:layout_height="35dp"
                 android:layout_weight="2"
                 android:textSize="16sp"
                 android:singleLine="true"
                 android:maxLength="7"
+                android:background="@drawable/edittext_border"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
         <View
@@ -129,11 +131,13 @@
             <EditText
                 android:id="@+id/change_before"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
+                android:padding="3dp"
                 android:layout_weight="2"
                 android:editable="false"
                 android:textSize="16sp"
                 android:singleLine="true"
+                android:background="@drawable/edittext_border"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
         <View
@@ -167,11 +171,13 @@
             <EditText
                 android:id="@+id/change_after"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
+                android:padding="3dp"
                 android:layout_weight="2"
                 android:textSize="16sp"
                 android:enabled="false"
                 android:singleLine="true"
+                android:background="@drawable/edittext_border"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
         <View
@@ -200,6 +206,7 @@
             <EditText
                 android:id="@+id/remark"
                 android:layout_width="0dp"
+                android:padding="3dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:layout_gravity="left"
@@ -208,6 +215,7 @@
                 android:minLines="4"
                 android:maxLines="5"
                 android:textSize="14sp"
+                android:background="@drawable/edittext_border"
                 android:scrollbars="none"/>
         </LinearLayout>
         <LinearLayout
