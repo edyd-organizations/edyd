@@ -189,6 +189,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".SelectTransportRole"
             android:screenOrientation="portrait"/>
+        <activity android:name=".TransportOrderDispatchActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- 社交分享-->
         <activity
