@@ -67,7 +67,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:onClick="toViolateNum"
                     android:orientation="horizontal">
 
                     <TextView
@@ -80,6 +79,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
+                        android:id="@+id/te_time"
                         android:text="3"
 
                         android:textColor="@color/user_icon_8"
@@ -109,6 +109,7 @@
                     android:layout_height="wrap_content"
                     android:text="扣分 0"
                     android:textColor="#bb000000"
+                    android:id="@+id/te_fen"
                     android:textSize="@dimen/violate_textsize" />
 
                 <TextView
@@ -116,12 +117,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="罚款 150"
+                    android:id="@+id/te_money"
                     android:textSize="@dimen/violate_textsize" />
             </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>
 
+<!--
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/vio_item_winth"
@@ -323,46 +326,73 @@
             android:text="2015-8-19 14:26"
             android:textSize="16dp" />
     </RelativeLayout>
-
-    <RelativeLayout
+-->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="@dimen/addcar_mar_top"
-        android:background="#ffffff">
-
-        <TextView
-            android:id="@+id/tv_gongji"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="已经1条罚款，罚款共计"
-            android:textColor="#000000"
-            android:textSize="16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/tv_gongji"
-            android:layout_below="@id/tv_gongji"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="￥50元"
-            android:textColor="@color/user_icon_8"
-            android:textSize="16dp" />
-
-        <Button
-            android:layout_width="110dp"
-            android:layout_height="30dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="vertical">
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listView2"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="15dp"
-            android:layout_marginRight="25dp"
-            android:background="@color/user_icon_8"
-            android:onClick="toFinepage"
-            android:text="罚款代缴"
-            android:textColor="@color/white" />
+            android:layout_centerHorizontal="true"
+            />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="@dimen/addcar_mar_top"
+                android:background="#ffffff">
 
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_gongji"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="已经1条罚款，罚款共计"
+                    android:textColor="#000000"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/tv_gongji"
+                    android:layout_below="@id/tv_gongji"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="￥50元"
+                    android:textColor="@color/user_icon_8"
+                    android:textSize="16dp" />
+
+                <Button
+                    android:layout_width="110dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginRight="25dp"
+                    android:background="@color/user_icon_8"
+                    android:onClick="toFinepage"
+                    android:text="罚款代缴"
+                    android:textColor="@color/white" />
+
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 </LinearLayout>

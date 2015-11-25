@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/vio_item_winth"
+        android:layout_marginTop="@dimen/addcar_mar_top"
+        android:background="#ffffff">
+
+        <CheckBox
+            android:id="@+id/vio_checkbox"
+            style="@style/VioCheckboxTheme"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="11dp"
+            android:gravity="right"/>
+
+        <TextView
+            android:id="@+id/jiner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/vio_checkbox"
+            android:text="0分"
+            android:textColor="#bb000000"
+            android:textSize="18dp" />
+        <TextView
+            android:id="@+id/money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/jiner"
+            android:layout_marginLeft="5dp"
+            android:text="50元"
+            android:textColor="#bb000000"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/vio_reason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/jiner"
+            android:layout_below="@id/jiner"
+            android:layout_marginTop="5dp"
+            android:text="不按规定临时停车影响其他车辆和行人通行的"
+
+            />
+
+        <TextView
+            android:id="@+id/vio_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/jiner"
+            android:layout_below="@id/vio_reason"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:text="[湖里区]厦门市湖里区长乐路304附近"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/tv_weichuli"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:text="未处理"
+            android:textColor="@color/user_icon_8"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/vio_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@id/tv_weichuli"
+            android:text="2015-8-19 14:26"
+            android:textSize="16dp" />
+    </RelativeLayout>
+
+</LinearLayout>

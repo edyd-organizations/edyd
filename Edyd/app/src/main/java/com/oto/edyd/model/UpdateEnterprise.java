@@ -11,7 +11,7 @@ public class UpdateEnterprise implements Serializable{
     private String conMobile; //联系人电话
     private String contacts; //企业联系人
     private String enMobile; //企业联系电话
-    private String enterpriseName; //企业名称
+    private String     enterpriseName; //企业名称
 
     private String title; //标题
     private int position; //索引

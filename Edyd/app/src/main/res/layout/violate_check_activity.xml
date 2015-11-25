@@ -75,6 +75,7 @@
             android:layout_below="@id/dingwei"
             android:layout_marginTop="3dp"
             android:text="闽D8627E"
+            android:id="@+id/car_number"
             android:textSize="@dimen/violate_textsize" />
 
         <ImageView
@@ -132,6 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="1dp"
+                android:id="@+id/te_number"
                 android:text="0"
                 android:textSize="30dp" />
 

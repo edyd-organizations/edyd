@@ -61,14 +61,14 @@
 
             />
 
-        <EditText
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="3"
             android:background="@null"
-            android:hint="小型车"
-
+            android:text="小型车"
+            android:id="@+id/et_car"
             android:textSize="14dp" />
 
     </LinearLayout>
@@ -96,6 +96,7 @@
             android:layout_weight="3"
             android:background="@null"
             android:hint="请输入车牌号"
+            android:id="@+id/ed_carnumber"
             android:textColor="@color/hint_color"
             android:textSize="14dp" />
 
@@ -121,6 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="3"
+            android:id="@+id/te_cicy"
             android:text="厦门" />
 
         <LinearLayout
@@ -147,6 +149,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:id="@+id/classno"
             android:gravity="center"
             android:text="车架号" />
 
@@ -162,7 +165,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:background="@null"
-                android:hint="请输入车牌号后6位"
+                android:hint="请先选择城市"
+                android:id="@+id/et_classno"
                 android:textColor="@color/hint_color"
                 android:textSize="14dp" />
         </LinearLayout>
@@ -190,7 +194,8 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="3"
             android:background="@null"
-            android:hint="请输入发动机号"
+            android:hint="请先选择城市"
+            android:id="@+id/et_engineno"
             android:textColor="@color/hint_color"
             android:textSize="14dp" />
 
@@ -216,5 +221,6 @@
         android:layout_marginTop="8dp"
         android:background="@color/user_icon_8"
         android:text="保存并查询"
+        android:id="@+id/submit"
         android:textColor="@color/user_icon_default_white" />
 </LinearLayout>

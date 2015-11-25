@@ -48,6 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="8dp"
+        android:onClick="toViolateNum"
         android:background="#ffffff">
 
         <LinearLayout
@@ -77,7 +78,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:orientation="horizontal"
-                    android:onClick="toViolateNum"
                     >
 
                     <TextView
@@ -93,6 +93,7 @@
                         android:text="3"
                         android:textColor="@color/user_icon_8"
                         android:textSize="30dp"
+                        android:id="@+id/te_time"
                         android:textStyle="bold" />
 
                     <TextView
@@ -115,6 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="￥600"
+                    android:id="@+id/te_money"
                     android:textColor="#ee000000"
                     android:textSize="@dimen/violate_textsize" />
 
@@ -136,7 +138,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3分"
+                    android:text="0"
+                    android:id="@+id/te_number"
                     android:textColor="#ee000000"
                     android:textSize="@dimen/violate_textsize" />
 
@@ -178,6 +181,7 @@
                 android:layout_height="wrap_content"
                 android:text="更新时间2015/8/18"
                 android:layout_alignParentBottom="true"
+                android:id="@+id/UpdateTime"
                 android:textSize="@dimen/violate_textsize" />
             </RelativeLayout>
         </LinearLayout>
@@ -201,6 +205,7 @@
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:id="@+id/img_number"
                 android:src="@mipmap/nine_vio"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="5dp"
