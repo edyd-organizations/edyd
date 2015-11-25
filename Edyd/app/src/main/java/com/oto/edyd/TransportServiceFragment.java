@@ -64,6 +64,7 @@ public class TransportServiceFragment extends Fragment implements View.OnClickLi
 
         selectTransportRole.setOnClickListener(this);
         transportReceiveOrder.setOnClickListener(this);
+        distributeOrder.setOnClickListener(this);
         return  transportServiceView;
     }
 
@@ -76,6 +77,10 @@ public class TransportServiceFragment extends Fragment implements View.OnClickLi
             case R.id.select_transport_role: //选择角色
                 intent = new Intent(getActivity(), SelectTransportRole.class);
                 startActivityForResult(intent, 0x10);
+                break;
+            case R.id.ll_distribute_order: //派单
+                intent = new Intent(getActivity(), TransportOrderDispatchActivity.class);
+                startActivity(intent);
                 break;
         }
     }
