@@ -39,6 +39,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     public FragmentManager fragmentManager; //fragment管理器
 
     private Common common;
+    private Common globalCommon;
     private TextView mainTitle; //标题
     private LeftSlidingFragment leftMenuFragment;
     // 定义一个变量，来标识退出时间
@@ -140,6 +141,14 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         fragmentManager = getSupportFragmentManager();
         mainTitle = (TextView) findViewById(R.id.main_title);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        globalCommon = new Common(getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
+        Map<Object, Object> map = new HashMap<Object, Object>();
+        map.put(Constant.TRANSPORT_ROLE, 0); //默认运输角色，设置为司机，标识0
+        //保存账户ID
+        if (!globalCommon.isSave(map)) {
+            Toast.makeText(getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
     /**
      * 初始化左侧菜单
@@ -278,7 +287,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         //运输服务角色选择返回更新
         if(resultCode == Constant.TRANSPORT_ROLE_CODE) {
             TransportServiceFragment transportServiceFragment = (TransportServiceFragment)listFragment.get(2);
-            int transportRoleId = Integer.valueOf(common.getStringByKey(Constant.TRANSPORT_ROLE));
+            int transportRoleId = Integer.valueOf(globalCommon.getStringByKey(Constant.TRANSPORT_ROLE));
             switch (transportRoleId) {
                 case 0: //司机
                     transportServiceFragment.transportRole.setText("司机");

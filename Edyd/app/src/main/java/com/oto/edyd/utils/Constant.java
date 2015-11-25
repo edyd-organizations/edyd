@@ -21,6 +21,7 @@ public  class Constant {
     public final static String ROLE_NAME = "role_name"; //组织名称
     public final static String ENTERPRISE_NAME = "enterprise_name"; //企业名称
     public final static String LOGIN_PREFERENCES_FILE = "login.xml"; //登入信息保存文件
+    public final static String GLOBAL_FILE = "global.xml"; //全局偏好文件设置
     public final static String USER_INFO_FILE = "users.xml"; //用户信息
     public final static String SESSION_UUID = "session_uuid";
     //public final static String ACCOUNT_ID = "account_id";
