@@ -121,4 +121,10 @@
         <item>广西</item>
         <item>内蒙古</item>
     </string-array>
+    <string-array name="transport_role_list">
+        <item>司机</item>
+        <item>发货方</item>
+        <item>收货方</item>
+        <item>承运方</item>
+    </string-array>
 </resources>

@@ -71,10 +71,9 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
     //private int listSize; //订单数据总条数
 
     private int visibleLastIndex = 0; //最后可视项索引
-    private int visibleItemCount; //当前窗口可见总数
+    //private int visibleItemCount; //当前窗口可见总数
     private ReceiveOrderListAdapter receiveOrderListAdapter; //自定义适配器
     //private View loadMoreView; //加载更多
-    private Button loadMoreButton;
 
     private final static int ROWS = 10; //分页加载数据每页10
     private boolean loadFlag = false;
@@ -141,8 +140,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        int itemsLastIndex = receiveOrderListAdapter.getCount() - 1; //数据集最后一项的索引
-        int lastIndex = itemsLastIndex + 1; //加上底部的loadMoreIndex项
+        int lastIndex = receiveOrderListAdapter.getCount(); //数据集最后一项的索引
+        //int lastIndex = itemsLastIndex + 1; //加上底部的loadMoreIndex项
         if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE  && visibleLastIndex ==lastIndex){
             //如果是自动加载,可以在这里放置异步加载数据的代码
             if(loadFlag) {
@@ -150,10 +149,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                 if(lastIndex % 10 == 0) {
                     int page = lastIndex / ROWS + 1;
                     loadOrderData(page, ROWS);
-                    loadMoreButton.setText("正在加载...");
                 }
             }
-
         }
     }
 
@@ -166,8 +163,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
      */
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        this.visibleItemCount = visibleItemCount;
-        visibleLastIndex = firstVisibleItem + visibleItemCount - 1;
+        //this.visibleItemCount = visibleItemCount;
+        visibleLastIndex = firstVisibleItem + visibleItemCount;
     }
 
     private class ReceiveOrderListAdapter extends BaseAdapter {
@@ -336,7 +333,6 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                     break;
                 case 3:
                     receiveOrderListAdapter.notifyDataSetChanged(); //通知ListView更新
-                    loadMoreButton.setText("加载更多");
                     break;
             }
         }

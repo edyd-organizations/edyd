@@ -48,7 +48,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
     private EditText inputCarNumber; //车牌号
     //    private Button search; //搜索
     private TextView amount; //总金额
-    private int amountString;
+    private double amountString;
     //    private TextView averageDistribute; //等额预分配
     private ListView listDistributeUser; //分配用户列表
     private TextView distributeCardNumber; //本次预分配卡数
@@ -99,7 +99,6 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
             public void onRefresh() {
                 getAllMoney(getMoneyUrl);
                 seachCar("");
-
             }
         });
 
@@ -172,8 +171,10 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
                     double mon = jsonArray.getDouble(0);
-
-                    amountString = (int)mon;
+                    if (mon == 0.0 && mon == 0) {
+                        Common.showToast(mActivity, "暂无数据");
+                    }
+                    amountString = mon;
                     amount.setText(mon + "");
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -255,12 +256,15 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
     }
 
     private void submitResult() {
+        if (!isNoAmount()) {
+            Toast.makeText(mActivity, "提交失败，您未填写分配金额", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Map<String, String> params = new HashMap<String, String>();
         params.put("sessionUuid", sessionUuid);
         sendDataList = new ArrayList<OilDataBean>();
         fillSendData(sendDataList);
         String sendData = common.createJsonString(sendDataList);
-        Common.printErrLog("bbbbbbbbbb" + sendData);
         params.put("sendData", sendData);
         Common.printErrLog("submitUrl" + submitUrl);
         OkHttpClientManager.postAsyn(submitUrl, params, new OkHttpClientManager.ResultCallback<String>() {
@@ -288,7 +292,18 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         });
     }
 
+    private boolean isNoAmount() {
+        boolean is = false;
+        for (OilAmountDistribute oad : oilAmountDistributeList) {
+            if (TextUtils.isEmpty(oad.getAmount())) {
+                is = true;
+            }
+        }
+        return is;
+    }
+
     private void fillSendData(List<OilDataBean> list) {
+
 //        private List<OilAmountDistribute> oilAmountDistributeList
         for (OilAmountDistribute oad : oilAmountDistributeList) {
             if (!TextUtils.isEmpty(oad.getAmount())) {
@@ -301,6 +316,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
             }
         }
     }
+
 
     Handler handler = new Handler() {
         @Override
@@ -322,11 +338,8 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
      * 请求预分配用户列表
      */
     private void requestDistributeUserList(JSONArray jsonArray) throws JSONException {
+
         oilAmountDistributeList.clear();
-        if (jsonArray.length() == 0) {
-            Toast.makeText(mActivity, "暂无数据", Toast.LENGTH_LONG).show();
-        }
-            oilAmountDistributeList.clear();
         //假数据
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
@@ -400,9 +413,19 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
                 @Override
                 public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                     //设置预分配卡数
-                    oilAmountDistribute.setAmount(s.toString());
+                    String s1 = s.toString();
+                    if (!TextUtils.isEmpty(s1)) {
+                        char c = s1.charAt(0);
+                        if (c == '.') {
+                            oilAmountDistribute.setAmount("");
+                            adapter.notifyDataSetChanged();
+                            return;
+                        }
+                    }
+                    oilAmountDistribute.setAmount(s1);
                     sumCardNum();
                     sumMoneyNum();
+
                 }
 
                 @Override
@@ -410,8 +433,6 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
 
                 }
             });
-
-
             tCardUser.setText(oilAmountDistribute.getCardUser());
             tCarNumber.setText(oilAmountDistribute.getCarNumber());
             tCardNumber.setText(oilAmountDistribute.getCardNumber());
@@ -425,12 +446,12 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
      * 设置分配总金额
      */
     private boolean sumMoneyNum() {
-        int mon = 0;
+        double mon = 0;
         for (OilAmountDistribute oad : oilAmountDistributeList) {
             String amount = oad.getAmount();
             if (!TextUtils.isEmpty(amount)) {
 
-                mon = mon + Integer.parseInt(amount);
+                mon = mon + Double.parseDouble(amount);
                 if (mon > amountString) {
                     Toast.makeText(mActivity, "你的余额不够", Toast.LENGTH_SHORT).show();
                     oad.setAmount("");

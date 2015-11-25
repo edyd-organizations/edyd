@@ -10,7 +10,6 @@ public  class Constant {
     //地理位置
     public final static double LATITUDE = 24.5004978985;
     public final static double LONGITUDE = 118.0877469228;
-
     public static final LatLng XIAMEN = new LatLng(24.5004978985, 118.0877469228);// 厦门市经纬度
 
     //存储文件
@@ -49,6 +48,7 @@ public  class Constant {
     public final static int LOGIN_ACTIVITY_RETURN_CODE = 1; //LOGIN_ACTIVITY返回码
     public final static int REGISTER_ACTIVITY_RETURN_CODE = 2; //REGISTER_ACTIVITY返回码
     public final static int ACCOUNT_TYPE_RESULT_CODE = 3; //账户类型返回码
+    public final static int TRANSPORT_ROLE_CODE = 4; //运输服务角色选择返回码
 
     //等待时间
     public final static int WAITING_TIME_VERIFICATION = 60; //获取验证码等待时间
@@ -71,6 +71,9 @@ public  class Constant {
     public final static int ENTER_ADMIN = 1; //企业管理员
     public final static int ENTER_STAFF = 2; //企业员工
     public final static int PERSON = 3; //个人信息
+
+    //运输角色 0-司机； 1-发货方；2-收货方；3-承运方 默认为司机
+    public final static String  TRANSPORT_ROLE = "transport_role";
 
     //认证类别
     public final static String NOT_AUTHENTICATED = "未认证"; //0

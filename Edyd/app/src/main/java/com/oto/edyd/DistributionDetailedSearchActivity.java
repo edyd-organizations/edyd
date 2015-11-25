@@ -114,6 +114,10 @@ public class DistributionDetailedSearchActivity extends Activity {
      * 请求预分配用户列表
      */
     private void requestDistributeUserList(JSONArray jsonArray) throws JSONException {
+
+        if (jsonArray.length() == 0) {
+            Toast.makeText(mActivity, "暂无数据", Toast.LENGTH_LONG).show();
+        }
         oilDistributeList.clear();
         /**
          * "cardBalance" : 卡余额 //Double,
@@ -141,10 +145,12 @@ public class DistributionDetailedSearchActivity extends Activity {
 
         String url = Constant.ENTRANCE_PREFIX + "inqueryOilBindingListInEnterpriseApp.json?sessionUuid="
                 + sessionUuid + "&enterpriseId=" + enterpriseId + "&cardId=" + cardId + "&OrgCode=" + orgCode;
+        Common.printErrLog(url);
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override

@@ -102,20 +102,20 @@ public class Common {
 
     public static void printLog(String content) {
         if (content != null) {
-//            Log.i(android.os.Build.MODEL, content);
+            Log.i(android.os.Build.MODEL, content);
         }
 
     }
 
     public static void printErrLog(String content) {
         if (content != null) {
-//                Log.e(android.os.Build.MODEL, content);
+                Log.e(android.os.Build.MODEL, content);
         }
     }
 
     public static void printLog(String tag, String content) {
         if (content != null) {
-//            Log.i(tag, content);
+            Log.i(tag, content);
         }
     }
 
@@ -149,6 +149,13 @@ public class Common {
         return result;
     }
 
+    public static void showToast(Context context, String Msg) {
+        Toast.makeText(context.getApplicationContext(), Msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showToastlong(Context context, String Msg) {
+        Toast.makeText(context.getApplicationContext(), Msg, Toast.LENGTH_LONG).show();
+    }
 
     public static String getStringByUrl(String urlStr) {
         HttpURLConnection urlConnection = null;

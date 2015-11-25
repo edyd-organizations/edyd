@@ -303,6 +303,7 @@ public class OkHttpClientManager {
 
 
     public static abstract class ResultCallback<T> {
+
         Type mType;
 
         public ResultCallback() {
