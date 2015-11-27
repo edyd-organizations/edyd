@@ -1,5 +1,6 @@
 package com.oto.edyd;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,12 +11,16 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import com.oto.edyd.utils.Common;
+import com.oto.edyd.utils.Constant;
 
 /**
  * Created by yql on 2015/8/26.
  */
 public class MainBoxFragment extends Fragment implements View.OnClickListener {
-
+    private Common common;
     private View boxView;
     private ImageView surroundingOil; //周边加油
     private ImageView surroundingSparking; //周边停车场
@@ -67,6 +72,11 @@ public class MainBoxFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.violate_check: //违章查询
+                common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                if (!common.isLogin()) {
+                    Toast.makeText(getActivity(), "用户未登录，请先登录", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 intent = new Intent(getActivity(),ViolateCheckActivity.class);
                 startActivity(intent);
                 break;

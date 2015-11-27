@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -34,6 +35,7 @@ public class TransportServiceFragment extends Fragment implements View.OnClickLi
     private LinearLayout driverInfo; //司机信息
     private ImageView transportReceiveOrder; //接单
 
+    private Common globalCommon;
     private Common common;
 
     @Nullable
@@ -42,26 +44,7 @@ public class TransportServiceFragment extends Fragment implements View.OnClickLi
         //transportServiceView = inflater.inflate(R.layout.transport_service_main, null);
         transportServiceView = inflater.inflate(R.layout.transport_undertake, null);
         initFields(transportServiceView);
-
-        String txEnterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
-
-        enterpriseName.setText(txEnterpriseName);
-        int transportRoleId = Integer.valueOf(common.getStringByKey(Constant.TRANSPORT_ROLE));
-        switch (transportRoleId) {
-            case 0: //司机
-                transportRole.setText("司机");
-                break;
-            case 1: //发货方
-                transportRole.setText("发货方");
-                break;
-            case 2: //收货方
-                transportRole.setText("收货方");
-                break;
-            case 3: //承运方
-                transportRole.setText("承运方");
-                break;
-        }
-
+        switchTransportRole();
         selectTransportRole.setOnClickListener(this);
         transportReceiveOrder.setOnClickListener(this);
         distributeOrder.setOnClickListener(this);
@@ -101,6 +84,33 @@ public class TransportServiceFragment extends Fragment implements View.OnClickLi
         driverInfo = (LinearLayout) view.findViewById(R.id.ll_driver_info);
         transportReceiveOrder = (ImageView) view.findViewById(R.id.iv_receive_order);
 
+        globalCommon = new Common(getActivity().getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+    }
+
+    /**
+     * 切换司机角色
+     */
+    private void switchTransportRole() {
+        String txEnterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
+        enterpriseName.setText(txEnterpriseName);
+        String txTransportRole = globalCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        if(txTransportRole!=null && txTransportRole.equals("")) {
+            int transportRoleId = Integer.valueOf(txTransportRole);
+            switch (transportRoleId) {
+                case 0: //司机
+                    transportRole.setText("司机");
+                    break;
+                case 1: //发货方
+                    transportRole.setText("发货方");
+                    break;
+                case 2: //收货方
+                    transportRole.setText("收货方");
+                    break;
+                case 3: //承运方
+                    transportRole.setText("承运方");
+                    break;
+            }
+        }
     }
 }
