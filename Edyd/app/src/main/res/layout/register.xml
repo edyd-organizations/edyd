@@ -105,7 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:hint="@string/user_alias"
+            android:hint="请输入用户名"
             android:textColorHint="#CCCCCC"
             android:drawablePadding="10dp"
             android:layout_marginTop="15dp"
@@ -122,7 +122,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:hint="@string/p_input_password"
+            android:hint="密码由字母和数字组成，不少于六位"
             android:textColorHint="#CCCCCC"
             android:drawablePadding="10dp"
             android:layout_marginTop="15dp"
@@ -138,10 +138,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="13dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/user_icon_8"
+                    android:text="*短信运营商的限制：同一个号码12小时发送不能超过5条，24小时不超过10条"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="40dp">
+            android:layout_marginTop="15dp">
             <ImageView
                 android:id="@+id/cb_agree_protocol"
                 android:layout_width="wrap_content"

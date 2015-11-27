@@ -76,6 +76,7 @@
             android:layout_marginTop="3dp"
             android:text="闽D8627E"
             android:id="@+id/car_number"
+            android:visibility="gone"
             android:textSize="@dimen/violate_textsize" />
 
         <ImageView

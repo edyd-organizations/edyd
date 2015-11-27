@@ -93,7 +93,7 @@ public class ViolateAddCarActivity extends Activity implements View.OnClickListe
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case 0x40: //卡号已存在
+                case 0x40: //车辆已存在
                     Toast.makeText(getApplicationContext(), "车辆已经注册", Toast.LENGTH_SHORT).show();
                     break;
                 case 0x41: //不存在
@@ -122,7 +122,7 @@ public class ViolateAddCarActivity extends Activity implements View.OnClickListe
                     String status = accountTypeJson.getString("status");
                     if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         //请求失败
-                        Toast.makeText(ViolateAddCarActivity.this, Constant.ACCOUNT_TYPE_INFO_REQUEST_FAIL, Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(ViolateAddCarActivity.this, Constant.ACCOUNT_TYPE_INFO_REQUEST_FAIL, Toast.LENGTH_SHORT).show();
                         return;
                     }
                     accountTypeArray = accountTypeJson.getJSONArray("rows");
@@ -162,7 +162,6 @@ public class ViolateAddCarActivity extends Activity implements View.OnClickListe
                Log.e("classno_", classno_);
                return;
            }
-           Toast.makeText(getApplicationContext(), "正确", Toast.LENGTH_SHORT).show();
        }
         if (!(engineno_.equals("0"))){
             if (engineno!=null&&engineno.equals("")){
@@ -173,7 +172,7 @@ public class ViolateAddCarActivity extends Activity implements View.OnClickListe
                 Toast.makeText(getApplicationContext(), "发动机号格式不对", Toast.LENGTH_SHORT).show();
                 return;
             }
-               Toast.makeText(getApplicationContext(), "完成", Toast.LENGTH_SHORT).show();
+
         }
         requestport();
       //  requestdata();//保存到服务器。

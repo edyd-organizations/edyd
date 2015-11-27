@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -56,13 +57,20 @@ public class ViolateCheckActivity extends Activity implements View.OnClickListen
       /*  mActivity=this;
         intiView();
         initdata();*/
+
+
     }
     @Override
     protected void onStart() {
         super.onStart();
         mActivity=this;
-        dialog = new CusProgressDialog(this,"正在加载数据");
+       dialog = new CusProgressDialog(this,"正在加载数据");
         dialog.showDialog();
+     /*   common = new Common(this.getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        if (!common.isLogin()) {
+            dialog.dismissDialog();
+            return;
+        }*/
         intiView();
         initdata();
     }
@@ -71,7 +79,14 @@ public class ViolateCheckActivity extends Activity implements View.OnClickListen
         //requestPort();//请求接口
 
     }
-
+/*   @Override
+   public boolean onKeyDown(int keyCode, KeyEvent event) {
+       if(keyCode == KeyEvent.KEYCODE_BACK){
+           dialog.dismissDialog();;
+           return false;
+       }
+       return super.onKeyDown(keyCode, event);
+   }*/
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -156,10 +171,14 @@ public class ViolateCheckActivity extends Activity implements View.OnClickListen
                     String status = accountTypeJson.getString("status");
                     if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         //请求失败
-                        Toast.makeText(ViolateCheckActivity.this, Constant.ACCOUNT_TYPE_INFO_REQUEST_FAIL, Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(ViolateCheckActivity.this, Constant.ACCOUNT_TYPE_INFO_REQUEST_FAIL, Toast.LENGTH_SHORT).show();
+                        dialog.dismissDialog();
                         return;
                     }
                     accountTypeArray = accountTypeJson.getJSONArray("rows");
+                    if (accountTypeArray.length()==0){
+                        dialog.dismissDialog();
+                    }
                     JSONObject rowsJson = accountTypeArray.getJSONObject(0);
                     accountId = rowsJson.getLong("accountId");
                     primaryId = rowsJson.getLong("primaryId");
@@ -199,10 +218,11 @@ public class ViolateCheckActivity extends Activity implements View.OnClickListen
     }
 
     public void addCar(View view) {
+/*        common = new Common(this.getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         if (!common.isLogin()) {
             Toast.makeText(this, "用户未登录，请先登录", Toast.LENGTH_LONG).show();
             return;
-        }
+        }*/
         if (city!=null){
             Toast.makeText(this, "您已经绑定过车辆", Toast.LENGTH_LONG).show();
             return;
