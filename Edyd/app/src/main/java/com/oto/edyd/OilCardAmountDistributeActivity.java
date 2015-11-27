@@ -266,7 +266,6 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         fillSendData(sendDataList);
         String sendData = common.createJsonString(sendDataList);
         params.put("sendData", sendData);
-        Common.printErrLog("submitUrl" + submitUrl);
         OkHttpClientManager.postAsyn(submitUrl, params, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
@@ -394,12 +393,10 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         public View getView(int position, View convertView, ViewGroup parent) {
             //item数据
             final OilAmountDistribute oilAmountDistribute = oilAmountDistributeList.get(position);
-            TextView tCardUser; //卡用户
             TextView tCarNumber; //车牌号
             TextView tCardNumber; //卡号
             EditText tAmount; //金额
             View view = inflater.inflate(R.layout.distribute_user_item, null);
-            tCardUser = (TextView) view.findViewById(R.id.distribute_name);
             tCarNumber = (TextView) view.findViewById(R.id.car_number);
             tCardNumber = (TextView) view.findViewById(R.id.card_id);
             //设置监听
@@ -433,7 +430,6 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
 
                 }
             });
-            tCardUser.setText(oilAmountDistribute.getCardUser());
             tCarNumber.setText(oilAmountDistribute.getCarNumber());
             tCardNumber.setText(oilAmountDistribute.getCardNumber());
             tAmount.setText(oilAmountDistribute.getAmount());

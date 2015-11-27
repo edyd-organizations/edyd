@@ -73,6 +73,8 @@ public class TransportServiceFragment extends Fragment implements View.OnClickLi
         Intent intent;
         switch(v.getId()) {
             case R.id.iv_receive_order: //接单
+                intent = new Intent(getActivity(),ReceiveOrderActivity.class);
+                startActivity(intent);
                 break;
             case R.id.select_transport_role: //选择角色
                 intent = new Intent(getActivity(), SelectTransportRole.class);

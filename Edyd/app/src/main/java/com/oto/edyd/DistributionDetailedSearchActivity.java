@@ -95,9 +95,7 @@ public class DistributionDetailedSearchActivity extends Activity {
         });
     }
 
-    public void searchDistribution(View view) {
 
-    }
 
     Handler handler = new Handler() {
         @Override
@@ -133,6 +131,7 @@ public class DistributionDetailedSearchActivity extends Activity {
             bean.setCarId(obj.getString("carId"));
             bean.setCardBalance(obj.getDouble("cardBalance"));
             bean.setOilBindingDateTime(obj.getString("oilBindingDateTime"));
+            bean.setProvisionsMoney(obj.getDouble("provisionsMoney"));
             oilDistributeList.add(bean);
         }
         Message message = new Message();
@@ -199,15 +198,17 @@ public class DistributionDetailedSearchActivity extends Activity {
         @Override
         public View getView(int position, View view, ViewGroup viewGroup) {
             DistributionBean bean = oilDistributeList.get(position);
-            View itemView = View.inflate(mActivity, R.layout.distribute_search, null);
+            View itemView = View.inflate(mActivity, R.layout.distribute_search_two, null);
             TextView car_id = (TextView) itemView.findViewById(R.id.car_id);
             TextView card_id = (TextView) itemView.findViewById(R.id.card_id);
             TextView time_band = (TextView) itemView.findViewById(R.id.time_band);
             TextView balance_mon = (TextView) itemView.findViewById(R.id.balance_mon);
+            TextView tv_provisions = (TextView) itemView.findViewById(R.id.tv_provisions);
             car_id.setText(bean.getCarId());
             card_id.setText(bean.getCardId());
             time_band.setText(bean.getOilBindingDateTime());
             balance_mon.setText(bean.getCardBalance() + "");
+            tv_provisions.setText(bean.getProvisionsMoney()+"");
             return itemView;
         }
     }

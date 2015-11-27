@@ -96,9 +96,7 @@ public class Common {
         return isActive;
     }
 
-    public static void showToastMsg(Context context, String Msg) {
-        Toast.makeText(context.getApplicationContext(), Msg, Toast.LENGTH_SHORT).show();
-    }
+
 
     public static void printLog(String content) {
         if (content != null) {

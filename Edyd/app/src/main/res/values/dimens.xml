@@ -15,4 +15,6 @@
     <dimen name="violate_textsize">18dp</dimen>
     <dimen name="vio_item_winth">95dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="order_item_text_line">3dp</dimen>
 </resources>

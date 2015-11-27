@@ -191,6 +191,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".TransportOrderDispatchActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ReceiveOrderActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- 社交分享-->
         <activity

@@ -18,6 +18,15 @@ public class DistributionBean implements Serializable{
     private String cardId;
     private String oilBindingDateTime;
     private double cardBalance;
+    private double provisionsMoney;
+
+    public double getProvisionsMoney() {
+        return provisionsMoney;
+    }
+
+    public void setProvisionsMoney(double provisionsMoney) {
+        this.provisionsMoney = provisionsMoney;
+    }
 
     public DistributionBean() {
 

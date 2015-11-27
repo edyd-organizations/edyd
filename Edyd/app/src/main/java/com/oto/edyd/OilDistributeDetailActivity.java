@@ -47,6 +47,8 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
     private TextView carNumber; //车牌号
     private TextView balance; //余额
     private TextView lastTime; //最后加油时间
+    private TextView tv_provisions; //备付金余额
+
     private ExpandableListView distributeDetailList; //分配明细列表
 
     private TextView tOilCardApply; //油卡申请
@@ -64,7 +66,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.oil_card_distribute_detail);
-        mActivity=this;
+        mActivity = this;
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         bean = (DistributionBean) bundle.getSerializable("detailBean");
@@ -89,8 +91,8 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
          * inqueryOilBalanceDetailList.json?sessionUuid=&page=1&rows=8&
          */
         String url = Constant.ENTRANCE_PREFIX + "inqueryOilBalanceDetailList.json?sessionUuid="
-                + sessionUuid + "&enterpriseId=" + enterpriseId + "&cardId=" + cardId + "&orgCode=" + orgCode;
-//                + "&page=1&rows=30";
+                + sessionUuid + "&enterpriseId=" + enterpriseId + "&cardId=" + cardId + "&orgCode=" + orgCode
+                + "&page=1&rows=30";
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
@@ -114,6 +116,8 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
                 }
             }
         });
+
+
     }
 
     /**
@@ -128,12 +132,13 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         carNumber = (TextView) findViewById(R.id.car_number);
         carNumber.setText(bean.getCarId());
         balance = (TextView) findViewById(R.id.balance);
-        balance.setText(bean.getCardBalance()+"");
+        balance.setText(bean.getCardBalance() + "");
         lastTime = (TextView) findViewById(R.id.last_time);
         lastTime.setText(bean.getOilBindingDateTime());
         distributeDetailList = (ExpandableListView) findViewById(R.id.distribute_detail_list);
         distributeDetailList.setGroupIndicator(null);
-
+        tv_provisions= (TextView) findViewById(R.id.tv_provisions);
+        tv_provisions.setText(bean.getProvisionsMoney()+"");
         tOilCardApply = (TextView) findViewById(R.id.oil_card_apply);
         tAmountDistribute = (TextView) findViewById(R.id.oil_card_account_distribute);
     }
@@ -171,10 +176,10 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0x12: //油卡金额数据返回执行
-                    if (adapter==null) {
+                    if (adapter == null) {
                         adapter = new OilCardDistributeDetailAdapter(mActivity);
                         distributeDetailList.setAdapter(adapter);
-                    }else {
+                    } else {
                         adapter.notifyDataSetChanged();
                     }
                     break;
@@ -354,6 +359,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         public boolean hasStableIds() {
             return true;
         }
+
         /**
          * 是否选中指定位置上的子元素。
          *
