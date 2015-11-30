@@ -9,17 +9,15 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.model.DistributionBean;
-import com.oto.edyd.model.OilDistributeDetail;
 import com.oto.edyd.model.OilDistributeDetailTime;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -61,6 +59,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
     List<AllocationBean> allocationBeanlist = new ArrayList<AllocationBean>();
     OilCardDistributeDetailAdapter adapter;
     Context mActivity;
+    private String cardId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +76,8 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
             enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
 
             initFields(); //初始化数据
-            getDate(bean.getCardId());
+            cardId=bean.getCardId();
+            getDate(cardId);
 
             back.setOnClickListener(this);
             tOilCardApply.setOnClickListener(this);
@@ -86,13 +86,17 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         }
     }
 
+    private int page = 1;
+    private int rows = 20;
+
     private void getDate(String cardId) {
         /**
          * inqueryOilBalanceDetailList.json?sessionUuid=&page=1&rows=8&
          */
         String url = Constant.ENTRANCE_PREFIX + "inqueryOilBalanceDetailList.json?sessionUuid="
                 + sessionUuid + "&enterpriseId=" + enterpriseId + "&cardId=" + cardId + "&orgCode=" + orgCode
-                + "&page=1&rows=30";
+                + "&page="+ page +"&rows="+ rows;
+
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
@@ -116,8 +120,6 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
                 }
             }
         });
-
-
     }
 
     /**
@@ -135,12 +137,33 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         balance.setText(bean.getCardBalance() + "");
         lastTime = (TextView) findViewById(R.id.last_time);
         lastTime.setText(bean.getOilBindingDateTime());
-        distributeDetailList = (ExpandableListView) findViewById(R.id.distribute_detail_list);
-        distributeDetailList.setGroupIndicator(null);
         tv_provisions= (TextView) findViewById(R.id.tv_provisions);
-        tv_provisions.setText(bean.getProvisionsMoney()+"");
+        tv_provisions.setText(bean.getProvisionsMoney() + "");
         tOilCardApply = (TextView) findViewById(R.id.oil_card_apply);
         tAmountDistribute = (TextView) findViewById(R.id.oil_card_account_distribute);
+
+        distributeDetailList = (ExpandableListView) findViewById(R.id.distribute_detail_list);
+        distributeDetailList.setGroupIndicator(null);
+        distributeDetailList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                switch (scrollState) {
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                        int lastPosition = distributeDetailList.getLastVisiblePosition();
+                        if (lastPosition == allocationBeanlist.size() - 1) {
+                            page ++;
+                            getDate(cardId);
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+            }
+        });
+
     }
 
     @Override

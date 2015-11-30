@@ -219,7 +219,7 @@ public class ReceiveOrderActivity extends Activity {
     private void submitResult(long primaryId) {
         //v1.1/appReceiveSelectedOrdersByOrderPrimaryId.json?sessionUuid=46f85d6bf7eb461cb75d52979dc87e27&primaryId=370
 
-        String submitUrl = Constant.ENTRANCE_PREFIX_v1 + "appReceiveSelectedOrdersByOrderPrimaryId.json?="
+        String submitUrl = Constant.ENTRANCE_PREFIX_v1 + "appReceiveSelectedOrdersByOrderPrimaryId.json?sessionUuid="
                 + sessionUuid + "&primaryId=" + primaryId;
 
         OkHttpClientManager.getAsyn(submitUrl, new OkHttpClientManager.ResultCallback<String>() {
