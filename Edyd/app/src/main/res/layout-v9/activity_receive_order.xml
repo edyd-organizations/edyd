@@ -33,51 +33,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="分配明细搜索"
+            android:text="接单"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold"/>
     </RelativeLayout>
-
-    <LinearLayout
+    <ListView
+        android:id="@+id/lv_order"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:focusable="true"
+        android:divider="@color/gray_EEEEEE"
+        android:dividerHeight="4dp">
 
-            android:focusableInTouchMode="true"
-            android:layout_margin="5dp">
-            <EditText
-                android:id="@+id/input_number_or_card"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:hint="请输入卡号或者车牌号查找"
-                android:singleLine="true"
-                android:drawableLeft="@mipmap/search"
-                android:textColorHint="#CCCCCC"
-                android:textSize="14sp"
-                android:drawablePadding="5dp"
-                android:padding="5dp"
-                android:background="@color/white"/>
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            android:layout_weight="2">
-                <ListView
-                    android:id="@+id/list_distribute_user_seek"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scrollbars="none"
-                    android:descendantFocusability="beforeDescendants">
-                </ListView>
-        </LinearLayout>
-    </LinearLayout>
+    </ListView>
 </LinearLayout>

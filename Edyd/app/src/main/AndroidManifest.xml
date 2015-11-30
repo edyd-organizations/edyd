@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.oto.edyd">
-    <!--支持多屏-->
+    package="com.oto.edyd" >
+    <!-- 支持多屏 -->
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
@@ -18,8 +18,10 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!--短信服务-->
+    <!-- 短信服务 -->
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+    <!-- 高德地图 -->
     <!--拨打电话的权限-->
     <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
     <!-- 高德地图-->
@@ -39,19 +41,16 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <!-- 聚合官网 -->
-
     <application
-        android:name="com.oto.edyd.EdydApplication"
+        android:name=".EdydApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        >
-
+        android:theme="@style/AppTheme" >>
         <!-- 高德地图 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="0dfb6053d90a759dcf7c0a6216e58de5" />
+            android:value="391bb51068ef790c94b3f93fe9852186" />
         <!-- 聚合数据 -->
         <meta-data
             android:name="com.thinkland.juheapi.openid"
@@ -65,7 +64,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -74,17 +73,16 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SetUpActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MultyLocationActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CurrentWeatherReportActivity"
-            android:screenOrientation="portrait">
-
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".MarkerActivity"
@@ -165,11 +163,9 @@
         <activity
             android:name=".RoleTypeActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".DistributionDetailedSearchActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".SelectCardActivity"
             android:screenOrientation="portrait" />
@@ -202,19 +198,20 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".SelectCarActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ReceiveOrderActivity"
+            android:screenOrientation="portrait"/>
 
-        <!-- 社交分享-->
+        <!-- 社交分享 -->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
-            android:noHistory="true">
+            android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -232,14 +229,14 @@
             android:name=".SocialSharedActivity"
             android:screenOrientation="portrait" />
 
-
         <service
             android:name="com.umeng.update.net.DownloadingService"
-            android:process=":DownloadingService"/>
+            android:process=":DownloadingService" />
 
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:process=":DownloadingService"/>
 
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -248,15 +245,27 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ForgetPasswordActivity"
+            android:screenOrientation="portrait" />
             android:screenOrientation="portrait"/>
 
-        <receiver android:name=".components.SmsReceiver">
-            <intent-filter android:priority="800">
+        <receiver android:name=".components.SmsReceiver" >
+            <intent-filter android:priority="800" >
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
+        <service android:name=".service.WeatherService" />
+        <service android:name=".service.TimerService" />
+
+        <activity android:name=".Chooseprovince"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".ChooseCity"
+            android:screenOrientation="portrait"
+            >
+        </activity>
         <service android:name=".service.WeatherService"/>
         <service android:name=".service.TimerService"/>
     </application>
+
 </manifest>
