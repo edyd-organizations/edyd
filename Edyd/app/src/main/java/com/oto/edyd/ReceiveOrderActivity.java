@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -39,6 +40,8 @@ public class ReceiveOrderActivity extends Activity {
     private String sessionUuid;
     private Common common;
     private OrderAdapter adapter;
+    private int page = 1;
+    private int rows = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,19 +61,40 @@ public class ReceiveOrderActivity extends Activity {
 
     private void initView() {
         lv_order = (ListView) findViewById(R.id.lv_order);
-        getDate();
+        getDate(true);
+        lv_order.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                switch (scrollState) {
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                        int lastPosition = lv_order.getLastVisiblePosition();
+                        if (lastPosition == orderlist.size() - 1) {
+                            page++;
+                            getDate(false);
+                        }
+                        break;
+                }
+            }
 
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+            }
+        });
 //        lv_order.setAdapter(new OrderAdapter());
     }
 
-    private void getDate() {
+    /**
+     *
+     * @param isFirst 是否是第一次加载
+     */
+    private void getDate(final boolean isFirst) {
 
         //findPendingOrderList.json?sessionUuid=46f85d6bf7eb461cb75d52979dc87e27&page=1&rows=10
-        int page = 1;
-        int rows = 20;
+
         String url = Constant.ENTRANCE_PREFIX + "findPendingOrderList.json?sessionUuid="
                 + sessionUuid + "&page=" + page + "&rows=" + rows;
-        Common.printErrLog("........." + url);
+
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
@@ -89,7 +113,7 @@ public class ReceiveOrderActivity extends Activity {
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
-                    requestDistributeUserList(jsonArray);
+                    requestDistributeUserList(jsonArray,isFirst);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -113,11 +137,9 @@ public class ReceiveOrderActivity extends Activity {
         }
     };
 
-    private void requestDistributeUserList(JSONArray jsonArray) throws JSONException {
-        if (jsonArray.length() == 0) {
-            Common.showToast(mActivity,"暂无数据");
-        }
-        orderlist.clear();
+    private void requestDistributeUserList(JSONArray jsonArray,boolean isFirst) throws JSONException {
+
+        ArrayList<OrderBean> tempList = new ArrayList<OrderBean>();
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
             OrderBean bean = new OrderBean();
@@ -134,7 +156,18 @@ public class ReceiveOrderActivity extends Activity {
             bean.setReceiverContactTel(obj.getString("receiverContactTel"));
             bean.setTotalNum(obj.getString("totalNum"));
             bean.setPrimaryId(obj.getLong("primaryId"));
-            orderlist.add(bean);
+            tempList.add(bean);
+        }
+        if (tempList.size() == 0) {
+
+            if (isFirst) {
+                //是第一次加载数据
+                Common.showToast(mActivity, "暂无数据");
+            } else {
+//                Common.showToast(mActivity, "没有更多数据");
+            }
+        } else {
+            orderlist.addAll(tempList);
         }
         Message message = new Message();
         message.what = 0x12;
@@ -195,7 +228,7 @@ public class ReceiveOrderActivity extends Activity {
             TextView receiverContactTelView = (TextView) itemView.findViewById(R.id.receiverContactTelView);
             receiverContactTelView.setText(order.getReceiverContactTel());
             //接单按钮
-            Button btn_receiveorder= (Button) itemView.findViewById(R.id.btn_receiveorder);
+            Button btn_receiveorder = (Button) itemView.findViewById(R.id.btn_receiveorder);
             btn_receiveorder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -227,6 +260,7 @@ public class ReceiveOrderActivity extends Activity {
             public void onError(Request request, Exception e) {
                 Toast.makeText(getApplicationContext(), "接单失败", Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onResponse(String response) {
 
@@ -239,7 +273,7 @@ public class ReceiveOrderActivity extends Activity {
                         return;
                     }
                     Toast.makeText(getApplicationContext(), "提交成功", Toast.LENGTH_SHORT).show();
-                    getDate();
+                    updateDate();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -247,4 +281,37 @@ public class ReceiveOrderActivity extends Activity {
         });
     }
 
+    private void updateDate() {
+
+        //findPendingOrderList.json?sessionUuid=46f85d6bf7eb461cb75d52979dc87e27&page=1&rows=10
+
+        String url = Constant.ENTRANCE_PREFIX + "findPendingOrderList.json?sessionUuid="
+                + sessionUuid + "&page=1&rows=" +page* rows;
+
+        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+            @Override
+            public void onError(Request request, Exception e) {
+                Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(String response) {
+                Common.printErrLog("........." + response);
+                JSONObject jsonObject;
+                JSONArray jsonArray;
+                try {
+                    jsonObject = new JSONObject(response);
+                    if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        Toast.makeText(getApplicationContext(), "返回信息失败", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    jsonArray = jsonObject.getJSONArray("rows");
+                    orderlist.clear();
+                    requestDistributeUserList(jsonArray, true);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }

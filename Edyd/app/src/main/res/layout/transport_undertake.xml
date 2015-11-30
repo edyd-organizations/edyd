@@ -104,7 +104,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:textStyle="bold"
-                        android:text="轨迹查询"/>
+                        android:text="查看轨迹"/>
                 </LinearLayout>
             </LinearLayout>
             <View

@@ -76,8 +76,8 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
             enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
 
             initFields(); //初始化数据
-            cardId=bean.getCardId();
-            getDate(cardId);
+            cardId = bean.getCardId();
+            getDate(true);
 
             back.setOnClickListener(this);
             tOilCardApply.setOnClickListener(this);
@@ -89,13 +89,17 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
     private int page = 1;
     private int rows = 20;
 
-    private void getDate(String cardId) {
+    /**
+     * @param isFist 是否是第一次加载
+     */
+
+    private void getDate(final boolean isFist) {
         /**
          * inqueryOilBalanceDetailList.json?sessionUuid=&page=1&rows=8&
          */
         String url = Constant.ENTRANCE_PREFIX + "inqueryOilBalanceDetailList.json?sessionUuid="
                 + sessionUuid + "&enterpriseId=" + enterpriseId + "&cardId=" + cardId + "&orgCode=" + orgCode
-                + "&page="+ page +"&rows="+ rows;
+                + "&page=" + page + "&rows=" + rows;
 
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
@@ -114,7 +118,9 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
-                    requestDistributeUserList(jsonArray);
+
+                    requestDistributeUserList(jsonArray, isFist);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -137,7 +143,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         balance.setText(bean.getCardBalance() + "");
         lastTime = (TextView) findViewById(R.id.last_time);
         lastTime.setText(bean.getOilBindingDateTime());
-        tv_provisions= (TextView) findViewById(R.id.tv_provisions);
+        tv_provisions = (TextView) findViewById(R.id.tv_provisions);
         tv_provisions.setText(bean.getProvisionsMoney() + "");
         tOilCardApply = (TextView) findViewById(R.id.oil_card_apply);
         tAmountDistribute = (TextView) findViewById(R.id.oil_card_account_distribute);
@@ -151,8 +157,8 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
                     case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
                         int lastPosition = distributeDetailList.getLastVisiblePosition();
                         if (lastPosition == allocationBeanlist.size() - 1) {
-                            page ++;
-                            getDate(cardId);
+                            page++;
+                            getDate(false);
                         }
                         break;
                 }
@@ -213,24 +219,29 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
     /**
      * 请求预分配用户列表
      */
-    private void requestDistributeUserList(JSONArray jsonArray) throws JSONException {
-        allocationBeanlist.clear();
-        /**
-         "accountId" : 创建人ID //Long,
-         "achieveTime" : 完成时间 //String,
-         "applyTime" : 申请时间 //String,
-         "provisionsMoney" : 分配备付金余额 //Double,
-         */
-
+    private void requestDistributeUserList(JSONArray jsonArray, boolean isFirst) throws JSONException {
+        ArrayList<AllocationBean> tempList = new ArrayList<AllocationBean>();
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
             AllocationBean bean = new AllocationBean();
+
             bean.setCardId(obj.getString("cardId"));
             bean.setCarId(obj.getString("carId"));
             bean.setAchieveTime(obj.getString("achieveTime"));
             bean.setApplyTime(obj.getString("applyTime"));
             bean.setProvisionsMoney(obj.getString("provisionsMoney"));
-            allocationBeanlist.add(bean);
+            tempList.add(bean);
+        }
+        if (tempList.size() == 0) {
+
+            if (isFirst) {
+                //是第一次加载数据
+                Common.showToast(mActivity, "暂无数据");
+            } else {
+//                Common.showToast(mActivity, "没有更多数据");
+            }
+        } else {
+            allocationBeanlist.addAll(tempList);
         }
         Message message = new Message();
         message.what = 0x12;
