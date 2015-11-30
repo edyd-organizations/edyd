@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.oto.edyd.model.TransportDispatch;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.oto.edyd.widget.CusOnClickListener;
 import com.squareup.okhttp.Request;
@@ -52,13 +54,15 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
     private boolean loadFlag = false;
     private final static int ROWS = 10; //分页加载数据每页10
     private Common common;
+    private CusProgressDialog loadingDialog;
+    private int page;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transport_order_dispatch);
         initFields();
-        requestTransportOderData(1, 1);
+        requestTransportOderData(1, 10, 1);
 
         mPullToRefreshScrollView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             /**
@@ -66,7 +70,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
              */
             @Override
             public void onRefresh() {
-                requestTransportOderData(1, 2);
+                requestTransportOderData(1, 10, 2);
             }
         });
         back.setOnClickListener(this);
@@ -82,7 +86,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
             if(loadFlag) {
                 loadFlag = false;
                 if(lastIndex % ROWS == 0) {
-                    int page = lastIndex / ROWS + 1;
+                    page = lastIndex / ROWS + 1;
                     pageRequestTransportOderData(page, ROWS);
                 }
             }
@@ -104,6 +108,8 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
         transportOrderList = (ListView) findViewById(R.id.transport_order_list);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         mPullToRefreshScrollView = (SwipeRefreshLayout)findViewById(R.id.swipe_container);
+
+        page = 1;
     }
 
     Handler handler = new Handler() {
@@ -113,6 +119,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                 case 1: //首次加载
                     transportOrderAdapter = new TransportOrderAdapter(TransportOrderDispatchActivity.this);
                     transportOrderList.setAdapter(transportOrderAdapter);
+                    loadingDialog.dismissDialog();
                     break;
                 case 2: //下拉刷新
                     transportOrderAdapter.notifyDataSetChanged(); //通知ListView更新
@@ -130,9 +137,13 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
      * @param page
      * @param loadType
      */
-    private void requestTransportOderData(int page, final int loadType) {
+    private void requestTransportOderData(int page, int rows,final int loadType) {
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
-        String url = Constant.ENTRANCE_PREFIX + "getScheduleList.json?sessionUuid=" + sessionUuid +"&page=" + 1 + "&rows=" + ROWS;
+        String url = Constant.ENTRANCE_PREFIX + "getScheduleList.json?sessionUuid=" + sessionUuid +"&page=" + 1 + "&rows=" + rows;
+        if(loadType == 1) {
+            loadingDialog = new CusProgressDialog(TransportOrderDispatchActivity.this, "正在拼命加载...");
+            loadingDialog.getLoadingDialog().show();
+        }
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>(){
             @Override
             public void onError(Request request, Exception e) {
@@ -159,6 +170,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                     for (int i = 0; i < rowJson.length(); i++) {
                         TransportDispatch transportDispatch = new TransportDispatch();
                         jsonObjectItem = rowJson.getJSONObject(i);
+                        transportDispatch.setId(String.valueOf(jsonObjectItem.getInt("ID")));
                         transportDispatch.setPrimaryId(String.valueOf(jsonObjectItem.getInt("primaryId")));
                         transportDispatch.setOrderFlowWaterNumber(jsonObjectItem.getString("orderNum"));
                         startAndEndAddr = jsonObjectItem.getString("senderProvince") + jsonObjectItem.getString("senderCity") +
@@ -166,6 +178,10 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                         transportDispatch.setStartAndEndAddress(startAndEndAddr);
                         transportDispatch.setPlaceOrderDate(timeFormatDate(jsonObjectItem.getString("orderDate")));
                         transportDispatch.setShipperName(jsonObjectItem.getString("senderName"));
+                        transportDispatch.setArriveTime(timeFormatDate(jsonObjectItem.getString("shipTime")));
+                        transportDispatch.setTotalNumber(jsonObjectItem.getString("totalNum"));
+                        transportDispatch.setTotalWeight(jsonObjectItem.getString("totalWeight"));
+                        transportDispatch.setTotalVolume(jsonObjectItem.getString("totalVolume"));
                         transportDispatchList.add(transportDispatch);
                     }
 
@@ -186,6 +202,11 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
         });
     }
 
+    /**
+     * 上拉加载
+     * @param page
+     * @param rows
+     */
     private void pageRequestTransportOderData(int page, int rows) {
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         String url = Constant.ENTRANCE_PREFIX + "getScheduleList.json?sessionUuid=" + sessionUuid +"&page=" + page + "&rows=" + rows;
@@ -212,6 +233,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                     for (int i = 0; i < rowJson.length(); i++) {
                         TransportDispatch transportDispatch = new TransportDispatch();
                         jsonObjectItem = rowJson.getJSONObject(i);
+                        transportDispatch.setId(String.valueOf(jsonObjectItem.getInt("ID")));
                         transportDispatch.setPrimaryId(String.valueOf(jsonObjectItem.getInt("primaryId")));
                         transportDispatch.setOrderFlowWaterNumber(jsonObjectItem.getString("orderNum"));
                         startAndEndAddr = jsonObjectItem.getString("senderProvince") + jsonObjectItem.getString("senderCity") +
@@ -219,6 +241,10 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                         transportDispatch.setStartAndEndAddress(startAndEndAddr);
                         transportDispatch.setPlaceOrderDate(timeFormatDate(jsonObjectItem.getString("orderDate")));
                         transportDispatch.setShipperName(jsonObjectItem.getString("senderName"));
+                        transportDispatch.setArriveTime(jsonObjectItem.getString("shipTime"));
+                        transportDispatch.setTotalNumber(jsonObjectItem.getString("totalNum"));
+                        transportDispatch.setTotalWeight(jsonObjectItem.getString("totalWeight"));
+                        transportDispatch.setTotalVolume(jsonObjectItem.getString("totalVolume"));
                         transportDispatchList.add(transportDispatch);
                     }
 
@@ -287,7 +313,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
             viewHolder.tvAddress.setText(transportDispatch.getStartAndEndAddress());
             viewHolder.tvTime.setText(transportDispatch.getPlaceOrderDate());
             viewHolder.tvShipper.setText(transportDispatch.getShipperName());
-            viewHolder.tvOrderDistribute.setOnClickListener(new CusTranOrderDisOnClickListener(transportDispatch.getPrimaryId()));
+            viewHolder.tvOrderDistribute.setOnClickListener(new CusTranOrderDisOnClickListener(transportDispatch.getPrimaryId(), position));
 
             return convertView;
         }
@@ -307,43 +333,51 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
      * @return
      */
     private String timeFormatDate(String time) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date date;
-        try {
-            date = df.parse(time);
-            return df.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if(time != null && !time.equals("")) {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            Date date;
+            try {
+                date = df.parse(time);
+                return df.format(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
-        return "error";
+        return "无";
     }
 
     private class CusTranOrderDisOnClickListener implements View.OnClickListener{
 
         private String primaryId;
-        public CusTranOrderDisOnClickListener(String primaryId) {
+        private int position;
+
+        public CusTranOrderDisOnClickListener(String primaryId, int position) {
             this.primaryId = primaryId;
+            this.position = position;
         }
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.tv_distribute_order: //派单
-                    new AlertDialog.Builder(TransportOrderDispatchActivity.this).setTitle("派单")
-                            .setMessage("确认派单吗？")
-                            .setPositiveButton("是", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            })
-                            .setNegativeButton("否", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            }).show();
+                    Intent intent = new Intent(TransportOrderDispatchActivity.this, TransportOrderDispatchDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("distribute_order_item", transportDispatchList.get(position));
+                    bundle.putSerializable("page", page);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, 0x10);
                     break;
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //int page = 1;
+        switch (resultCode) {
+            case 0x35: //正常调度返回
+                //page = data.getIntExtra("page", 1);
+                requestTransportOderData(1, page*10, 2);
+                break;
         }
     }
 }

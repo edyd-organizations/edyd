@@ -25,7 +25,6 @@
     <!--拨打电话的权限-->
     <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
     <!-- 高德地图-->
->>>>>>> 85e608920f6e42590e2e74d938c3bd534313eb5e
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
@@ -47,11 +46,11 @@
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        >
+        android:theme="@style/AppTheme" >>
+        <!-- 高德地图 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="0dfb6053d90a759dcf7c0a6216e58de5" />
+            android:value="391bb51068ef790c94b3f93fe9852186" />
         <!-- 聚合数据 -->
         <meta-data
             android:name="com.thinkland.juheapi.openid"
@@ -188,6 +187,16 @@
         <activity android:name=".SelectTransportRole"
             android:screenOrientation="portrait"/>
         <activity android:name=".TransportOrderDispatchActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".TransportOrderDispatchDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SelectDriverActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ModifyDriverPhoneNumberActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FastDistributeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SelectCarActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ReceiveOrderActivity"
             android:screenOrientation="portrait"/>

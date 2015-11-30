@@ -372,7 +372,7 @@ public class OilCardChangeActivity extends Activity implements View.OnClickListe
                         message.what = position;
                     } else {
                         message.what = 0x40;
-                        Toast.makeText(getApplicationContext(), "卡不存在", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "车牌号不存在", Toast.LENGTH_LONG).show();
                     }
                     handler.sendMessage(message);
                 } catch (JSONException e) {

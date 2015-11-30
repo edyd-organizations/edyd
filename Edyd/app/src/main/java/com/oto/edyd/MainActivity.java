@@ -315,6 +315,9 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * 2秒内连续按返回键退出程序
+     */
     public void exit() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
             Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
