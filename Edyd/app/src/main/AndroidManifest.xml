@@ -48,6 +48,7 @@
         android:theme="@style/AppTheme"
         >
 
+        <!-- 高德地图 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="0dfb6053d90a759dcf7c0a6216e58de5" />
@@ -190,6 +191,16 @@
         <activity android:name=".SelectTransportRole"
             android:screenOrientation="portrait"/>
         <activity android:name=".TransportOrderDispatchActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".TransportOrderDispatchDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SelectDriverActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ModifyDriverPhoneNumberActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FastDistributeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SelectCarActivity"
             android:screenOrientation="portrait"/>
 
         <!-- 社交分享-->
