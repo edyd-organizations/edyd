@@ -48,6 +48,7 @@ public class TransportServiceFragment extends Fragment implements View.OnClickLi
         selectTransportRole.setOnClickListener(this);
         transportReceiveOrder.setOnClickListener(this);
         distributeOrder.setOnClickListener(this);
+        panorama.setOnClickListener(this);
         return  transportServiceView;
     }
 
@@ -63,6 +64,10 @@ public class TransportServiceFragment extends Fragment implements View.OnClickLi
                 break;
             case R.id.ll_distribute_order: //派单
                 intent = new Intent(getActivity(), TransportOrderDispatchActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.ll_panorama://全景图
+                intent = new Intent(getActivity(), PanoramaActivity.class);
                 startActivity(intent);
                 break;
         }
