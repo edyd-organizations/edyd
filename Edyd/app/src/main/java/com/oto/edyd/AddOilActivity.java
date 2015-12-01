@@ -218,7 +218,8 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
                             oilCardInfo.setCarId(jsonObject.getString("carId"));
                             oilCardInfo.setCardId(jsonObject.getString("cardId"));
                             oilCardInfo.setCardBalance(jsonObject.getString("cardBalance"));
-                            oilCardInfo.setOilBindingDateTime(jsonObject.getString("oilBindingDateTime"));
+                            oilCardInfo.setSpareMoney(jsonObject.getString("provisionsMoney"));
+                            oilCardInfo.setTime(jsonObject.getString("oilBindingDateTime"));
                             addOilCards.add(oilCardInfo);
                         }
                     }else {
@@ -233,12 +234,6 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
                 }
             }
         });
-
-
-//        Message message = new Message();
-//        message.what = 0x12;
-//        handler.sendMessage(message);
-
     }
 
     /**
@@ -278,7 +273,7 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
                 viewHolder = new ViewHolder();
                 convertView = inflater.inflate(R.layout.my_add_oil_item, null);
                 viewHolder.carNumber = (TextView) convertView.findViewById(R.id.car_number);
-                viewHolder.time = (TextView) convertView.findViewById(R.id.time);
+                viewHolder.spareMoney = (TextView) convertView.findViewById(R.id.spare_money);
                 viewHolder.cardNumber = (TextView) convertView.findViewById(R.id.card_number);
                 viewHolder.balance = (TextView) convertView.findViewById(R.id.balance);
                 convertView.setTag(viewHolder);
@@ -289,7 +284,7 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
             OilCardInfo oilCardInfo = addOilCards.get(position);
 
             viewHolder.carNumber.setText(oilCardInfo.getCarId());
-            viewHolder.time.setText(oilCardInfo.getOilBindingDateTime());
+            viewHolder.spareMoney.setText(oilCardInfo.getSpareMoney());
             viewHolder.cardNumber.setText(oilCardInfo.getCardId());
             viewHolder.balance.setText(oilCardInfo.getCardBalance());
 
@@ -302,7 +297,7 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
      */
     static class ViewHolder {
         TextView carNumber; //车牌号
-        TextView time; //时间
+        TextView spareMoney; //备付金余额
         TextView cardNumber; //车牌号
         TextView balance; //金额
     }

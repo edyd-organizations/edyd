@@ -54,7 +54,7 @@
                         android:layout_weight="1"
                         android:textColor="@color/bright_foreground_light_disabled"
                         android:layout_gravity="left"
-                        android:text="备付金余额"/>
+                        android:text="交易日期"/>
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -62,23 +62,10 @@
                         android:layout_weight="2"
                         android:gravity="right">
                         <TextView
+                            android:id="@+id/transport_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:textColor="@color/user_icon_8"
-                            android:text="￥"/>
-                        <TextView
-                            android:id="@+id/spare_money"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:textColor="@color/user_icon_8" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:textColor="@color/user_icon_8"
-                            android:text="元"/>
+                            android:textSize="15sp" />
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout

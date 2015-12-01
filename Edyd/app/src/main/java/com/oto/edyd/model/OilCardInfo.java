@@ -9,7 +9,8 @@ public class OilCardInfo implements Serializable{
     private String carId; //车牌号
     private String cardBalance; //卡余额
     private String cardId; //卡号
-    private String oilBindingDateTime; //油卡绑定时间
+    private String spareMoney; //备付金余额
+    private String time; //油卡绑定事件
 
     public String getCarId() {
         return carId;
@@ -35,11 +36,19 @@ public class OilCardInfo implements Serializable{
         this.cardId = cardId;
     }
 
-    public String getOilBindingDateTime() {
-        return oilBindingDateTime;
+    public String getSpareMoney() {
+        return spareMoney;
     }
 
-    public void setOilBindingDateTime(String oilBindingDateTime) {
-        this.oilBindingDateTime = oilBindingDateTime;
+    public void setSpareMoney(String spareMoney) {
+        this.spareMoney = spareMoney;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

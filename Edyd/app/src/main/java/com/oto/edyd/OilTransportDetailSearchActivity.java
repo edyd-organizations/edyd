@@ -34,10 +34,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by yql on 2015/11/12.
+ * Created by yql on 2015/12/1.
  */
-public class SelectCardActivity extends Activity implements View.OnClickListener {
-
+public class OilTransportDetailSearchActivity extends Activity implements View.OnClickListener {
     private LinearLayout back; //返回
     private EditText blurContent; //模糊文本
     private TextView search; //搜索
@@ -60,7 +59,7 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
         cardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(SelectCardActivity.this, OilTransactionDetailActivity.class);
+                Intent intent = new Intent(OilTransportDetailSearchActivity.this, OilTransactionDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("oil_card", oilCardInfoSet.get(position));
                 intent.putExtras(bundle);
@@ -134,75 +133,75 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
         }
     };
 
-        /**
-         * 请求我的加油卡列表
-         */
-        private void requestAddOilCardList(final String text) {
+    /**
+     * 请求我的加油卡列表
+     */
+    private void requestAddOilCardList(final String text) {
 
-            String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
-            String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
-            String orgCode = common.getStringByKey(Constant.ORG_CODE);
-            String url = "";
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+        String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+        String orgCode = common.getStringByKey(Constant.ORG_CODE);
+        String url = "";
 
-            if(text == null || text.equals("")) {
-                url = Constant.ENTRANCE_PREFIX + "inqueryOilBindingListInEnterpriseApp.json?sessionUuid=" + sessionUuid +
-                        "&enterpriseId=" + enterpriseId + "&OrgCode=" + orgCode;
-            } else {
-                url = Constant.ENTRANCE_PREFIX + "inqueryOilBindingListInEnterpriseApp.json?"+"sessionUuid="+sessionUuid+"&enterpriseId=" + enterpriseId +
-                        "&OrgCode=" + orgCode + "&cardId=" + text;
+        if(text == null || text.equals("")) {
+            url = Constant.ENTRANCE_PREFIX + "inqueryOilBindingListInEnterpriseApp.json?sessionUuid=" + sessionUuid +
+                    "&enterpriseId=" + enterpriseId + "&OrgCode=" + orgCode;
+        } else {
+            url = Constant.ENTRANCE_PREFIX + "inqueryOilBindingListInEnterpriseApp.json?"+"sessionUuid="+sessionUuid+"&enterpriseId=" + enterpriseId +
+                    "&OrgCode=" + orgCode + "&cardId=" + text;
+        }
+
+        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+            @Override
+            public void onError(Request request, Exception e) {
+
             }
 
-            OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
-                @Override
-                public void onError(Request request, Exception e) {
-
-                }
-
-                @Override
-                public void onResponse(String response) {
-                    JSONObject addOilJSON;
-                    JSONArray addOilArray;
-                    try {
-                        addOilJSON = new JSONObject(response);
-                        String status = addOilJSON.getString("status");
-                        Message message = new Message();
-                        if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                            //卡列表数据获取失败
-                            Toast.makeText(getApplicationContext(), "油卡列表获取失败", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        addOilArray = addOilJSON.getJSONArray("rows");
-                        if(addOilArray.length() == 0) {
-                            oilCardInfoSet.clear();
-                            message.what = 0x16;
-                            handler.sendMessage(message);
-                            Toast.makeText(getApplicationContext(), "暂无数据", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        oilCardInfoSet.clear();
-                        if (addOilArray.length() > 0) {
-                            for (int i = 0; i < addOilArray.length(); i++) {
-                                OilCardInfo oilCardInfo = new OilCardInfo();
-                                JSONObject jsonObject = addOilArray.getJSONObject(i);
-                                oilCardInfo.setCarId(jsonObject.getString("carId"));
-                                oilCardInfo.setCardId(jsonObject.getString("cardId"));
-                                oilCardInfo.setCardBalance(jsonObject.getString("cardBalance"));
-                                oilCardInfo.setTime(jsonObject.getString("oilBindingDateTime"));
-                                oilCardInfoSet.add(oilCardInfo);
-                            }
-                        }
-                        if(text == null) {
-                            message.what = 0x14;
-                        } else {
-                            message.what = 0x15;
-                        }
-                        handler.sendMessage(message);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+            @Override
+            public void onResponse(String response) {
+                JSONObject addOilJSON;
+                JSONArray addOilArray;
+                try {
+                    addOilJSON = new JSONObject(response);
+                    String status = addOilJSON.getString("status");
+                    Message message = new Message();
+                    if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        //卡列表数据获取失败
+                        Toast.makeText(getApplicationContext(), "油卡列表获取失败", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+                    addOilArray = addOilJSON.getJSONArray("rows");
+                    if (addOilArray.length() == 0) {
+                        oilCardInfoSet.clear();
+                        message.what = 0x16;
+                        handler.sendMessage(message);
+                        Toast.makeText(getApplicationContext(), "暂无数据", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    oilCardInfoSet.clear();
+                    if (addOilArray.length() > 0) {
+                        for (int i = 0; i < addOilArray.length(); i++) {
+                            OilCardInfo oilCardInfo = new OilCardInfo();
+                            JSONObject jsonObject = addOilArray.getJSONObject(i);
+                            oilCardInfo.setCarId(jsonObject.getString("carId"));
+                            oilCardInfo.setCardId(jsonObject.getString("cardId"));
+                            oilCardInfo.setCardBalance(jsonObject.getString("cardBalance"));
+                            //oilCardInfo.setOilBindingDateTime(jsonObject.getString("oilBindingDateTime"));
+                            oilCardInfoSet.add(oilCardInfo);
+                        }
+                    }
+                    if (text == null) {
+                        message.what = 0x14;
+                    } else {
+                        message.what = 0x15;
+                    }
+                    handler.sendMessage(message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            });
-        }
+            }
+        });
+    }
 
 
     /**
@@ -240,9 +239,9 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
 
             if(convertView == null) {
                 viewHolder = new ViewHolder();
-                convertView = inflater.inflate(R.layout.oil_transport_detail_search_item, null);
+                convertView = inflater.inflate(R.layout.my_add_oil_item, null);
                 viewHolder.carNumber = (TextView) convertView.findViewById(R.id.car_number);
-                viewHolder.time = (TextView) convertView.findViewById(R.id.transport_date);
+                viewHolder.time = (TextView) convertView.findViewById(R.id.time);
                 viewHolder.cardNumber = (TextView) convertView.findViewById(R.id.card_number);
                 viewHolder.balance = (TextView) convertView.findViewById(R.id.balance);
                 convertView.setTag(viewHolder);
@@ -253,7 +252,7 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
             OilCardInfo oilCardInfo = oilCardInfoSet.get(position);
 
             viewHolder.carNumber.setText(oilCardInfo.getCarId());
-            viewHolder.time.setText(oilCardInfo.getTime());
+            //viewHolder.time.setText(oilCardInfo.getOilBindingDateTime());
             viewHolder.cardNumber.setText(oilCardInfo.getCardId());
             viewHolder.balance.setText(oilCardInfo.getCardBalance());
             return convertView;
@@ -265,16 +264,16 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
      */
     static class ViewHolder {
         TextView carNumber; //车牌号
-        TextView cardNumber; //卡号
-        TextView time; //交易时间时间
-        TextView balance; //卡余额
+        TextView time; //时间
+        TextView cardNumber; //车牌号
+        TextView balance; //金额
     }
 
     public abstract class SelectCardResultCallback<T> extends OkHttpClientManager.ResultCallback<T>{
         @Override
         public void onBefore() {
             //请求之前操作
-            cusProgressDialog = new CusProgressDialog(SelectCardActivity.this, "正在拼命加载...");
+            cusProgressDialog = new CusProgressDialog(OilTransportDetailSearchActivity.this, "正在拼命加载...");
             cusProgressDialog.getLoadingDialog().show();
         }
 

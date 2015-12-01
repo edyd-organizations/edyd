@@ -18,6 +18,7 @@ public class OilCardAddDetailActivity extends Activity implements View.OnClickLi
     private TextView carNumber; //车牌号
     private TextView balance; //余额
     private TextView oilBindTime; //油卡绑定时间
+    private TextView spareMoney; //备付金余额
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,8 @@ public class OilCardAddDetailActivity extends Activity implements View.OnClickLi
         cardNumber.setText(oilCardInfo.getCardId());
         carNumber.setText(oilCardInfo.getCarId());
         balance.setText(oilCardInfo.getCardBalance());
-        oilBindTime.setText(oilCardInfo.getOilBindingDateTime());
+        oilBindTime.setText(oilCardInfo.getTime());
+        spareMoney.setText(oilCardInfo.getSpareMoney());
         back.setOnClickListener(this);
     }
 
@@ -49,5 +51,6 @@ public class OilCardAddDetailActivity extends Activity implements View.OnClickLi
         carNumber = (TextView) findViewById(R.id.car_number);
         balance = (TextView) findViewById(R.id.balance);
         oilBindTime = (TextView) findViewById(R.id.oil_bind_time);
+        spareMoney = (TextView) findViewById(R.id.spare_money);
     }
 }
