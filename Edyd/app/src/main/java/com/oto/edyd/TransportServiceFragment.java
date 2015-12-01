@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -79,7 +78,15 @@ public class TransportServiceFragment extends Fragment implements View.OnClickLi
         enterpriseName = (TextView) view.findViewById(R.id.enterprise_name);
         transportRole = (TextView) view.findViewById(R.id.transport_role);
         distributeOrder = (LinearLayout) view.findViewById(R.id.ll_distribute_order);
+        //查看轨迹
         trackSearch = (LinearLayout) view.findViewById(R.id.ll_track_search);
+        trackSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(),TrackListActivity.class);
+                startActivity(intent);
+            }
+        });
         panorama = (LinearLayout) view.findViewById(R.id.ll_panorama);
         driverInfo = (LinearLayout) view.findViewById(R.id.ll_driver_info);
         transportReceiveOrder = (ImageView) view.findViewById(R.id.iv_receive_order);
