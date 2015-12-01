@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.oto.edyd" >
+
     <!-- 支持多屏 -->
     <supports-screens
         android:anyDensity="true"
@@ -8,7 +9,7 @@
         android:normalScreens="true"
         android:smallScreens="true"
         android:xlargeScreens="true" />
-    <!--系统权限-->
+    <!-- 系统权限 -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -40,6 +41,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+
     <!-- 聚合官网 -->
     <application
         android:name=".EdydApplication"
@@ -51,9 +53,10 @@
         <!--<meta-data-->
             <!--android:name="com.amap.api.v2.apikey"-->
             <!--android:value="391bb51068ef790c94b3f93fe9852186" />-->
+        <!-- 高德地图 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="b0da2264df3bf64e1b5b9143dff0b427" />
+            android:value="b751da55d5392f83be3e89d0924c587d" />
         <!-- 聚合数据 -->
         <meta-data
             android:name="com.thinkland.juheapi.openid"
@@ -242,7 +245,6 @@
             android:name="com.umeng.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
             android:process=":DownloadingService"/>
-
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -252,7 +254,6 @@
             android:name=".ForgetPasswordActivity"
             android:screenOrientation="portrait" />
             android:screenOrientation="portrait"/>
-
         <receiver android:name=".components.SmsReceiver" >
             <intent-filter android:priority="800" >
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
@@ -262,15 +263,21 @@
         <service android:name=".service.WeatherService" />
         <service android:name=".service.TimerService" />
 
-        <activity android:name=".Chooseprovince"
-            android:screenOrientation="portrait">
+        <activity
+            android:name=".Chooseprovince"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".ChooseCity"
-            android:screenOrientation="portrait"
-            >
+        <activity
+            android:name=".ChooseCity"
+            android:screenOrientation="portrait" >
         </activity>
-        <service android:name=".service.WeatherService"/>
-        <service android:name=".service.TimerService"/>
+
+        <service android:name=".service.WeatherService" />
+        <service android:name=".service.TimerService" />
+
+        <activity android:name=".PanoramaActivity"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>
