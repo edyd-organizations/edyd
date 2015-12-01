@@ -208,6 +208,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".TrackListActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ShowTrackActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- 社交分享 -->
         <activity
