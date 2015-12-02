@@ -151,6 +151,7 @@ public class OilTransportDetailSearchActivity extends Activity implements View.O
                     "&OrgCode=" + orgCode + "&cardId=" + text;
         }
 
+
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
