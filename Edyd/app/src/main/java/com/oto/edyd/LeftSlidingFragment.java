@@ -124,10 +124,15 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.exit: //退出登录
                 Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                Common commonTrans = new Common(getActivity().getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
                 exitProgressDialog = new CusProgressDialog(getActivity(), "正在退出...");
                 exitProgressDialog.getLoadingDialog().show();
                 if(!common.isClearAccount()) {
                     Toast.makeText(getActivity().getApplicationContext(), "清除账户异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!commonTrans.isClearAccount()) {
+                    Toast.makeText(getActivity().getApplicationContext(), "清除司机信息异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 new Thread(new ExitDialogThread(exitProgressDialog)).start(); //弹出对话框线程

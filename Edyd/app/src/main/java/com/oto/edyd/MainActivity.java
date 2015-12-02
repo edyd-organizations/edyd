@@ -2,6 +2,7 @@ package com.oto.edyd;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -27,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends SlidingFragmentActivity implements View.OnClickListener{
+public class MainActivity extends SlidingFragmentActivity implements View.OnClickListener {
 
     private CustomViewPager customViewPager;
     private FragmentPagerAdapter mAdapter; //ViewPager适配器
@@ -39,7 +41,6 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     public FragmentManager fragmentManager; //fragment管理器
 
     private Common common;
-    private Common globalCommon;
     private TextView mainTitle; //标题
     private LeftSlidingFragment leftMenuFragment;
     // 定义一个变量，来标识退出时间
@@ -88,13 +89,14 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
     /**
      * 处理底部菜单点击事件,根据不同按钮刷新不同页面
+     *
      * @param v
      */
     @Override
     public void onClick(View v) {
         Intent intent;
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.main_home:
                 mainTitle.setText("首页");
                 customViewPager.setCurrentItem(0);
@@ -107,7 +109,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 break;
             case R.id.main_vehicle_server:
                 mainTitle.setText("运输服务");
-               // Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                // Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
                 if (!common.isLogin()) {
                     Toast.makeText(getApplicationContext(), "用户未登录，请先登录", Toast.LENGTH_LONG).show();
                     intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -132,24 +134,25 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
      * 初始化数据
      */
     private void initFields() {
-        home = (RadioButton)findViewById(R.id.main_home); //底部菜单-首页
-        market = (RadioButton)findViewById(R.id.main_market); //底部菜单-商城
-        vehicleServer = (RadioButton)findViewById(R.id.main_vehicle_server); //底部菜单-交通服务
-        box = (RadioButton)findViewById(R.id.main_box); //底部菜单-百宝箱
-        customViewPager = (CustomViewPager)findViewById(R.id.content_viewpager); //获取ViewPager实现多页面滑动
+        home = (RadioButton) findViewById(R.id.main_home); //底部菜单-首页
+        market = (RadioButton) findViewById(R.id.main_market); //底部菜单-商城
+        vehicleServer = (RadioButton) findViewById(R.id.main_vehicle_server); //底部菜单-交通服务
+        box = (RadioButton) findViewById(R.id.main_box); //底部菜单-百宝箱
+        customViewPager = (CustomViewPager) findViewById(R.id.content_viewpager); //获取ViewPager实现多页面滑动
         customViewPager.setIsScrollable(false); //设置不能滚动
         fragmentManager = getSupportFragmentManager();
         mainTitle = (TextView) findViewById(R.id.main_title);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-        globalCommon = new Common(getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
-        Map<Object, Object> map = new HashMap<Object, Object>();
-        map.put(Constant.TRANSPORT_ROLE, 0); //默认运输角色，设置为司机，标识0
-        //保存账户ID
-        if (!globalCommon.isSave(map)) {
-            Toast.makeText(getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        globalCommon = new Common(getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
+//        Map<Object, Object> map = new HashMap<Object, Object>();
+//        map.put(Constant.TRANSPORT_ROLE, 0); //默认运输角色，设置为司机，标识0
+//        //保存账户ID
+//        if (!globalCommon.isSave(map)) {
+//            Toast.makeText(getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
     }
+
     /**
      * 初始化左侧菜单
      */
@@ -184,7 +187,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     /**
      * 初始化首页
      */
-    private  void initViewPager() {
+    private void initViewPager() {
         MainIndexFragment indexFragment = new MainIndexFragment();
         MainMarketFragment marketFragment = new MainMarketFragment();
         //MainVehicleServerFragment vehicleServerFragment = new MainVehicleServerFragment();
@@ -211,6 +214,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
     /**
      * 显示左侧菜单
+     *
      * @param view
      */
     public void showLeftMenu(View view) {
@@ -224,14 +228,17 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
     /**
      * 用于接收Activity返回数据
+     *
      * @param requestCode
      * @param resultCode
      * @param data
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String enterpriseName;
+        TransportServiceFragment transportServiceFragment;
         //登录返回
-        if(resultCode == Constant.LOGIN_ACTIVITY_RETURN_CODE){
+        if (resultCode == Constant.LOGIN_ACTIVITY_RETURN_CODE) {
             String username = data.getExtras().getString("username");
             leftMenuFragment.userAlias.setText(username);
             leftMenuFragment.exit.setVisibility(View.VISIBLE);
@@ -243,7 +250,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             //}
 
             leftMenuFragment.dataSets.clear();
-            for(int i = 0; i < leftMenuFragment.textResources.length; i++) {
+            for (int i = 0; i < leftMenuFragment.textResources.length; i++) {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("list_image", leftMenuFragment.imageResources[i]);
                 map.put("list_text", leftMenuFragment.textResources[i]);
@@ -251,16 +258,21 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 leftMenuFragment.dataSets.add(map);
             }
             leftMenuFragment.simpleAdapter.notifyDataSetChanged();
+            enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
+            transportServiceFragment = (TransportServiceFragment) listFragment.get(2);
+            if (!(transportServiceFragment.enterpriseName == null)) {
+                transportServiceFragment.enterpriseName.setText(enterpriseName);
+            }
         }
         //注册返回
-        if(resultCode == Constant.REGISTER_ACTIVITY_RETURN_CODE) {
+        if (resultCode == Constant.REGISTER_ACTIVITY_RETURN_CODE) {
             String username = data.getExtras().getString("username");
             leftMenuFragment.userAlias.setText(username);
             leftMenuFragment.accountType.setText("个人");
             leftMenuFragment.exit.setVisibility(View.VISIBLE);
             leftMenuFragment.slidingBottomLine.setVisibility(View.VISIBLE);
             leftMenuFragment.dataSets.clear();
-            for(int i = 0; i < leftMenuFragment.textResources.length; i++) {
+            for (int i = 0; i < leftMenuFragment.textResources.length; i++) {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("list_image", leftMenuFragment.imageResources[i]);
                 map.put("list_text", leftMenuFragment.textResources[i]);
@@ -268,25 +280,31 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 leftMenuFragment.dataSets.add(map);
             }
             leftMenuFragment.simpleAdapter.notifyDataSetChanged();
+            transportServiceFragment = (TransportServiceFragment) listFragment.get(2);
+            enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
+            if (!(transportServiceFragment.enterpriseName == null)) {
+                transportServiceFragment.enterpriseName.setText(enterpriseName);
+            }
         }
         //账户类型返回
-        if(resultCode == Constant.ACCOUNT_TYPE_RESULT_CODE) {
+        if (resultCode == Constant.ACCOUNT_TYPE_RESULT_CODE) {
             //String accountTypeStr = data.getExtras().getString("account_type");
             //Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-            String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
+            enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
             String roleName = common.getStringByKey(Constant.ROLE_NAME);
 
             leftMenuFragment.accountType.setText(enterpriseName);
             leftMenuFragment.roleType.setText(roleName);
-            TransportServiceFragment transportServiceFragment = (TransportServiceFragment)listFragment.get(2);
-            if(!(transportServiceFragment.enterpriseName == null)) {
+            transportServiceFragment = (TransportServiceFragment) listFragment.get(2);
+            if (!(transportServiceFragment.enterpriseName == null)) {
                 transportServiceFragment.enterpriseName.setText(enterpriseName);
             }
         }
 
         //运输服务角色选择返回更新
-        if(resultCode == Constant.TRANSPORT_ROLE_CODE) {
-            TransportServiceFragment transportServiceFragment = (TransportServiceFragment)listFragment.get(2);
+        if (resultCode == Constant.TRANSPORT_ROLE_CODE) {
+            Common globalCommon = new Common(getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
+            transportServiceFragment = (TransportServiceFragment)listFragment.get(2);
             int transportRoleId = Integer.valueOf(globalCommon.getStringByKey(Constant.TRANSPORT_ROLE));
             switch (transportRoleId) {
                 case 0: //司机
@@ -308,7 +326,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             exit();
             return false;
         }
@@ -324,6 +342,45 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             exitTime = System.currentTimeMillis();
         } else {
             finish();
+        }
+    }
+
+    class FragmentVPAdapter extends FragmentPagerAdapter {
+        //private List<Fragment> listFragment;
+        private FragmentManager fm;
+        public FragmentVPAdapter(FragmentManager fm, List<Fragment> listFragment) {
+            super(fm);
+            this.fm = fm;
+            //this.listFragment = listFragment;
+        }
+
+        public void setFragments(List<Fragment> fragments) {
+            if(listFragment != null){
+                FragmentTransaction ft = fm.beginTransaction();
+                for(Fragment f : listFragment){
+                    ft.remove(f);
+                }
+                ft.commitAllowingStateLoss();
+                ft=null;
+                fm.executePendingTransactions();
+            }
+            listFragment = fragments;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+        @Override
+        public Fragment getItem(int arg0) {
+            return listFragment.get(arg0);
+        }
+
+        @Override
+        public int getCount() {
+            return listFragment.size();
         }
     }
 }
