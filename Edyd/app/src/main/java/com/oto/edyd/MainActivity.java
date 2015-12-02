@@ -299,9 +299,32 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
             leftMenuFragment.accountType.setText(enterpriseName);
             leftMenuFragment.roleType.setText(roleName);
-            transportServiceFragment = (TransportUndertakeFragment) listFragment.get(2);
-            if (!(transportServiceFragment.enterpriseName == null)) {
-                transportServiceFragment.enterpriseName.setText(enterpriseName);
+            int transportRoleId = Integer.valueOf(globalCommon.getStringByKey(Constant.TRANSPORT_ROLE));
+            switch (transportRoleId) {
+                case 0: //司机
+                    TransportDriverFragment transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
+                    if (!(transportDriverFragment.enterpriseName == null)) {
+                        transportDriverFragment.enterpriseName.setText(enterpriseName);
+                    }
+                    break;
+                case 1: //发货方
+                    TransportShipperFragment transportShipperFragment = (TransportShipperFragment) listFragment.get(2);
+                    if (!(transportShipperFragment.enterpriseName == null)) {
+                        transportShipperFragment.enterpriseName.setText(enterpriseName);
+                    }
+                    break;
+                case 2: //收货方
+                    TransportReceiverFragment transportReceiverFragment = (TransportReceiverFragment) listFragment.get(2);
+                    if (!(transportReceiverFragment.enterpriseName == null)) {
+                        transportReceiverFragment.enterpriseName.setText(enterpriseName);
+                    }
+                    break;
+                case 3: //承运方
+                    TransportUndertakeFragment transportUndertakeFragment = (TransportUndertakeFragment) listFragment.get(2);
+                    if (!(transportUndertakeFragment.enterpriseName == null)) {
+                        transportUndertakeFragment.enterpriseName.setText(enterpriseName);
+                    }
+                    break;
             }
         }
 
