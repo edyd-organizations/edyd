@@ -16,6 +16,7 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.PolylineOptions;
 import com.oto.edyd.model.TrackBean;
 import com.oto.edyd.model.TrackLineBean;
+import com.oto.edyd.model.TrackPointBean;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.OkHttpClientManager;
@@ -43,7 +44,21 @@ public class ShowTrackActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            switch (msg.what) {
+                case 0x12:
+                    PolylineOptions line = new PolylineOptions();
+                    ArrayList<TrackPointBean> list = tlb.getTraceInfo();
+                    ArrayList<LatLng> pos = new ArrayList<LatLng>();
 
+                    for (TrackPointBean point : list) {
+                        LatLng latLng=new LatLng(point.getLat(),point.getLng());
+                        pos.add(latLng);
+                    }
+                    line.addAll(pos);
+                    line.color(Color.RED);
+                    aMap.addPolyline(line);
+                    break;
+            }
         }
     };
 
@@ -72,9 +87,9 @@ public class ShowTrackActivity extends Activity {
 
     private void setUpMap() {
         // 绘制一个乌鲁木齐到哈尔滨的线
-        aMap.addPolyline((new PolylineOptions()).add(
-                new LatLng(43.828, 87.621), new LatLng(45.808, 126.55)).color(
-                Color.RED));
+//        aMap.addPolyline((new PolylineOptions()).add(
+//                new LatLng(43.828, 87.621), new LatLng(45.808, 126.55)).color(
+//                Color.RED));
     }
 
     private void getInfo(final boolean isFist) {
@@ -82,7 +97,7 @@ public class ShowTrackActivity extends Activity {
 
         String url = Constant.ENTRANCE_PREFIX + "getTruckPosition.json?sessionUuid="
                 + sessionUuid + "&primaryId=" + primaryId;
-        Common.printErrLog("轨迹地图" + url);
+//        Common.printErrLog("轨迹地图" + url);
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
@@ -91,7 +106,7 @@ public class ShowTrackActivity extends Activity {
 
             @Override
             public void onResponse(String response) {
-                Common.printErrLog("轨迹地图" + response);
+//                Common.printErrLog("轨迹地图" + response);
                 JSONObject jsonObject;
                 JSONArray jsonArray;
                 try {
@@ -103,9 +118,12 @@ public class ShowTrackActivity extends Activity {
                     jsonArray = jsonObject.getJSONArray("rows");
                     JSONObject obj = (JSONObject) jsonArray.get(0);
                     String objStr = obj.toString();
-                    Common.printErrLog("解析正常rows" + objStr);
+//                    Common.printErrLog("解析正常rows" + objStr);
                     tlb = Common.readJsonToCommandObject(objStr);
 
+                    Message message = new Message();
+                    message.what = 0x12;
+                    handler.sendMessage(message);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
