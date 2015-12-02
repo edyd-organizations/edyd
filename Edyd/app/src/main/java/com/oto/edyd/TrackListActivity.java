@@ -146,7 +146,7 @@ public class TrackListActivity extends Activity {
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
             TrackBean bean = new TrackBean();
-            bean.setPrimaryId(obj.getString("primaryId"));
+            bean.setPrimaryId(obj.getLong("primaryId"));
             bean.setControlNum(obj.getString("controlNum"));
             bean.setTruckNum(obj.getString("truckNum"));
             bean.setReserveNum(obj.getString("reserveNum"));

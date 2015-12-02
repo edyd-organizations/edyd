@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by Administrator on 2015/12/1.
  */
 public class TrackBean implements Serializable{
-    private String primaryId;
+    private long primaryId;
     private String controlNum;
     private String truckNum;
     private String reserveNum;
@@ -21,11 +21,11 @@ public class TrackBean implements Serializable{
     }
 
 
-    public String getPrimaryId() {
+    public long getPrimaryId() {
         return primaryId;
     }
 
-    public void setPrimaryId(String primaryId) {
+    public void setPrimaryId(long primaryId) {
         this.primaryId = primaryId;
     }
 

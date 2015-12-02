@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.oto.edyd.model.TrackLineBean;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -200,5 +201,22 @@ public class Common {
         Matcher m = p.matcher(phone);
         return m.find();
     }
+
+    static public TrackLineBean readJsonToCommandObject(String jsonData) {
+        if (jsonData == null)
+            return null;
+        if (checkDataIsJson(jsonData) == false)
+            return null;
+        Gson gson = new Gson();
+        TrackLineBean commandObject = null;
+        try {
+            commandObject = gson.fromJson(jsonData, TrackLineBean.class);
+        } catch (Exception ex) {
+            Common.printErrLog("解析jsonData=" + jsonData);
+            ex.printStackTrace();
+        }
+        return commandObject;
+    }
+
 
 }
