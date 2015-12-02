@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -68,6 +69,12 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
                 startActivity(intent);
                 break;
             case R.id.ll_panorama://全景图
+                String menterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+                int enterpriseId = Integer.parseInt(menterpriseId );
+                if (enterpriseId==0){
+                    Toast.makeText(getActivity(),"您没有权限查看",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 intent = new Intent(getActivity(), PanoramaActivity.class);
                 startActivity(intent);
                 break;
