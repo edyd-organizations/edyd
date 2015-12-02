@@ -79,7 +79,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         loginFragmentView = inflater.inflate(R.layout.login, null);
 
         initFields(loginFragmentView); //初始化数据
-
         loginBack.setOnClickListener(this);
         btLogin.setOnClickListener(this);
         linearLayoutRemember.setOnClickListener(this);
