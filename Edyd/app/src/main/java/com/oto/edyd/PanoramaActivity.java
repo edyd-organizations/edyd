@@ -21,8 +21,11 @@ import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.AMap.OnMapLoadedListener;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.Projection;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeAddress;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -49,15 +52,9 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
     private String sessionUuid;
     String location;//得到调度车辆的所有位置信息
     MarkerOptions markerOptions;//标记对象
-/*    String driverName;//司机姓名
-    String controlNum;//调度单号
-    String driverTel;//司机电话
-    String trunckNum;//车号
-    double slat;//纬度
-    double slng;//经度
-    String order;//调度单状况
-    String operTime;//操作时间*/
+    private GeocodeSearch geocoderSearch;
     List<CarInfo> addInfo;
+    TextView address;//地址address
     private LocationManagerProxy mAMapLocationManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,15 +82,21 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
     private void traverse() {
         for (int i=0;i<addInfo.size();i++){
             CarInfo carInfo = addInfo.get(i);
-            LatLng  latlng = new LatLng(carInfo.getSlat(), carInfo.getSlng());
-            addAllMarker(latlng,carInfo);//添加所有的位置
+            double slat = carInfo.getSlat();
+            double slng = carInfo.getSlng();
+            if (slat!=0&&slng!=0){
+                if (slat>0&&slng>0){
+                    LatLng  latlng = new LatLng(slat,slng);
+                    addAllMarker(latlng,carInfo);//添加所有的位置
+                }
+            }
         }
     }
 
     private void requestport() {
         addInfo = new ArrayList<CarInfo>();
-        // location="http://www.edyd.cn/api/v1.0/" +"viewTruckPanorama.json?"+"&sessionUuid="+sessionUuid;//得到调度车辆的所有位置信息
-          location="http://www.edyd.cn/api/v1.0/" +"viewTruckPanorama.json?"+"&sessionUuid="+"879425d835d34ac183dddddf831ecdc7";//得到调度车辆的所有位置信息
+        location=Constant.ENTRANCE_PREFIX +"viewTruckPanorama.json?"+"&sessionUuid="+sessionUuid;//得到调度车辆的所有位置信息
+          //location="http://www.edyd.cn/api/v1.0/" +"viewTruckPanorama.json?"+"&sessionUuid="+"879425d835d34ac183dddddf831ecdc7";//得到调度车辆的所有位置信息
         OkHttpClientManager.getAsyn(location, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
@@ -111,26 +114,27 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                         JSONObject jsonObject = accountTypeArray.getJSONObject(i);
                         int controlStatus = jsonObject.getInt("controlStatus");
                         String order = "";
-                        switch (controlStatus){
+                        switch (controlStatus) {
                             case 0:
-                                order="状态异常";
+                                order = "状态异常";
+                                break;
                             case 20:
-                                order ="装货在途";
+                                order = "装货在途";
                                 break;
                             case 30:
-                                order ="到达装货";
+                                order = "到达装货";
                                 break;
                             case 40:
-                                order="装货完成";
+                                order = "装货完成";
                                 break;
                             case 50:
-                                order ="送货在途";
+                                order = "送货在途";
                                 break;
                             case 60:
-                                order ="到达收货";
+                                order = "到达收货";
                                 break;
                             case 99:
-                                order="收货完成";
+                                order = "收货完成";
                                 break;
                         }
 
@@ -143,7 +147,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                         String operTime = jsonObject.getString("operTime");
                         double slat = Double.parseDouble(lat);
                         double slng = Double.parseDouble(lng);
-                        CarInfo carinfo=new CarInfo();
+                        CarInfo carinfo = new CarInfo();
                         carinfo.setDriverName(driverName);//司机名字
                         carinfo.setControlNum(controlNum);//调度单号
                         carinfo.setDriverTel(driverTel);//司机电话
@@ -152,11 +156,9 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                         carinfo.setOrder(order);
                         carinfo.setSlat(slat);
                         carinfo.setSlng(slng);
-                       /* LatLng  latlng = new LatLng(carinfo.getSlat(), carinfo.getSlng());
-                        addAllMarker(latlng);//添加所有的位置*/
                         addInfo.add(carinfo);
-
                     }
+                    onMapLoaded();
                     Message message = Message.obtain();
                     message.what = 0x20;
                     handler.sendMessage(message);
@@ -165,7 +167,6 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                     e.printStackTrace();
                 }
             }
-
         });
     }
 
@@ -173,7 +174,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
 
         markerOptions = new MarkerOptions();
        // markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.truck));
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.car));
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.car));
         markerOptions.position(latlng);
         markerOptions.title("车辆信息").draggable(true).anchor(0.5f, 0.5f);
         Marker marker = aMap.addMarker(markerOptions);
@@ -204,14 +205,39 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
         aMap.setMyLocationEnabled(true);//默认地图可以自动定位
     }
 
+    /**
+     * 监听amap地图加载成功事件回调
+     */
     @Override
     public void onMapLoaded() {
         // 设置所有maker显示在当前可视区域地图中
-       /* LatLngBounds bounds = new LatLngBounds.Builder()
-                .include(new LatLng(34.7466, 113.625367)).include(new LatLng(30.679879, 104.064855))
-                .include(new LatLng(39.989614, 116.481763)).build();
-        aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,10));*/
+//        LatLngBounds.Builder bounds = new LatLngBounds.Builder();
+//            .include(new LatLng(24.500522, 118.087857)).build();
+        //requestport();
+        LatLngBounds.Builder latlngBoundsB = new LatLngBounds.Builder();
+        LatLngBounds latlngBounds = null;
+        for (int i=0;i<addInfo.size();i++){
+            CarInfo carInfo = addInfo.get(i);
+            double slat = carInfo.getSlat();
+            double slng = carInfo.getSlng();
+            if (slat!=0&&slng!=0){
+                if (slat>0&&slng>0){
+                    LatLng lat=new LatLng(slat,slng);
+                    latlngBoundsB = addlay(latlngBoundsB,lat);
+                }
+            }
+            if (addInfo.size()-1 == i){
+                latlngBounds =  latlngBoundsB.build();
+            }
+        }
+        aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latlngBounds, 10));
     }
+
+
+    private LatLngBounds.Builder addlay(LatLngBounds.Builder latLngBounds, LatLng latLng) {
+        return  latLngBounds.include(latLng);
+    }
+
 
     /**
      * 方法必须重写
@@ -263,7 +289,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
      */
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(this,"infowindow点击",Toast.LENGTH_SHORT).show();
+     //   Toast.makeText(this,"infowindow点击",Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -295,20 +321,6 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
         } else {
             titleUi.setText("");
         }
-       /* TextView Scheduling = ((TextView) infoWindow.findViewById(R.id.Scheduling));//调度单号
-        Scheduling.setText("调度单号："+addInfo.get());
-        TextView carNumber = (TextView) infoWindow.findViewById(R.id.carNumber);//车牌号
-        carNumber.setText("车 牌号："+trunckNum);
-        TextView driver = (TextView) infoWindow.findViewById(R.id.driver);//司机
-        driver.setText("司  机："+driverName);
-        TextView phone = (TextView) infoWindow.findViewById(R.id.phone);//电话
-        driver.setText("电  话："+driverTel);
-        TextView state = (TextView) infoWindow.findViewById(R.id.state);//状态
-        state.setText("状  态："+order);
-        TextView time = (TextView) infoWindow.findViewById(R.id.time);//时间
-        time.setText("时  间："+operTime);
-        TextView address = (TextView) infoWindow.findViewById(R.id.address);//地址
-        time.setText("地  址：");*/
         TextView Scheduling = ((TextView) infoWindow.findViewById(R.id.Scheduling));//调度单号
         Scheduling.setText("调度单号："+carInfo.getControlNum());
         TextView carNumber = (TextView) infoWindow.findViewById(R.id.carNumber);//车牌号
@@ -321,11 +333,16 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
         state.setText("状       态："+carInfo.getOrder());
        /* TextView time = (TextView) infoWindow.findViewById(R.id.time);//时间
         time.setText("时  间："+carInfo.getOperTime());*/
-        TextView address = (TextView) infoWindow.findViewById(R.id.address);//地址
-        address.setText("地       址：");
+        address = (TextView) infoWindow.findViewById(R.id.address);
+        LatLonPoint latLonPoint=new LatLonPoint(carInfo.getSlat(),carInfo.getSlng());
+        RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 200,
+                GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+        geocoderSearch = new GeocodeSearch(this);
+        geocoderSearch.setOnGeocodeSearchListener(this);
+        geocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
+
 
     }
-
     @Override
     public View getInfoContents(Marker marker) {
         return null;
@@ -345,12 +362,20 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
     public void onMarkerDragEnd(Marker marker) {
 
     }
-
     /**
      * 逆地理编码回调
      */
     @Override
-    public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
+    public void onRegeocodeSearched(RegeocodeResult result, int rCode) {
+        if (rCode == 0) {
+       /*
+            if (result != null && result.getGeocodeAddressList() != null
+                    && result.getGeocodeAddressList().size() > 0) {
+
+            }*/
+            String formatAddress = result.getRegeocodeAddress().getFormatAddress();
+            address.setText("地       址："+formatAddress);
+        }
 
     }
 

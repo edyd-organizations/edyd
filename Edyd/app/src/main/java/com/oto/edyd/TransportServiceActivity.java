@@ -18,7 +18,7 @@ public class TransportServiceActivity extends FragmentActivity{
         setContentView(R.layout.common_frame);
         transportServiceFragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = transportServiceFragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.common_frame, new TransportServiceFragment());
+        fragmentTransaction.replace(R.id.common_frame, new TransportUndertakeFragment());
         //fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

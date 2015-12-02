@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -20,9 +21,9 @@ import com.oto.edyd.utils.Constant;
 /**
  * Created by yql on 2015/9/21.
  */
-public class TransportServiceFragment extends Fragment implements View.OnClickListener{
+public class TransportUndertakeFragment extends Fragment implements View.OnClickListener{
 
-    private View transportServiceView;
+    private View transportUndertakeView;
     public FragmentManager fragmentManager; //fragment管理器
 
     private RelativeLayout selectTransportRole; //选择运输服务角色
@@ -41,14 +42,14 @@ public class TransportServiceFragment extends Fragment implements View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //transportServiceView = inflater.inflate(R.layout.transport_service_main, null);
-        transportServiceView = inflater.inflate(R.layout.transport_undertake, null);
-        initFields(transportServiceView);
+        transportUndertakeView = inflater.inflate(R.layout.transport_undertake, null);
+        initFields(transportUndertakeView);
         switchTransportRole();
         selectTransportRole.setOnClickListener(this);
         transportReceiveOrder.setOnClickListener(this);
         distributeOrder.setOnClickListener(this);
         panorama.setOnClickListener(this);
-        return  transportServiceView;
+        return  transportUndertakeView;
     }
 
     @Override
@@ -68,6 +69,12 @@ public class TransportServiceFragment extends Fragment implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.ll_panorama://全景图
+                String menterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+                int enterpriseId = Integer.parseInt(menterpriseId );
+                if (enterpriseId==0){
+                    Toast.makeText(getActivity(),"您没有权限查看",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 intent = new Intent(getActivity(), PanoramaActivity.class);
                 startActivity(intent);
                 break;
@@ -107,7 +114,7 @@ public class TransportServiceFragment extends Fragment implements View.OnClickLi
         String txEnterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
         enterpriseName.setText(txEnterpriseName);
         String txTransportRole = globalCommon.getStringByKey(Constant.TRANSPORT_ROLE);
-        if(txTransportRole!=null && txTransportRole.equals("")) {
+        if(txTransportRole!=null && !txTransportRole.equals("")) {
             int transportRoleId = Integer.valueOf(txTransportRole);
             switch (transportRoleId) {
                 case 0: //司机
