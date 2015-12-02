@@ -95,7 +95,7 @@ public class TransportServiceFragment extends Fragment implements View.OnClickLi
         String txEnterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
         enterpriseName.setText(txEnterpriseName);
         String txTransportRole = globalCommon.getStringByKey(Constant.TRANSPORT_ROLE);
-        if(txTransportRole!=null && txTransportRole.equals("")) {
+        if(txTransportRole!=null && !txTransportRole.equals("")) {
             int transportRoleId = Integer.valueOf(txTransportRole);
             switch (transportRoleId) {
                 case 0: //司机
