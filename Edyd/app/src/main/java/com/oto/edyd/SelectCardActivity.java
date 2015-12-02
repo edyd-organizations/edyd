@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -36,17 +38,22 @@ import java.util.List;
 /**
  * Created by yql on 2015/11/12.
  */
-public class SelectCardActivity extends Activity implements View.OnClickListener {
+public class SelectCardActivity extends Activity implements View.OnClickListener, AbsListView.OnScrollListener {
 
     private LinearLayout back; //返回
     private EditText blurContent; //模糊文本
     private TextView search; //搜索
     private ListView cardListView; //卡列表
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private Common common;
     private List<OilCardInfo> oilCardInfoSet = new ArrayList<OilCardInfo>(); //油卡集合
     private SelectCardAdapter selectCardAdapter;
     private CusProgressDialog cusProgressDialog;
+
+    private int visibleLastIndex = 0; //最后可视项索引
+    private boolean loadFlag = false;
+    private final static int ROWS = 10; //分页加载数据每页10
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +61,20 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.select_card);
         initFields();
 
-        requestAddOilCardList(null);
+        requestAddOilCardList(1, 10, "", 0);
         back.setOnClickListener(this);
         search.setOnClickListener(this);
+        cardListView.setOnScrollListener(this);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            /**
+             * 刷新要做的操作
+             */
+            @Override
+            public void onRefresh() {
+                String searchText = blurContent.getText().toString();
+                requestAddOilCardList(1, 10, searchText, 1);
+            }
+        });
         cardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -82,9 +100,9 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
             public void afterTextChanged(Editable s) {
                 String content = s.toString();
                 if (content == null || content.equals("")) {
-                    requestAddOilCardList(null);
+                    pageRequestAddOilCardList(1, ROWS, "");
                 } else {
-                    requestAddOilCardList(content);
+                    pageRequestAddOilCardList(1, ROWS, content);
                 }
             }
         });
@@ -98,6 +116,7 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
         blurContent = (EditText) findViewById(R.id.blur_content);
         search = (TextView) findViewById(R.id.search);
         cardListView = (ListView) findViewById(R.id.card_list);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         selectCardAdapter = new SelectCardAdapter(getApplicationContext());
 
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
@@ -111,23 +130,47 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
                 break;
             case R.id.search: //搜索
                 //requestAddOilCardList();
-                String text = blurContent.getText().toString();
-                requestAddOilCardList(text);
+                //String text = blurContent.getText().toString();
+                //requestAddOilCardList(text);
                 break;
         }
+    }
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        int lastIndex = selectCardAdapter.getCount(); //数据集最后一项的索引
+        //int lastIndex = itemsLastIndex + 1; //加上底部的loadMoreIndex项
+        if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE  && visibleLastIndex ==lastIndex){
+            //如果是自动加载,可以在这里放置异步加载数据的代码
+            if(loadFlag) {
+                loadFlag = false;
+                if(lastIndex % ROWS == 0) {
+                    int page = lastIndex / ROWS + 1;
+                    //pageRequestTransportOderData(page, ROWS);
+                    String searchText = blurContent.getText().toString();
+                    pageRequestAddOilCardList(page, ROWS, searchText);
+                }
+            }
+
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        visibleLastIndex = firstVisibleItem + visibleItemCount;
     }
 
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case 0x14:
+                case 0x14: //首次加载
                     cardListView.setAdapter(selectCardAdapter);
                     break;
-                case 0x15: //暂无数据
+                case 0x15: //下拉刷新
                     selectCardAdapter.notifyDataSetChanged();
+                    swipeRefreshLayout.setRefreshing(false); //停止刷新
                     break;
-                case 0x16: //暂无数据
+                case 0x16: //上拉加载
                     selectCardAdapter.notifyDataSetChanged();
                     break;
             }
@@ -135,22 +178,22 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
     };
 
         /**
-         * 请求我的加油卡列表
+         * 请求我的加油卡列表, 用于初次加载，和下拉刷新
+         * @param page 第几页
+         * @param rows 每页几条
+         * @param searchText 模糊文本
+         * @param loadType 加载类型
          */
-        private void requestAddOilCardList(final String text) {
+        private void requestAddOilCardList(int page, int rows, String searchText, final int loadType) {
 
             String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
             String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
             String orgCode = common.getStringByKey(Constant.ORG_CODE);
             String url = "";
 
-            if(text == null || text.equals("")) {
-                url = Constant.ENTRANCE_PREFIX + "inqueryOilBindingListInEnterpriseApp.json?sessionUuid=" + sessionUuid +
-                        "&enterpriseId=" + enterpriseId + "&OrgCode=" + orgCode;
-            } else {
-                url = Constant.ENTRANCE_PREFIX + "inqueryOilBindingListInEnterpriseApp.json?"+"sessionUuid="+sessionUuid+"&enterpriseId=" + enterpriseId +
-                        "&OrgCode=" + orgCode + "&cardId=" + text;
-            }
+            url = Constant.ENTRANCE_PREFIX_v1 + "inqueryOilCardDetailByCarIdOrCardIdApp.json?sessionUuid=" + sessionUuid +
+                    "&enterpriseId=" + enterpriseId + "&OrgCode=" + orgCode + "&page=" +
+                    page + "&rows=" + rows + "&serachText=" + searchText;
 
             OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
                 @Override
@@ -186,14 +229,14 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
                                 JSONObject jsonObject = addOilArray.getJSONObject(i);
                                 oilCardInfo.setCarId(jsonObject.getString("carId"));
                                 oilCardInfo.setCardId(jsonObject.getString("cardId"));
-                                oilCardInfo.setCardBalance(jsonObject.getString("cardBalance"));
-                                oilCardInfo.setTime(jsonObject.getString("oilBindingDateTime"));
+                                oilCardInfo.setCardBalance(jsonObject.getString("balance"));
+                                oilCardInfo.setTime(jsonObject.getString("detailDT"));
                                 oilCardInfoSet.add(oilCardInfo);
                             }
                         }
-                        if(text == null) {
+                        if(loadType == 0) { //首次加载
                             message.what = 0x14;
-                        } else {
+                        } else { //下拉刷新
                             message.what = 0x15;
                         }
                         handler.sendMessage(message);
@@ -204,6 +247,69 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
             });
         }
 
+    /**
+     * 上拉加载
+     * @param page 第几页
+     * @param rows 每页几条
+     * @param searchText 模糊文本
+     */
+    private void pageRequestAddOilCardList(int page, int rows, String searchText) {
+
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+        String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+        String orgCode = common.getStringByKey(Constant.ORG_CODE);
+        String url = "";
+
+        url = Constant.ENTRANCE_PREFIX_v1 + "inqueryOilCardDetailByCarIdOrCardIdApp.json?sessionUuid=" + sessionUuid +
+                "&enterpriseId=" + enterpriseId + "&OrgCode=" + orgCode + "&page=" +
+                page + "&rows=" + rows + "&serachText=" + searchText;
+
+        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+            @Override
+            public void onError(Request request, Exception e) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                JSONObject addOilJSON;
+                JSONArray addOilArray;
+                try {
+                    addOilJSON = new JSONObject(response);
+                    String status = addOilJSON.getString("status");
+                    Message message = new Message();
+                    if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        //卡列表数据获取失败
+                        Toast.makeText(getApplicationContext(), "油卡列表获取失败", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    addOilArray = addOilJSON.getJSONArray("rows");
+                    if(addOilArray.length() == 0) {
+                        oilCardInfoSet.clear();
+                        message.what = 0x16;
+                        handler.sendMessage(message);
+                        Toast.makeText(getApplicationContext(), "暂无数据", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (addOilArray.length() > 0) {
+                        for (int i = 0; i < addOilArray.length(); i++) {
+                            OilCardInfo oilCardInfo = new OilCardInfo();
+                            JSONObject jsonObject = addOilArray.getJSONObject(i);
+                            oilCardInfo.setCarId(jsonObject.getString("carId"));
+                            oilCardInfo.setCardId(jsonObject.getString("cardId"));
+                            oilCardInfo.setCardBalance(jsonObject.getString("balance"));
+                            oilCardInfo.setTime(jsonObject.getString("detailDT"));
+                            oilCardInfoSet.add(oilCardInfo);
+                        }
+                    }
+                    message.what = 0x16;
+                    handler.sendMessage(message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
     /**
      * 自定义适配器

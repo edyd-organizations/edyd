@@ -177,28 +177,35 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
         listFragment.add(indexFragment);
         listFragment.add(marketFragment);
-        int transportRoleId = Integer.valueOf(globalCommon.getStringByKey(Constant.TRANSPORT_ROLE));
-        switch (transportRoleId) {
-            case 0: //司机
-                TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
-                listFragment.add(transportDriverFragment);
-                break;
-            case 1: //发货方
-                //listFragment.add(transportServiceFragment);
-                TransportShipperFragment transportShipperFragment = new TransportShipperFragment();
-                listFragment.add(transportShipperFragment);
-                break;
-            case 2: //收货方
-                //listFragment.add(transportServiceFragment);
-                TransportReceiverFragment transportReceiverFragment = new TransportReceiverFragment();
-                listFragment.add(transportReceiverFragment);
-                break;
-            case 3: //承运方
-                TransportUndertakeFragment transportServiceFragment = new TransportUndertakeFragment();
-                listFragment.add(transportServiceFragment);
-                break;
+        String txTransportId = globalCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        if(txTransportId != null && !txTransportId.equals("")) {
+            int transportRoleId = Integer.valueOf(txTransportId);
+            switch (transportRoleId) {
+                case 0: //司机
+                    TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
+                    listFragment.add(transportDriverFragment);
+                    break;
+                case 1: //发货方
+                    //listFragment.add(transportServiceFragment);
+                    TransportShipperFragment transportShipperFragment = new TransportShipperFragment();
+                    listFragment.add(transportShipperFragment);
+                    break;
+                case 2: //收货方
+                    //listFragment.add(transportServiceFragment);
+                    TransportReceiverFragment transportReceiverFragment = new TransportReceiverFragment();
+                    listFragment.add(transportReceiverFragment);
+                    break;
+                case 3: //承运方
+                    TransportUndertakeFragment transportServiceFragment = new TransportUndertakeFragment();
+                    listFragment.add(transportServiceFragment);
+                    break;
 
+            }
+        } else {
+            TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
+            listFragment.add(transportDriverFragment);
         }
+
 
         listFragment.add(boxFragment);
 
@@ -263,10 +270,29 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             }
             leftMenuFragment.simpleAdapter.notifyDataSetChanged();
             enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
-            transportServiceFragment = (TransportUndertakeFragment) listFragment.get(2);
-            if (!(transportServiceFragment.enterpriseName == null)) {
-                transportServiceFragment.enterpriseName.setText(enterpriseName);
-            }
+            int transportRoleId = Integer.valueOf(globalCommon.getStringByKey(Constant.TRANSPORT_ROLE));
+//            switch (transportRoleId) {
+//                case 0: //司机
+//                    //TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
+//                    TransportDriverFragment transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
+//                    transportDriverFragment.enterpriseName.setText(enterpriseName);
+//                    break;
+//                case 1: //发货方
+//                    //TransportShipperFragment transportShipperFragment = new TransportShipperFragment();
+//                    TransportShipperFragment transportShipperFragment = (TransportShipperFragment) listFragment.get(2);
+//                    transportShipperFragment.enterpriseName.setText(enterpriseName);
+//                    break;
+//                case 2: //收货方
+//                    //TransportReceiverFragment transportReceiverFragment = new TransportReceiverFragment();
+//                    TransportReceiverFragment transportReceiverFragment = (TransportReceiverFragment) listFragment.get(2);
+//                    transportReceiverFragment.enterpriseName.setText(enterpriseName);
+//                    break;
+//                case 3: //承运方
+//                    //TransportUndertakeFragment transportUndertakeFragment = new TransportUndertakeFragment();
+//                    TransportUndertakeFragment transportUndertakeFragment = (TransportUndertakeFragment) listFragment.get(2);
+//                    transportUndertakeFragment.enterpriseName.setText(enterpriseName);
+//                    break;
+//            }
         }
         //注册返回
         if (resultCode == Constant.REGISTER_ACTIVITY_RETURN_CODE) {
@@ -284,11 +310,30 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 leftMenuFragment.dataSets.add(map);
             }
             leftMenuFragment.simpleAdapter.notifyDataSetChanged();
-            transportServiceFragment = (TransportUndertakeFragment) listFragment.get(2);
             enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
-            if (!(transportServiceFragment.enterpriseName == null)) {
-                transportServiceFragment.enterpriseName.setText(enterpriseName);
-            }
+            int transportRoleId = Integer.valueOf(globalCommon.getStringByKey(Constant.TRANSPORT_ROLE));
+//            switch (transportRoleId) {
+//                case 0: //司机
+//                    //TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
+//                    TransportDriverFragment transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
+//                    transportDriverFragment.enterpriseName.setText(enterpriseName);
+//                    break;
+//                case 1: //发货方
+//                    //TransportShipperFragment transportShipperFragment = new TransportShipperFragment();
+//                    TransportShipperFragment transportShipperFragment = (TransportShipperFragment) listFragment.get(2);
+//                    transportShipperFragment.enterpriseName.setText(enterpriseName);
+//                    break;
+//                case 2: //收货方
+//                    //TransportReceiverFragment transportReceiverFragment = new TransportReceiverFragment();
+//                    TransportReceiverFragment transportReceiverFragment = (TransportReceiverFragment) listFragment.get(2);
+//                    transportReceiverFragment.enterpriseName.setText(enterpriseName);
+//                    break;
+//                case 3: //承运方
+//                    //TransportUndertakeFragment transportUndertakeFragment = new TransportUndertakeFragment();
+//                    TransportUndertakeFragment transportUndertakeFragment = (TransportUndertakeFragment) listFragment.get(2);
+//                    transportUndertakeFragment.enterpriseName.setText(enterpriseName);
+//                    break;
+//            }
         }
         //账户类型返回
         if (resultCode == Constant.ACCOUNT_TYPE_RESULT_CODE) {

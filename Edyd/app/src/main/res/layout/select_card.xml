@@ -73,13 +73,17 @@
                 android:layout_marginLeft="2dp"
                 android:background="@drawable/border_corner_login_enable"/>
         </LinearLayout>
-        <ListView
-            android:id="@+id/card_list"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:choiceMode="singleChoice"
-            android:background="@color/white">
+            android:layout_height="match_parent">
 
-        </ListView>
+            <ListView
+                android:id="@+id/card_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:choiceMode="singleChoice"
+                android:background="@color/white"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 </LinearLayout>
