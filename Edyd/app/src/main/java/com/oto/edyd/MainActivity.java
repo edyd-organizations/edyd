@@ -2,7 +2,6 @@ package com.oto.edyd;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -33,6 +32,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
     private CustomViewPager customViewPager;
     private FragmentPagerAdapter mAdapter; //ViewPager适配器
+    private EFragmentAdapter eAdapter;
     private List<Fragment> listFragment = new ArrayList<Fragment>(); //存储Fragment
     private RadioButton home; //首页
     private RadioButton market; //商城
@@ -41,10 +41,12 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     public FragmentManager fragmentManager; //fragment管理器
 
     private Common common;
+    private Common globalCommon;
     private TextView mainTitle; //标题
     private LeftSlidingFragment leftMenuFragment;
-    // 定义一个变量，来标识退出时间
-    private long exitTime = 0;
+    private long exitTime = 0; // 定义一个变量，来标识退出时间
+
+    boolean[] fragmentsUpdateFlag = { false, false, false, false };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
         initFields(); //初始化字段
         initLeftMenu();//初始化侧滑栏
-        initViewPager(); //初始化首页
+        initViewPager(); //初始化ViewPager
 
         home.setOnClickListener(this);
         market.setOnClickListener(this);
@@ -65,25 +67,13 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         UmengUpdateAgent.update(this);
     }
 
-/*    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }*/
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -109,7 +99,6 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 break;
             case R.id.main_vehicle_server:
                 mainTitle.setText("运输服务");
-                // Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
                 if (!common.isLogin()) {
                     Toast.makeText(getApplicationContext(), "用户未登录，请先登录", Toast.LENGTH_LONG).show();
                     intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -143,14 +132,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         fragmentManager = getSupportFragmentManager();
         mainTitle = (TextView) findViewById(R.id.main_title);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-//        globalCommon = new Common(getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
-//        Map<Object, Object> map = new HashMap<Object, Object>();
-//        map.put(Constant.TRANSPORT_ROLE, 0); //默认运输角色，设置为司机，标识0
-//        //保存账户ID
-//        if (!globalCommon.isSave(map)) {
-//            Toast.makeText(getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
+        globalCommon = new Common(getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
     }
 
     /**
@@ -185,31 +167,53 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     }
 
     /**
-     * 初始化首页
+     * 初始化ViewPager
      */
     private void initViewPager() {
         MainIndexFragment indexFragment = new MainIndexFragment();
         MainMarketFragment marketFragment = new MainMarketFragment();
-        //MainVehicleServerFragment vehicleServerFragment = new MainVehicleServerFragment();
-        TransportServiceFragment transportServiceFragment = new TransportServiceFragment();
+        //TransportUndertakeFragment transportServiceFragment = new TransportUndertakeFragment();
         MainBoxFragment boxFragment = new MainBoxFragment();
 
         listFragment.add(indexFragment);
         listFragment.add(marketFragment);
-        listFragment.add(transportServiceFragment);
+        int transportRoleId = Integer.valueOf(globalCommon.getStringByKey(Constant.TRANSPORT_ROLE));
+        switch (transportRoleId) {
+            case 0: //司机
+                TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
+                listFragment.add(transportDriverFragment);
+                break;
+            case 1: //发货方
+                //listFragment.add(transportServiceFragment);
+                TransportShipperFragment transportShipperFragment = new TransportShipperFragment();
+                listFragment.add(transportShipperFragment);
+                break;
+            case 2: //收货方
+                //listFragment.add(transportServiceFragment);
+                TransportReceiverFragment transportReceiverFragment = new TransportReceiverFragment();
+                listFragment.add(transportReceiverFragment);
+                break;
+            case 3: //承运方
+                TransportUndertakeFragment transportServiceFragment = new TransportUndertakeFragment();
+                listFragment.add(transportServiceFragment);
+                break;
+
+        }
+
         listFragment.add(boxFragment);
 
-        mAdapter = new FragmentPagerAdapter(fragmentManager){
-            @Override
-            public int getCount() {
-                return listFragment.size();
-            }
-            @Override
-            public Fragment getItem(int position) {
-                return listFragment.get(position);
-            }
-        };
-        customViewPager.setAdapter(mAdapter);
+//        mAdapter = new FragmentPagerAdapter(fragmentManager){
+//            @Override
+//            public int getCount() {
+//                return listFragment.size();
+//            }
+//            @Override
+//            public Fragment getItem(int position) {
+//                return listFragment.get(position);
+//            }
+//        };
+        eAdapter = new EFragmentAdapter(fragmentManager);
+        customViewPager.setAdapter(eAdapter);
     }
 
     /**
@@ -236,7 +240,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         String enterpriseName;
-        TransportServiceFragment transportServiceFragment;
+        TransportUndertakeFragment transportServiceFragment;
         //登录返回
         if (resultCode == Constant.LOGIN_ACTIVITY_RETURN_CODE) {
             String username = data.getExtras().getString("username");
@@ -259,7 +263,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             }
             leftMenuFragment.simpleAdapter.notifyDataSetChanged();
             enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
-            transportServiceFragment = (TransportServiceFragment) listFragment.get(2);
+            transportServiceFragment = (TransportUndertakeFragment) listFragment.get(2);
             if (!(transportServiceFragment.enterpriseName == null)) {
                 transportServiceFragment.enterpriseName.setText(enterpriseName);
             }
@@ -280,7 +284,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 leftMenuFragment.dataSets.add(map);
             }
             leftMenuFragment.simpleAdapter.notifyDataSetChanged();
-            transportServiceFragment = (TransportServiceFragment) listFragment.get(2);
+            transportServiceFragment = (TransportUndertakeFragment) listFragment.get(2);
             enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
             if (!(transportServiceFragment.enterpriseName == null)) {
                 transportServiceFragment.enterpriseName.setText(enterpriseName);
@@ -295,7 +299,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
             leftMenuFragment.accountType.setText(enterpriseName);
             leftMenuFragment.roleType.setText(roleName);
-            transportServiceFragment = (TransportServiceFragment) listFragment.get(2);
+            transportServiceFragment = (TransportUndertakeFragment) listFragment.get(2);
             if (!(transportServiceFragment.enterpriseName == null)) {
                 transportServiceFragment.enterpriseName.setText(enterpriseName);
             }
@@ -303,21 +307,36 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
         //运输服务角色选择返回更新
         if (resultCode == Constant.TRANSPORT_ROLE_CODE) {
-            Common globalCommon = new Common(getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
-            transportServiceFragment = (TransportServiceFragment)listFragment.get(2);
+            //transportServiceFragment = (TransportServiceFragment)listFragment.get(2);
             int transportRoleId = Integer.valueOf(globalCommon.getStringByKey(Constant.TRANSPORT_ROLE));
             switch (transportRoleId) {
                 case 0: //司机
-                    transportServiceFragment.transportRole.setText("司机");
+                    //transportServiceFragment.transportRole.setText("司机");
+                    TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
+                    listFragment.set(2, transportDriverFragment);
+                    fragmentsUpdateFlag[2] = true;
+                    eAdapter.notifyDataSetChanged();
                     break;
                 case 1: //发货方
-                    transportServiceFragment.transportRole.setText("发货方");
+                    //transportServiceFragment.transportRole.setText("发货方");
+                    TransportShipperFragment transportShipperFragment = new TransportShipperFragment();
+                    listFragment.set(2, transportShipperFragment);
+                    fragmentsUpdateFlag[2] = true;
+                    eAdapter.notifyDataSetChanged();
                     break;
                 case 2: //收货方
-                    transportServiceFragment.transportRole.setText("收货方");
+                    //transportServiceFragment.transportRole.setText("收货方");
+                    TransportReceiverFragment transportReceiverFragment = new TransportReceiverFragment();
+                    listFragment.set(2, transportReceiverFragment);
+                    fragmentsUpdateFlag[2] = true;
+                    eAdapter.notifyDataSetChanged();
                     break;
                 case 3: //承运方
-                    transportServiceFragment.transportRole.setText("承运方");
+                    //transportServiceFragment.transportRole.setText("承运方");
+                    TransportUndertakeFragment transportUndertakeFragment = new TransportUndertakeFragment();
+                    listFragment.set(2, transportUndertakeFragment);
+                    fragmentsUpdateFlag[2] = true;
+                    eAdapter.notifyDataSetChanged();
                     break;
             }
         }
@@ -345,42 +364,169 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         }
     }
 
-    class FragmentVPAdapter extends FragmentPagerAdapter {
-        //private List<Fragment> listFragment;
-        private FragmentManager fm;
-        public FragmentVPAdapter(FragmentManager fm, List<Fragment> listFragment) {
+//    class EFragmentAdapter extends FragmentPagerAdapter {
+//
+//        private FragmentManager fm;
+//
+//        public EFragmentAdapter(FragmentManager fm) {
+//            super(fm);
+//            this.fm = fm;
+//        }
+//
+//        /**
+//         * 这里存在POSITION_UNCHANGED和POSITION_NONE这两种情况
+//         * 1、返回POSITION_UNCHANGED表示item位置没有变换，会使用FragmentManager缓存中的Fragment,所以
+//         * 即使调用了notifyDataSetChanged没有刷新数据的效果
+//         * 2、返回POSITION_NONE表示item不存在，需要重新绘制，此时会从新加载数据源中的数据
+//         * @param object
+//         * @return
+//         */
+//        @Override
+//        public int getItemPosition(Object object) {
+//            return POSITION_NONE;
+//        }
+//
+//        /**
+//         *返回指定位置Fragment
+//         * @param position
+//         * @return
+//         */
+//        @Override
+//        public Fragment getItem(int position) {
+//            return listFragment.get(position);
+//        }
+//
+//        /**
+//         * 返回大小
+//         */
+//        @Override
+//        public int getCount() {
+//            return listFragment.size();
+//        }
+//
+//        public void setFragments(List<Fragment> fragments) {
+//            if(listFragment != null) {
+//                FragmentTransaction ft = fm.beginTransaction();
+//                for(Fragment f : listFragment){
+//                    ft.remove(f);
+//                }
+//                ft.commitAllowingStateLoss();
+//                ft=null;
+//                fragmentManager.executePendingTransactions();
+//            }
+//            listFragment = fragments;
+//            notifyDataSetChanged();
+//        }
+//    }
+
+//    class EFragmentAdapter extends FragmentPagerAdapter {
+//        private List<Fragment> fragments;
+//        private FragmentManager fm;
+//        public EFragmentAdapter(FragmentManager fm, List<Fragment> fragments) {
+//            super(fm);
+//            this.fm = fm;
+//            this.fragments = fragments;
+//        }
+//
+//        public void setFragments(List<Fragment> fragments) {
+//            if(this.fragments != null){
+//                FragmentTransaction ft = fm.beginTransaction();
+//                for(Fragment f:this.fragments){
+//                    ft.remove(f);
+//                }
+//                ft.commitAllowingStateLoss();
+//                ft=null;
+//                fm.executePendingTransactions();
+//            }
+//            this.fragments = fragments;
+//            notifyDataSetChanged();
+//        }
+//
+//        @Override
+//        public Object instantiateItem(ViewGroup container, int position) {
+//            return super.instantiateItem(container, position);
+//        }
+//
+//        @Override
+//        public int getItemPosition(Object object) {
+//            return POSITION_NONE;
+//        }
+//
+//        @Override
+//        public Fragment getItem(int arg0) {
+//            return fragments.get(arg0);
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return fragments.size();
+//        }
+//    }
+
+    /**
+     * FragmentPager适配器
+     */
+    class EFragmentAdapter extends FragmentPagerAdapter {
+        FragmentManager fm;
+
+        EFragmentAdapter(FragmentManager fm) {
             super(fm);
             this.fm = fm;
-            //this.listFragment = listFragment;
         }
 
-        public void setFragments(List<Fragment> fragments) {
-            if(listFragment != null){
-                FragmentTransaction ft = fm.beginTransaction();
-                for(Fragment f : listFragment){
-                    ft.remove(f);
-                }
-                ft.commitAllowingStateLoss();
-                ft=null;
-                fm.executePendingTransactions();
-            }
-            listFragment = fragments;
-            notifyDataSetChanged();
+        @Override
+        public int getCount() {
+            return listFragment.size();
         }
 
+        /**
+         * 返回指定位置Fragment
+         * @param position
+         * @return
+         */
+        @Override
+        public Fragment getItem(int position) {
+            return listFragment.get(position);
+        }
+
+        /**
+         * 这里存在POSITION_UNCHANGED和POSITION_NONE这两种情况
+         * 1、返回POSITION_UNCHANGED表示item位置没有变换，会使用FragmentManager缓存中的Fragment,所以
+         * 即使调用了notifyDataSetChanged没有刷新数据的效果
+         * 2、返回POSITION_NONE表示item不存在，需要重新绘制，此时会从新加载数据源中的数据
+         * @param object
+         * @return
+         */
         @Override
         public int getItemPosition(Object object) {
             return POSITION_NONE;
         }
 
         @Override
-        public Fragment getItem(int arg0) {
-            return listFragment.get(arg0);
-        }
+        public Object instantiateItem(ViewGroup container, int position) {
+            //得到缓存的fragment
+            Fragment fragment = (Fragment) super.instantiateItem(container,
+                    position);
+            //得到tag，这点很重要
+            String fragmentTag = fragment.getTag();
 
-        @Override
-        public int getCount() {
-            return listFragment.size();
+            if (fragmentsUpdateFlag[position]) {
+                //如果这个fragment需要更新
+                FragmentTransaction ft = fm.beginTransaction();
+                //移除旧的fragment
+                ft.remove(fragment);
+                //换成新的fragment
+                fragment = listFragment.get(position);
+                //添加新fragment时必须用前面获得的tag，这点很重要
+                ft.add(container.getId(), fragment, fragmentTag);
+                ft.attach(fragment);
+                ft.commitAllowingStateLoss();
+                ft = null;
+                //复位更新标志
+                fragmentsUpdateFlag[position] = false;
+            }
+
+            return fragment;
         }
     }
 }

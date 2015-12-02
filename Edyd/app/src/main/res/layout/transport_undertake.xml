@@ -43,7 +43,7 @@
                     android:layout_marginTop="5dp"
                     android:textSize="14sp"
                     android:layout_gravity="right"
-                    android:text="承运方" />
+                    android:text="承运方"/>
             </LinearLayout>
             <ImageView
                 android:layout_width="wrap_content"

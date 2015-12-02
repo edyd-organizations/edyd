@@ -20,9 +20,9 @@ import com.oto.edyd.utils.Constant;
 /**
  * Created by yql on 2015/9/21.
  */
-public class TransportServiceFragment extends Fragment implements View.OnClickListener{
+public class TransportUndertakeFragment extends Fragment implements View.OnClickListener{
 
-    private View transportServiceView;
+    private View transportUndertakeView;
     public FragmentManager fragmentManager; //fragment管理器
 
     private RelativeLayout selectTransportRole; //选择运输服务角色
@@ -41,14 +41,14 @@ public class TransportServiceFragment extends Fragment implements View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //transportServiceView = inflater.inflate(R.layout.transport_service_main, null);
-        transportServiceView = inflater.inflate(R.layout.transport_undertake, null);
-        initFields(transportServiceView);
+        transportUndertakeView = inflater.inflate(R.layout.transport_undertake, null);
+        initFields(transportUndertakeView);
         switchTransportRole();
         selectTransportRole.setOnClickListener(this);
         transportReceiveOrder.setOnClickListener(this);
         distributeOrder.setOnClickListener(this);
         panorama.setOnClickListener(this);
-        return  transportServiceView;
+        return  transportUndertakeView;
     }
 
     @Override

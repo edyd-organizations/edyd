@@ -18,7 +18,7 @@ import com.oto.edyd.utils.Constant;
 /**
  * Created by yql on 2015/12/1.
  */
-public class TransportDriverFragment extends Fragment implements View.OnClickListener{
+public class TransportReceiverFragment extends Fragment implements View.OnClickListener{
 
     private View transportDriverView;
     public FragmentManager fragmentManager; //fragment管理器
@@ -33,7 +33,7 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View transportDriverView = inflater.inflate(R.layout.transport_driver, null);
+        View transportDriverView = inflater.inflate(R.layout.transport_receiver, null);
         initFields(transportDriverView);
         switchTransportRole();
 
@@ -90,4 +90,5 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
             }
         }
     }
+
 }
