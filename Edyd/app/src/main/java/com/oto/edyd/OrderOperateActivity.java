@@ -16,21 +16,17 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amap.api.maps.LocationSource;
-import com.oto.edyd.service.TimerService;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.MLocation;
 import com.oto.edyd.utils.OkHttpClientManager;
-import com.oto.edyd.utils.ServiceUtil;
 import com.squareup.okhttp.Request;
 
 import org.json.JSONArray;
@@ -51,7 +47,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
 
     private LinearLayout receiveOrderBack; //返回
     private ListView receiveOrderList; //接单
-    private TextView historyOrder; //历史订单
+    //private TextView historyOrder; //历史订单
     private CusProgressDialog receiveOrderDialog; //页面切换过度
     private SwipeRefreshLayout mPullToRefreshScrollView = null; //下拉组件
     //private ScrollView mScrollView = null; //滚动视图
@@ -107,7 +103,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                 startActivityForResult(intent, 0x21);
             }
         });
-        historyOrder.setOnClickListener(this);
+        //historyOrder.setOnClickListener(this);
     }
 
     /**
@@ -115,7 +111,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
      */
     private void initFields() {
         receiveOrderBack = (LinearLayout) findViewById(R.id.receive_order_back);
-        historyOrder = (TextView) findViewById(R.id.history_order);
+        //historyOrder = (TextView) findViewById(R.id.history_order);
         receiveOrderList = (ListView) findViewById(R.id.receive_order_list);
         //loadMoreView = getLayoutInflater().inflate(R.layout.load_more, null);
         //loadMoreButton = (Button)loadMoreView.findViewById(R.id.load_more_button);
@@ -131,9 +127,9 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
             case R.id.receive_order_back:
                 finish();
                 break;
-            case R.id.history_order:
-                Intent intent = new Intent(OrderOperateActivity.this, HistoryTransportOrderActivity.class);
-                startActivity(intent);
+//            case R.id.history_order:
+//                Intent intent = new Intent(OrderOperateActivity.this, HistoryTransportOrderActivity.class);
+//                startActivity(intent);
 
         }
     }
