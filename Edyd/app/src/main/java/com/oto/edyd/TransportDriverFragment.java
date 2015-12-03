@@ -9,8 +9,11 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -26,6 +29,11 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
     private RelativeLayout selectTransportRole; //选择运输服务角色
     public TextView enterpriseName; //用户名
     public TextView transportRole; //角色
+    private LinearLayout llWaitingExecuteOrders; //待执行订单
+    private LinearLayout llHistoryOrders; //历史订单
+    private LinearLayout llExecutingOrders; //执行中的订单
+    private LinearLayout llViewTrack; //查看轨迹
+    private ImageView ivReceiveOrder; //接单
 
     private Common common;
     private Common globalCommon;
@@ -38,6 +46,11 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
         switchTransportRole();
 
         selectTransportRole.setOnClickListener(this);
+        llWaitingExecuteOrders.setOnClickListener(this);
+        llHistoryOrders.setOnClickListener(this);
+        llExecutingOrders.setOnClickListener(this);
+        llViewTrack.setOnClickListener(this);
+        ivReceiveOrder.setOnClickListener(this);
         return transportDriverView;
     }
 
@@ -49,6 +62,11 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
         selectTransportRole = (RelativeLayout) view.findViewById(R.id.select_transport_role);
         enterpriseName = (TextView) view.findViewById(R.id.enterprise_name);
         transportRole = (TextView) view.findViewById(R.id.transport_role);
+        llWaitingExecuteOrders = (LinearLayout) view.findViewById(R.id.ll_waiting_execute_orders);
+        llHistoryOrders = (LinearLayout) view.findViewById(R.id.ll_history_orders);
+        llExecutingOrders = (LinearLayout) view.findViewById(R.id.ll_executing_orders);
+        llViewTrack = (LinearLayout) view.findViewById(R.id.ll_view_track);
+        ivReceiveOrder = (ImageView) view.findViewById(R.id.iv_receive_order);
 
         globalCommon = new Common(getActivity().getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
@@ -61,6 +79,24 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
             case R.id.select_transport_role: //选择角色
                 intent = new Intent(getActivity(), SelectTransportRole.class);
                 startActivityForResult(intent, 0x10);
+                break;
+            case R.id.iv_receive_order: //接单
+                intent = new Intent(getActivity().getApplicationContext(), OrderOperateActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.ll_waiting_execute_orders: //待执行订单
+                intent = new Intent(getActivity().getApplicationContext(), OrderOperateActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.ll_history_orders: //历史订单
+                intent = new Intent(getActivity().getApplicationContext(), HistoryTransportOrderActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.ll_executing_orders: //执行订单
+                Toast.makeText(getActivity().getApplicationContext(), "开发中...", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.ll_view_track: //查看轨迹
+                Toast.makeText(getActivity().getApplicationContext(), "开发中...", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

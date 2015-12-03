@@ -100,9 +100,9 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
             public void afterTextChanged(Editable s) {
                 String content = s.toString();
                 if (content == null || content.equals("")) {
-                    pageRequestAddOilCardList(1, ROWS, "");
+                    requestAddOilCardList(1, 10, content, 2);
                 } else {
-                    pageRequestAddOilCardList(1, ROWS, content);
+                    requestAddOilCardList(1, 10, content, 2);
                 }
             }
         });
@@ -192,7 +192,7 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
             String url = "";
 
             url = Constant.ENTRANCE_PREFIX_v1 + "inqueryOilCardDetailByCarIdOrCardIdApp.json?sessionUuid=" + sessionUuid +
-                    "&enterpriseId=" + enterpriseId + "&OrgCode=" + orgCode + "&page=" +
+                    "&enterpriseId=" + enterpriseId + "&orgCode=" + orgCode + "&page=" +
                     page + "&rows=" + rows + "&serachText=" + searchText;
 
             OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
@@ -222,6 +222,7 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
                             Toast.makeText(getApplicationContext(), "暂无数据", Toast.LENGTH_SHORT).show();
                             return;
                         }
+                        loadFlag = true;
                         oilCardInfoSet.clear();
                         if (addOilArray.length() > 0) {
                             for (int i = 0; i < addOilArray.length(); i++) {
@@ -261,7 +262,7 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
         String url = "";
 
         url = Constant.ENTRANCE_PREFIX_v1 + "inqueryOilCardDetailByCarIdOrCardIdApp.json?sessionUuid=" + sessionUuid +
-                "&enterpriseId=" + enterpriseId + "&OrgCode=" + orgCode + "&page=" +
+                "&enterpriseId=" + enterpriseId + "&orgCode=" + orgCode + "&page=" +
                 page + "&rows=" + rows + "&serachText=" + searchText;
 
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
@@ -291,6 +292,7 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
                         Toast.makeText(getApplicationContext(), "暂无数据", Toast.LENGTH_SHORT).show();
                         return;
                     }
+                    loadFlag = true;
                     if (addOilArray.length() > 0) {
                         for (int i = 0; i < addOilArray.length(); i++) {
                             OilCardInfo oilCardInfo = new OilCardInfo();

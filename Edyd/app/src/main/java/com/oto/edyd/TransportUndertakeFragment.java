@@ -49,6 +49,7 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
         transportReceiveOrder.setOnClickListener(this);
         distributeOrder.setOnClickListener(this);
         panorama.setOnClickListener(this);
+        driverInfo.setOnClickListener(this);
         return  transportUndertakeView;
     }
 
@@ -77,6 +78,9 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
                 }
                 intent = new Intent(getActivity(), PanoramaActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.ll_driver_info: //司机信息
+                Toast.makeText(getActivity().getApplicationContext(), "开发中...", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

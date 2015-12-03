@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <!--模拟ActionBar-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/user_icon_8">
-
         <LinearLayout
-            android:id="@+id/receive_order_back"
+            android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:gravity="center">
-            <ImageView
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@mipmap/ic_chevron_left_white_36dp"/>
@@ -27,51 +24,21 @@
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
         </LinearLayout>
-
         <TextView
-            android:id="@+id/tv_order_detail_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/receive_order_title"
             android:gravity="center"
+            android:text="@string/receive_order_title"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold"/>
-        <!--右边菜单-->
-<!--        <TextView
-            android:id="@+id/history_order"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="12dp"
-            android:textSize="16sp"
-            android:textColor="@android:color/white"
-            android:text="历史订单"/>-->
     </RelativeLayout>
-
-<!--    <com.oto.edyd.lib.swiperefresh.PullToRefreshScrollView
-        xmlns:ptr="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/pull_refresh_scrollview_order"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fadeScrollbars="true"
-        android:scrollbars="none"
-        ptr:ptrAnimationStyle="flip"
-        ptr:ptrMode="pullFromStart" >
-        <com.oto.edyd.widget.MenuListView
-            android:id="@+id/receive_order_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none"/>
-    </com.oto.edyd.lib.swiperefresh.PullToRefreshScrollView>-->
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ListView
-            android:id="@+id/receive_order_list"
+            android:id="@+id/shipper_order_lists"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none"/>

@@ -105,8 +105,6 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                     startActivityForResult(intent, 0x03);
                     return;
                 }
-                //intent = new Intent(MainActivity.this, OrderOperateActivity.class);
-                //startActivity(intent);
                 customViewPager.setCurrentItem(2);
                 break;
             case R.id.main_box:
@@ -410,7 +408,12 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         }
     }
 
-
+    /**
+     * 按键监听
+     * @param keyCode
+     * @param event
+     * @return
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -432,106 +435,8 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         }
     }
 
-//    class EFragmentAdapter extends FragmentPagerAdapter {
-//
-//        private FragmentManager fm;
-//
-//        public EFragmentAdapter(FragmentManager fm) {
-//            super(fm);
-//            this.fm = fm;
-//        }
-//
-//        /**
-//         * 这里存在POSITION_UNCHANGED和POSITION_NONE这两种情况
-//         * 1、返回POSITION_UNCHANGED表示item位置没有变换，会使用FragmentManager缓存中的Fragment,所以
-//         * 即使调用了notifyDataSetChanged没有刷新数据的效果
-//         * 2、返回POSITION_NONE表示item不存在，需要重新绘制，此时会从新加载数据源中的数据
-//         * @param object
-//         * @return
-//         */
-//        @Override
-//        public int getItemPosition(Object object) {
-//            return POSITION_NONE;
-//        }
-//
-//        /**
-//         *返回指定位置Fragment
-//         * @param position
-//         * @return
-//         */
-//        @Override
-//        public Fragment getItem(int position) {
-//            return listFragment.get(position);
-//        }
-//
-//        /**
-//         * 返回大小
-//         */
-//        @Override
-//        public int getCount() {
-//            return listFragment.size();
-//        }
-//
-//        public void setFragments(List<Fragment> fragments) {
-//            if(listFragment != null) {
-//                FragmentTransaction ft = fm.beginTransaction();
-//                for(Fragment f : listFragment){
-//                    ft.remove(f);
-//                }
-//                ft.commitAllowingStateLoss();
-//                ft=null;
-//                fragmentManager.executePendingTransactions();
-//            }
-//            listFragment = fragments;
-//            notifyDataSetChanged();
-//        }
-//    }
-
-//    class EFragmentAdapter extends FragmentPagerAdapter {
-//        private List<Fragment> fragments;
-//        private FragmentManager fm;
-//        public EFragmentAdapter(FragmentManager fm, List<Fragment> fragments) {
-//            super(fm);
-//            this.fm = fm;
-//            this.fragments = fragments;
-//        }
-//
-//        public void setFragments(List<Fragment> fragments) {
-//            if(this.fragments != null){
-//                FragmentTransaction ft = fm.beginTransaction();
-//                for(Fragment f:this.fragments){
-//                    ft.remove(f);
-//                }
-//                ft.commitAllowingStateLoss();
-//                ft=null;
-//                fm.executePendingTransactions();
-//            }
-//            this.fragments = fragments;
-//            notifyDataSetChanged();
-//        }
-//
-//        @Override
-//        public Object instantiateItem(ViewGroup container, int position) {
-//            return super.instantiateItem(container, position);
-//        }
-//
-//        @Override
-//        public int getItemPosition(Object object) {
-//            return POSITION_NONE;
-//        }
-//
-//        @Override
-//        public Fragment getItem(int arg0) {
-//            return fragments.get(arg0);
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return fragments.size();
-//        }
-//    }
-
     /**
+     * FragmentPager刷新Fragment
      * FragmentPager适配器
      */
     class EFragmentAdapter extends FragmentPagerAdapter {

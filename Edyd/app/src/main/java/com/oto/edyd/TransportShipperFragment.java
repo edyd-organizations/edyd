@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
     private RelativeLayout selectTransportRole; //选择运输服务角色
     public TextView enterpriseName; //用户名
     public TextView transportRole; //角色
+    private LinearLayout llOnTheWayOrders; //在途订单
 
     private Common common;
     private Common globalCommon;
@@ -49,6 +51,7 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
         selectTransportRole = (RelativeLayout) view.findViewById(R.id.select_transport_role);
         enterpriseName = (TextView) view.findViewById(R.id.enterprise_name);
         transportRole = (TextView) view.findViewById(R.id.transport_role);
+        llOnTheWayOrders = (LinearLayout) view.findViewById(R.id.ll_on_the_way_orders);
 
         globalCommon = new Common(getActivity().getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
