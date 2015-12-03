@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.CharacterPickerDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -33,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
  * Created by Administrator on 2015/11/12.
  */
 public class DistributionDetailedSearchActivity extends Activity {
@@ -57,8 +57,8 @@ public class DistributionDetailedSearchActivity extends Activity {
         sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
         initView();
-        //首次查询信息；
-        seachCar("");
+
+        seachCar(""); //首次查询信息；
 
         adapter = new DistributeDetailAdapter();
         listview_result.setAdapter(adapter);
@@ -139,6 +139,10 @@ public class DistributionDetailedSearchActivity extends Activity {
         handler.sendMessage(message);
     }
 
+    /**
+     * 功能：
+     * @param cardId
+     */
     private void seachCar(String cardId) {
 //        String cardId = input_number_or_card.getText().toString().trim();
 

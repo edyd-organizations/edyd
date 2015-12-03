@@ -158,7 +158,9 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                         carinfo.setSlng(slng);
                         addInfo.add(carinfo);
                     }
-                    onMapLoaded();
+                    if (addInfo.size()!=0){
+                        onMapLoaded();
+                    }
                     Message message = Message.obtain();
                     message.what = 0x20;
                     handler.sendMessage(message);
@@ -216,18 +218,19 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
         //requestport();
         LatLngBounds.Builder latlngBoundsB = new LatLngBounds.Builder();
         LatLngBounds latlngBounds = null;
+        boolean isenter = false;
         for (int i=0;i<addInfo.size();i++){
             CarInfo carInfo = addInfo.get(i);
             double slat = carInfo.getSlat();
             double slng = carInfo.getSlng();
-            if (slat!=0&&slng!=0){
                 if (slat>0&&slng>0){
                     LatLng lat=new LatLng(slat,slng);
                     latlngBoundsB = addlay(latlngBoundsB,lat);
-                }
+                    isenter=true;
             }
-            if (addInfo.size()-1 == i){
-                latlngBounds =  latlngBoundsB.build();
+                if (isenter&&addInfo.size()-1 == i){
+                        latlngBounds = latlngBoundsB.build();
+
             }
         }
         aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latlngBounds, 10));

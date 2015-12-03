@@ -5,7 +5,7 @@ import com.amap.api.maps.model.LatLng;
 /**
  * Created by yql on 2015/8/27.
  */
-public  class Constant {
+public class Constant {
 
     //地理位置
     public final static double LATITUDE = 24.5004978985;
@@ -28,7 +28,7 @@ public  class Constant {
 
     //网络地址
     public final static String ENTRANCE_PREFIX = "http://120.24.236.223/api/v1.0/"; //接口前缀地址
-    //public final static String ENTRANCE_PREFIX = "http://www.edyd.cn/api/v1.0/"; //接口前缀地址
+   // public final static String ENTRANCE_PREFIX = "http://www.edyd.cn/api/v1.0/"; //接口前缀地址
 
     public final static String ENTRANCE_PREFIX_v1 = "http://120.24.236.223/api/v1.1/"; //接口前缀地址
     //public final static String ENTRANCE_PREFIX_v1 = "http://www.edyd.cn/api/v1.1/"; //接口前缀地址
