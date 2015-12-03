@@ -144,6 +144,7 @@
                     android:layout_height="120dp"
                     android:layout_weight="1"
                     android:orientation="vertical"
+                    android:background="@color/gray_EDEDED"
                     android:gravity="center">
                     <ImageView
                         android:layout_width="wrap_content"

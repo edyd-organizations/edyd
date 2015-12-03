@@ -221,6 +221,8 @@
         <activity
             android:name=".ShowTrackActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".ShipperOrderOperateActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- 社交分享 -->
         <activity
