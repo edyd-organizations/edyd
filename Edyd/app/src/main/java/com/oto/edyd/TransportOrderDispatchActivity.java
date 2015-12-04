@@ -161,6 +161,9 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                         return;
                     }
                     rowJson = jsonObject.getJSONArray("rows");
+                    if(rowJson.length() == 0) {
+                        Toast.makeText(TransportOrderDispatchActivity.this, "暂无数据", Toast.LENGTH_SHORT).show();
+                    }
                     JSONObject jsonObjectItem = new JSONObject();
                     String startAndEndAddr = "";
                     loadFlag = true;
