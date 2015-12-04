@@ -108,9 +108,11 @@ public class TrackListActivity extends Activity {
 
     private void fillDate(final boolean isFist, String controlNum) {
         ///v1.1/traceAllOrder.json?truckNum=&controlStatus=0&sessionUuid=
+        int page=1;
+        int rows=50;
         String url = Constant.ENTRANCE_PREFIX_v1 + "traceAllOrder.json?sessionUuid="
-                + sessionUuid + "&controlNum=" + controlNum + "&controlStatus=0";
-//                + "&page=" + page + "&rows=" + rows;
+                + sessionUuid + "&controlNum=" + controlNum + "&controlStatus=0"
+                + "&page=" + page + "&rows=" + rows;
 //        Common.printErrLog("轨迹" + url);
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
