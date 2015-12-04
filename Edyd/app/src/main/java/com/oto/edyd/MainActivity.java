@@ -32,7 +32,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
     private CustomViewPager customViewPager;
     private FragmentPagerAdapter mAdapter; //ViewPager适配器
-    private EFragmentAdapter eAdapter;
+    public EFragmentAdapter eAdapter;
     private List<Fragment> listFragment = new ArrayList<Fragment>(); //存储Fragment
     private RadioButton home; //首页
     private RadioButton market; //商城
@@ -41,7 +41,8 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     public FragmentManager fragmentManager; //fragment管理器
 
     private Common common;
-    private Common globalCommon;
+    //private Common globalCommon;
+    private Common fixedCommon;
     private TextView mainTitle; //标题
     private LeftSlidingFragment leftMenuFragment;
     private long exitTime = 0; // 定义一个变量，来标识退出时间
@@ -130,7 +131,8 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         fragmentManager = getSupportFragmentManager();
         mainTitle = (TextView) findViewById(R.id.main_title);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-        globalCommon = new Common(getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
+        //globalCommon = new Common(getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
+        fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
     }
 
     /**
@@ -175,7 +177,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
         listFragment.add(indexFragment);
         listFragment.add(marketFragment);
-        String txTransportId = globalCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        String txTransportId = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
         if(txTransportId != null && !txTransportId.equals("")) {
             int transportRoleId = Integer.valueOf(txTransportId);
             switch (transportRoleId) {
@@ -267,8 +269,8 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 leftMenuFragment.dataSets.add(map);
             }
             leftMenuFragment.simpleAdapter.notifyDataSetChanged();
-            enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
-            int transportRoleId = Integer.valueOf(globalCommon.getStringByKey(Constant.TRANSPORT_ROLE));
+//            enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
+//            int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
 //            switch (transportRoleId) {
 //                case 0: //司机
 //                    //TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
@@ -308,8 +310,8 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 leftMenuFragment.dataSets.add(map);
             }
             leftMenuFragment.simpleAdapter.notifyDataSetChanged();
-            enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
-            int transportRoleId = Integer.valueOf(globalCommon.getStringByKey(Constant.TRANSPORT_ROLE));
+//            enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
+//            int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
 //            switch (transportRoleId) {
 //                case 0: //司机
 //                    //TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
@@ -342,7 +344,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
             leftMenuFragment.accountType.setText(enterpriseName);
             leftMenuFragment.roleType.setText(roleName);
-            int transportRoleId = Integer.valueOf(globalCommon.getStringByKey(Constant.TRANSPORT_ROLE));
+            int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
             switch (transportRoleId) {
                 case 0: //司机
                     TransportDriverFragment transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
@@ -374,7 +376,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         //运输服务角色选择返回更新
         if (resultCode == Constant.TRANSPORT_ROLE_CODE) {
             //transportServiceFragment = (TransportServiceFragment)listFragment.get(2);
-            int transportRoleId = Integer.valueOf(globalCommon.getStringByKey(Constant.TRANSPORT_ROLE));
+            int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
             switch (transportRoleId) {
                 case 0: //司机
                     //transportServiceFragment.transportRole.setText("司机");
@@ -501,5 +503,13 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
             return fragment;
         }
+    }
+
+    /**
+     * 返回首页
+     */
+    public void comeBackIndex() {
+        customViewPager.setCurrentItem(0);
+        home.setChecked(true);
     }
 }

@@ -30,7 +30,7 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
     private ListView roleList; //运输服务角色列表
 
     private String[] roleArray; //角色集合
-    private Common globalCommon;
+    private Common fixedCommon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
                     case 0: //司机
                         transportRoleMap.put(Constant.TRANSPORT_ROLE, 0);
                         //保存账户ID
-                        if (!globalCommon.isSave(transportRoleMap)) {
+                        if (!fixedCommon.isSave(transportRoleMap)) {
                             Toast.makeText(getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -65,7 +65,7 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
                     case 3: //承运方
                         transportRoleMap.put(Constant.TRANSPORT_ROLE, 3);
                         //保存账户ID
-                        if (!globalCommon.isSave(transportRoleMap)) {
+                        if (!fixedCommon.isSave(transportRoleMap)) {
                             Toast.makeText(getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -91,7 +91,7 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
         back = (LinearLayout) findViewById(R.id.back);
         roleList = (ListView) findViewById(R.id.role_list);
         roleArray = getResources().getStringArray(R.array.transport_role_list);
-        globalCommon = new Common(getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
+        fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
     }
 
     @Override

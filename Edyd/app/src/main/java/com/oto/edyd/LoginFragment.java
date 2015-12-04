@@ -63,7 +63,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     private CusProgressDialog loadingDialog; //页面切换过度
     private Common common;
-    private Common globalCommon;
+    private Common fixedCommon;
 
     //数据库
     private DaoMaster.DevOpenHelper helper;
@@ -224,7 +224,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         linearLayoutRemember = (LinearLayout) view.findViewById(R.id.ll_remember);
 
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-        globalCommon = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
 
         helper = new DaoMaster.DevOpenHelper(getActivity(), "USER_INFO", null);
         db = helper.getWritableDatabase();
@@ -411,13 +411,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         }
                     });
 
-                    globalCommon = new Common(getActivity().getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
-                    Map<Object, Object> map = new HashMap<Object, Object>();
-                    map.put(Constant.TRANSPORT_ROLE, 0); //默认运输角色，设置为司机，标识0
-                    //保存账户ID
-                    if (!globalCommon.isSave(map)) {
-                        Toast.makeText(getActivity().getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
-                        return;
+                    String roleContent = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+                    if(roleContent != null && roleContent.equals("")) {
+                        Map<Object, Object> map = new HashMap<Object, Object>();
+                        map.put(Constant.TRANSPORT_ROLE, 0); //默认运输角色，设置为司机，标识0
+                        //保存账户ID
+                        if (!fixedCommon.isSave(map)) {
+                            Toast.makeText(getActivity().getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                     }
 
                     //登录成功之后做的操作

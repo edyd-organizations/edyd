@@ -23,6 +23,7 @@ public class Constant {
     public final static String LOGIN_PREFERENCES_FILE = "login.xml"; //登入信息保存文件
     public final static String GLOBAL_FILE = "global.xml"; //全局偏好文件设置
     public final static String USER_INFO_FILE = "users.xml"; //用户信息
+    public final static String FIXED_FILE = "fixed_file"; //不清理数据
     public final static String SESSION_UUID = "session_uuid";
     //public final static String ACCOUNT_ID = "account_id";
 
