@@ -33,6 +33,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 收货方历史订单详情
+ */
 public class ReceivingOrderDetail extends Activity implements View.OnClickListener{
 
     private LinearLayout orderDetailBack; //返回
@@ -156,6 +159,9 @@ public class ReceivingOrderDetail extends Activity implements View.OnClickListen
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
     }
 
+    public void imageBack(View view){//返回按钮
+        finish();
+    }
     /**
      * 格式化日期
      * @param month
