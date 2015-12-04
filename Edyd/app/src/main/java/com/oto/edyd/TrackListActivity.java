@@ -98,7 +98,7 @@ public class TrackListActivity extends Activity {
             switch (msg.what) {
                 case 0x12: //油卡金额数据返回执行
                     //加载完成隐藏loading
-//                    loadingDialog.getLoadingDialog().dismiss();
+                    loadingDialog.getLoadingDialog().dismiss();
 
                     if (adapter == null) {
                         adapter = new TrackListAdapter();
@@ -116,18 +116,18 @@ public class TrackListActivity extends Activity {
         int page=1;
         int rows=50;
         //第一次进来显示loading
-//        if (isFist) {
-//            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
-//            loadingDialog.getLoadingDialog().show();
-//        }
+        if (isFist) {
+            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
+            loadingDialog.getLoadingDialog().show();
+        }
         String url = Constant.ENTRANCE_PREFIX_v1 + "traceAllOrder.json?sessionUuid="
                 + sessionUuid + "&controlNum=" + controlNum + "&controlStatus=0"
                 + "&page=" + page + "&rows=" + rows;
 //        Common.printErrLog("轨迹" + url);
-        OkHttpClientManager.getAsyn(url, new FoginResultCallback<String>() {
+        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
-//                loadingDialog.getLoadingDialog().dismiss();
+                loadingDialog.getLoadingDialog().dismiss();
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
             }
 
@@ -220,19 +220,19 @@ public class TrackListActivity extends Activity {
         }
     }
 
-    public abstract class FoginResultCallback<T> extends OkHttpClientManager.ResultCallback<T> {
-
-        @Override
-        public void onAfter() {
-            //super.onAfter();
-            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
-            loadingDialog.getLoadingDialog().show();
-        }
-
-        @Override
-        public void onBefore() {
-            //super.onBefore();
-            loadingDialog.getLoadingDialog().dismiss();
-        }
-    }
+//    public abstract class FoginResultCallback<T> extends OkHttpClientManager.ResultCallback<T> {
+//
+//        @Override
+//        public void onAfter() {
+//            //super.onAfter();
+//            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
+//            loadingDialog.getLoadingDialog().show();
+//        }
+//
+//        @Override
+//        public void onBefore() {
+//            //super.onBefore();
+//            loadingDialog.getLoadingDialog().dismiss();
+//        }
+//    }
 }
