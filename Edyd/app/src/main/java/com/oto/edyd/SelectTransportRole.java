@@ -55,7 +55,14 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
                         finish();
                         break;
                     case 1: //发货方
-                        //transportRoleMap.put(Constant.TRANSPORT_ROLE, 1);
+//                        transportRoleMap.put(Constant.TRANSPORT_ROLE, 1);
+//                        //保存账户ID
+//                        if (!globalCommon.isSave(transportRoleMap)) {
+//                            Toast.makeText(getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }
+//                        setResult(Constant.TRANSPORT_ROLE_CODE);
+//                        finish();
                         Toast.makeText(SelectTransportRole.this, "开发中...", Toast.LENGTH_SHORT).show();
                         break;
                     case 2: //收货方
