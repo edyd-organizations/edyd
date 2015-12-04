@@ -80,13 +80,13 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
                         finish();
                         break;
                 }
-                //保存账户ID
-//                if (!globalCommon.isSave(transportRoleMap)) {
-//                    Toast.makeText(getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                setResult(Constant.TRANSPORT_ROLE_CODE);
-//                finish();
+  /*              //保存账户ID
+                if (!globalCommon.isSave(transportRoleMap)) {
+                    Toast.makeText(getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                setResult(Constant.TRANSPORT_ROLE_CODE);
+                finish();*/
             }
         });
     }
