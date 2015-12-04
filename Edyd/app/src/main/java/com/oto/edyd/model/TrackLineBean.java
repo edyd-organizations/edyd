@@ -21,9 +21,7 @@ public class TrackLineBean {
     private double senderLat;
     private double senderLng;
     private String trunckNum;
-
     private ArrayList<TrackPointBean> traceInfo;
-
     private String senderName;
 
     public String getTrunckNum() {

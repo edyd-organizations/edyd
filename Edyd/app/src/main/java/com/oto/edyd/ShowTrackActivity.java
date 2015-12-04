@@ -7,13 +7,26 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.LatLngBounds;
+import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.PolylineOptions;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.oto.edyd.model.TrackBean;
 import com.oto.edyd.model.TrackLineBean;
 import com.oto.edyd.model.TrackPointBean;
@@ -32,7 +45,7 @@ import java.util.logging.LogRecord;
 /**
  * Created by Administrator on 2015/12/1.
  */
-public class ShowTrackActivity extends Activity {
+public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickListener, AMap.InfoWindowAdapter, AMap.OnInfoWindowClickListener, AMap.OnMapLoadedListener, GeocodeSearch.OnGeocodeSearchListener {
     private Context mActivity;
     private TrackBean bean;
     private String sessionUuid;
@@ -40,6 +53,9 @@ public class ShowTrackActivity extends Activity {
     private MapView mapView;
     private AMap aMap;
     private TrackLineBean tlb;
+    private ArrayList<LatLng> pos;
+    private TextView address;
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -48,19 +64,28 @@ public class ShowTrackActivity extends Activity {
                 case 0x12:
                     PolylineOptions line = new PolylineOptions();
                     ArrayList<TrackPointBean> list = tlb.getTraceInfo();
-                    ArrayList<LatLng> pos = new ArrayList<LatLng>();
+                    pos = new ArrayList<LatLng>();
+                    if (list.size() == 0) {
+                        Common.showToast(mActivity, "暂时没有轨迹");
+                    }
+                    for (int i = 0; i < list.size(); i++) {
+                        TrackPointBean point=list.get(i);
 
-                    for (TrackPointBean point : list) {
-                        LatLng latLng=new LatLng(point.getLat(),point.getLng());
+                        LatLng latLng = new LatLng(point.getLat(), point.getLng());
                         pos.add(latLng);
+                            addMarker(point,i,list);//添加所有的位置
                     }
                     line.addAll(pos);
                     line.color(Color.RED);
+
                     aMap.addPolyline(line);
+                    onMapLoaded();
                     break;
             }
         }
     };
+    private GeocodeSearch geocoderSearch;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +99,6 @@ public class ShowTrackActivity extends Activity {
             aMap = mapView.getMap();
             setUpMap();
         }
-
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         bean = (TrackBean) bundle.getSerializable("detailBean");
@@ -82,14 +106,57 @@ public class ShowTrackActivity extends Activity {
             initFields(); //初始化数据
             getInfo(true);
         }
-
+        dismissInfowindow();
     }
 
+    private void dismissInfowindow() {
+        aMap.setOnMapClickListener(new AMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+
+            }
+        });
+    }
+
+    /**
+     *添加标记到地图
+     * @param point
+     * @param index 表示第几个坐标
+     */
+
+    private void addMarker(TrackPointBean point,int index,ArrayList<TrackPointBean> list) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        if (index==0){
+            //如果是第一个坐标
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.getup));
+        }else if (index==(list.size()-1)) {
+            //如果是最后一个坐标
+            if (!"收货完成".equals(list.get(list.size()-1).getControlStatus())){
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.car));
+            }else {
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ending));
+            }
+        }else {
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.abit));
+        }
+        markerOptions.position(new LatLng(point.getLat(), point.getLng()));
+        markerOptions.title("车辆信息").draggable(true).anchor(0.5f, 1.0f);
+        Marker marker = aMap.addMarker(markerOptions);
+
+        marker.setObject(point);
+        marker.showInfoWindow();
+    }
+
+
     private void setUpMap() {
-        // 绘制一个乌鲁木齐到哈尔滨的线
-//        aMap.addPolyline((new PolylineOptions()).add(
-//                new LatLng(43.828, 87.621), new LatLng(45.808, 126.55)).color(
-//                Color.RED));
+
+        aMap.setMapType(AMap.MAP_TYPE_NORMAL); // 矢量地图模式
+        aMap.setOnMarkerClickListener(this);// 设置点击marker事件监听器
+        aMap.setOnMapLoadedListener(this);// 设置amap加载成功事件监听器
+        aMap.setMyLocationEnabled(true);//默认地图可以自动定位
+        aMap.setOnInfoWindowClickListener(this);// 设置点击infoWindow事件监听器
+        aMap.setInfoWindowAdapter(this);// 设置自定义InfoWindow样式
+
     }
 
     private void getInfo(final boolean isFist) {
@@ -112,7 +179,7 @@ public class ShowTrackActivity extends Activity {
                 try {
                     jsonObject = new JSONObject(response);
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        Toast.makeText(getApplicationContext(), "获取查询信息失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "返回信息失败", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
@@ -174,5 +241,89 @@ public class ShowTrackActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+    }
+
+
+    private View render(Marker marker) {
+        View infoWindow = View.inflate(mActivity, R.layout.track_info_windom, null);
+        TrackPointBean trackPointBean = (TrackPointBean) marker.getObject();
+        TextView Scheduling = ((TextView) infoWindow.findViewById(R.id.Scheduling));//调度单号
+        Scheduling.setText(tlb.getControlNum());
+        TextView carNumber = (TextView) infoWindow.findViewById(R.id.carNumber);//车牌号
+        carNumber.setText(tlb.getTrunckNum());
+        TextView driver = (TextView) infoWindow.findViewById(R.id.driver);//司机
+        driver.setText(tlb.getDriverName());
+        TextView phone = (TextView) infoWindow.findViewById(R.id.phone);//电话
+        phone.setText(tlb.getDriverTel());
+        TextView state = (TextView) infoWindow.findViewById(R.id.state);//状态
+        state.setText(trackPointBean.getControlStatus());
+        TextView time = (TextView) infoWindow.findViewById(R.id.time);//时间
+        time.setText(trackPointBean.getOperTime());
+        address = (TextView) infoWindow.findViewById(R.id.address);//时间
+
+        LatLonPoint latLonPoint = new LatLonPoint(trackPointBean.getLat(), trackPointBean.getLng());
+        RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 200,
+                GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+        geocoderSearch = new GeocodeSearch(this);
+        geocoderSearch.setOnGeocodeSearchListener(this);
+        geocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
+        return infoWindow;
+    }
+
+
+    public boolean onMarkerClick(Marker marker) {
+//            render(marker);
+        return false;
+    }
+
+    /**
+     * 自定义信息窗口
+     *
+     * @param marker
+     * @return
+     */
+    @Override
+    public View getInfoWindow(Marker marker) {
+
+        return render(marker);
+    }
+
+    @Override
+    public View getInfoContents(Marker marker) {
+        return null;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+
+    }
+
+    @Override
+    public void onMapLoaded() {
+
+        LatLngBounds.Builder buidler = new LatLngBounds.Builder();
+        if (pos != null && pos.size() != 0) {
+            for (LatLng po : pos) {
+                buidler.include(po);
+            }
+            LatLngBounds bounds = buidler.build();
+            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
+        }
+
+    }
+
+    @Override
+    public void onRegeocodeSearched(RegeocodeResult result, int rCode) {
+        if (rCode == 0) {
+
+            String formatAddress = result.getRegeocodeAddress().getFormatAddress();
+            address.setText(formatAddress);
+        }
+
+    }
+
+    @Override
+    public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+
     }
 }
