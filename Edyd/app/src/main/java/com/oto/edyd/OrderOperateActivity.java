@@ -205,40 +205,58 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            TextView orderNumber; //订单号
-            TextView orderDate; //订单日期
-            TextView startPoint; //起始点
-            TextView endPoint; //终点
-            TextView shipper; //发货人
-            TextView phoneNumber; //发货人联系电话
-            TextView dial; //拨打发货人联系电话
-            TextView consignee; //收货人
-            TextView consigneePhoneNumber; //收货人联系人电话
-            TextView consigneeDial; //拨打收货人联系电话
-            TextView receiveOrder; //接单
-            ImageView orderStatus; //单子状态
 
-        //    if (convertView == null) {
-//                ViewHolder viewHolder = new ViewHolder();
-//                convertView = inflater.inflate(R.layout.receive_order_item, null);
-//                viewHolder.startPoint = (TextView) convertView.findViewById(R.id.receive_order_start_address);
-//                viewHolder.endPoint = (TextView) convertView.findViewById(R.id.receive_order_end_address);
-//                viewHolder.shipper = (TextView) convertView.findViewById(R.id.shipper_name);
-//                viewHolder.phoneNumber = (TextView) convertView.findViewById(R.id.phone_number_one);
-            convertView = inflater.inflate(R.layout.order_operation_item, null);
+            ViewHolder viewHolder;
+            if(convertView == null) {
+                convertView = inflater.inflate(R.layout.order_operation_item, null);
+                viewHolder = new ViewHolder();
 
-            orderNumber = (TextView) convertView.findViewById(R.id.order_number);
-            orderDate = (TextView) convertView.findViewById(R.id.order_date);
-            startPoint = (TextView) convertView.findViewById(R.id.receive_order_start_address); //发货地址
-            endPoint = (TextView) convertView.findViewById(R.id.receive_order_end_address); //收货地址
-            shipper = (TextView) convertView.findViewById(R.id.shipper_name); //发货人
-            phoneNumber = (TextView) convertView.findViewById(R.id.phone_number_one); //发货人联系电话
-            dial = (TextView) convertView.findViewById(R.id.dialog_one); //拨打电话
-            consignee = (TextView) convertView.findViewById(R.id.consignee); //收货人
-            consigneePhoneNumber = (TextView) convertView.findViewById(R.id.consignee_phone_number); //收货人联系电话
-            consigneeDial = (TextView) convertView.findViewById(R.id.consignee_dial);
-            receiveOrder = (TextView) convertView.findViewById(R.id.receive_order); //接单
-            orderStatus = (ImageView) convertView.findViewById(R.id.order_status); //订单状态
+                viewHolder.orderNumber = (TextView) convertView.findViewById(R.id.order_number);
+                viewHolder.orderDate = (TextView) convertView.findViewById(R.id.order_date);
+                viewHolder.startPoint = (TextView) convertView.findViewById(R.id.receive_order_start_address); //发货地址
+                viewHolder.endPoint = (TextView) convertView.findViewById(R.id.receive_order_end_address); //收货地址
+                viewHolder.shipper = (TextView) convertView.findViewById(R.id.shipper_name); //发货人
+                viewHolder.tPhoneNumber = (TextView) convertView.findViewById(R.id.phone_number_one); //发货人联系电话
+                viewHolder.dial = (TextView) convertView.findViewById(R.id.dialog_one); //拨打电话
+                viewHolder.consignee = (TextView) convertView.findViewById(R.id.consignee); //收货人
+                viewHolder.consigneePhoneNumber = (TextView) convertView.findViewById(R.id.consignee_phone_number); //收货人联系电话
+                viewHolder.consigneeDial = (TextView) convertView.findViewById(R.id.consignee_dial);
+                viewHolder.receiveOrder = (TextView) convertView.findViewById(R.id.receive_order); //接单
+                viewHolder.orderStatus = (ImageView) convertView.findViewById(R.id.order_status); //订单状态
+                convertView.setTag(viewHolder);
+            }else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+
+//            TextView orderNumber; //订单号
+//            TextView orderDate; //订单日期
+//            TextView startPoint; //起始点
+//            TextView endPoint; //终点
+//            TextView shipper; //发货人
+//            TextView phoneNumber; //发货人联系电话
+//            TextView dial; //拨打发货人联系电话
+//            TextView consignee; //收货人
+//            TextView consigneePhoneNumber; //收货人联系人电话
+//            TextView consigneeDial; //拨打收货人联系电话
+//            TextView receiveOrder; //接单
+//            ImageView orderStatus; //单子状态
+//
+//
+//            convertView = inflater.inflate(R.layout.order_operation_item, null);
+//
+//            orderNumber = (TextView) convertView.findViewById(R.id.order_number);
+//            orderDate = (TextView) convertView.findViewById(R.id.order_date);
+//            startPoint = (TextView) convertView.findViewById(R.id.receive_order_start_address); //发货地址
+//            endPoint = (TextView) convertView.findViewById(R.id.receive_order_end_address); //收货地址
+//            shipper = (TextView) convertView.findViewById(R.id.shipper_name); //发货人
+//            phoneNumber = (TextView) convertView.findViewById(R.id.phone_number_one); //发货人联系电话
+//            dial = (TextView) convertView.findViewById(R.id.dialog_one); //拨打电话
+//            consignee = (TextView) convertView.findViewById(R.id.consignee); //收货人
+//            consigneePhoneNumber = (TextView) convertView.findViewById(R.id.consignee_phone_number); //收货人联系电话
+//            consigneeDial = (TextView) convertView.findViewById(R.id.consignee_dial);
+//            receiveOrder = (TextView) convertView.findViewById(R.id.receive_order); //接单
+//            orderStatus = (ImageView) convertView.findViewById(R.id.order_status); //订单状态
 
 //            Animation mAnimationRight = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_textview_one);
 //            mAnimationRight.setFillAfter(true);
@@ -246,71 +264,67 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
 //            otherVersion(orderStatus);
             switch (orderStatusList.get(position)) {
                 case 17: //未接单
-                    receiveOrder.setText(getString(R.string.receive_order));
+                    viewHolder.receiveOrder.setText(getString(R.string.receive_order));
                     break;
                 case 20: //已接单
-                    orderStatus.setImageResource(R.mipmap.tts_loading_way);
-                    receiveOrder.setText("到达装货");
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_loading_way);
+                    viewHolder.receiveOrder.setText("到达装货");
                     break;
                 case 30: //	到达装货
-                    orderStatus.setImageResource(R.mipmap.tts_arrived_load);
-                    receiveOrder.setText("装货完成");
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_arrived_load);
+                    viewHolder.receiveOrder.setText("装货完成");
                     break;
                 case 40: //装货完成
-                    orderStatus.setImageResource(R.mipmap.tts_completion_load);
-                    receiveOrder.setText("送货在途");
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_completion_load);
+                    viewHolder.receiveOrder.setText("送货在途");
                     break;
                 case 50: //送货在途
-                    orderStatus.setImageResource(R.mipmap.tts_delivery_way);
-                    receiveOrder.setText("到达收货");
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_delivery_way);
+                    viewHolder.receiveOrder.setText("到达收货");
                     break;
                 case 60: //到达收货
-                    orderStatus.setImageResource(R.mipmap.tts_arrived_receive);
-                    receiveOrder.setText("收货完成");
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_arrived_receive);
+                    viewHolder.receiveOrder.setText("收货完成");
                     break;
                 case 99: //收货完成
-                    //orderStatus.setImageResource(R.mipmap.ic_have_been_receive);
-                    //receiveOrder.setText("完成订单");
-
-                    orderStatus.setImageResource(R.mipmap.finished_receive); //收货完成
-                    receiveOrder.setText("完成订单");
-                    receiveOrder.setBackgroundResource(R.drawable.border_corner_login);
-                    receiveOrder.setEnabled(false);
+                    viewHolder.orderStatus.setImageResource(R.mipmap.finished_receive); //收货完成
+                    viewHolder.receiveOrder.setText("完成订单");
+                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login);
+                    viewHolder.receiveOrder.setEnabled(false);
                     break;
             }
 
-            orderNumber.setText(orderList.get(position));
-            orderDate.setText(dateList.get(position));
-            startPoint.setText(senderAddressList.get(position));
-            endPoint.setText(receiveAddressList.get(position));
-            shipper.setText(senderList.get(position));
-            phoneNumber.setText(phoneNumberList.get(position));
-            consignee.setText(consigneeList.get(position));
-            consigneePhoneNumber.setText(consigneePhoneList.get(position));
-            shipper.setText(senderList.get(position));
-            phoneNumber.setText(phoneNumberList.get(position));
-            dial.setOnClickListener(new CusOnClickListener(position, convertView));
-            consigneeDial.setOnClickListener(new CusOnClickListener(position, convertView));
-            receiveOrder.setOnClickListener(new CusOnClickListener(position, convertView));
+            viewHolder.orderNumber.setText(orderList.get(position));
+            viewHolder.orderDate.setText(dateList.get(position));
+            viewHolder.startPoint.setText(senderAddressList.get(position));
+            viewHolder.endPoint.setText(receiveAddressList.get(position));
+            viewHolder.shipper.setText(senderList.get(position));
+            viewHolder.tPhoneNumber.setText(phoneNumberList.get(position));
+            viewHolder.consignee.setText(consigneeList.get(position));
+            viewHolder.consigneePhoneNumber.setText(consigneePhoneList.get(position));
+            viewHolder.shipper.setText(senderList.get(position));
+            viewHolder.dial.setOnClickListener(new CusOnClickListener(position, convertView));
+            viewHolder.consigneeDial.setOnClickListener(new CusOnClickListener(position, convertView));
+            viewHolder.receiveOrder.setOnClickListener(new CusOnClickListener(position, convertView));
 
-               // convertView.setTag(viewHolder);
-//            } else {
-//                ViewHolder viewHolder = (ViewHolder)convertView.getTag();
-//                viewHolder.startPoint.setText(senderAddressList.get(position));
-//                viewHolder.endPoint.setText(receiveAddressList.get(position));
-//                viewHolder.shipper.setText(senderList.get(position));
-//                viewHolder.phoneNumber.setText(phoneNumberList.get(position));
-//            }
             return convertView;
         }
     }
 
-//    private static class ViewHolder {
-//        public TextView startPoint;
-//        public TextView endPoint;
-//        public TextView shipper;
-//        public TextView phoneNumber;
-//    }
+     static class ViewHolder {
+         TextView orderNumber; //订单号
+         TextView orderDate; //订单日期
+         TextView startPoint; //起始点
+         TextView endPoint; //终点
+         TextView shipper; //发货人
+         TextView tPhoneNumber; //发货人联系电话
+         TextView dial; //拨打发货人联系电话
+         TextView consignee; //收货人
+         TextView consigneePhoneNumber; //收货人联系人电话
+         TextView consigneeDial; //拨打收货人联系电话
+         TextView receiveOrder; //接单
+         ImageView orderStatus; //单子状态
+    }
 
     Handler handler = new Handler(){
         @Override
