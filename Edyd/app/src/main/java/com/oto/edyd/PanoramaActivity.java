@@ -43,7 +43,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * 全景图
+ */
 public class PanoramaActivity extends Activity implements OnMapLoadedListener,AMap.OnMarkerClickListener,
         AMap.OnInfoWindowClickListener,AMap.InfoWindowAdapter,AMap.OnMarkerDragListener,GeocodeSearch.OnGeocodeSearchListener {
     private MapView mapView; //地图控件，用于地图显示

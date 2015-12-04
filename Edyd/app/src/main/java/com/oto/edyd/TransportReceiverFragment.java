@@ -71,7 +71,7 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
                 startActivity(intent);
                 break;
             case  R.id.ll_on_the_way_orders://在途订单
-                intent=new Intent(getActivity(),ReceivingOrderDetail.class);
+                intent=new Intent(getActivity(),ReceiveTransitOrderActivity.class);
                 startActivity(intent);
                 break;
         }

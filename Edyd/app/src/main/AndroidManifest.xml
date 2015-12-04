@@ -221,8 +221,9 @@
         <activity
             android:name=".ShowTrackActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ShipperOrderOperateActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ShipperOrderOperateActivity"
+            android:screenOrientation="portrait" />
 
         <!-- 社交分享 -->
         <activity
@@ -299,6 +300,8 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity android:name=".ReceivingOrderDetail" >
+        </activity>
+        <activity android:name=".ReceiveTransitOrderActivity" >
         </activity>
     </application>
 

@@ -3,6 +3,7 @@ package com.oto.edyd;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,17 +19,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,9 +34,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 收货方历史订单列表
+ * 收货方在途订单
  */
-public class ReceivingOrderOperate extends Activity implements View.OnClickListener, AbsListView.OnScrollListener {
+public class ReceiveTransitOrderActivity extends Activity implements View.OnClickListener, AbsListView.OnScrollListener{
     private LinearLayout historyTransportOrderBack; //返回
     private ListView receiveOrderList; //接单
     private CusProgressDialog receiveOrderDialog; //页面切换过度
@@ -53,13 +51,12 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
     private List<String> senderList = new ArrayList<String>();//发货人集合
     private List<String> phoneNumberList = new ArrayList<String>(); //发货人联系电话集合
     private List<Integer> orderStatusList = new ArrayList<Integer>(); //订单状态
-    private List<String> dateList = new ArrayList<String>(); //时间集合
     private int visibleLastIndex = 0; //最后可视项索引
     private final static int ROWS = 10; //分页加载数据每页10
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_receiving_order_operate);
+        setContentView(R.layout.activity_receive_transit_order);
         initFields();
         requestData(1, 10, 1); //请求数据
         mPullToRefreshScrollView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -77,28 +74,22 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(ReceivingOrderOperate.this, ReceivingOrderDetail.class);
+                Intent intent = new Intent(ReceiveTransitOrderActivity.this, ReceivingOrderDetail.class);
                 intent.putExtra("primaryId", String.valueOf(primaryIdList.get(position)));
                 intent.putExtra("position", String.valueOf(position));
                 startActivityForResult(intent, 0x21);
             }
         });
     }
-
     /**
      * 初始化数据
      */
     private void initFields() {
-       /* historyTransportOrderBack = (LinearLayout) findViewById(R.id.history_transport_order_back);
-        historyTransportOrderBack.setOnClickListener(this);*/
         receiveOrderList = (ListView) findViewById(R.id.receive_order_list);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         mPullToRefreshScrollView = (SwipeRefreshLayout)findViewById(R.id.swipe_container);
-      /*  receiveOrderListAdapter= new ReceiveOrderListAdapter(getApplicationContext());
-        receiveOrderList.setAdapter(receiveOrderListAdapter);*/
 
     }
-
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         int lastIndex = receiveOrderListAdapter.getCount(); //数据集最后一项的索引
@@ -130,12 +121,13 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
      */
     private void loadOrderData(int page, int rows) {
         String sessionUUID = getSessionUUID();
-        String url = Constant.ENTRANCE_PREFIX + "appQueryHistoricalOrderList.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows;
+        String url = Constant.ENTRANCE_PREFIX + "appQueryOrderList.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows;
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onResponse(String response) {
                 JSONObject jsonObject;
@@ -148,19 +140,18 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
-                    for(int i = 0; i < jsonArray.length(); i++) {
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tempJSON = jsonArray.getJSONObject(i);
                         idList.add(tempJSON.getInt("ID"));
                         primaryIdList.add(tempJSON.getInt("primaryId"));
                         orderList.add(tempJSON.getString("controlNum"));
-                        dateList.add(tempJSON.getString("controlDate"));
                         //dateList.add(tempJSON.getString("controlDate"));
                         senderAddressList.add(tempJSON.getString("senderAddr"));
                         //receiveAddressList.add(tempJSON.getString("receiverAddr"));
                         senderList.add(tempJSON.getString("senderContactPerson"));
                         phoneNumberList.add(tempJSON.getString("senderContactTel"));
                         //consigneeList.add(tempJSON.getString("receiverContactPerson"));
-                       // consigneePhoneList.add(tempJSON.getString("receiverContactTel"));
+                        // consigneePhoneList.add(tempJSON.getString("receiverContactTel"));
                         orderStatusList.add(tempJSON.getInt("controlStatus"));
                     }
                     Message message = new Message();
@@ -184,7 +175,6 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
         senderList.clear();
         phoneNumberList.clear();
         orderStatusList.clear();
-        dateList.clear();
     }
     /**
      *
@@ -206,7 +196,7 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
      */
     private void requestData(int page, int rows, final int loadType) {
         String sessionUUID = getSessionUUID();
-        String url = Constant.ENTRANCE_PREFIX + "appQueryHistoricalOrderList.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows;
+        String url = Constant.ENTRANCE_PREFIX + "appQueryOrderList.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows;
         OkHttpClientManager.getAsyn(url, new ReceiveOrderCallback<String>(loadType) {
             @Override
             public void onError(Request request, Exception e) {
@@ -244,9 +234,7 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                            dateList.add(sdf.format(date));
                         } else {
-                            dateList.add("");
                         }
                         senderAddressList.add(tempJSON.getString("senderAddr"));
                         senderList.add(tempJSON.getString("senderContactPerson"));
@@ -281,7 +269,7 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
         public void onBefore() {
             //请求之前操作
             if(loadType == 1) {
-                receiveOrderDialog = new CusProgressDialog(ReceivingOrderOperate.this, "正在加载订单数据...");
+                receiveOrderDialog = new CusProgressDialog(ReceiveTransitOrderActivity.this, "正在加载订单数据...");
                 receiveOrderDialog.getLoadingDialog().show();
             }
         }
@@ -323,7 +311,7 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView orderNumber; //订单号
-            TextView orderDate; //订单日期
+            TextView tvDistance; //距离
             TextView fromTo;//从哪里到哪里
             TextView startPoint; //发货地址
             TextView shipper; //发货人
@@ -333,14 +321,13 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
             convertView = inflater.inflate(R.layout.receiving_order_operation_item, null);
 
             orderNumber = (TextView) convertView.findViewById(R.id.orderNumView);
-            //orderDate = (TextView) convertView.findViewById(R.id.tv_distance);
-            orderDate = (TextView)convertView.findViewById(R.id.tv_distance);
+            tvDistance = (TextView) convertView.findViewById(R.id.tv_distance);
             fromTo = (TextView) convertView.findViewById(R.id.from_to);
             startPoint = (TextView) convertView.findViewById(R.id.tv_addr_detail); //发货地址
             shipper = (TextView) convertView.findViewById(R.id.shipper_name); //发货人
             phoneNumber = (TextView) convertView.findViewById(R.id.phone_number_one); //发货人联系电话*/
             orderStatus = (ImageView) convertView.findViewById(R.id.order_status); //订单状态
-          //  orderStatus.setImageResource(R.mipmap.finished_receive);
+            //  orderStatus.setImageResource(R.mipmap.finished_receive);
             switch (orderStatusList.get(position)) {
                 case 20: //已接单
                     orderStatus.setImageResource(R.mipmap.tts_loading_way);
@@ -361,8 +348,8 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
                     orderStatus.setImageResource(R.mipmap.finished_receive);
                     break;
             }
-           //orderDate.setText("日期可以不");
-            orderDate.setText(dateList.get(position));
+            tvDistance.setText("距离装货地3000米");
+            tvDistance.setTextColor(Color.RED);
             orderNumber.setText(orderList.get(position));
             startPoint.setText(senderAddressList.get(position));
             shipper.setText(senderList.get(position));
@@ -398,7 +385,6 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-        }
+
     }
 }
