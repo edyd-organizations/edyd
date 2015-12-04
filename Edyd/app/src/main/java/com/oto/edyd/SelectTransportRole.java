@@ -66,7 +66,7 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
                         Toast.makeText(SelectTransportRole.this, "开发中...", Toast.LENGTH_SHORT).show();
                         break;
                     case 2: //收货方
-                        //transportRoleMap.put(Constant.TRANSPORT_ROLE, 2);
+                        //ransportRoleMap.put(Constant.TRANSPORT_ROLE, 2);
                         Toast.makeText(SelectTransportRole.this, "开发中...", Toast.LENGTH_SHORT).show();
                         break;
                     case 3: //承运方
@@ -80,7 +80,7 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
                         finish();
                         break;
                 }
-  /*              //保存账户ID
+               /*//保存账户ID
                 if (!globalCommon.isSave(transportRoleMap)) {
                     Toast.makeText(getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
                     return;
