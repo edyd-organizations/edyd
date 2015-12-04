@@ -51,13 +51,13 @@
         android:theme="@style/AppTheme" >
 >
         <!-- 高德地图 -->
-        <!-- <meta-data -->
-        <!-- android:name="com.amap.api.v2.apikey" -->
-        <!-- android:value="391bb51068ef790c94b3f93fe9852186" /> -->
+         <!--<meta-data-->
+         <!--android:name="com.amap.api.v2.apikey"-->
+         <!--android:value="391bb51068ef790c94b3f93fe9852186" />-->
         <!-- 高德地图 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />
+            android:value="b0da2264df3bf64e1b5b9143dff0b427" />
         <!-- 聚合数据 -->
         <meta-data
             android:name="com.thinkland.juheapi.openid"

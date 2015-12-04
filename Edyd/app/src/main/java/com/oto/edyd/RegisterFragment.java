@@ -70,6 +70,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
 
     private CusProgressDialog registerSuccessDialog;
     private Common common;
+    private Common fixedCommon;
 
     @Nullable
     @Override
@@ -343,6 +344,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         btAlreadyRegister = (Button) view.findViewById(R.id.bt_already_register);
         this.loginFragmentManager = ((LoginActivity)getActivity()).loginFragmentManager;
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
     }
 
     private void setStatus(Button btVerificationCode) {
@@ -655,6 +657,15 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     if(!userCommon.isClearAccount()) {
                         Toast.makeText(getActivity(), "清除偏好用户信息失败！", Toast.LENGTH_SHORT);
                     }
+
+                    Map<Object, Object> map = new HashMap<Object, Object>();
+                    map.put(Constant.TRANSPORT_ROLE, 0); //默认运输角色，设置为司机，标识0
+                    //保存账户ID
+                    if (!fixedCommon.isSave(map)) {
+                        Toast.makeText(getActivity().getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     //登录成功之后做的操作
                     registerSuccessDialog.dismissDialog();
                     Intent intent = new Intent();

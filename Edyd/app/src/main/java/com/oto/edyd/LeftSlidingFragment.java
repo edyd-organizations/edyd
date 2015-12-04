@@ -132,9 +132,11 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                     return;
                 }
                 if(!commonTrans.isClearAccount()) {
+                    //((MainActivity)getActivity())
                     Toast.makeText(getActivity().getApplicationContext(), "清除司机信息异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                ((MainActivity)getActivity()).comeBackIndex();
                 new Thread(new ExitDialogThread(exitProgressDialog)).start(); //弹出对话框线程
                 break;
             default:

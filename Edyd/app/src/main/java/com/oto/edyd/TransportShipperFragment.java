@@ -30,7 +30,7 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
     private LinearLayout llOnTheWayOrders; //在途订单
 
     private Common common;
-    private Common globalCommon;
+    private Common fixedCommon;
 
     @Nullable
     @Override
@@ -53,7 +53,7 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
         transportRole = (TextView) view.findViewById(R.id.transport_role);
         llOnTheWayOrders = (LinearLayout) view.findViewById(R.id.ll_on_the_way_orders);
 
-        globalCommon = new Common(getActivity().getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
+        fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
     }
 
@@ -74,7 +74,7 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
     private void switchTransportRole() {
         String txEnterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
         enterpriseName.setText(txEnterpriseName);
-        String txTransportRole = globalCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        String txTransportRole = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
         if(txTransportRole!=null && !txTransportRole.equals("")) {
             int transportRoleId = Integer.valueOf(txTransportRole);
             switch (transportRoleId) {

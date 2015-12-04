@@ -35,7 +35,7 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
     private LinearLayout driverInfo; //司机信息
     private ImageView transportReceiveOrder; //接单
 
-    private Common globalCommon;
+    private Common fixedCommon;
     private Common common;
 
     @Nullable
@@ -107,7 +107,7 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
         driverInfo = (LinearLayout) view.findViewById(R.id.ll_driver_info);
         transportReceiveOrder = (ImageView) view.findViewById(R.id.iv_receive_order);
 
-        globalCommon = new Common(getActivity().getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
+        fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
     }
 
@@ -117,7 +117,7 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
     private void switchTransportRole() {
         String txEnterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
         enterpriseName.setText(txEnterpriseName);
-        String txTransportRole = globalCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        String txTransportRole = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
         if(txTransportRole!=null && !txTransportRole.equals("")) {
             int transportRoleId = Integer.valueOf(txTransportRole);
             switch (transportRoleId) {

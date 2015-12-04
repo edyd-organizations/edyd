@@ -29,7 +29,7 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
     public TextView transportRole; //角色
 
     private Common common;
-    private Common globalCommon;
+    private Common fixedCommon;
 
     @Nullable
     @Override
@@ -54,7 +54,7 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
         LinearLayout ll_on_the_wayOrders = (LinearLayout) view.findViewById(R.id.ll_on_the_way_orders);
         ll_historyOrders.setOnClickListener(this);
         ll_on_the_wayOrders.setOnClickListener(this);
-        globalCommon = new Common(getActivity().getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
+        fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
     }
 
@@ -83,7 +83,7 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
     private void switchTransportRole() {
         String txEnterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
         enterpriseName.setText(txEnterpriseName);
-        String txTransportRole = globalCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        String txTransportRole = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
         if(txTransportRole!=null && !txTransportRole.equals("")) {
             int transportRoleId = Integer.valueOf(txTransportRole);
             switch (transportRoleId) {

@@ -36,7 +36,7 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
     private ImageView ivReceiveOrder; //接单
 
     private Common common;
-    private Common globalCommon;
+    private Common fixedCommon;
 
     @Nullable
     @Override
@@ -68,7 +68,7 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
         llViewTrack = (LinearLayout) view.findViewById(R.id.ll_view_track);
         ivReceiveOrder = (ImageView) view.findViewById(R.id.iv_receive_order);
 
-        globalCommon = new Common(getActivity().getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
+        fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
     }
 
@@ -107,7 +107,7 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
     private void switchTransportRole() {
         String txEnterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
         enterpriseName.setText(txEnterpriseName);
-        String txTransportRole = globalCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        String txTransportRole = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
         if(txTransportRole!=null && !txTransportRole.equals("")) {
             int transportRoleId = Integer.valueOf(txTransportRole);
             switch (transportRoleId) {
