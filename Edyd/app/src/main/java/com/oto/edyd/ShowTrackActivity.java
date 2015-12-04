@@ -106,16 +106,6 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
             initFields(); //初始化数据
             getInfo(true);
         }
-        dismissInfowindow();
-    }
-
-    private void dismissInfowindow() {
-        aMap.setOnMapClickListener(new AMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-
-            }
-        });
     }
 
     /**
