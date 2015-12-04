@@ -269,6 +269,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 leftMenuFragment.dataSets.add(map);
             }
             leftMenuFragment.simpleAdapter.notifyDataSetChanged();
+            comeBackIndex();
 //            enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
 //            int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
 //            switch (transportRoleId) {
