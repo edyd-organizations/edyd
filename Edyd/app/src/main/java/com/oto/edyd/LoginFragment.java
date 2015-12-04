@@ -48,7 +48,7 @@ import java.util.Map;
  * Created by yql on 2015/8/27.
  * 登入首页面
  */
-public class LoginFragment extends Fragment implements View.OnClickListener{
+public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private View loginFragmentView;
     private FragmentManager loginFragmentManager; //LoginActivity布局管理器
@@ -125,11 +125,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!(s == null)) {
+                if (!(s == null)) {
                     String inputContent = s.toString();
-                    if(inputContent != null && !(inputContent.equals(""))){
+                    if (inputContent != null && !(inputContent.equals(""))) {
                         String userName = etUserName.getText().toString();
-                        if(userName != null && !(userName.equals(""))){
+                        if (userName != null && !(userName.equals(""))) {
                             btLogin.setEnabled(true); //设置按钮可用
                             btLogin.setBackgroundResource(R.drawable.border_corner_login_enable);
                         }
@@ -144,29 +144,30 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         //记住密码
         Common userCommon = new Common(getActivity().getSharedPreferences(Constant.USER_INFO_FILE, Context.MODE_PRIVATE));
         String t_username = userCommon.getStringByKey(Constant.USER_NAME);
-        if(t_username != null && (!t_username.equals(""))) {
+        if (t_username != null && (!t_username.equals(""))) {
             String t_password = userCommon.getStringByKey(Constant.PASSWORD);
             etUserName.setText(t_username);
             etPassword.setText(t_password);
             rememberPassword.setImageResource(R.mipmap.ic_agree_protocol);
             rememberPassword.setTag(R.id.remember_password, true);
-        } else{
+        } else {
             //rememberPassword.setChecked(false);
             rememberPassword.setImageResource(R.mipmap.ic_not_agree_protocol);
             rememberPassword.setTag(R.id.remember_password, false);
         }
         return loginFragmentView;
     }
+
     @Override
     public void onClick(View v) {
         Intent intent;
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.login_back:
                 getActivity().finish(); //结束LoginActivity
                 break;
             case R.id.login_user_register:
                 //登录用户注册
-                this.loginFragmentManager = ((LoginActivity)getActivity()).loginFragmentManager;
+                this.loginFragmentManager = ((LoginActivity) getActivity()).loginFragmentManager;
                 FragmentTransaction loginTransaction = loginFragmentManager.beginTransaction();
                 loginTransaction.addToBackStack(null);
                 loginTransaction.replace(R.id.common_frame, new RegisterFragment());
@@ -182,8 +183,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.ll_remember:
-                boolean tag = (boolean)rememberPassword.getTag(R.id.remember_password);
-                if(tag) {
+                boolean tag = (boolean) rememberPassword.getTag(R.id.remember_password);
+                if (tag) {
                     rememberPassword.setImageResource(R.mipmap.ic_not_agree_protocol);
                     rememberPassword.setTag(R.id.remember_password, false);
                 } else {
@@ -195,7 +196,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    public abstract class LoginResultCallback<T> extends OkHttpClientManager.ResultCallback<T>{
+    public abstract class LoginResultCallback<T> extends OkHttpClientManager.ResultCallback<T> {
         @Override
         public void onBefore() {
             //请求之前操作
@@ -213,7 +214,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     /**
      * 数据初始化
      */
-    private void initFields(View view){
+    private void initFields(View view) {
         loginBack = (LinearLayout) view.findViewById(R.id.login_back);
         loginUserRegister = (TextView) view.findViewById(R.id.login_user_register);
         etUserName = (EditText) view.findViewById(R.id.login_username);
@@ -238,23 +239,23 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     /**
      * 用户登录
      */
-    private void userLogin(){
+    private void userLogin() {
         String userName = etUserName.getText().toString();
         String password = etPassword.getText().toString();
 
-        if(TextUtils.isEmpty(userName)){
+        if (TextUtils.isEmpty(userName)) {
             Toast.makeText(getActivity().getApplicationContext(), Constant.NOT_NULL_USERNAME, Toast.LENGTH_SHORT).show();
             return;
         }
-        if(TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(password)) {
             Toast.makeText(getActivity().getApplicationContext(), Constant.NOT_NULL_PASSWORD, Toast.LENGTH_SHORT).show();
             return;
         }
-        String url = Constant.ENTRANCE_PREFIX+"login.json?mobile="+userName+"&password="+password+"&appKey=null"; //登录访问地址
+        String url = Constant.ENTRANCE_PREFIX + "login.json?mobile=" + userName + "&password=" + password + "&appKey=null"; //登录访问地址
 
         //判断网络是否有网络
         NetWork netWork = new NetWork(getContext());
-        if(!netWork.isHaveInternet()){
+        if (!netWork.isHaveInternet()) {
             //无网络访问
             Toast.makeText(getActivity().getApplicationContext(), Constant.NOT_INTERNET_CONNECT, Toast.LENGTH_SHORT).show();
             return;
@@ -263,8 +264,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onError(Request request, Exception e) {
                 //请求异常
-                Toast.makeText(getActivity().getApplicationContext(), Constant.INTERNET_REQUEST_ABNORMAL,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), Constant.INTERNET_REQUEST_ABNORMAL, Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onResponse(String response) {
                 //请求成功
@@ -305,7 +307,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 //                    }
 
                     //获取账户类型信息
-                    String accountUrl = Constant.ENTRANCE_PREFIX + "SubmitEnter.json?sessionUuid="+sessionUuid+"&enterprisesId="+Constant.ENTERPRISE_TYPE_PERSONAL;
+                    String accountUrl = Constant.ENTRANCE_PREFIX + "SubmitEnter.json?sessionUuid=" + sessionUuid + "&enterprisesId=" + Constant.ENTERPRISE_TYPE_PERSONAL;
                     OkHttpClientManager.getAsyn(accountUrl, new OkHttpClientManager.ResultCallback<String>() {
                         JSONObject accountTypeJson;
                         JSONArray accountTypeArray;
@@ -315,12 +317,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                             //请求异常
                             Toast.makeText(getActivity(), Constant.INTERNET_REQUEST_ABNORMAL, Toast.LENGTH_SHORT).show();
                         }
+
                         @Override
                         public void onResponse(String response) {
                             try {
                                 accountTypeJson = new JSONObject(response);
                                 String status = accountTypeJson.getString("status");
-                                if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                                if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                                     //账户类型请求失败
                                     Toast.makeText(getActivity().getApplicationContext(), Constant.ACCOUNT_TYPE_INFO_REQUEST_FAIL, Toast.LENGTH_SHORT).show();
                                     return;
@@ -343,12 +346,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                                 }
 
                                 //获取角色用户
-                                String roleUrl = Constant.ENTRANCE_PREFIX + "Compare.json?sessionUuid="+sessionUuid+"&enterpriseId="+enterpriseId;
+                                String roleUrl = Constant.ENTRANCE_PREFIX + "Compare.json?sessionUuid=" + sessionUuid + "&enterpriseId=" + enterpriseId;
                                 OkHttpClientManager.getAsyn(roleUrl, new OkHttpClientManager.ResultCallback<String>() {
                                     @Override
                                     public void onError(Request request, Exception e) {
 
                                     }
+
                                     @Override
                                     public void onResponse(String response) {
                                         JSONObject roleJSON;
@@ -356,7 +360,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                                         try {
                                             roleJSON = new JSONObject(response);
                                             String status = roleJSON.getString("status");
-                                            if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                                            if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                                                 //角色类型请求失败
                                                 //Toast.makeText(getActivity().getApplicationContext(), "角色用户请求失败", Toast.LENGTH_SHORT).show();
                                                 return;
@@ -384,12 +388,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                     });
 
                     //获取用户ID
-                    String accountIDUrl = Constant.ENTRANCE_PREFIX + "getAccountIdBySessionUuid.json?sessionUuid="+sessionUuid;
+                    String accountIDUrl = Constant.ENTRANCE_PREFIX + "getAccountIdBySessionUuid.json?sessionUuid=" + sessionUuid;
                     OkHttpClientManager.getAsyn(accountIDUrl, new OkHttpClientManager.ResultCallback<String>() {
                         @Override
                         public void onError(Request request, Exception e) {
 
                         }
+
                         @Override
                         public void onResponse(String response) {
                             JSONObject accountIDJSON;
@@ -439,15 +444,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
      */
     private void isRememberPassword(ImageView imageView, Map<Object, Object> loginMap) {
         //boolean isChecked = checkBox.isChecked();
-        boolean isChecked = (boolean)imageView.getTag(R.id.remember_password);
+        boolean isChecked = (boolean) imageView.getTag(R.id.remember_password);
         Common userCommon = new Common(getActivity().getSharedPreferences(Constant.USER_INFO_FILE, Context.MODE_PRIVATE));
-        if(isChecked) {
+        if (isChecked) {
 
-            if(!userCommon.isSave(loginMap)) {
+            if (!userCommon.isSave(loginMap)) {
                 Toast.makeText(getActivity(), "保存偏好用户信息失败！", Toast.LENGTH_SHORT);
             }
         } else {
-            if(!userCommon.isClearAccount()) {
+            if (!userCommon.isClearAccount()) {
                 Toast.makeText(getActivity(), "清除偏好用户信息失败！", Toast.LENGTH_SHORT);
             }
         }
