@@ -15,6 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal"
+            android:onClick="back"
             android:gravity="center">
             <ImageView
                 android:layout_width="wrap_content"
@@ -32,7 +33,7 @@
             android:id="@+id/tv_order_detail_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/receive_order_title"
+            android:text="@string/history_transport_order"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="20sp"
