@@ -51,13 +51,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:gravity="left">
+                >
                 <TextView
                     android:layout_width="wrap_content"
                     android:id="@+id/from_to"
                     android:layout_height="wrap_content"
                     android:textColor="@color/gray_999999"
-                    android:text="福建厦门—福建晋江"/>
+                    android:text="福建厦门"/>
+                <TextView
+                    android:layout_width="15dp"
+                    android:id="@+id/line"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/from_to"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_999999"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/from"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/line"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_999999"
+                    android:text="福建晋江"/>
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"

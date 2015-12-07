@@ -96,7 +96,8 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
         OkHttpClientManager.getAsyn(location, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
-                Toast.makeText(PanoramaActivity.this, "失败", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PanoramaActivity.this, "", Toast.LENGTH_SHORT).show();
+                Common.showToast(PanoramaActivity.this,"请求失败");
             }
 
             @Override
@@ -106,6 +107,10 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                 try {
                     accountTypeJson = new JSONObject(response);
                     accountTypeArray = accountTypeJson.getJSONArray("rows");
+                    if (accountTypeArray.length()==0){
+                        Common.showToast(PanoramaActivity.this,"暂时没数据");
+                        return;
+                    }
                     for (int i = 0; i < accountTypeArray.length(); i++) {
                         JSONObject jsonObject = accountTypeArray.getJSONObject(i);
                         int controlStatus = jsonObject.getInt("controlStatus");
@@ -144,6 +149,10 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                         double slat = Double.parseDouble(lat);
                         double slng = Double.parseDouble(lng);
                         CarInfo carinfo = new CarInfo();
+                        if (slat==0&&slng==0){
+                            Common.showToast(PanoramaActivity.this,"暂时没数据");
+                            return;
+                        }
                         carinfo.setDriverName(driverName);//司机名字
                         carinfo.setControlNum(controlNum);//调度单号
                         carinfo.setDriverTel(driverTel);//司机电话
