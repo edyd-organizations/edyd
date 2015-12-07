@@ -3,26 +3,20 @@ package com.oto.edyd;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.AMap.OnMapLoadedListener;
 import com.amap.api.maps2d.MapView;
-import com.amap.api.maps2d.Projection;
 import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.geocoder.GeocodeAddress;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeQuery;
@@ -102,7 +96,8 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
         OkHttpClientManager.getAsyn(location, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
-                Toast.makeText(PanoramaActivity.this, "失败", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PanoramaActivity.this, "", Toast.LENGTH_SHORT).show();
+                Common.showToast(PanoramaActivity.this,"请求失败");
             }
 
             @Override
@@ -112,6 +107,10 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                 try {
                     accountTypeJson = new JSONObject(response);
                     accountTypeArray = accountTypeJson.getJSONArray("rows");
+                    if (accountTypeArray.length()==0){
+                        Common.showToast(PanoramaActivity.this,"暂时没数据");
+                        return;
+                    }
                     for (int i = 0; i < accountTypeArray.length(); i++) {
                         JSONObject jsonObject = accountTypeArray.getJSONObject(i);
                         int controlStatus = jsonObject.getInt("controlStatus");
@@ -150,6 +149,10 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                         double slat = Double.parseDouble(lat);
                         double slng = Double.parseDouble(lng);
                         CarInfo carinfo = new CarInfo();
+                        if (slat==0&&slng==0){
+                            Common.showToast(PanoramaActivity.this,"暂时没数据");
+                            return;
+                        }
                         carinfo.setDriverName(driverName);//司机名字
                         carinfo.setControlNum(controlNum);//调度单号
                         carinfo.setDriverTel(driverTel);//司机电话
@@ -214,10 +217,6 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
      */
     @Override
     public void onMapLoaded() {
-        // 设置所有maker显示在当前可视区域地图中
-//        LatLngBounds.Builder bounds = new LatLngBounds.Builder();
-//            .include(new LatLng(24.500522, 118.087857)).build();
-        //requestport();
         LatLngBounds.Builder latlngBoundsB = new LatLngBounds.Builder();
         LatLngBounds latlngBounds = null;
         boolean isenter = false;
@@ -373,11 +372,6 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
     @Override
     public void onRegeocodeSearched(RegeocodeResult result, int rCode) {
         if (rCode == 0) {
-       /*
-            if (result != null && result.getGeocodeAddressList() != null
-                    && result.getGeocodeAddressList().size() > 0) {
-
-            }*/
             String formatAddress = result.getRegeocodeAddress().getFormatAddress();
             address.setText("地       址："+formatAddress);
         }
