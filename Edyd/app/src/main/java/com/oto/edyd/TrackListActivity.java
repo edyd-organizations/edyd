@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.oto.edyd.model.TrackBean;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 
@@ -39,6 +40,7 @@ public class TrackListActivity extends Activity {
     private String sessionUuid;
     private ArrayList<TrackBean> infos;
     private TrackListAdapter adapter;
+    private CusProgressDialog loadingDialog; //页面切换过度
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +97,9 @@ public class TrackListActivity extends Activity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0x12: //油卡金额数据返回执行
+                    //加载完成隐藏loading
+                    loadingDialog.getLoadingDialog().dismiss();
+
                     if (adapter == null) {
                         adapter = new TrackListAdapter();
                         lv_track.setAdapter(adapter);
@@ -110,6 +115,11 @@ public class TrackListActivity extends Activity {
         ///v1.1/traceAllOrder.json?truckNum=&controlStatus=0&sessionUuid=
         int page=1;
         int rows=50;
+        //第一次进来显示loading
+        if (isFist) {
+            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
+            loadingDialog.getLoadingDialog().show();
+        }
         String url = Constant.ENTRANCE_PREFIX_v1 + "traceAllOrder.json?sessionUuid="
                 + sessionUuid + "&controlNum=" + controlNum + "&controlStatus=0"
                 + "&page=" + page + "&rows=" + rows;
@@ -117,6 +127,7 @@ public class TrackListActivity extends Activity {
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
+                loadingDialog.getLoadingDialog().dismiss();
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
             }
 
@@ -208,4 +219,20 @@ public class TrackListActivity extends Activity {
             return v;
         }
     }
+
+//    public abstract class FoginResultCallback<T> extends OkHttpClientManager.ResultCallback<T> {
+//
+//        @Override
+//        public void onAfter() {
+//            //super.onAfter();
+//            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
+//            loadingDialog.getLoadingDialog().show();
+//        }
+//
+//        @Override
+//        public void onBefore() {
+//            //super.onBefore();
+//            loadingDialog.getLoadingDialog().dismiss();
+//        }
+//    }
 }

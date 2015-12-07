@@ -48,18 +48,13 @@
             android:text="@string/register_text"/>
     </RelativeLayout>
 
-    <!-- Activity标题 -->
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!-- logo-->
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="40dp">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_login_logo" />
-    </LinearLayout>
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:src="@mipmap/ic_login_logo" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -93,6 +88,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
             android:background="@color/gray_DDDDDD"/>
+        <!-- 密码 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -115,12 +111,15 @@
                 android:inputType="textPassword" />
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal"
         android:layout_marginTop="20dp">
+
+        <!-- 登录按钮 -->
         <Button
             android:id="@+id/bt_login"
             android:layout_width="match_parent"
@@ -139,17 +138,14 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp">
+
+            <!-- 记住密码 -->
             <LinearLayout
                 android:id="@+id/ll_remember"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center">
-                <!--<CheckBox-->
-                    <!--android:id="@+id/remember_password"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:checked="true"/>-->
                 <ImageView
                     android:id="@+id/remember_password"
                     android:layout_width="wrap_content"
@@ -161,6 +157,8 @@
                     android:layout_height="wrap_content"
                     android:text="记住密码"/>
             </LinearLayout>
+
+            <!-- 忘记密码 -->
             <TextView
                 android:id="@+id/forget_password"
                 android:layout_width="wrap_content"
@@ -170,19 +168,4 @@
                 android:text="忘记密码？"/>
         </RelativeLayout>
     </LinearLayout>
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="30dp"-->
-        <!--android:layout_marginRight="20dp">-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/forget_password"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="right"-->
-            <!--android:textSize="14sp"-->
-            <!--android:text="忘记密码？"/>-->
-    <!--</LinearLayout>-->
-    <!--模拟ActionBar-->
 </LinearLayout>

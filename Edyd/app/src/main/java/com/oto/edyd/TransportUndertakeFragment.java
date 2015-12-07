@@ -49,6 +49,7 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
         transportReceiveOrder.setOnClickListener(this);
         distributeOrder.setOnClickListener(this);
         panorama.setOnClickListener(this);
+//        trackSearch.setOnClickListener(this);
         driverInfo.setOnClickListener(this);
         return  transportUndertakeView;
     }
@@ -82,6 +83,16 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
             case R.id.ll_driver_info: //司机信息
                 Toast.makeText(getActivity().getApplicationContext(), "开发中...", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.ll_track_search:
+                String seId = common.getStringByKey(Constant.ENTERPRISE_ID);
+                int enId = Integer.parseInt(seId );
+                if (enId==0){
+                    Toast.makeText(getActivity(),"您没有权限查看",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                intent =new Intent(getActivity(),TrackListActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 
@@ -96,13 +107,8 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
         distributeOrder = (LinearLayout) view.findViewById(R.id.ll_distribute_order);
         //查看轨迹
         trackSearch = (LinearLayout) view.findViewById(R.id.ll_track_search);
-        trackSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(getActivity(),TrackListActivity.class);
-                startActivity(intent);
-            }
-        });
+        trackSearch.setOnClickListener(this);
+
         panorama = (LinearLayout) view.findViewById(R.id.ll_panorama);
         driverInfo = (LinearLayout) view.findViewById(R.id.ll_driver_info);
         transportReceiveOrder = (ImageView) view.findViewById(R.id.iv_receive_order);
