@@ -422,7 +422,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      */
     private void initTransportServiceRoleType() {
         String roleType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
-        if(!TextUtils.isEmpty(roleType)) {
+        if(TextUtils.isEmpty(roleType)) {
             Map<Object, Object> map = new HashMap<Object, Object>();
             map.put(Constant.TRANSPORT_ROLE, 0); //默认运输角色，设置为司机，标识0
             //保存账户ID
