@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:hint="请输入订单流水号查找"
+                android:hint="请输入调度单号查找"
                 android:singleLine="true"
                 android:drawableLeft="@mipmap/search"
                 android:textColorHint="#CCCCCC"

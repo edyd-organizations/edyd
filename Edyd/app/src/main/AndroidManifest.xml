@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.oto.edyd" >
+    package="com.oto.edyd">
 
     <!-- 支持多屏 -->
     <supports-screens
@@ -54,13 +54,14 @@
          <!--<meta-data
          android:name="com.amap.api.v2.apikey"
          android:value="391bb51068ef790c94b3f93fe9852186" />-->
-        <!-- 高德地图 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="b0da2264df3bf64e1b5b9143dff0b427" />
         <!--<meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="b751da55d5392f83be3e89d0924c587d" />-->
+            android:value="b751da55d5392f83be3e89d0924c587d" />
+             android:name="com.amap.api.v2.apikey"
+             android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />-->
         <!-- 聚合数据 -->
         <meta-data
             android:name="com.thinkland.juheapi.openid"
@@ -74,7 +75,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -92,8 +93,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".CurrentWeatherReportActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".MarkerActivity"
             android:screenOrientation="portrait" />
@@ -218,8 +218,7 @@
         <activity
             android:name=".ReceiveOrderActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".TrackListActivity"
+        <activity android:name=".TrackListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ShowTrackActivity"
@@ -230,6 +229,12 @@
         <activity android:name=".ShipperOrderOperateItemDetailActivity"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".ShipperHistoryOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ShipperHisOrderDetailActivity"
+            android:screenOrientation="portrait" />
         <!-- 社交分享 -->
         <activity
             android:name=".wxapi.WXEntryActivity"
@@ -240,7 +245,7 @@
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
-            android:noHistory="true" >
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -265,7 +270,7 @@
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-            android:process=":DownloadingService"/>
+        android:process=":DownloadingService"/>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -274,9 +279,9 @@
         <activity
             android:name=".ForgetPasswordActivity"
             android:screenOrientation="portrait" />
-            android:screenOrientation="portrait"/>
-        <receiver android:name=".components.SmsReceiver" >
-            <intent-filter android:priority="800" >
+        android:screenOrientation="portrait"/>
+        <receiver android:name=".components.SmsReceiver">
+            <intent-filter android:priority="800">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
@@ -286,28 +291,23 @@
 
         <activity
             android:name=".Chooseprovince"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ChooseCity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
         <service android:name=".service.WeatherService" />
         <service android:name=".service.TimerService" />
 
         <activity
             android:name=".PanoramaActivity"
-            android:screenOrientation="po rtrait" >
-              android:name=".ReceivingOrderOperate"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ReceivingOrderOperate"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ReceivingOrderDetail"
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".ReceiveTransitOrderActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"/>
     </application>
-
 </manifest>
