@@ -19,7 +19,7 @@ import com.oto.edyd.utils.Constant;
 /**
  * Created by yql on 2015/12/1.
  */
-public class TransportShipperFragment extends Fragment implements View.OnClickListener{
+public class TransportShipperFragment extends Fragment implements View.OnClickListener {
 
     private View transportDriverView;
     public FragmentManager fragmentManager; //fragment管理器
@@ -31,6 +31,8 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
 
     private Common common;
     private Common fixedCommon;
+    private LinearLayout ll_history_orders;
+
 
     @Nullable
     @Override
@@ -47,14 +49,22 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
      * 初始化数据
      */
     private void initFields(View view) {
-        this.fragmentManager = ((MainActivity)getActivity()).fragmentManager;
+        this.fragmentManager = ((MainActivity) getActivity()).fragmentManager;
         selectTransportRole = (RelativeLayout) view.findViewById(R.id.select_transport_role);
         enterpriseName = (TextView) view.findViewById(R.id.enterprise_name);
         transportRole = (TextView) view.findViewById(R.id.transport_role);
         llOnTheWayOrders = (LinearLayout) view.findViewById(R.id.ll_on_the_way_orders);
-
         fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+
+        ll_history_orders = (LinearLayout) view.findViewById(R.id.ll_history_orders);//发货方历史订单
+        ll_history_orders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getActivity(),ShipperHistoryOrderActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -75,7 +85,7 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
         String txEnterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
         enterpriseName.setText(txEnterpriseName);
         String txTransportRole = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
-        if(txTransportRole!=null && !txTransportRole.equals("")) {
+        if (txTransportRole != null && !txTransportRole.equals("")) {
             int transportRoleId = Integer.valueOf(txTransportRole);
             switch (transportRoleId) {
                 case 0: //司机

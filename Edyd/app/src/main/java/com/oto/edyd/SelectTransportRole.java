@@ -31,11 +31,13 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
 
     private String[] roleArray; //角色集合
     private Common fixedCommon;
+    private Context mActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_transport_role);
+
         initFields();
         roleList.setAdapter(new TransportRoleAdapter(SelectTransportRole.this));
         back.setOnClickListener(this);
@@ -55,15 +57,17 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
                         finish();
                         break;
                     case 1: //发货方
-//                        transportRoleMap.put(Constant.TRANSPORT_ROLE, 1);
-//                        //保存账户ID
-//                        if (!globalCommon.isSave(transportRoleMap)) {
-//                            Toast.makeText(getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
-//                        setResult(Constant.TRANSPORT_ROLE_CODE);
-//                        finish();
-                        Toast.makeText(SelectTransportRole.this, "开发中...", Toast.LENGTH_SHORT).show();
+
+                        transportRoleMap.put(Constant.TRANSPORT_ROLE, 1);
+                        //保存账户ID
+                        if (!fixedCommon.isSave(transportRoleMap)) {
+                           Common.showToast(mActivity,"运输服务角色保存异常");
+                            return;
+                        }
+                        setResult(Constant.TRANSPORT_ROLE_CODE);
+                        finish();
+//                        Common.showToast(mActivity, "开发中...");
+
                         break;
                     case 2: //收货方
                         //transportRoleMap.put(Constant.TRANSPORT_ROLE, 2);
@@ -95,6 +99,7 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
      * 角色类型
      */
     private void initFields() {
+        mActivity=this;
         back = (LinearLayout) findViewById(R.id.back);
         roleList = (ListView) findViewById(R.id.role_list);
         roleArray = getResources().getStringArray(R.array.transport_role_list);
