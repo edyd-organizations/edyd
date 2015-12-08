@@ -90,7 +90,6 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                     pageRequestTransportOderData(page, ROWS);
                 }
             }
-
         }
     }
 

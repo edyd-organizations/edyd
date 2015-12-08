@@ -33,10 +33,14 @@
             android:textSize="20sp"
             android:textStyle="bold"/>
     </RelativeLayout>
+
+    <!-- 下拉刷新控件 -->
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <!-- 订单列表 -->
         <ListView
             android:id="@+id/shipper_order_lists"
             android:layout_width="match_parent"
