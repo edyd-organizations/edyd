@@ -229,8 +229,6 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ShipperOrderOperateItemDetailActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ReceiverOrderOperateActivity"
-            android:screenOrientation="portrait"/>
 
         <!-- 社交分享 -->
         <activity
@@ -300,10 +298,8 @@
 
         <activity
             android:name=".PanoramaActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".ReceivingOrderOperate"
+            android:screenOrientation="po rtrait" >
+              android:name=".ReceivingOrderOperate"
             android:screenOrientation="portrait" >
         </activity>
         <activity android:name=".ReceivingOrderDetail"
