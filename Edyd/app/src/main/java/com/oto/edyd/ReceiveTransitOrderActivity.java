@@ -134,7 +134,6 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                 JSONArray jsonArray;
                 try {
                     jsonObject = new JSONObject(response);
-
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), getString(R.string.pull_info_exception), Toast.LENGTH_SHORT).show();
                         return;
@@ -216,6 +215,9 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                     }
                     loadFlag = true;
                     jsonArray = jsonObject.getJSONArray("rows");
+                    if(jsonArray.length() == 0) {
+                        Toast.makeText(ReceiveTransitOrderActivity.this, "暂无数据", Toast.LENGTH_SHORT).show();
+                    }
                     //listSize = jsonArray.length();
                     if (loadType == 2) {
                         clearData();
