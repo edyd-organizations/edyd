@@ -71,7 +71,6 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
                 requestData(1, 10, 2);
             }
         });
-
         receiveOrderList.setOnScrollListener(this);
         receiveOrderList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

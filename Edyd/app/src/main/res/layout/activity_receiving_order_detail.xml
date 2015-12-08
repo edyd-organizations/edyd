@@ -462,15 +462,6 @@
                                 android:layout_alignParentLeft="true"
                                 android:text="晋江市"
                                 android:textColor="@android:color/background_dark" />
-                           <!-- <Button
-                                android:id="@+id/checktrack"
-                                android:layout_width="70dp"
-                                android:layout_height="35dp"
-                                android:text="查看轨迹"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginRight="10dp"
-                                android:textColor="@color/white"
-                                android:background="@color/blue_106ab8"/>-->
                         </RelativeLayout>
                     </RelativeLayout>
                     <LinearLayout
