@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.oto.edyd.model.OrderDetail;
 import com.oto.edyd.model.OrderPerTime;
+import com.oto.edyd.model.TrackBean;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -36,7 +37,7 @@ import java.util.Set;
 /**
  * 收货方历史订单详情
  */
-public class ReceivingOrderDetail extends Activity implements View.OnClickListener{
+public class ReceivingOrderDetail extends Activity {
 
     private LinearLayout orderDetailBack; //返回
     //private Button receiveOrder; //按钮
@@ -91,19 +92,23 @@ public class ReceivingOrderDetail extends Activity implements View.OnClickListen
 
     private Common common; //common偏好设置
     private int reOrderStatus; //订单状态
+
+    TrackBean infos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receiving_order_detail);
         initFields();
         String primaryId = getIntent().getStringExtra("primaryId");
+        infos = new TrackBean();
+        Long aLong = Long.parseLong(primaryId);
+        infos.setPrimaryId(aLong);
         requestOrderDetailData(primaryId);
     }
     /**
      * 初始化数据
      */
     private void initFields() {
-        orderDetailBack = (LinearLayout) findViewById(R.id.order_detail_back);
         orderStatus = (ImageView) findViewById(R.id.order_status); //接单状态
 
         executeFirstPoint = (ImageView) findViewById(R.id.execute_first_point);
@@ -582,16 +587,19 @@ public class ReceivingOrderDetail extends Activity implements View.OnClickListen
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.order_detail_back:
-                Intent intent = new Intent();
-                intent.putExtra("position", position);
-                intent.putExtra("controlStatus", tControlStatus);
-                setResult(0x15, intent);
-                finish();
-                break;
-        }
+    public void back(View v){//返回按钮
+        Intent intent = new Intent();
+        intent.putExtra("position", position);
+        intent.putExtra("controlStatus", tControlStatus);
+        setResult(0x15, intent);
+        finish();
     }
+    public void checkTrack(View v){//查看轨迹
+        Intent intent = new Intent(this, ShowTrackActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("detailBean",infos);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
 }

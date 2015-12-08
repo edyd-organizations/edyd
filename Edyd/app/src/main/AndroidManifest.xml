@@ -302,9 +302,11 @@
             android:name=".ReceivingOrderOperate"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".ReceivingOrderDetail" >
+        <activity android:name=".ReceivingOrderDetail"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".ReceiveTransitOrderActivity" >
+        <activity android:name=".ReceiveTransitOrderActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

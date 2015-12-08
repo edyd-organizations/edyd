@@ -149,10 +149,10 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                         double slat = Double.parseDouble(lat);
                         double slng = Double.parseDouble(lng);
                         CarInfo carinfo = new CarInfo();
-                        if (slat==0&&slng==0){
+                      /*  if (slat==0&&slng==0){
                             Common.showToast(PanoramaActivity.this,"暂时没数据");
                             return;
-                        }
+                        }*/
                         carinfo.setDriverName(driverName);//司机名字
                         carinfo.setControlNum(controlNum);//调度单号
                         carinfo.setDriverTel(driverTel);//司机电话
@@ -161,10 +161,15 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                         carinfo.setOrder(order);
                         carinfo.setSlat(slat);
                         carinfo.setSlng(slng);
-                        addInfo.add(carinfo);
+                        if (!(slat==0&&slng==0)){
+                            addInfo.add(carinfo);
+                        }
                     }
                     if (addInfo.size()!=0){
                         onMapLoaded();
+                    }
+                    if (addInfo.size()==0){
+                        Common.showToast(PanoramaActivity.this, "暂时没数据");
                     }
                     Message message = Message.obtain();
                     message.what = 0x20;
