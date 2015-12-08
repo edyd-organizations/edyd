@@ -5,23 +5,41 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 /**
- * Created by yql on 2015/8/27.
- * 登入页Activity
+ * 功能：登录模块Activity
+ * 文件名：com.oto.edyd.LoginActivity.java
+ * 创建时间：2015/8/27
+ * 作者：yql
  */
 public class LoginActivity extends FragmentActivity {
 
-    public FragmentManager loginFragmentManager; //LoginActivity布局管理器
+    private FragmentManager eFragmentManager; //Fragment管理器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_frame);
+        init(); //初始化数据
+        loadLayout(); //加载布局
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        this.loginFragmentManager = getSupportFragmentManager();
-        loginFragmentManager.beginTransaction().replace(R.id.common_frame, new LoginFragment()).commit();
+    /**
+     * 初始化数据
+     */
+    private void init() {
+        initFields();
+    }
+
+    /**
+     * 初始化字段
+     */
+    private void initFields() {
+        eFragmentManager = getSupportFragmentManager();
+    }
+
+    /**
+     * 加载并初始化数据
+     */
+    private void loadLayout() {
+        eFragmentManager.beginTransaction().replace(R.id.common_frame, new LoginFragment()).commit(); //replace函数参数一为容器，参数二要加载的页面
     }
 }

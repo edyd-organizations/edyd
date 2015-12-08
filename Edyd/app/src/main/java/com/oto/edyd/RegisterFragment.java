@@ -52,7 +52,7 @@ import cn.smssdk.SMSSDK;
 public class RegisterFragment extends Fragment implements View.OnClickListener, View.OnFocusChangeListener{
 
     private View registerView; //布局view
-    private FragmentManager loginFragmentManager; //LoginActivity布局管理器
+    private FragmentManager eFragmentManager; //LoginActivity布局管理器
 
     private LinearLayout registerBack; //注册返回
     private EditText registerPhoneNumber; //注册手机号
@@ -126,7 +126,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.register_back: //注册返回
-                loginFragmentManager.popBackStack(); //activity的后退栈中弹出fragment
+                eFragmentManager.popBackStack(); //activity的后退栈中弹出fragment
                 break;
             case R.id.verification_code: //获取验证码
                 String userName = registerPhoneNumber.getText().toString();
@@ -143,7 +143,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 register();
                 break;
             case R.id.bt_already_register:
-                loginFragmentManager.popBackStack(); //activity的后退栈中弹出fragment
+                eFragmentManager.popBackStack(); //activity的后退栈中弹出fragment
                 break;
             default:
                 break;
@@ -342,7 +342,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         protocolIntroduction = (TextView) view.findViewById(R.id.protocol_introduction);
         btRegister = (Button) view.findViewById(R.id.bt_register);
         btAlreadyRegister = (Button) view.findViewById(R.id.bt_already_register);
-        this.loginFragmentManager = ((LoginActivity)getActivity()).loginFragmentManager;
+        eFragmentManager = getActivity().getSupportFragmentManager();
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
     }

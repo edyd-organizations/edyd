@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 功能：登录模块
+ * 功能：登录模块Fragment
  * 文件名：com.oto.edyd.LoginFragment.java
  * 创建时间：2015/8/27
  * 作者：yql
@@ -187,7 +187,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 getActivity().finish(); //结束LoginActivity
                 break;
             case R.id.login_user_register: //登录用户注册
-                this.eFragmentManager = ((LoginActivity) getActivity()).loginFragmentManager;
+                eFragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction loginTransaction = eFragmentManager.beginTransaction();
                 loginTransaction.addToBackStack(null);
                 loginTransaction.replace(R.id.common_frame, new RegisterFragment());
@@ -232,11 +232,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
 
         //请求数据
-        OkHttpClientManager.getAsyn(url, new LoginResultCallback<String>() {
+        OkHttpClientManager.getAsyn(url, new LoginResultCallback<String>(1) {
             @Override
             public void onError(Request request, Exception e) {
                 //网络异常
                 common.showToast(context, Constant.INTERNET_REQUEST_ABNORMAL);
+                loadingDialog.getLoadingDialog().dismiss();
             }
 
             @Override
@@ -253,6 +254,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         //用户名和密码错误
                         common.showToast(context, Constant.INVALID_USERNAME_PASSWORD);
+                        loadingDialog.getLoadingDialog().dismiss();
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
@@ -264,6 +266,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     if (!common.isSave(map)) {
                         //用户信息保存失败
                         common.showToast(context, Constant.USER_INFO_SAVE_FAIL);
+                        loadingDialog.getLoadingDialog().dismiss();
                         return;
                     }
 
@@ -288,6 +291,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             public void onError(Request request, Exception e) {
                 //请求异常
                 common.showToast(context, Constant.INTERNET_REQUEST_ABNORMAL);
+                loadingDialog.getLoadingDialog().dismiss();
             }
 
             @Override
@@ -300,6 +304,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         //账户类型请求失败
                         common.showToast(context, Constant.ACCOUNT_TYPE_INFO_REQUEST_FAIL);
+                        loadingDialog.getLoadingDialog().dismiss();
                         return;
                     }
 
@@ -314,6 +319,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     //保存账户类型信息
                     if (!common.isSave(map)) {
                         common.showToast(context, Constant.ACCOUNT_TYPE_INFO_SAVE_FAIL);
+                        loadingDialog.getLoadingDialog().dismiss();
                         return;
                     }
 
@@ -340,6 +346,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             public void onError(Request request, Exception e) {
                 //请求异常
                 common.showToast(context, Constant.INTERNET_REQUEST_ABNORMAL);
+                loadingDialog.getLoadingDialog().dismiss();
             }
 
             @Override
@@ -352,6 +359,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         //角色类型请求异常
                         common.showToast(context, "角色类型请求异常");
+                        loadingDialog.getLoadingDialog().dismiss();
                         return;
                     }
 
@@ -364,6 +372,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     if (!common.isSave(map)) {
                         //角色类型保存失败
                         common.showToast(context, getString(R.string.role_type_info_save_error));
+                        loadingDialog.getLoadingDialog().dismiss();
                         return;
                     }
 
@@ -384,11 +393,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private void requestAccountId(String sessionUuid) {
         String accountIDUrl = Constant.ENTRANCE_PREFIX + "getAccountIdBySessionUuid.json?sessionUuid=" + sessionUuid;
 
-        OkHttpClientManager.getAsyn(accountIDUrl, new OkHttpClientManager.ResultCallback<String>() {
+        OkHttpClientManager.getAsyn(accountIDUrl, new LoginResultCallback<String>(2) {
             @Override
             public void onError(Request request, Exception e) {
                 //请求异常
                 common.showToast(context, Constant.INTERNET_REQUEST_ABNORMAL);
+                loadingDialog.getLoadingDialog().dismiss();
             }
 
             @Override
@@ -404,6 +414,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     //保存账户ID
                     if (!common.isSave(map)) {
                         common.showToast(context, getString(R.string.role_type_info_save_error));
+                        loadingDialog.getLoadingDialog().dismiss();
                         return;
                     }
 
@@ -433,7 +444,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
 
         isNeedRememberPassword(); //是否需要记住密码
-        loadingDialog.getLoadingDialog().dismiss(); //关闭弹窗
 
         //登录成功之后做的操作
         Intent intent = new Intent();
@@ -498,17 +508,32 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      * @param <T>
      */
     abstract class LoginResultCallback<T> extends OkHttpClientManager.ResultCallback<T> {
+
+        private int requestSequence; //请求次序
+        private final static int START_ACCESS = 1; //首次访问
+        private final static int END_ACCESS = 2; //末次访问
+
+        public LoginResultCallback(int requestSequence) {
+            this. requestSequence = requestSequence;
+        }
+
         @Override
         public void onBefore() {
             //请求之前操作
-            loadingDialog = new CusProgressDialog(getActivity(), "正在登录...");
-            loadingDialog.getLoadingDialog().show();
+            if(requestSequence == START_ACCESS) {
+                //首次访问
+                loadingDialog = new CusProgressDialog(getActivity(), "正在登录...");
+                loadingDialog.getLoadingDialog().show();
+            }
         }
 
         @Override
         public void onAfter() {
             //请求之后要做的操作
-            //loadingDialog.getLoadingDialog().dismiss();
+            if(requestSequence == END_ACCESS) {
+                //末次访问
+                loadingDialog.getLoadingDialog().dismiss();
+            }
         }
     }
 }
