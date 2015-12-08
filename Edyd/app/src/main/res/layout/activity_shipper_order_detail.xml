@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
     <!--模拟ActionBar-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/user_icon_8">
+
         <LinearLayout
-            android:id="@+id/order_detail_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center">
-            <ImageButton
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:onClick="back"
+            android:orientation="horizontal">
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/ic_chevron_left_white_36dp"/>
+                android:background="@mipmap/ic_chevron_left_white_36dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -26,73 +31,85 @@
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
         </LinearLayout>
+
         <TextView
             android:id="@+id/tv_order_detail_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/order_detail_title"
             android:gravity="center"
+            android:text="@string/order_detail_title"
             android:textColor="@android:color/white"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:layout_margin="10dp"
-                android:orientation="horizontal"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:orientation="horizontal">
+
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
+
                     <ImageView
                         android:id="@+id/execute_first_point"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentLeft="true"
-                        android:background="@mipmap/execute_gray" />
+                        android:layout_centerVertical="true"
+                        android:background="@mipmap/execute_green" />
+
                     <TextView
                         android:id="@+id/execute_first_line"
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/execute_first_point"
-                        android:background="@color/gray_999999" />
+                        android:background="@color/green_55e6ac" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_below="@id/execute_first_point"
                         android:layout_centerVertical="true"
+                        android:layout_marginTop="10dp"
                         android:gravity="center"
-                        android:layout_marginTop="10dp">
+                        android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/tv_first_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="接单"/>
+                            android:text="接单" />
+
                         <TextView
                             android:id="@+id/execute_first_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
+                            android:text="15:12"
                             android:textSize="12sp" />
+
                         <TextView
                             android:id="@+id/execute_first_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
+                            android:text="11-18"
                             android:textSize="10sp" />
                     </LinearLayout>
                 </RelativeLayout>
@@ -100,46 +117,55 @@
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2" >
+                    android:layout_weight="2">
+
                     <TextView
                         android:id="@+id/execute_second_line"
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
-                        android:background="@color/gray_999999" />
+                        android:background="@color/green_55e6ac" />
+
                     <ImageView
                         android:id="@+id/execute_second_point"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:background="@mipmap/execute_gray"/>
+                        android:background="@mipmap/execute_green" />
+
                     <TextView
                         android:id="@+id/execute_third_line"
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
-                        android:layout_toRightOf="@id/execute_second_point"
                         android:layout_centerVertical="true"
-                        android:background="@color/gray_999999" />
+                        android:layout_toRightOf="@id/execute_second_point"
+                        android:background="@color/green_55e6ac" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_above="@id/execute_second_point"
                         android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
                         android:gravity="center"
-                        android:layout_marginBottom="10dp">
+                        android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/execute_second_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
+                            android:text="9-14"
                             android:textSize="10sp" />
+
                         <TextView
                             android:id="@+id/execute_second_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="20:46"
                             android:textSize="12sp" />
+
                         <TextView
                             android:id="@+id/tv_second_time"
                             android:layout_width="wrap_content"
@@ -152,98 +178,116 @@
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2" >
+                    android:layout_weight="2">
+
                     <TextView
                         android:id="@+id/execute_four_line"
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
-                        android:background="@color/gray_999999" />
+                        android:background="@color/green_55e6ac" />
+
                     <ImageView
                         android:id="@+id/execute_third_point"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:background="@mipmap/execute_gray"/>
+                        android:background="@mipmap/execute_green" />
+
                     <TextView
                         android:id="@+id/execute_five_line"
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
-                        android:layout_toRightOf="@id/execute_third_point"
                         android:layout_centerVertical="true"
-                        android:background="@color/gray_999999" />
+                        android:layout_toRightOf="@id/execute_third_point"
+                        android:background="@color/green_55e6ac" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_below="@id/execute_third_point"
                         android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
                         android:gravity="center"
-                        android:layout_marginTop="10dp">
+                        android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/tv_third_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="装货完成" />
+
                         <TextView
                             android:id="@+id/execute_third_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
+                            android:text="20:46"
                             android:textSize="12sp" />
+
                         <TextView
                             android:id="@+id/execute_third_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="10sp"
-                            android:layout_marginTop="5dp" />
+                            android:layout_marginTop="5dp"
+                            android:text="9-12"
+                            android:textSize="10sp" />
                     </LinearLayout>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2" >
+                    android:layout_weight="2">
+
                     <TextView
                         android:id="@+id/execute_six_line"
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
-                        android:background="@color/gray_999999" />
+                        android:background="@color/green_55e6ac" />
+
                     <ImageView
                         android:id="@+id/execute_four_point"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:background="@mipmap/execute_gray"/>
+                        android:background="@mipmap/execute_green" />
+
                     <TextView
                         android:id="@+id/execute_seven_line"
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
-                        android:layout_toRightOf="@id/execute_four_point"
                         android:layout_centerVertical="true"
-                        android:background="@color/gray_999999" />
+                        android:layout_toRightOf="@id/execute_four_point"
+                        android:background="@color/green_55e6ac" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_above="@id/execute_four_point"
                         android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
                         android:gravity="center"
-                        android:layout_marginBottom="10dp">
+                        android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/execute_four_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
+                            android:text="9-23"
                             android:textSize="10sp" />
+
                         <TextView
                             android:id="@+id/execute_four_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="20:46"
                             android:textSize="12sp" />
+
                         <TextView
                             android:id="@+id/tv_four_time"
                             android:layout_width="wrap_content"
@@ -256,305 +300,290 @@
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2" >
+                    android:layout_weight="2">
+
                     <TextView
                         android:id="@+id/execute_eight_line"
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
-                        android:background="@color/gray_999999" />
+                        android:background="@color/green_55e6ac" />
+
                     <ImageView
                         android:id="@+id/execute_five_point"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:background="@mipmap/execute_gray"/>
+                        android:background="@mipmap/execute_green" />
+
                     <TextView
                         android:id="@+id/execute_nine_line"
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
-                        android:layout_toRightOf="@id/execute_five_point"
                         android:layout_centerVertical="true"
-                        android:background="@color/gray_999999" />
+                        android:layout_toRightOf="@id/execute_five_point"
+                        android:background="@color/green_55e6ac" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_below="@id/execute_five_point"
                         android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
                         android:gravity="center"
-                        android:layout_marginTop="10dp">
+                        android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/tv_five_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="到达收货" />
+                            android:text="到达卸货" />
+
                         <TextView
                             android:id="@+id/execute_five_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
+                            android:text="20:46"
                             android:textSize="12sp" />
+
                         <TextView
                             android:id="@+id/execute_five_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="10sp"
-                            android:layout_marginTop="5dp" />
+                            android:layout_marginTop="5dp"
+                            android:text="11-11"
+                            android:textSize="10sp" />
                     </LinearLayout>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <TextView
                         android:id="@+id/execute_ten_line"
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
-                        android:background="@color/gray_999999" />
+                        android:background="@color/green_55e6ac" />
 
                     <ImageView
                         android:id="@+id/execute_six_point"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
-                        android:background="@mipmap/execute_gray" />
+                        android:layout_centerVertical="true"
+                        android:background="@mipmap/line_car" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_above="@id/execute_six_point"
                         android:layout_centerHorizontal="true"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/execute_six_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
+                            android:text="10-10"
+                            android:textColor="@color/user_icon_8"
                             android:textSize="10sp" />
+
                         <TextView
                             android:id="@+id/execute_six_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="20:46"
+                            android:textColor="@color/user_icon_8"
                             android:textSize="12sp" />
+
                         <TextView
                             android:id="@+id/tv_six_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="收货完成" />
+                            android:text="完成卸货"
+                            android:textColor="@color/user_icon_8" />
                     </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/bright_foreground_light_disabled"/>
+                android:background="@color/bright_foreground_light_disabled" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white">
-<!--                <TextView
-                    android:id="@+id/order_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="25dp"
-                    android:paddingRight="25dp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:background="#ff6600"
-                    android:text="未完成"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"/>-->
+                android:layout_height="wrap_content">
+
                 <ImageView
                     android:id="@+id/order_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true" />
+                    android:src="@mipmap/tts_arrived_load" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-<!--                        <TextView
+
+                        <ImageView
                             android:id="@+id/tv_order_number"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:textSize="15sp"
-                            android:textColor="@color/black"
-                            android:text="订单号:"/>-->
+                            android:src="@mipmap/order_number" />
+
                         <TextView
-                            android:id="@+id/order_number"
+                            android:id="@+id/orderNumView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:textColor="@color/black"
-                            android:text="EDR43286F846"/>
-                        <TextView
-                            android:id="@+id/order_date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:textColor="@color/gray_999999"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="40dp" />
+                            android:layout_marginLeft="5dp"
+                            android:layout_toRightOf="@+id/tv_order_number"
+                            android:text="1234567890" />
+
                     </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:gravity="left">
+
+                        <TextView
+                            android:id="@+id/fromAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="福建省厦门市" />
+
+                        <TextView
+                            android:layout_width="30dp"
+                            android:layout_height="1dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@color/gray_999999" />
+
+                        <TextView
+                            android:id="@+id/toAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="福建省漳州市" />
+                    </LinearLayout>
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp">
-                        <LinearLayout
+
+                        <RelativeLayout
                             android:id="@+id/l_start_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="left">
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:src="@mipmap/starting_point"/>
-                            <TextView
-                                android:id="@+id/receive_order_start_address"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginLeft="7dp"
-                                android:textSize="15sp"
-                                android:textColor="@android:color/background_dark" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/l_start_address"
-                            android:layout_marginTop="10dp"
-                            android:orientation="horizontal"
-                            android:gravity="left">
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:src="@mipmap/finishing_point"/>
-                            <TextView
-                                android:id="@+id/receive_order_end_address"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:textSize="15sp"
-                                android:layout_marginLeft="7dp"
-                                android:textColor="@android:color/background_dark" />
-                        </LinearLayout>
+                            android:gravity="left"
+                            android:orientation="horizontal">
 
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@mipmap/finishingpoint" />
+
+                            <TextView
+                                android:id="@+id/tv_addr_detail"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="22dp"
+                                android:text="河北省张家口市沽源县"
+                                android:textSize="15sp" />
+
+                            <Button
+                                android:id="@+id/checktrack"
+                                android:layout_width="70dp"
+                                android:layout_height="35dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="10dp"
+                                android:background="@color/blue_106ab8"
+                                android:text="查看轨迹"
+                                android:textColor="@color/white"
+                                android:visibility="gone" />
+                        </RelativeLayout>
                     </RelativeLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:orientation="vertical">
+
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
+                                android:layout_marginBottom="5dp"
                                 android:orientation="horizontal">
+
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:src="@mipmap/consignor"/>
+                                    android:src="@mipmap/cargo_receiver" />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
-                                    android:textSize="14sp"
-                                    android:textColor="@color/black"
-                                    android:text="发货人"/>
+                                    android:layout_marginLeft="7dp"
+                                    android:text="发货人"
+                                    android:textSize="14sp" />
+
                                 <TextView
                                     android:id="@+id/shipper_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textSize="14sp"
                                     android:layout_marginLeft="8dp"
-                                    android:textColor="@color/black"/>
+                                    android:text="李四"
+                                    android:textSize="14sp" />
+
                                 <TextView
                                     android:id="@+id/phone_number_one"
                                     android:layout_width="wrap_content"
-                                    android:layout_marginLeft="8dp"
-                                    android:text="15080212174"
-                                    android:layout_weight="1"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/black"/>
+                                    android:layout_marginLeft="8dp"
+                                    android:layout_weight="1"
+                                    android:text="15080212174" />
                             </LinearLayout>
                         </RelativeLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:orientation="vertical">
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center">
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:layout_gravity="center_horizontal">
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:src="@mipmap/cargo_receiver"/>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="5dp"
-                                        android:textSize="14sp"
-                                        android:textColor="@color/black"
-                                        android:text="收货人"/>
-                                    <TextView
-                                        android:id="@+id/consignee"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="8dp"
-                                        android:text="李小萌"
-                                        android:textColor="@color/black"/>
-                                    <TextView
-                                        android:id="@+id/consignee_phone_number"
-                                        android:layout_width="wrap_content"
-                                        android:layout_marginLeft="8dp"
-                                        android:text="15080212174"
-                                        android:layout_weight="1"
-                                        android:layout_height="wrap_content"
-                                        android:textColor="@color/black"/>
-                                </LinearLayout>
-                            </RelativeLayout>
-                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/bright_foreground_light_disabled"/>
+                android:background="@color/bright_foreground_light_disabled" />
+
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -562,97 +591,88 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/white">
+
                 <TableRow>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="货物信息"/>
+                        android:text="货物信息" />
                 </TableRow>
+
                 <TableRow>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
                         android:layout_marginTop="10dp"
-                        android:text="货物名称"/>
+                        android:text="货物名称" />
+
                     <TextView
                         android:id="@+id/goods_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:maxEms="14"
-                        android:singleLine="false"
-                        android:textColor="@color/black"
+                        android:layout_marginLeft="20dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginLeft="20dp" />
+                        android:maxEms="14"
+                        android:singleLine="false" />
                 </TableRow>
+
                 <TableRow>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
                         android:layout_marginTop="10dp"
-                        android:text="货物总体积"/>
+                        android:text="货物总体积" />
+
                     <TextView
                         android:id="@+id/goods_total_volume"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginLeft="20dp" />
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp" />
                 </TableRow>
+
                 <TableRow>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
                         android:layout_marginTop="10dp"
-                        android:text="货物总数量"/>
+                        android:text="货物总数量" />
+
                     <TextView
                         android:id="@+id/goods_total_quantity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
+                        android:layout_marginLeft="20dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginLeft="20dp" />
+                        android:textColor="@color/black" />
                 </TableRow>
+
                 <TableRow>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
                         android:layout_marginTop="10dp"
-                        android:text="货物总重量"/>
+                        android:text="货物总重量" />
+
                     <TextView
                         android:id="@+id/goods_total_weight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
+                        android:layout_marginLeft="20dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginLeft="20dp"/>
+                        android:textColor="@color/black" />
                 </TableRow>
             </TableLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/gray_DDDDDD"
-                android:gravity="center"
-                android:orientation="vertical">
-                <Button
-                    android:id="@+id/detail_receive_order"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginBottom="10dp"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"
-                    android:background="@drawable/border_corner_order"/>
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

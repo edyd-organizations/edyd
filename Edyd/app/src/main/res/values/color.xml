@@ -162,8 +162,9 @@
     <color name="gray_EEEEEE">#EEEEEE</color>
     <color name="gray_EDEDED">#EDEDED</color>
     <color name="gray_DDDDDD">#DDDDDD</color>
-    <color name="gray_999999">#999999</color>
     <color name="gray_AAAAAA">#AAAAAA</color>
+    <color name="gray_999999">#999999</color>
+    <color name="gray_818181">#818181</color>
     <color name="gray_5d5d5d">#5d5d5d</color>
 
 

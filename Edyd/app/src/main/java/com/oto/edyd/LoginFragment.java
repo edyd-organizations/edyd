@@ -75,7 +75,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      */
     private void init(View view) {
         initFields(view); //初始化字段
-        initEvent(); //初始化监听事件
+        initListener(); //初始化监听事件
         initWhetherRememberPassword(); //初始化记住密码状态
     }
 
@@ -100,7 +100,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     /**
      * 初始化监听事件
      */
-    private void initEvent() {
+    private void initListener() {
         back.setOnClickListener(this);
         btLogin.setOnClickListener(this);
         linearLayoutRemember.setOnClickListener(this);
