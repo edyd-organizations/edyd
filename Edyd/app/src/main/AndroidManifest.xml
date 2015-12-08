@@ -218,7 +218,9 @@
         <activity
             android:name=".ReceiveOrderActivity"
             android:screenOrientation="portrait" />
-        <ShipperHistoryOrderActivityname=".TrackListActivity"
+
+        <activity
+            android:name=".TrackListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ShowTrackActivity"
@@ -227,8 +229,6 @@
             android:name=".ShipperOrderOperateActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ShipperOrderOperateItemDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ReceiverOrderOperateActivity"
             android:screenOrientation="portrait"/>
 
         <activity
