@@ -27,10 +27,7 @@ import com.squareup.okhttp.Request;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,15 +41,9 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
     private ReceiveOrderListAdapter receiveOrderListAdapter; //自定义适配器
     private Common common;
     private boolean loadFlag = false;
-    private List<Integer> idList = new ArrayList<Integer>(); //ID集合
-    private List<Integer> primaryIdList = new ArrayList<Integer>(); //主键ID集合
-    private List<String> orderList = new ArrayList<String>(); //订单集合
-    private List<String> senderAddressList = new ArrayList<String>(); //发货方地址集合
-    private List<String> senderList = new ArrayList<String>();//发货人集合
-    private List<String> phoneNumberList = new ArrayList<String>(); //发货人联系电话集合
-    private List<Integer> orderStatusList = new ArrayList<Integer>(); //订单状态
     private int visibleLastIndex = 0; //最后可视项索引
     private final static int ROWS = 10; //分页加载数据每页10
+    List<Orderdetail> addInfo= new ArrayList<Orderdetail>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +66,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(ReceiveTransitOrderActivity.this, ReceivingOrderDetail.class);
-                intent.putExtra("primaryId", String.valueOf(primaryIdList.get(position)));
+               // intent.putExtra("primaryId", String.valueOf(primaryIdList.get(position)));
                 intent.putExtra("position", String.valueOf(position));
                 startActivityForResult(intent, 0x21);
             }
@@ -141,17 +132,15 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                     jsonArray = jsonObject.getJSONArray("rows");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tempJSON = jsonArray.getJSONObject(i);
-                        idList.add(tempJSON.getInt("ID"));
-                        primaryIdList.add(tempJSON.getInt("primaryId"));
-                        orderList.add(tempJSON.getString("controlNum"));
-                        //dateList.add(tempJSON.getString("controlDate"));
-                        senderAddressList.add(tempJSON.getString("senderAddr"));
-                        //receiveAddressList.add(tempJSON.getString("receiverAddr"));
-                        senderList.add(tempJSON.getString("senderContactPerson"));
-                        phoneNumberList.add(tempJSON.getString("senderContactTel"));
-                        //consigneeList.add(tempJSON.getString("receiverContactPerson"));
-                        // consigneePhoneList.add(tempJSON.getString("receiverContactTel"));
-                        orderStatusList.add(tempJSON.getInt("controlStatus"));
+                        Orderdetail orderdetail=new Orderdetail();
+                        orderdetail.setDistance(tempJSON.getInt("distance"));//距离
+                        orderdetail.setControlNum(tempJSON.getString("controlNum"));//调度单
+                        orderdetail.setStartAddrProviceAndCity(tempJSON.getString("senderAddrProviceAndCity"));//发货人省份
+                        orderdetail.setStopAddrProviceAndCity(tempJSON.getString("receiverAddrProviceAndCity"));//收货人省份
+                        orderdetail.setDetailedAddress(tempJSON.getString("receiverAddr"));//详细地址
+                        orderdetail.setContacrName(tempJSON.getString("senderName"));//发货人
+                        orderdetail.setContactTel(tempJSON.getString("senderContactTel"));//发货人电话
+                        addInfo.add(orderdetail);
                     }
                     Message message = new Message();
                     message.what = 3;
@@ -167,13 +156,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
      * 去除数据
      */
     private void clearData() {
-        idList.clear();
-        primaryIdList.clear();
-        orderList.clear();
-        senderAddressList.clear();
-        senderList.clear();
-        phoneNumberList.clear();
-        orderStatusList.clear();
+        addInfo.clear();
     }
     /**
      *
@@ -194,8 +177,14 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
      * @param loadType 加载类型
      */
     private void requestData(int page, int rows, final int loadType) {
+        Common fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+        String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        String orgCode = common.getStringByKey(Constant.ORG_CODE);
+        String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
         String sessionUUID = getSessionUUID();
-        String url = Constant.ENTRANCE_PREFIX + "appQueryOrderList.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows;
+        String url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderList.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows
+                        +"&aspectType="+aspectType+"&enterpriseId="+enterpriseId+"&orgCode="+orgCode;
         OkHttpClientManager.getAsyn(url, new ReceiveOrderCallback<String>(loadType) {
             @Override
             public void onError(Request request, Exception e) {
@@ -224,24 +213,16 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                     }
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tempJSON = jsonArray.getJSONObject(i);
-                        idList.add(tempJSON.getInt("ID"));
-                        primaryIdList.add(tempJSON.getInt("primaryId"));
-                        orderList.add(tempJSON.getString("controlNum"));
-                        String tDate = tempJSON.getString("controlDate");
-                        if (tDate != null && !(tDate.equals(""))) {
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                            Date date = null;
-                            try {
-                                date = sdf.parse(tempJSON.getString("controlDate"));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                        }
-                        senderAddressList.add(tempJSON.getString("senderAddr"));
-                        senderList.add(tempJSON.getString("senderContactPerson"));
-                        phoneNumberList.add(tempJSON.getString("senderContactTel"));
-                        orderStatusList.add(tempJSON.getInt("controlStatus"));
+                        Orderdetail orderdetail=new Orderdetail();
+                        orderdetail.setDistance(tempJSON.getInt("distance"));//距离
+                        orderdetail.setControlNum(tempJSON.getString("controlNum"));//调度单
+                        orderdetail.setOrderStatus(tempJSON.getInt("orderStatus"));
+                        orderdetail.setStartAddrProviceAndCity(tempJSON.getString("senderAddrProviceAndCity"));//发货人省份
+                        orderdetail.setStopAddrProviceAndCity(tempJSON.getString("receiverAddrProviceAndCity"));//收货人省份
+                        orderdetail.setDetailedAddress(tempJSON.getString("receiverAddr"));//详细地址
+                        orderdetail.setContacrName(tempJSON.getString("senderName"));//发货人
+                        orderdetail.setContactTel(tempJSON.getString("senderContactTel"));//发货人电话
+                        addInfo.add(orderdetail);
                     }
 
                     Message message = new Message();
@@ -298,7 +279,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
 
         @Override
         public int getCount() {
-            return idList.size();
+            return addInfo.size();
         }
 
         @Override
@@ -314,23 +295,23 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView orderNumber; //订单号
             TextView tvDistance; //距离
-            TextView fromTo;//从哪里到哪里
+            TextView startProvince;//开始省份
+            TextView stopProvince;//终点省份
             TextView startPoint; //发货地址
             TextView shipper; //发货人
             TextView phoneNumber; //发货人联系电话*/
             ImageView orderStatus; //单子状态
-
             convertView = inflater.inflate(R.layout.receiving_order_operation_item, null);
-
+            Orderdetail orderdetail = addInfo.get(position);
             orderNumber = (TextView) convertView.findViewById(R.id.orderNumView);
             tvDistance = (TextView) convertView.findViewById(R.id.tv_distance);
-            fromTo = (TextView) convertView.findViewById(R.id.from_to);
+            startProvince = (TextView) convertView.findViewById(R.id.from_to);
+            stopProvince = (TextView) convertView.findViewById(R.id.from);
             startPoint = (TextView) convertView.findViewById(R.id.tv_addr_detail); //发货地址
             shipper = (TextView) convertView.findViewById(R.id.shipper_name); //发货人
             phoneNumber = (TextView) convertView.findViewById(R.id.phone_number_one); //发货人联系电话*/
             orderStatus = (ImageView) convertView.findViewById(R.id.order_status); //订单状态
-            //  orderStatus.setImageResource(R.mipmap.finished_receive);
-            switch (orderStatusList.get(position)) {
+            switch (orderdetail.getOrderStatus()) {
                 case 20: //已接单
                     orderStatus.setImageResource(R.mipmap.tts_loading_way);
                     break;
@@ -350,14 +331,19 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                     orderStatus.setImageResource(R.mipmap.finished_receive);
                     break;
             }
-            tvDistance.setText("距离装货地3000米");
-            tvDistance.setTextColor(Color.RED);
-            orderNumber.setText(orderList.get(position));
-            startPoint.setText(senderAddressList.get(position));
-            shipper.setText(senderList.get(position));
-            phoneNumber.setText(phoneNumberList.get(position));
-            shipper.setText(senderList.get(position));
-            phoneNumber.setText(phoneNumberList.get(position));
+            double distance = orderdetail.getDistance();
+            if (distance==0){
+                tvDistance.setVisibility(View.INVISIBLE);
+            }else{
+                tvDistance.setText("距离装货地"+orderdetail.getDistance()+"米");
+                tvDistance.setTextColor(Color.RED);
+            }
+            orderNumber.setText(orderdetail.getOrderNum());
+            startProvince.setText(orderdetail.getStartAddrProviceAndCity());
+            stopProvince.setText(orderdetail.getStopAddrProviceAndCity());
+            startPoint.setText(orderdetail.getDetailedAddress());
+            shipper.setText(orderdetail.getContacrName());
+            phoneNumber.setText(orderdetail.getContactTel());
             return convertView;
         }
     }
