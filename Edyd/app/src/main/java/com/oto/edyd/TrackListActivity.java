@@ -41,11 +41,15 @@ public class TrackListActivity extends Activity {
     private ArrayList<TrackBean> infos;
     private TrackListAdapter adapter;
     private CusProgressDialog loadingDialog; //页面切换过度
+    private int aspectType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.track_list_activity);
+        //得到角色类型
+        Intent intent=getIntent();
+
         initfield();
         initView();
         fillDate(true, "");
@@ -120,9 +124,9 @@ public class TrackListActivity extends Activity {
             loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
             loadingDialog.getLoadingDialog().show();
         }
-        String url = Constant.ENTRANCE_PREFIX_v1 + "traceAllOrder.json?sessionUuid="
-                + sessionUuid + "&controlNum=" + controlNum + "&controlStatus=0"
-                + "&page=" + page + "&rows=" + rows;
+        String url = Constant.ENTRANCE_PREFIX_v1 + "appTraceAllOrder.json?sessionUuid="
+                + sessionUuid + "&controlNum=" + controlNum + "&page=" + page + "&rows=" + rows
+                +"&aspectType"=aspectType;
 //        Common.printErrLog("轨迹" + url);
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
