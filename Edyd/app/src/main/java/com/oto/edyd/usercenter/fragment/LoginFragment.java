@@ -1,4 +1,4 @@
-package com.oto.edyd;
+package com.oto.edyd.usercenter.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.oto.edyd.ForgetPasswordActivity;
+import com.oto.edyd.R;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -37,7 +39,7 @@ import java.util.Map;
 
 /**
  * 功能：登录模块Fragment
- * 文件名：com.oto.edyd.LoginFragment.java
+ * 文件名：com.oto.edyd.usercenter.fragment.LoginFragment.java
  * 创建时间：2015/8/27
  * 作者：yql
  */
@@ -435,7 +437,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         String roleType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
         if(TextUtils.isEmpty(roleType)) {
             Map<Object, Object> map = new HashMap<Object, Object>();
-            map.put(Constant.TRANSPORT_ROLE, 0); //默认运输角色，设置为司机，标识0
+            map.put(Constant.TRANSPORT_ROLE, Constant.DRIVER_ROLE_ID); //默认运输角色，设置为司机，标识0
             //保存账户ID
             if (!fixedCommon.isSave(map)) {
                 common.showToast(context, "运输服务角色保存异常");

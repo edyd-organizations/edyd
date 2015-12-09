@@ -1,8 +1,7 @@
-package com.oto.edyd;
+package com.oto.edyd.usercenter.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,25 +10,20 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
-import android.text.Selection;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oto.edyd.R;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
-import com.oto.edyd.utils.MaxLengthWatcher;
 import com.oto.edyd.utils.NetWork;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
@@ -37,6 +31,7 @@ import com.squareup.okhttp.Request;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,79 +42,274 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
 /**
- * Created by yql on 2015/8/31.
+ * 功能：注册模块Fragment
+ * 文件名：com.oto.edyd.usercenter.fragment.RegisterFragment.java
+ * 创建时间：2015/8/31
+ * 作者：yql
  */
 public class RegisterFragment extends Fragment implements View.OnClickListener, View.OnFocusChangeListener{
 
-    private View registerView; //布局view
     private FragmentManager eFragmentManager; //LoginActivity布局管理器
 
-    private LinearLayout registerBack; //注册返回
-    private EditText registerPhoneNumber; //注册手机号
-    private Button verificationCode; //获取验证码
-    private EditText registerUserAlias; //注册用户别名
-    private EditText registerVerificationCode; //用户输入验证码
-    private EditText registerPassword; //注册密码
-    private ImageView agreeProtocol; //协议复选框
-    private TextView protocolIntroduction; //协议描述
+    private LinearLayout back; //注册返回
+    private EditText etRegisterPhoneNumber; //注册手机号
+    private EditText etRegisterVerificationCode; //验证码
+    private Button btObtainVerificationCode; //获取验证码
+    private EditText etRegisterUserAlias; //注册用户别名
+    private EditText etRegisterPassword; //注册密码
+    //private ImageView ivAgreeProtocol; //协议复选框
+    //private TextView tvProtocolIntroduction; //协议描述
     private Button btRegister; //注册按钮
     private Button btAlreadyRegister; //已经注册
-
     private VerificationProgressAsyncTask verificationProgressAsyncTask; //异步消息对象
     private boolean asyncIsOver = false; //异步线程是否结束
-
-    private CusProgressDialog registerSuccessDialog;
+    private CusProgressDialog transitionDialog; //过度对话框
     private Common common;
     private Common fixedCommon;
+    private static final int MOBILE_PHONE_LENGTH  = 11; //手机号码长度
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        registerView = inflater.inflate(R.layout.register, null);
-        initFields(registerView); //数据初始化
+        View view = inflater.inflate(R.layout.register, null); //加载布局view
+        init(view); //数据初始化
+        return view;
+    }
+
+    /**
+     * 初始化数据
+     */
+    private void init(View view) {
+        initFields(view); //初始化字段
+        initListener(); //初始化监听器
         initSMSDK(); //初始化短信服务
+    }
 
-        registerBack.setOnClickListener(this);
-        verificationCode.setOnClickListener(this);
+    /**
+     * 初始化字段
+     */
+    private void initFields(View view) {
+        back = (LinearLayout) view.findViewById(R.id.register_back);
+        etRegisterPhoneNumber = (EditText) view.findViewById(R.id.register_phone_number);
+        btObtainVerificationCode = (Button) view.findViewById(R.id.verification_code);
+        etRegisterUserAlias = (EditText) view.findViewById(R.id.register_user_alias);
+        etRegisterVerificationCode = (EditText) view.findViewById(R.id.register_verification_code);
+        etRegisterPassword = (EditText) view.findViewById(R.id.register_user_password);
+        //ivAgreeProtocol = (ImageView) view.findViewById(R.id.cb_agree_protocol);
+        //tvProtocolIntroduction = (TextView) view.findViewById(R.id.protocol_introduction);
+        btRegister = (Button) view.findViewById(R.id.bt_register);
+        btAlreadyRegister = (Button) view.findViewById(R.id.bt_already_register);
+        eFragmentManager = getActivity().getSupportFragmentManager();
+        common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
+    }
+
+    /**
+     * 初始化监听器
+     */
+    private void initListener() {
+        back.setOnClickListener(this);
+        btObtainVerificationCode.setOnClickListener(this);
         btRegister.setOnClickListener(this);
-
-        registerVerificationCode.setOnFocusChangeListener(this); //监听是否失去焦点
-        registerPassword.setOnFocusChangeListener(this);
-        verify();
         btAlreadyRegister.setOnClickListener(this);
+        etRegisterVerificationCode.setOnFocusChangeListener(this);
+        etRegisterPassword.setOnFocusChangeListener(this);
 
-        registerPhoneNumber.addTextChangedListener(new TextWatcher() {
+        //手机号码监听
+        etRegisterPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s != null) {
-                    String phoneNumber = s.toString();
-                    if(phoneNumber != null && !(phoneNumber.equals(""))) {
-                        int phoneNumberLength = phoneNumber.length();
-                        if(phoneNumberLength == 11) {
-                            verificationCode.setEnabled(true);
-                            verificationCode.setBackgroundResource(R.drawable.border_corner_login_enable);
-                        } else {
-                            verificationCode.setEnabled(false);
-                            verificationCode.setBackgroundResource(R.drawable.border_corner_login);
+                String content = s.toString();
+                if(!TextUtils.isEmpty(content)) {
+                    //手机号码不为空
+                    String verificationCode = etRegisterVerificationCode.getText().toString();
+                    if(!TextUtils.isEmpty(verificationCode)) {
+                        //验证码不为空
+                        String alias = etRegisterUserAlias.getText().toString();
+                        if(!TextUtils.isEmpty(alias)) {
+                            //别名不为空
+                            String password = etRegisterPassword.getText().toString();
+                            if(!TextUtils.isEmpty(password)) {
+                                int length = s.length();
+                                if(length == MOBILE_PHONE_LENGTH) {
+                                    //密码不为空，以及满足以上条件，设置获取验证码橙色且可用
+                                    setVerificationButtonEnable();
+                                } else {
+                                    setVerificationCodeDisable();
+                                }
+                            }
                         }
-                    } else {
-                        verificationCode.setEnabled(false);
-                        verificationCode.setBackgroundResource(R.drawable.border_corner_login);
                     }
+                } else {
+                    //手机号码为空，设置获取验证码按钮灰色且不可用
+                    setVerificationCodeDisable();
                 }
             }
         });
-        return registerView;
+
+        //验证码输入监听
+        etRegisterVerificationCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String content = s.toString();
+                if(!TextUtils.isEmpty(content)) {
+                    //验证码不为空
+                    String mobilePhone = etRegisterPhoneNumber.getText().toString();
+                    if(!TextUtils.isEmpty(mobilePhone)) {
+                        //手机号码不为空
+                        String alias = etRegisterUserAlias.getText().toString();
+                        if(!TextUtils.isEmpty(alias)) {
+                            //别名不为空
+                            String password = etRegisterPassword.getText().toString();
+                            if(!TextUtils.isEmpty(password)) {
+                                //密码不为空，以及满足以上条件，设置注册按钮橙色且可用
+                                setRegisterButtonEnabled();
+                            }
+                        }
+                    }
+                } else {
+                    //手机号码为空，设置注册按钮灰色且不可用
+                    setRegisterButtonDisabled();
+                }
+
+
+//                if (s != null) {
+//                    String inputContent = s.toString();
+//                    if (inputContent != null && !(inputContent.equals(""))) {
+//                        String phoneNumber = etRegisterPhoneNumber.getText().toString();
+//                        String alias = etRegisterUserAlias.getText().toString();
+//                        String password = etRegisterPassword.getText().toString();
+//
+//                        if (phoneNumber != null && !(phoneNumber.equals(""))) {
+//                            if (alias != null && !(alias.equals(""))) {
+//                                if (password != null && !(password.equals(""))) {
+//                                    setEnabled();
+//                                }
+//                            }
+//                        }
+//                    } else {
+//                        setDisable();
+//                    }
+//                }
+            }
+        });
+
+        //用户别名
+        etRegisterUserAlias.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String content = s.toString();
+                if(!TextUtils.isEmpty(content)) {
+                    //用户别名不为空
+                    String mobilePhone = etRegisterPhoneNumber.getText().toString();
+                    if(!TextUtils.isEmpty(mobilePhone)) {
+                        //手机号码不为空
+                        String verificationCode = etRegisterVerificationCode.getText().toString();
+                        if(!TextUtils.isEmpty(verificationCode)) {
+                            //验证码不为空
+                            String password = etRegisterPassword.getText().toString();
+                            if(!TextUtils.isEmpty(password)) {
+                                //密码不为空，以及满足以上条件，设置注册按钮橙色且可用
+                                setRegisterButtonEnabled();
+                            }
+                        }
+                    }
+                } else {
+                    //用户别名为空，设置注册按钮灰色且不可用
+                    setRegisterButtonDisabled();
+                }
+
+
+//                if (!(s == null)) {
+//                    String inputContent = s.toString();
+//                    if (inputContent != null && !(inputContent.equals(""))) {
+//                        String phoneNumber = etRegisterPhoneNumber.getText().toString();
+//                        String code = etRegisterVerificationCode.getText().toString();
+//                        String password = etRegisterPassword.getText().toString();
+//
+//                        if (phoneNumber != null && !(phoneNumber.equals(""))) {
+//                            if (code != null && !(code.equals(""))) {
+//                                if (password != null && !(password.equals(""))) {
+//                                    setEnabled();
+//                                }
+//                            }
+//                        }
+//                    } else {
+//                        setDisable();
+//                    }
+//                }
+            }
+        });
+
+        //密码框改变监听器
+        etRegisterPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String content = s.toString();
+                if(!TextUtils.isEmpty(content)) {
+                    //密码不为空
+                    String mobilePhone = etRegisterPhoneNumber.getText().toString();
+                    if(!TextUtils.isEmpty(mobilePhone)) {
+                        //手机号码为空
+                        String verificationCode = etRegisterVerificationCode.getText().toString();
+                        if(!TextUtils.isEmpty(verificationCode)) {
+                            //验证码不为空
+                            String alias = etRegisterUserAlias.getText().toString();
+                            if(!TextUtils.isEmpty(alias)) {
+                                //用户别名不为空，以及满足以上条件，设置注册按钮橙色且可用
+                                setRegisterButtonEnabled();
+                            }
+                        }
+                    }
+                } else {
+                    //密码为空，设置注册按钮灰色且不可用
+                    setRegisterButtonDisabled();
+                }
+
+//                if (!(s == null)) {
+//                    String inputContent = s.toString();
+//                    if (inputContent != null && !(inputContent.equals(""))) {
+//                        String phoneNumber = etRegisterPhoneNumber.getText().toString();
+//                        String code = etRegisterVerificationCode.getText().toString();
+//                        String alias = etRegisterUserAlias.getText().toString();
+//
+//                        if (phoneNumber != null && !(phoneNumber.equals(""))) {
+//                            if (code != null && !(code.equals(""))) {
+//                                if (alias != null && !(alias.equals(""))) {
+//                                    setEnabled();
+//                                }
+//                            }
+//                        }
+//                    } else {
+//                        setDisable();
+//                    }
+//                }
+            }
+        });
     }
 
     @Override
@@ -129,7 +319,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 eFragmentManager.popBackStack(); //activity的后退栈中弹出fragment
                 break;
             case R.id.verification_code: //获取验证码
-                String userName = registerPhoneNumber.getText().toString();
+                String userName = etRegisterPhoneNumber.getText().toString();
                 if(!isNetworkAvailable(getActivity())){ //判断网络是否可用
                     Toast.makeText(getActivity().getApplicationContext(), Constant.NOT_INTERNET_CONNECT, Toast.LENGTH_SHORT).show();
                     return;
@@ -138,8 +328,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 break;
             case R.id.bt_register:
                 //注册
-                registerSuccessDialog = new CusProgressDialog(getActivity(), "正在注册中...");
-                registerSuccessDialog.getLoadingDialog().show();
+                transitionDialog = new CusProgressDialog(getActivity(), "正在注册中...");
+                transitionDialog.getLoadingDialog().show();
                 register();
                 break;
             case R.id.bt_already_register:
@@ -173,8 +363,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     toastMessage(msg.what);
                     break;
                 case 703:
-                    String mobile = registerPhoneNumber.getText().toString();
-                    verificationProgressAsyncTask = new VerificationProgressAsyncTask(verificationCode);
+                    String mobile = etRegisterPhoneNumber.getText().toString();
+                    verificationProgressAsyncTask = new VerificationProgressAsyncTask(btObtainVerificationCode);
                     verificationProgressAsyncTask.execute(Constant.WAITING_TIME_VERIFICATION);
                     SMSSDK.getVerificationCode("86", mobile); //向短信服务运营商请求短信验证码
                     break;
@@ -328,25 +518,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
-    /**
-     * 初始化数据
-     */
-    private void initFields(View view) {
-        registerBack = (LinearLayout) view.findViewById(R.id.register_back);
-        registerPhoneNumber = (EditText) view.findViewById(R.id.register_phone_number);
-        verificationCode = (Button) view.findViewById(R.id.verification_code);
-        registerUserAlias = (EditText) view.findViewById(R.id.register_user_alias);
-        registerVerificationCode = (EditText) view.findViewById(R.id.register_verification_code);
-        registerPassword = (EditText) view.findViewById(R.id.register_user_password);
-        agreeProtocol = (ImageView) view.findViewById(R.id.cb_agree_protocol);
-        protocolIntroduction = (TextView) view.findViewById(R.id.protocol_introduction);
-        btRegister = (Button) view.findViewById(R.id.bt_register);
-        btAlreadyRegister = (Button) view.findViewById(R.id.bt_already_register);
-        eFragmentManager = getActivity().getSupportFragmentManager();
-        common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-        fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
-    }
-
     private void setStatus(Button btVerificationCode) {
         btVerificationCode.setEnabled(true); //可点击
         btVerificationCode.setTextSize(10);
@@ -376,7 +547,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                         //返回支持发送验证码的国家列表
                     }
                 }else{
-                    registerSuccessDialog.dismissDialog();
+                    transitionDialog.dismissDialog();
                     //这里不是UI线程，如果要更新或者操作UI，要调用UI线程
                     String dataStr = data.toString();
                     String str = dataStr.substring(dataStr.indexOf(":")+1).trim();
@@ -415,29 +586,29 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
      * 注册验证
      */
     private void register() {
-        String userName = registerPhoneNumber.getText().toString(); //用户名
-        String code = registerVerificationCode.getText().toString(); //验证码
-        String alias = registerUserAlias.getText().toString(); //别名
-        String password = registerPassword.getText().toString(); //密码
+        String userName = etRegisterPhoneNumber.getText().toString(); //用户名
+        String code = etRegisterVerificationCode.getText().toString(); //验证码
+        String alias = etRegisterUserAlias.getText().toString(); //别名
+        String password = etRegisterPassword.getText().toString(); //密码
 
         if(TextUtils.isEmpty(userName)) {
             Toast.makeText(getActivity(),"手机号码不能为空", Toast.LENGTH_SHORT).show();
-            registerSuccessDialog.dismissDialog();
+            transitionDialog.dismissDialog();
             return;
         }
         if(TextUtils.isEmpty(code)) {
             Toast.makeText(getActivity(),"验证码不能为空", Toast.LENGTH_SHORT).show();
-            registerSuccessDialog.dismissDialog();
+            transitionDialog.dismissDialog();
             return;
         }
         if(TextUtils.isEmpty(alias)) {
             Toast.makeText(getActivity(),"昵称不能为空", Toast.LENGTH_SHORT).show();
-            registerSuccessDialog.dismissDialog();
+            transitionDialog.dismissDialog();
             return;
         }
         if(TextUtils.isEmpty(password)) {
             Toast.makeText(getActivity(),"密码不能为空", Toast.LENGTH_SHORT).show();
-            registerSuccessDialog.dismissDialog();
+            transitionDialog.dismissDialog();
             return;
         }
 
@@ -445,12 +616,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         Matcher matcher = pt.matcher(password);
         if(!matcher.matches()){
             Toast.makeText(getActivity(), "密码必须为6位字母加数字", Toast.LENGTH_SHORT).show();
-            registerSuccessDialog.dismissDialog();
+            transitionDialog.dismissDialog();
             return;
         }
         if(!isNetworkAvailable(getActivity())){ //判断网络是否可用
             Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
-            registerSuccessDialog.dismissDialog();
+            transitionDialog.dismissDialog();
             return;
         }
         //校验验证码
@@ -461,30 +632,30 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
      * 注册请求
      */
     private void passVerify() {
-        String userName = registerPhoneNumber.getText().toString(); //用户名
-        String code = registerVerificationCode.getText().toString(); //验证码
-        String alias = registerUserAlias.getText().toString(); //别名
-        String password = registerPassword.getText().toString(); //密码
+        String userName = etRegisterPhoneNumber.getText().toString(); //用户名
+        String code = etRegisterVerificationCode.getText().toString(); //验证码
+        String alias = etRegisterUserAlias.getText().toString(); //别名
+        String password = etRegisterPassword.getText().toString(); //密码
 
         if(!isNetworkAvailable(getActivity())){ //判断网络是否可用
             return;
         }
 
         OkHttpClientManager.Param[] params =null;
-        OkHttpClientManager.postAsyn(Constant.ENTRANCE_PREFIX+"register.json?mobile=" + userName + "&password=" + password + "&verificationCode=000000" + "&fullName="+ alias + "&appKey=null", params, new RegisterResultCallback<String>() {
+        OkHttpClientManager.postAsyn(Constant.ENTRANCE_PREFIX + "register.json?mobile=" + userName + "&password=" + password + "&verificationCode=000000" + "&fullName=" + alias + "&appKey=null", params, new RegisterResultCallback<String>() {
 
             @Override
             public void onError(Request request, Exception e) {
                 //请求失败
                 //Toast.makeText(getActivity().getApplicationContext(), "注册异常", Toast.LENGTH_SHORT).show();
-                registerSuccessDialog.dismissDialog();
+                transitionDialog.dismissDialog();
             }
 
             @Override
             public void onResponse(String response) {
                 JSONObject registerJson;
                 final String sessionUuid; //用户唯一标识UUID
-                String userName = registerPhoneNumber.getText().toString();
+                String userName = etRegisterPhoneNumber.getText().toString();
 
                 try {
                     registerJson = new JSONObject(response);
@@ -493,26 +664,27 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                         Message message = new Message();
                         message.what = Integer.valueOf(Constant.USER_ALREADY_EXIST);
                         registerHandler.sendMessage(message);
-                        registerSuccessDialog.dismissDialog();
+                        transitionDialog.dismissDialog();
                         return;
                     }
                     if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) { //用户注册异常
                         Message message = new Message();
                         message.what = Integer.valueOf(Constant.USER_REGISTER_EXCEPTION);
                         registerHandler.sendMessage(message);
-                        registerSuccessDialog.dismissDialog();
+                        transitionDialog.dismissDialog();
                         return;
                     }
                     sessionUuid = registerJson.getJSONArray("rows").getJSONObject(0).getString("sessionUuid");
 
                     //注册子公司
-                    OkHttpClientManager.Param[] params =null;
-                    OkHttpClientManager.postAsyn(Constant.ENTRANCE_PREFIX+"addVirtualCom.json?sessionUuid=" + sessionUuid, params, new RegisterSubCompanyResultCallback<String>() {
+                    OkHttpClientManager.Param[] params = null;
+                    OkHttpClientManager.postAsyn(Constant.ENTRANCE_PREFIX + "addVirtualCom.json?sessionUuid=" + sessionUuid, params, new RegisterSubCompanyResultCallback<String>() {
 
                         JSONObject registerSubJson;
+
                         @Override
                         public void onError(Request request, Exception e) {
-                            registerSuccessDialog.dismissDialog();
+                            transitionDialog.dismissDialog();
                         }
 
                         @Override
@@ -524,7 +696,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                                     Message message = new Message();
                                     message.what = Integer.valueOf(Constant.USER_REGISTER_EXCEPTION);
                                     registerHandler.sendMessage(message);
-                                    registerSuccessDialog.dismissDialog();
+                                    transitionDialog.dismissDialog();
                                     return;
                                 }
                             } catch (JSONException e) {
@@ -535,7 +707,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     });
 
                     //获取账户类型信息
-                    String accountUrl = Constant.ENTRANCE_PREFIX + "SubmitEnter.json?sessionUuid="+sessionUuid+"&enterprisesId="+Constant.ENTERPRISE_TYPE_PERSONAL;
+                    String accountUrl = Constant.ENTRANCE_PREFIX + "SubmitEnter.json?sessionUuid=" + sessionUuid + "&enterprisesId=" + Constant.ENTERPRISE_TYPE_PERSONAL;
                     OkHttpClientManager.getAsyn(accountUrl, new OkHttpClientManager.ResultCallback<String>() {
                         JSONObject accountTypeJson;
                         JSONArray accountTypeArray;
@@ -545,12 +717,13 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                             //请求异常
                             Toast.makeText(getActivity(), Constant.INTERNET_REQUEST_ABNORMAL, Toast.LENGTH_SHORT).show();
                         }
+
                         @Override
                         public void onResponse(String response) {
                             try {
                                 accountTypeJson = new JSONObject(response);
                                 String status = accountTypeJson.getString("status");
-                                if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                                if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                                     //账户类型请求失败
                                     Toast.makeText(getActivity().getApplicationContext(), Constant.ACCOUNT_TYPE_INFO_REQUEST_FAIL, Toast.LENGTH_SHORT).show();
                                     return;
@@ -573,12 +746,13 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                                 }
 
                                 //获取角色用户
-                                String roleUrl = Constant.ENTRANCE_PREFIX + "Compare.json?sessionUuid="+sessionUuid+"&enterpriseId="+enterpriseId;
+                                String roleUrl = Constant.ENTRANCE_PREFIX + "Compare.json?sessionUuid=" + sessionUuid + "&enterpriseId=" + enterpriseId;
                                 OkHttpClientManager.getAsyn(roleUrl, new OkHttpClientManager.ResultCallback<String>() {
                                     @Override
                                     public void onError(Request request, Exception e) {
 
                                     }
+
                                     @Override
                                     public void onResponse(String response) {
                                         JSONObject roleJSON;
@@ -586,7 +760,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                                         try {
                                             roleJSON = new JSONObject(response);
                                             String status = roleJSON.getString("status");
-                                            if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                                            if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                                                 //角色类型请求失败
                                                 //Toast.makeText(getActivity().getApplicationContext(), "角色用户请求失败", Toast.LENGTH_SHORT).show();
                                                 return;
@@ -614,7 +788,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     });
 
                     //获取用户ID
-                    String accountIDUrl = Constant.ENTRANCE_PREFIX + "getAccountIdBySessionUuid.json?sessionUuid="+sessionUuid;
+                    String accountIDUrl = Constant.ENTRANCE_PREFIX + "getAccountIdBySessionUuid.json?sessionUuid=" + sessionUuid;
                     OkHttpClientManager.getAsyn(accountIDUrl, new OkHttpClientManager.ResultCallback<String>() {
                         @Override
                         public void onError(Request request, Exception e) {
@@ -650,16 +824,16 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
                     if (!common.isSave(registerMap)) { //保存用户信息
                         Toast.makeText(getActivity().getApplicationContext(), "用户信息保存失败", Toast.LENGTH_SHORT).show();
-                        registerSuccessDialog.dismissDialog();
+                        transitionDialog.dismissDialog();
                         return;
                     }
                     Common userCommon = userCommon = new Common(getActivity().getSharedPreferences(Constant.USER_INFO_FILE, Context.MODE_PRIVATE));
-                    if(!userCommon.isClearAccount()) {
+                    if (!userCommon.isClearAccount()) {
                         Toast.makeText(getActivity(), "清除偏好用户信息失败！", Toast.LENGTH_SHORT);
                     }
 
                     Map<Object, Object> map = new HashMap<Object, Object>();
-                    map.put(Constant.TRANSPORT_ROLE, 0); //默认运输角色，设置为司机，标识0
+                    map.put(Constant.TRANSPORT_ROLE, Constant.DRIVER_ROLE_ID); //默认运输角色，设置为司机，标识0
                     //保存账户ID
                     if (!fixedCommon.isSave(map)) {
                         Toast.makeText(getActivity().getApplicationContext(), "运输服务角色保存异常", Toast.LENGTH_SHORT).show();
@@ -667,7 +841,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     }
 
                     //登录成功之后做的操作
-                    registerSuccessDialog.dismissDialog();
+                    transitionDialog.dismissDialog();
                     Intent intent = new Intent();
                     intent.putExtra("username", userName);
                     getActivity().setResult(Constant.REGISTER_ACTIVITY_RETURN_CODE, intent);
@@ -751,146 +925,44 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         });
     }
 
-    private void verify() {
-        registerPhoneNumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s!=null) {
-                    String inputContent = s.toString();
-                    if (inputContent != null && !(inputContent.equals(""))) {
-                        String code = registerVerificationCode.getText().toString();
-                        String alias = registerUserAlias.getText().toString();
-                        String password = registerPassword.getText().toString();
-
-                        if (code != null && !(code.equals(""))) {
-                            if (alias != null && !(alias.equals(""))) {
-                                if (password != null && !(password.equals(""))) {
-                                    setEnabled();
-                                }
-                            }
-                        }
-                    } else {
-                        setDisable();
-                    }
-                }
-            }
-        });
-        registerVerificationCode.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s != null) {
-                    String inputContent = s.toString();
-                    if (inputContent != null && !(inputContent.equals(""))) {
-                        String phoneNumber = registerPhoneNumber.getText().toString();
-                        String alias = registerUserAlias.getText().toString();
-                        String password = registerPassword.getText().toString();
-
-                        if (phoneNumber != null && !(phoneNumber.equals(""))) {
-                            if (alias != null && !(alias.equals(""))) {
-                                if (password != null && !(password.equals(""))) {
-                                    setEnabled();
-                                }
-                            }
-                        }
-                    } else {
-                        setDisable();
-                    }
-                }
-            }
-        });
-        registerUserAlias.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!(s == null)) {
-                    String inputContent = s.toString();
-                    if (inputContent != null && !(inputContent.equals(""))) {
-                        String phoneNumber = registerPhoneNumber.getText().toString();
-                        String code = registerVerificationCode.getText().toString();
-                        String password = registerPassword.getText().toString();
-
-                        if (phoneNumber != null && !(phoneNumber.equals(""))) {
-                            if (code != null && !(code.equals(""))) {
-                                if (password != null && !(password.equals(""))) {
-                                    setEnabled();
-                                }
-                            }
-                        }
-                    } else {
-                        setDisable();
-                    }
-                }
-            }
-        });
-        registerPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!(s == null)) {
-                    String inputContent = s.toString();
-                    if (inputContent != null && !(inputContent.equals(""))) {
-                        String phoneNumber = registerPhoneNumber.getText().toString();
-                        String code = registerVerificationCode.getText().toString();
-                        String alias = registerUserAlias.getText().toString();
-
-                        if (phoneNumber != null && !(phoneNumber.equals(""))) {
-                            if (code != null && !(code.equals(""))) {
-                                if (alias != null && !(alias.equals(""))) {
-                                    setEnabled();
-                                }
-                            }
-                        }
-                    } else {
-                        setDisable();
-                    }
-                }
-            }
-        });
-    }
 
     private void setEnabled() {
         btRegister.setEnabled(true); //设置按钮可用
         btRegister.setBackgroundResource(R.drawable.border_corner_login_enable);
     }
     private void setDisable() {
+        btRegister.setBackgroundResource(R.drawable.border_corner_login);
+        btRegister.setEnabled(false); //设置按钮不可用
+    }
+
+    /**
+     * 设置获取验证码按钮可用
+     */
+    private void setVerificationButtonEnable() {
+        btObtainVerificationCode.setEnabled(true);
+        btObtainVerificationCode.setBackgroundResource(R.drawable.border_corner_login_enable);
+    }
+
+    /**
+     * 设置获取验证码按钮不可用
+     */
+    private void setVerificationCodeDisable() {
+        btObtainVerificationCode.setEnabled(false);
+        btObtainVerificationCode.setBackgroundResource(R.drawable.border_corner_login);
+    }
+
+    /**
+     * 设置注册按钮可用
+     */
+    private void setRegisterButtonEnabled() {
+        btRegister.setEnabled(true); //设置按钮可用
+        btRegister.setBackgroundResource(R.drawable.border_corner_login_enable);
+    }
+
+    /**
+     * 设置注册按钮不可用
+     */
+    private void setRegisterButtonDisabled() {
         btRegister.setBackgroundResource(R.drawable.border_corner_login);
         btRegister.setEnabled(false); //设置按钮不可用
     }
