@@ -64,6 +64,8 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
         selectTransportRole = (RelativeLayout) view.findViewById(R.id.select_transport_role);
         enterpriseName = (TextView) view.findViewById(R.id.enterprise_name);
         transportRole = (TextView) view.findViewById(R.id.transport_role);
+        LinearLayout panorama = (LinearLayout) view.findViewById(R.id.ll_panorama);
+        panorama.setOnClickListener(this);//全景图
         llOnTheWayOrders = (LinearLayout) view.findViewById(R.id.ll_on_the_way_orders);
         content = getActivity();
         fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
@@ -123,6 +125,10 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
                 break;
             case R.id.ll_on_the_way_orders: //在途订单
                 intent = new Intent(content, ShipperOrderOperateActivity.class);
+                startActivity(intent);
+                break;
+            case  R.id.ll_panorama://全景图
+                intent=new Intent(getActivity(),PanoramaActivity.class);
                 startActivity(intent);
                 break;
         }
