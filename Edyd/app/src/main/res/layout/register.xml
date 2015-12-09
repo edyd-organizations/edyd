@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
+
     <!--模拟ActionBar-->
     <RelativeLayout
         android:layout_width="match_parent"
@@ -44,6 +45,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginBottom="15dp"
         android:orientation="vertical">
+
+        <!-- 输入手机号和获取验证码 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -81,6 +84,7 @@
             android:layout_marginTop="1dp"
             android:background="@color/gray_DDDDDD"/>
 
+        <!-- 验证码 -->
         <EditText
             android:id="@+id/register_verification_code"
             android:layout_width="match_parent"
@@ -100,6 +104,8 @@
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
             android:background="@color/gray_DDDDDD"/>
+
+        <!-- 用户名 -->
         <EditText
             android:id="@+id/register_user_alias"
             android:layout_width="match_parent"
@@ -118,6 +124,8 @@
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
             android:background="@color/gray_DDDDDD"/>
+
+        <!-- 密码 -->
         <EditText
             android:id="@+id/register_user_password"
             android:layout_width="match_parent"
@@ -137,6 +145,8 @@
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
             android:background="@color/gray_DDDDDD"/>
+
+        <!-- 提示信息 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -144,7 +154,7 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginLeft="13dp">
                 <TextView
                     android:layout_width="wrap_content"
@@ -152,9 +162,9 @@
                     android:textColor="@color/user_icon_8"
                     android:text="*短信运营商的限制：同一个号码12小时发送不能超过5条，24小时不超过10条"/>
             </RelativeLayout>
-
         </LinearLayout>
 
+        <!-- 同意协议 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -176,6 +186,8 @@
                 android:textColor="@color/user_icon_8"
                 android:text="@string/protocol" />
         </LinearLayout>
+
+        <!-- 注册按钮 -->
         <Button
             android:id="@+id/bt_register"
             android:layout_width="match_parent"
@@ -187,6 +199,8 @@
             android:background="@drawable/border_corner_login"
             android:textColor="@android:color/white"
             android:text="@string/register_text"/>
+
+        <!-- 已有账号 -->
         <Button
             android:id="@+id/bt_already_register"
             android:layout_width="match_parent"

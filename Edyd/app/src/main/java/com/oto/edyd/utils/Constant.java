@@ -74,8 +74,13 @@ public class Constant {
     public final static int ENTER_STAFF = 2; //企业员工
     public final static int PERSON = 3; //个人信息
 
-    //运输角色 0-司机； 1-发货方；2-收货方；3-承运方 默认为司机
+    //运输角色 0-司机； 2-发货方；1-收货方；3-承运方 默认为司机
     public final static String  TRANSPORT_ROLE = "transport_role";
+    public final static int DRIVER_ROLE_ID = 0; //司机
+    public final static int RECEIVER_ROLE_ID = 1; //收货方
+    public final static int SHIPPER_ROLE_ID = 2; //发货方
+    public final static int UNDERTAKER_ROLE_ID = 3; //承运方
+
 
     //认证类别
     public final static String NOT_AUTHENTICATED = "未认证"; //0

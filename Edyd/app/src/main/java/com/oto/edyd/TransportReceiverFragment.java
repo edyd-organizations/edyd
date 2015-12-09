@@ -93,16 +93,16 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
         if(txTransportRole!=null && !txTransportRole.equals("")) {
             int transportRoleId = Integer.valueOf(txTransportRole);
             switch (transportRoleId) {
-                case 0: //司机
+                case Constant.DRIVER_ROLE_ID: //司机
                     transportRole.setText("司机");
                     break;
-                case 1: //发货方
+                case Constant.SHIPPER_ROLE_ID: //发货方
                     transportRole.setText("发货方");
                     break;
-                case 2: //收货方
+                case Constant.RECEIVER_ROLE_ID: //收货方
                     transportRole.setText("收货方");
                     break;
-                case 3: //承运方
+                case Constant.UNDERTAKER_ROLE_ID: //承运方
                     transportRole.setText("承运方");
                     break;
             }
