@@ -1,12 +1,15 @@
-package com.oto.edyd;
+package com.oto.edyd.usercenter.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
+import com.oto.edyd.R;
+import com.oto.edyd.usercenter.fragment.LoginFragment;
+
 /**
  * 功能：登录模块Activity
- * 文件名：com.oto.edyd.LoginActivity.java
+ * 文件名：com.oto.edyd.usercenter.activity.LoginActivity.java
  * 创建时间：2015/8/27
  * 作者：yql
  */

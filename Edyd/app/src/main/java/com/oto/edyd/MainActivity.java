@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.oto.edyd.lib.slidingmenu.SlidingMenu;
 import com.oto.edyd.lib.slidingmenu.app.SlidingFragmentActivity;
+import com.oto.edyd.usercenter.activity.LoginActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.widget.CustomViewPager;
@@ -181,21 +182,21 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         if(txTransportId != null && !txTransportId.equals("")) {
             int transportRoleId = Integer.valueOf(txTransportId);
             switch (transportRoleId) {
-                case 0: //司机
+                case Constant.DRIVER_ROLE_ID: //司机
                     TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
                     listFragment.add(transportDriverFragment);
                     break;
-                case 1: //发货方
+                case Constant.SHIPPER_ROLE_ID: //发货方
                     //listFragment.add(transportServiceFragment);
                     TransportShipperFragment transportShipperFragment = new TransportShipperFragment();
                     listFragment.add(transportShipperFragment);
                     break;
-                case 2: //收货方
+                case Constant.RECEIVER_ROLE_ID: //收货方
                     //listFragment.add(transportServiceFragment);
                     TransportReceiverFragment transportReceiverFragment = new TransportReceiverFragment();
                     listFragment.add(transportReceiverFragment);
                     break;
-                case 3: //承运方
+                case Constant.UNDERTAKER_ROLE_ID: //承运方
                     TransportUndertakeFragment transportServiceFragment = new TransportUndertakeFragment();
                     listFragment.add(transportServiceFragment);
                     break;
@@ -347,25 +348,25 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             leftMenuFragment.roleType.setText(roleName);
             int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
             switch (transportRoleId) {
-                case 0: //司机
+                case Constant.DRIVER_ROLE_ID: //司机
                     TransportDriverFragment transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
                     if (!(transportDriverFragment.enterpriseName == null)) {
                         transportDriverFragment.enterpriseName.setText(enterpriseName);
                     }
                     break;
-                case 1: //发货方
+                case Constant.SHIPPER_ROLE_ID: //发货方
                     TransportShipperFragment transportShipperFragment = (TransportShipperFragment) listFragment.get(2);
                     if (!(transportShipperFragment.enterpriseName == null)) {
                         transportShipperFragment.enterpriseName.setText(enterpriseName);
                     }
                     break;
-                case 2: //收货方
+                case Constant.RECEIVER_ROLE_ID: //收货方
                     TransportReceiverFragment transportReceiverFragment = (TransportReceiverFragment) listFragment.get(2);
                     if (!(transportReceiverFragment.enterpriseName == null)) {
                         transportReceiverFragment.enterpriseName.setText(enterpriseName);
                     }
                     break;
-                case 3: //承运方
+                case Constant.UNDERTAKER_ROLE_ID: //承运方
                     TransportUndertakeFragment transportUndertakeFragment = (TransportUndertakeFragment) listFragment.get(2);
                     if (!(transportUndertakeFragment.enterpriseName == null)) {
                         transportUndertakeFragment.enterpriseName.setText(enterpriseName);
@@ -379,28 +380,28 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             //transportServiceFragment = (TransportServiceFragment)listFragment.get(2);
             int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
             switch (transportRoleId) {
-                case 0: //司机
+                case Constant.DRIVER_ROLE_ID: //司机
                     //transportServiceFragment.transportRole.setText("司机");
                     TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
                     listFragment.set(2, transportDriverFragment);
                     fragmentsUpdateFlag[2] = true;
                     eAdapter.notifyDataSetChanged();
                     break;
-                case 1: //发货方
+                case Constant.SHIPPER_ROLE_ID: //发货方
                     //transportServiceFragment.transportRole.setText("发货方");
                     TransportShipperFragment transportShipperFragment = new TransportShipperFragment();
                     listFragment.set(2, transportShipperFragment);
                     fragmentsUpdateFlag[2] = true;
                     eAdapter.notifyDataSetChanged();
                     break;
-                case 2: //收货方
+                case Constant.RECEIVER_ROLE_ID: //收货方
                     //transportServiceFragment.transportRole.setText("收货方");
                     TransportReceiverFragment transportReceiverFragment = new TransportReceiverFragment();
                     listFragment.set(2, transportReceiverFragment);
                     fragmentsUpdateFlag[2] = true;
                     eAdapter.notifyDataSetChanged();
                     break;
-                case 3: //承运方
+                case Constant.UNDERTAKER_ROLE_ID: //承运方
                     //transportServiceFragment.transportRole.setText("承运方");
                     TransportUndertakeFragment transportUndertakeFragment = new TransportUndertakeFragment();
                     listFragment.set(2, transportUndertakeFragment);

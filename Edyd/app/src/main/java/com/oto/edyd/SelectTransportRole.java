@@ -47,16 +47,16 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
                 Map<Object, Object> transportRoleMap = new HashMap<Object, Object>();
                 switch (position) {
                     case 0: //司机
-                        transportRoleMap.put(Constant.TRANSPORT_ROLE, 0);
+                        transportRoleMap.put(Constant.TRANSPORT_ROLE, Constant.DRIVER_ROLE_ID);
                         break;
                     case 1: //发货方
-                        transportRoleMap.put(Constant.TRANSPORT_ROLE, 1);
+                        transportRoleMap.put(Constant.TRANSPORT_ROLE, Constant.SHIPPER_ROLE_ID);
                         break;
                     case 2: //收货方
-                        transportRoleMap.put(Constant.TRANSPORT_ROLE, 2);
+                        transportRoleMap.put(Constant.TRANSPORT_ROLE, Constant.RECEIVER_ROLE_ID);
                         break;
                     case 3: //承运方
-                        transportRoleMap.put(Constant.TRANSPORT_ROLE, 3);
+                        transportRoleMap.put(Constant.TRANSPORT_ROLE, Constant.UNDERTAKER_ROLE_ID);
                         break;
                 }
                //保存账户ID
