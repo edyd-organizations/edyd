@@ -670,7 +670,6 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                 JSONArray jsonArray;
                 try {
                     jsonObject = new JSONObject(response);
-
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), getString(R.string.pull_info_exception), Toast.LENGTH_SHORT).show();
                         return;

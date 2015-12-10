@@ -12,7 +12,7 @@ public class ShipperOrderOperateItem {
     private String orderNumber; //订单号
     private String distance; //距离装货地
     private String startAndEndAddress; //起始和终点地址
-    private String endAddress; //终点地址
+    private String address; //地址
     private String receiver; //收货人
     private String phoneNumber; //联系电话
     private String orderStatus; //订单状态
@@ -49,12 +49,12 @@ public class ShipperOrderOperateItem {
         this.startAndEndAddress = startAndEndAddress;
     }
 
-    public String getEndAddress() {
-        return endAddress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setEndAddress(String endAddress) {
-        this.endAddress = endAddress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getReceiver() {
