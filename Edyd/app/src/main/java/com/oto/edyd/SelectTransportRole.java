@@ -31,6 +31,7 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
 
     private String[] roleArray; //角色集合
     private Common fixedCommon;
+    private Common common;
     private Context mActivity;
 
     @Override
@@ -77,8 +78,14 @@ public class SelectTransportRole extends Activity implements View.OnClickListene
         mActivity=this;
         back = (LinearLayout) findViewById(R.id.back);
         roleList = (ListView) findViewById(R.id.role_list);
-        roleArray = getResources().getStringArray(R.array.transport_role_list);
         fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
+        common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        int enterpriseId = Integer.valueOf(common.getStringByKey(Constant.ENTERPRISE_ID));
+        if(enterpriseId == 0) {
+            roleArray = new String[] {"司机"};
+        } else {
+            roleArray = getResources().getStringArray(R.array.transport_role_list);
+        }
     }
 
     @Override
