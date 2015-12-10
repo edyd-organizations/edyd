@@ -74,7 +74,8 @@ public class ReceivingOrderDetail extends Activity {
     private TextView startPoint; //起始点
     private TextView shipper; //发货人
     private TextView phoneNumber; //发货人联系电话
-    private TextView fromTo;//从哪到哪
+    private TextView startProvince;//开始省份
+    private TextView stopProvince;//开始省份
     private Button checkTrack;//查看轨迹
     private TextView goodsName, //货物名称
             goodsTotalVolume, //货物总体积
@@ -86,7 +87,7 @@ public class ReceivingOrderDetail extends Activity {
     private int controlStatus; //接单状态
     private int tControlStatus; //订单状态
     private String position; //保存位置
-
+    Orderdetail orderdetail;
     NumberFormat numberFormat = new NumberFormat(); //格式化时间
     private CusProgressDialog loadingDialog; //页面切换过度
 
@@ -99,10 +100,12 @@ public class ReceivingOrderDetail extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receiving_order_detail);
         initFields();
-        String primaryId = getIntent().getStringExtra("primaryId");
+      //  String primaryId = getIntent().getStringExtra("primaryId");
+        Bundle bundle = getIntent().getExtras();
+        orderdetail = (Orderdetail) bundle.get("orderdetail");
+        Long primaryId = orderdetail.getPrimaryId();
         infos = new TrackBean();
-        Long aLong = Long.parseLong(primaryId);
-        infos.setPrimaryId(aLong);
+        infos.setPrimaryId(primaryId);
         requestOrderDetailData(primaryId);
     }
     /**
@@ -110,14 +113,12 @@ public class ReceivingOrderDetail extends Activity {
      */
     private void initFields() {
         orderStatus = (ImageView) findViewById(R.id.order_status); //接单状态
-
         executeFirstPoint = (ImageView) findViewById(R.id.execute_first_point);
         executeSecondPoint = (ImageView) findViewById(R.id.execute_second_point);
         executeThirdPoint = (ImageView) findViewById(R.id.execute_third_point);
         executeFourPoint = (ImageView) findViewById(R.id.execute_four_point);
         executeFivePoint = (ImageView) findViewById(R.id.execute_five_point);
         executeSixPoint = (ImageView) findViewById(R.id.execute_six_point);
-
         executeFirstTime = (TextView) findViewById(R.id.execute_first_time);
         executeFirstDate = (TextView) findViewById(R.id.execute_first_date);
         executeSecondTime = (TextView) findViewById(R.id.execute_second_time);
@@ -130,7 +131,6 @@ public class ReceivingOrderDetail extends Activity {
         executeFiveDate = (TextView) findViewById(R.id.execute_five_date);
         executeSixTime = (TextView) findViewById(R.id.execute_six_time);
         executeSixDate = (TextView) findViewById(R.id.execute_six_date);
-
         executeFirstLine = (TextView) findViewById(R.id.execute_first_line);
         executeSecondLine = (TextView) findViewById(R.id.execute_second_line);
         executeThirdLine = (TextView) findViewById(R.id.execute_third_line);
@@ -141,13 +141,13 @@ public class ReceivingOrderDetail extends Activity {
         executeEightLine = (TextView) findViewById(R.id.execute_eight_line);
         executeNineLine = (TextView) findViewById(R.id.execute_nine_line);
         executeTenLine = (TextView) findViewById(R.id.execute_ten_line);
-
         orderNumber = (TextView) findViewById(R.id.orderNumView);//订单号
         orderDate = (TextView) findViewById(R.id.order_date);//订单日期
         startPoint = (TextView) findViewById(R.id.tv_addr_detail); //发货地址
         shipper = (TextView) findViewById(R.id.shipper_name); //发货人
         phoneNumber = (TextView) findViewById(R.id.phone_number_one); //发货人联系电话
-        fromTo = (TextView) findViewById(R.id.from_to);//从哪到哪里
+        startProvince = (TextView) findViewById(R.id.from_to);//开始省份
+        stopProvince = (TextView) findViewById(R.id.from);//结束省份
         checkTrack = (Button) findViewById(R.id.checktrack);//查看轨迹
         tvFirstTime = (TextView) findViewById(R.id.tv_first_time);
         tvSecondTime = (TextView) findViewById(R.id.tv_second_time);
@@ -202,8 +202,8 @@ public class ReceivingOrderDetail extends Activity {
                     setOrderDetailInfo(orderDetail);
                     break;
                 case 0x13:
-                    String primaryId = getIntent().getStringExtra("primaryId");
-                    requestOrderDetailData(primaryId);
+                   // String primaryId = getIntent().getStringExtra("primaryId");
+                   // requestOrderDetailData(primaryId);
             }
         }
     };
@@ -470,6 +470,8 @@ public class ReceivingOrderDetail extends Activity {
         goodsTotalVolume.setText(orderDetail.getGoodsTotalVolume());
         goodsTotalQuantity.setText(orderDetail.getGoodsTotalQuantity());
         goodsTotalWeight.setText(orderDetail.getGoodsTotalWeight());
+        startProvince.setText(orderdetail.getStartAddrProviceAndCity());
+        stopProvince.setText(orderdetail.getStopAddrProviceAndCity());
     }
 
 
@@ -478,7 +480,7 @@ public class ReceivingOrderDetail extends Activity {
      *
      * @param primaryID
      */
-    private void requestOrderDetailData(String primaryID) {
+    private void requestOrderDetailData(Long primaryID) {
         Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         String url = Constant.ENTRANCE_PREFIX + "appQueryOrderDetail.json?sessionUuid="+sessionUuid+"&primaryId=" + primaryID;
