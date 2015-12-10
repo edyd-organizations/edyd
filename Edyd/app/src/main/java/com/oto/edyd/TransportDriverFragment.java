@@ -77,8 +77,13 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
         Intent intent;
         switch (v.getId()) {
             case R.id.select_transport_role: //选择角色
-                intent = new Intent(getActivity(), SelectTransportRole.class);
-                startActivityForResult(intent, 0x10);
+                String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+                if(enterpriseId.equals("0")) {
+                    return;
+                } else {
+                    intent = new Intent(getActivity(), SelectTransportRole.class);
+                    startActivityForResult(intent, 0x10);
+                }
                 break;
             case R.id.iv_receive_order: //接单
                 intent = new Intent(getActivity().getApplicationContext(), OrderOperateActivity.class);

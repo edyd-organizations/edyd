@@ -30,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.ContentHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -133,6 +134,12 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
                 map.put(Constant.ROLE_NAME, "");
                 if(!common.isSave(map)) {
                     Toast.makeText(AccountTypeActivity.this, "企业ID更新失败", Toast.LENGTH_SHORT).show();
+                }
+                Common fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
+                map.clear();
+                map.put(Constant.TRANSPORT_ROLE, Constant.DRIVER_ROLE_ID);
+                if(!fixedCommon.isSave(map)) {
+                    Toast.makeText(AccountTypeActivity.this, "司机角色保存失败", Toast.LENGTH_SHORT).show();
                 }
                 AccountTypeActivity.this.setResult(Constant.ACCOUNT_TYPE_RESULT_CODE, intent);
                 updateRole(textEnterpriseId);

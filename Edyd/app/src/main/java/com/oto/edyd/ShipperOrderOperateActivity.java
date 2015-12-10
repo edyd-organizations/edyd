@@ -19,6 +19,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.oto.edyd.model.ShipperOrderOperateItem;
+import com.oto.edyd.utils.Common;
+import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.OkHttpClientManager;
+import com.squareup.okhttp.Request;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +47,9 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
     private boolean loadFlag = false;
     private final static int ROWS = 10; //分页加载数据每页10
     private ShipperOrderOperateAdapter adapter; //适配器对象
+    private Common common; //share对象
+    private Context context; //上下文对象
+    private final static int SHIPPER_ORDER_LIST_REQUEST_SUCCESS_CODE = 0x10; //订单列表请求成功返回码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +73,9 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
     private void initFields() {
         back = (LinearLayout) findViewById(R.id.back);
         shipperOrderLists = (ListView) findViewById(R.id.shipper_order_lists);
-        adapter = new ShipperOrderOperateAdapter(ShipperOrderOperateActivity.this);
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        context = ShipperOrderOperateActivity.this;
     }
 
     /**
@@ -121,8 +133,9 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case 0x20: //订单数据返回
-                    shipperOrderLists.setAdapter(new ShipperOrderOperateAdapter(ShipperOrderOperateActivity.this));
+                case SHIPPER_ORDER_LIST_REQUEST_SUCCESS_CODE: //订单数据返回
+                    adapter = new ShipperOrderOperateAdapter(ShipperOrderOperateActivity.this);
+                    shipperOrderLists.setAdapter(adapter);
                     break;
             }
         }
@@ -132,25 +145,57 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
      * 请求发货方在途订单
      */
     private void requestShipperOrderOperateData() {
-//        Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-//        String sessionUUID = common.getStringByKey(Constant.SESSION_UUID);
-//        String url = "";
+        Common fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE)); //保存固定不变信息
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID); //用户唯一标示
+        String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE); //运输服务角色ID
+        String orgCode = common.getStringByKey(Constant.ORG_CODE); //组织ID
+        String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID); //企业ID
 
-        for(int i = 0; i <= 20; i++) {
-            ShipperOrderOperateItem shipperOrderOperateItem = new ShipperOrderOperateItem();
-            shipperOrderOperateItem.setOrderNumber("EDYD435234234"+i);
-            shipperOrderOperateItem.setDistance("300" + i);
-            shipperOrderOperateItem.setStartAndEndAddress(i + "---" + i + 1);
-            shipperOrderOperateItem.setEndAddress("晋江市罗山市地税局");
-            shipperOrderOperateItem.setReceiver("李四" + i);
-            shipperOrderOperateItem.setPhoneNumber("1803986949" + i);
-            shipperOrderOperateItem.setOrderStatus("20");
-            shipperOrderOperateItemList.add(shipperOrderOperateItem);
-        }
+        String url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderList.json?sessionUuid=" + sessionUuid + "&aspectType=" +
+                aspectType + "&enterpriseId=" + enterpriseId + "&orgCode=" + orgCode;
+        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+            @Override
+            public void onError(Request request, Exception e) {
+                common.showToast(context, "请求异常");
+            }
 
-        Message msg = Message.obtain();
-        msg.what = 0x20;
-        handler.sendMessage(msg);
+            @Override
+            public void onResponse(String response) {
+                JSONObject jsonObject;
+                JSONArray jsonArray;
+                JSONObject item;
+                try {
+                    jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status"); //返回状态
+                    if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        //状态不等于200请求失败
+                        common.showToast(context, "订单数据请求失败");
+                        return;
+                    }
+                    jsonArray = jsonObject.getJSONArray("rows");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        item = jsonArray.getJSONObject(i);
+                        ShipperOrderOperateItem shipperOrderOperateItem = new ShipperOrderOperateItem();
+                        //shipperOrderOperateItem.setPrimaryId(item.getString("primaryId"));
+                        shipperOrderOperateItem.setOrderNumber(item.getString("controlNum")); //订单号
+                        shipperOrderOperateItem.setDistance(String.valueOf(item.getDouble("distance"))); //距离
+                        String startAndEndAddress = item.getString("senderAddrProviceAndCity") + item.getString("receiverAddrProviceAndCity");
+                        shipperOrderOperateItem.setStartAndEndAddress(startAndEndAddress); //起始和结束地址
+                        shipperOrderOperateItem.setAddress(item.getString("receiverAddr"));
+                        shipperOrderOperateItem.setReceiver(item.getString("receiverName")); //收货人名字
+                        shipperOrderOperateItem.setPhoneNumber(item.getString("receiverContactTel")); //收货人联系方式
+                        shipperOrderOperateItem.setOrderStatus(item.getString("orderStatus")); //订单状态
+                        shipperOrderOperateItemList.add(shipperOrderOperateItem);
+                    }
+
+                    Message msg = Message.obtain();
+                    msg.what = SHIPPER_ORDER_LIST_REQUEST_SUCCESS_CODE;
+                    handler.sendMessage(msg);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**
@@ -210,7 +255,7 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
             viewHolder.orderDistance.setText(shipperOrderOperateItem.getDistance());
             //viewHolder.orderStatus
             viewHolder.startAndEndAddress.setText(shipperOrderOperateItem.getStartAndEndAddress());
-            viewHolder.endAddress.setText(shipperOrderOperateItem.getEndAddress());
+            viewHolder.endAddress.setText(shipperOrderOperateItem.getAddress());
             viewHolder.receiver.setText(shipperOrderOperateItem.getReceiver());
             viewHolder.phoneNunber.setText(shipperOrderOperateItem.getPhoneNumber());
             return convertView;

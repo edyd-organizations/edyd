@@ -126,6 +126,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
             case R.id.exit: //退出登录
                 Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
                 Common commonTrans = new Common(getActivity().getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
+                Common commonFixed = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
                 exitProgressDialog = new CusProgressDialog(getActivity(), "正在退出...");
                 exitProgressDialog.getLoadingDialog().show();
                 if(!common.isClearAccount()) {
@@ -135,6 +136,13 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                 if(!commonTrans.isClearAccount()) {
                     //((MainActivity)getActivity())
                     Toast.makeText(getActivity().getApplicationContext(), "清除司机信息异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Map<Object, Object> map = new HashMap<Object, Object>();
+                map.put(Constant.TRANSPORT_ROLE, Constant.DRIVER_ROLE_ID);
+                if(!commonFixed.isSave(map)) {
+                    //((MainActivity)getActivity())
+                    Toast.makeText(getActivity().getApplicationContext(), "初始化司机", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 ((MainActivity)getActivity()).comeBackIndex();

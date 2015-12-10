@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,8 @@ import com.oto.edyd.utils.Constant;
 import com.oto.edyd.widget.CustomViewPager;
 import com.umeng.update.UmengUpdateAgent;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -173,13 +176,11 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     private void initViewPager() {
         MainIndexFragment indexFragment = new MainIndexFragment();
         MainMarketFragment marketFragment = new MainMarketFragment();
-        //TransportUndertakeFragment transportServiceFragment = new TransportUndertakeFragment();
-        MainBoxFragment boxFragment = new MainBoxFragment();
 
         listFragment.add(indexFragment);
         listFragment.add(marketFragment);
         String txTransportId = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
-        if(txTransportId != null && !txTransportId.equals("")) {
+        if(!TextUtils.isEmpty(txTransportId)) {
             int transportRoleId = Integer.valueOf(txTransportId);
             switch (transportRoleId) {
                 case Constant.DRIVER_ROLE_ID: //司机
@@ -200,26 +201,14 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                     TransportUndertakeFragment transportServiceFragment = new TransportUndertakeFragment();
                     listFragment.add(transportServiceFragment);
                     break;
-
             }
         } else {
             TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
             listFragment.add(transportDriverFragment);
         }
 
-
+        MainBoxFragment boxFragment = new MainBoxFragment();
         listFragment.add(boxFragment);
-
-//        mAdapter = new FragmentPagerAdapter(fragmentManager){
-//            @Override
-//            public int getCount() {
-//                return listFragment.size();
-//            }
-//            @Override
-//            public Fragment getItem(int position) {
-//                return listFragment.get(position);
-//            }
-//        };
         eAdapter = new EFragmentAdapter(fragmentManager);
         customViewPager.setAdapter(eAdapter);
     }
@@ -339,8 +328,6 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         }
         //账户类型返回
         if (resultCode == Constant.ACCOUNT_TYPE_RESULT_CODE) {
-            //String accountTypeStr = data.getExtras().getString("account_type");
-            //Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
             enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
             String roleName = common.getStringByKey(Constant.ROLE_NAME);
 
@@ -349,7 +336,19 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
             switch (transportRoleId) {
                 case Constant.DRIVER_ROLE_ID: //司机
-                    TransportDriverFragment transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
+                    String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+                    TransportDriverFragment transportDriverFragment;
+                    if(enterpriseId.equals("0")) {
+                        transportDriverFragment = new TransportDriverFragment();
+                        if(!transportDriverFragment.isAdded()) {
+                            listFragment.set(2, transportDriverFragment);
+                            fragmentsUpdateFlag[2] = true;
+                            eAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
+                    }
+
                     if (!(transportDriverFragment.enterpriseName == null)) {
                         transportDriverFragment.enterpriseName.setText(enterpriseName);
                     }
