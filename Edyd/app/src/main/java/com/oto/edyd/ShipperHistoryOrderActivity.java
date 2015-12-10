@@ -69,14 +69,13 @@ public class ShipperHistoryOrderActivity extends Activity {
     private ArrayList<ShipperHisOrderBean> infos;//数据源
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipper_hisorder);
         initField();
         initView();
-        requestData(firstLoad,""); //请求数据
+        requestData(firstLoad, ""); //请求数据
 
     }
 
@@ -145,7 +144,7 @@ public class ShipperHistoryOrderActivity extends Activity {
      *
      * @param loadType 是否是第一次
      */
-    private void requestData(final int loadType,String serachParames) {
+    private void requestData(final int loadType, String serachParames) {
 
         Common fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
         String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
@@ -155,7 +154,7 @@ public class ShipperHistoryOrderActivity extends Activity {
 //        v1.1/appSenderAndReceiverOrderListHistory.json?sessionUuid=879425d835d34ac183dddddf831ecdc7&aspectType=2&enterpriseId=52&orgCode=1
         String url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderListHistory.json?sessionUuid=" + sessionUuid +
                 "&aspectType=" + aspectType + "&page=" + page + "&rows=" + rows + "&enterpriseId=" + enterpriseId + "&orgCode=" + orgCode
-                +"&serachParames="+serachParames;
+                + "&serachParames=" + serachParames;
 
         //第一次进来显示loading
         if (loadType == firstLoad) {
@@ -197,7 +196,7 @@ public class ShipperHistoryOrderActivity extends Activity {
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                ShipperHisOrderBean bean=gson.fromJson(obj.toString(),ShipperHisOrderBean.class);
+                ShipperHisOrderBean bean = gson.fromJson(obj.toString(), ShipperHisOrderBean.class);
 
                 tempList.add(bean);
             } catch (JSONException e) {
@@ -210,9 +209,9 @@ public class ShipperHistoryOrderActivity extends Activity {
                 //是第一次加载数据
                 if (tempList.size() == 0) {
                     Common.showToast(mActivity, "暂无数据");
-                    return;
+                } else {
+                    infos.addAll(tempList);
                 }
-                infos.addAll(tempList);
                 break;
             case refreshLoad:
                 //如果是刷新加载
@@ -235,11 +234,12 @@ public class ShipperHistoryOrderActivity extends Activity {
         handler.sendMessage(message);
 
     }
+
     /**
      * 重置页数
      */
     private void reSetPage() {
-        page=1;
+        page = 1;
     }
 
     private void initField() {
@@ -257,7 +257,7 @@ public class ShipperHistoryOrderActivity extends Activity {
                 requestData(refreshLoad, "");
             }
         });
-        infos=new ArrayList<ShipperHisOrderBean>();
+        infos = new ArrayList<ShipperHisOrderBean>();
     }
 
 

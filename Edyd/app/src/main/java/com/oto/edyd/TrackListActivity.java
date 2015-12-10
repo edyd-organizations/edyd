@@ -213,9 +213,9 @@ public class TrackListActivity extends Activity {
                 //是第一次加载数据
                 if(tempList.size()==0){
                     Common.showToast(mActivity, "暂无数据");
-                    return;
-                }
+                }else {
                     infos.addAll(tempList);
+                }
                 break;
             case refreshLoad:
                 //如果是刷新加载
