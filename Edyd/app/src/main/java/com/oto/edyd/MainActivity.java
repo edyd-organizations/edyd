@@ -187,20 +187,20 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                     TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
                     listFragment.add(transportDriverFragment);
                     break;
-//                case Constant.SHIPPER_ROLE_ID: //发货方
-//                    //listFragment.add(transportServiceFragment);
-//                    TransportShipperFragment transportShipperFragment = new TransportShipperFragment();
-//                    listFragment.add(transportShipperFragment);
-//                    break;
-//                case Constant.RECEIVER_ROLE_ID: //收货方
-//                    //listFragment.add(transportServiceFragment);
-//                    TransportReceiverFragment transportReceiverFragment = new TransportReceiverFragment();
-//                    listFragment.add(transportReceiverFragment);
-//                    break;
-//                case Constant.UNDERTAKER_ROLE_ID: //承运方
-//                    TransportUndertakeFragment transportServiceFragment = new TransportUndertakeFragment();
-//                    listFragment.add(transportServiceFragment);
-//                    break;
+                case Constant.SHIPPER_ROLE_ID: //发货方
+                    //listFragment.add(transportServiceFragment);
+                    TransportShipperFragment transportShipperFragment = new TransportShipperFragment();
+                    listFragment.add(transportShipperFragment);
+                    break;
+                case Constant.RECEIVER_ROLE_ID: //收货方
+                    //listFragment.add(transportServiceFragment);
+                    TransportReceiverFragment transportReceiverFragment = new TransportReceiverFragment();
+                    listFragment.add(transportReceiverFragment);
+                    break;
+                case Constant.UNDERTAKER_ROLE_ID: //承运方
+                    TransportUndertakeFragment transportServiceFragment = new TransportUndertakeFragment();
+                    listFragment.add(transportServiceFragment);
+                    break;
             }
         } else {
             TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
