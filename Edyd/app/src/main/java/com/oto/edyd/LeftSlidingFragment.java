@@ -145,7 +145,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                     Toast.makeText(getActivity().getApplicationContext(), "初始化司机", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                ((MainActivity)getActivity()).comeBackIndex();
+                ((MainActivity)getActivity()).exitOperate();
                 new Thread(new ExitDialogThread(exitProgressDialog)).start(); //弹出对话框线程
                 break;
             default:
