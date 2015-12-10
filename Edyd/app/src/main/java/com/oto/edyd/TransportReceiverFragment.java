@@ -30,6 +30,7 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
 
     private Common common;
     private Common fixedCommon;
+    private LinearLayout ll_view_track;
 
     @Nullable
     @Override
@@ -52,6 +53,10 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
         transportRole = (TextView) view.findViewById(R.id.transport_role);
         LinearLayout panorama = (LinearLayout) view.findViewById(R.id.ll_panorama);
         panorama.setOnClickListener(this);//全景图
+        //查看轨迹
+        ll_view_track = (LinearLayout) view.findViewById(R.id.ll_view_track);
+        ll_view_track.setOnClickListener(this);
+
         LinearLayout ll_historyOrders = (LinearLayout) view.findViewById(R.id.ll_history_orders);
         LinearLayout ll_on_the_wayOrders = (LinearLayout) view.findViewById(R.id.ll_on_the_way_orders);
         ll_historyOrders.setOnClickListener(this);
@@ -78,6 +83,12 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
                 break;
             case  R.id.ll_panorama://全景图
                 intent=new Intent(getActivity(),PanoramaActivity.class);
+                startActivity(intent);
+                break;
+            case  R.id.ll_view_track://查看轨迹
+                intent = new Intent(getActivity(), TrackListActivity.class);
+                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+                intent.putExtra("aspectType", aspectType);
                 startActivity(intent);
                 break;
         }

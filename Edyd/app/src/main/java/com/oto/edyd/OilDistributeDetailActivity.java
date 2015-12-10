@@ -3,9 +3,11 @@ package com.oto.edyd;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +19,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.oto.edyd.model.DistributionBean;
 import com.oto.edyd.model.OilDistributeDetailTime;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 
@@ -34,7 +40,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by yql on 2015/11/3.
+ * Created by liubaozhong
+ * 分配明细
  */
 public class OilDistributeDetailActivity extends Activity implements View.OnClickListener {
 
@@ -46,8 +53,13 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
     private TextView balance; //余额
     private TextView lastTime; //最后加油时间
     private TextView tv_provisions; //备付金余额
+    private ExpandableListView distributeListView; //分配明细列表
 
-    private ExpandableListView distributeDetailList; //分配明细列表
+    private static final int firstLoad = 0;//第一次加载
+    private static final int refreshLoad = 1;//刷新加载
+    private static final int moreLoad = 2;//下拉加载更多
+    private int page = 1;//默认加载的页数
+    private int rows = 20;//默认加载的条数
 
     private TextView tOilCardApply; //油卡申请
     private TextView tAmountDistribute; //金额分配
@@ -60,6 +72,9 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
     OilCardDistributeDetailAdapter adapter;
     Context mActivity;
     private String cardId;
+    private SwipeRefreshLayout swipe_container;
+
+    private CusProgressDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +89,10 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
             orgCode = common.getStringByKey(Constant.ORG_CODE);
             sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
             enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+            cardId = bean.getCardId();
 
             initFields(); //初始化数据
-            cardId = bean.getCardId();
-            getDate(true);
+            getDate(firstLoad);
 
             back.setOnClickListener(this);
             tOilCardApply.setOnClickListener(this);
@@ -86,25 +101,29 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         }
     }
 
-    private int page = 1;
-    private int rows = 20;
+
 
     /**
-     * @param isFist 是否是第一次加载
+     * @param loadType 加载的类型
      */
 
-    private void getDate(final boolean isFist) {
+    private void getDate(final int loadType) {
         /**
          * inqueryOilBalanceDetailList.json?sessionUuid=&page=1&rows=8&
          */
         String url = Constant.ENTRANCE_PREFIX + "inqueryOilBalanceDetailList.json?sessionUuid="
                 + sessionUuid + "&enterpriseId=" + enterpriseId + "&cardId=" + cardId + "&orgCode=" + orgCode
                 + "&page=" + page + "&rows=" + rows;
+        if (loadType==firstLoad) {
+            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
+            loadingDialog.getLoadingDialog().show();
+        }
 
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
+                loadingDialog.getLoadingDialog().dismiss();
             }
 
             @Override
@@ -114,24 +133,37 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
                 try {
                     jsonObject = new JSONObject(response);
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        Toast.makeText(getApplicationContext(), "获取查询信息失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "返回信息失败", Toast.LENGTH_SHORT).show();
+                        loadingDialog.getLoadingDialog().dismiss();
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
 
-                    requestDistributeUserList(jsonArray, isFist);
+                    requestDistributeUserList(jsonArray, loadType);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
+        swipe_container.setRefreshing(false);
     }
 
     /**
      * 数据初始化
      */
     private void initFields() {
+        swipe_container = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            /**
+             * 刷新要做的操作
+             */
+            @Override
+            public void onRefresh() {
+                getDate(refreshLoad);
+            }
+        });
+
         back = (LinearLayout) findViewById(R.id.back);
         typeCardOrCarNumber = (TextView) findViewById(R.id.type_car_number_or_card);
         search = (TextView) findViewById(R.id.search);
@@ -148,17 +180,17 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         tOilCardApply = (TextView) findViewById(R.id.oil_card_apply);
         tAmountDistribute = (TextView) findViewById(R.id.oil_card_account_distribute);
 
-        distributeDetailList = (ExpandableListView) findViewById(R.id.distribute_detail_list);
-        distributeDetailList.setGroupIndicator(null);
-        distributeDetailList.setOnScrollListener(new AbsListView.OnScrollListener() {
+        distributeListView = (ExpandableListView) findViewById(R.id.distribute_detail_list);
+        distributeListView.setGroupIndicator(null);
+        distributeListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
                 switch (scrollState) {
                     case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
-                        int lastPosition = distributeDetailList.getLastVisiblePosition();
+                        int lastPosition = distributeListView.getLastVisiblePosition();
                         if (lastPosition == allocationBeanlist.size() - 1) {
                             page++;
-                            getDate(false);
+                            getDate(moreLoad);
                         }
                         break;
                 }
@@ -190,24 +222,16 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
         }
     }
 
-    //    Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case 0x12: //油卡金额数据返回执行
-//                    distributeDetailList.setAdapter(new OilCardDistributeDetailAdapter(getApplicationContext()));
-//                    break;
-//            }
-//        }
-//    };
+
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0x12: //油卡金额数据返回执行
+                    loadingDialog.getLoadingDialog().dismiss();
                     if (adapter == null) {
                         adapter = new OilCardDistributeDetailAdapter(mActivity);
-                        distributeDetailList.setAdapter(adapter);
+                        distributeListView.setAdapter(adapter);
                     } else {
                         adapter.notifyDataSetChanged();
                     }
@@ -219,7 +243,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
     /**
      * 请求预分配用户列表
      */
-    private void requestDistributeUserList(JSONArray jsonArray, boolean isFirst) throws JSONException {
+    private void requestDistributeUserList(JSONArray jsonArray, int loadType) throws JSONException {
         ArrayList<AllocationBean> tempList = new ArrayList<AllocationBean>();
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
@@ -232,21 +256,35 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
             bean.setProvisionsMoney(obj.getString("provisionsMoney"));
             tempList.add(bean);
         }
-        if (tempList.size() == 0) {
-
-            if (isFirst) {
+        switch (loadType){
+            case firstLoad:
                 //是第一次加载数据
+                if(tempList.size()==0){
                 Common.showToast(mActivity, "暂无数据");
-            } else {
-//                Common.showToast(mActivity, "没有更多数据");
-            }
-        } else {
-            allocationBeanlist.addAll(tempList);
+                }
+                allocationBeanlist.addAll(tempList);
+                break;
+            case refreshLoad:
+                //如果是刷新加载
+                allocationBeanlist.clear();
+                allocationBeanlist.addAll(tempList);
+                reSetPage();
+                break;
+            case moreLoad:
+                allocationBeanlist.addAll(tempList);
+                break;
         }
         Message message = new Message();
         message.what = 0x12;
         handler.sendMessage(message);
 
+    }
+
+    /**
+     * 重置页数
+     */
+    private void reSetPage() {
+        page=1;
     }
 
     private class OilCardDistributeDetailAdapter extends BaseExpandableListAdapter {

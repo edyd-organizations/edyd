@@ -90,7 +90,9 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
                     Toast.makeText(getActivity(),"您没有权限查看",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                intent =new Intent(getActivity(),TrackListActivity.class);
+                intent = new Intent(getActivity(), TrackListActivity.class);
+                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+                intent.putExtra("aspectType", aspectType);
                 startActivity(intent);
                 break;
         }

@@ -42,34 +42,40 @@
             android:textSize="20sp"
             android:textStyle="bold" />
     </RelativeLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:layout_margin="5dp">
-            <EditText
-                android:id="@+id/et_input_ordernum"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:hint="请输入调度单号查找"
-                android:singleLine="true"
-                android:drawableLeft="@mipmap/search"
-                android:textColorHint="#CCCCCC"
-                android:textSize="14sp"
-                android:drawablePadding="5dp"
-                android:padding="5dp"
-                android:background="@color/white"/>
-        </LinearLayout>
 
-    <ListView
-        android:id="@+id/lv_track"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:dividerHeight="4dp"
-        android:divider="@color/gray_EEEEEE"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_input_ordernum"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:drawableLeft="@mipmap/search"
+            android:drawablePadding="5dp"
+            android:hint="请输入调度单号查找"
+            android:padding="5dp"
+            android:singleLine="true"
+            android:textColorHint="#CCCCCC"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_container"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </ListView>
+        <ListView
+            android:id="@+id/lv_track"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/gray_EEEEEE"
+            android:dividerHeight="4dp"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

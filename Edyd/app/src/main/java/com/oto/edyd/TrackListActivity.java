@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -41,7 +42,15 @@ public class TrackListActivity extends Activity {
     private ArrayList<TrackBean> infos;
     private TrackListAdapter adapter;
     private CusProgressDialog loadingDialog; //页面切换过度
-    private int aspectType;
+    private String aspectType;
+    private SwipeRefreshLayout swipe_container;
+
+    private static final int firstLoad = 0;//第一次加载
+    private static final int refreshLoad = 1;//刷新加载
+    private static final int moreLoad = 2;//下拉加载更多
+    private static final int searchLoad = 3;//查询加载
+    private int page = 1;//默认加载的页数
+    private int rows = 20;//默认加载的条数
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +58,26 @@ public class TrackListActivity extends Activity {
         setContentView(R.layout.track_list_activity);
         //得到角色类型
         Intent intent=getIntent();
+        aspectType=intent.getStringExtra("aspectType");
 
         initfield();
         initView();
-        fillDate(true, "");
-
-
+        fillDate(firstLoad,"");
     }
 
     private void initView() {
-        et_input_ordernum = (EditText) findViewById(R.id.et_input_ordernum);
+        swipe_container = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            /**
+             * 刷新要做的操作
+             */
+            @Override
+            public void onRefresh() {
+                fillDate(refreshLoad,"");
+            }
+        });
 
+        et_input_ordernum = (EditText) findViewById(R.id.et_input_ordernum);
         et_input_ordernum.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -68,7 +86,7 @@ public class TrackListActivity extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
-                fillDate(false, s.toString());
+                fillDate(searchLoad, s.toString());
             }
 
             @Override
@@ -115,18 +133,15 @@ public class TrackListActivity extends Activity {
         }
     };
 
-    private void fillDate(final boolean isFist, String controlNum) {
-        ///v1.1/traceAllOrder.json?truckNum=&controlStatus=0&sessionUuid=
-        int page=1;
-        int rows=50;
+    private void fillDate(final int loadType, String controlNum) {
         //第一次进来显示loading
-        if (isFist) {
+        if (loadType==firstLoad) {
             loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
             loadingDialog.getLoadingDialog().show();
         }
         String url = Constant.ENTRANCE_PREFIX_v1 + "appTraceAllOrder.json?sessionUuid="
                 + sessionUuid + "&controlNum=" + controlNum + "&page=" + page + "&rows=" + rows
-                +"&aspectType"=aspectType;
+                +"&aspectType="+aspectType;
 //        Common.printErrLog("轨迹" + url);
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
@@ -134,7 +149,6 @@ public class TrackListActivity extends Activity {
                 loadingDialog.getLoadingDialog().dismiss();
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onResponse(String response) {
 //                Common.printErrLog("轨迹" + response);
@@ -144,21 +158,23 @@ public class TrackListActivity extends Activity {
                     jsonObject = new JSONObject(response);
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), "返回信息失败", Toast.LENGTH_SHORT).show();
+                        loadingDialog.getLoadingDialog().dismiss();
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
 
-                    requestDistributeUserList(jsonArray, isFist);
+                    requestDistributeUserList(jsonArray, loadType);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
+        swipe_container.setRefreshing(false);
     }
 
-    private void requestDistributeUserList(JSONArray jsonArray, boolean isFirst) throws JSONException {
-        infos.clear();
+    private void requestDistributeUserList(JSONArray jsonArray, int loadType) throws JSONException {
+
         ArrayList<TrackBean> tempList = new ArrayList<TrackBean>();
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
@@ -170,22 +186,42 @@ public class TrackListActivity extends Activity {
             bean.setOrderDate(obj.getString("orderDate"));
             tempList.add(bean);
         }
-        if (tempList.size() == 0) {
 
-            if (isFirst) {
+        switch (loadType){
+            case firstLoad:
                 //是第一次加载数据
-                Common.showToast(mActivity, "暂无数据");
-            } else {
-//                Common.showToast(mActivity, "没有更多数据");
-            }
-        } else {
-            infos.addAll(tempList);
+                if(tempList.size()==0){
+                    Common.showToast(mActivity, "暂无数据");
+                }
+                infos.addAll(tempList);
+                break;
+            case refreshLoad:
+                //如果是刷新加载
+                infos.clear();
+                infos.addAll(tempList);
+                reSetPage();
+                break;
+            case moreLoad:
+                infos.addAll(tempList);
+                break;
+            case searchLoad:
+                //查询加载
+                infos.clear();
+                infos.addAll(tempList);
+                reSetPage();
+                break;
         }
         Message message = new Message();
         message.what = 0x12;
         handler.sendMessage(message);
     }
 
+    /**
+     * 重置页数
+     */
+    private void reSetPage() {
+        page=1;
+    }
 
     public void back(View view) {
         finish();
