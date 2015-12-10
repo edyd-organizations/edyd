@@ -40,7 +40,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by yql on 2015/10/28.
+ * Created by lbz
+ * 金额分配模块
  */
 public class OilCardAmountDistributeActivity extends Activity implements View.OnClickListener {
 
@@ -73,6 +74,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         setContentView(R.layout.oil_card_amount_distribute);
         mActivity = this;
         initFields();
+
         listDistributeUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -104,6 +106,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
 
         back = (LinearLayout) findViewById(R.id.back);
         inputCarNumber = (EditText) findViewById(R.id.type_car_number);
+
         inputCarNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

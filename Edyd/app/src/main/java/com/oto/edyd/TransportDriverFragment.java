@@ -21,7 +21,7 @@ import com.oto.edyd.utils.Constant;
 /**
  * Created by yql on 2015/12/1.
  */
-public class TransportDriverFragment extends Fragment implements View.OnClickListener{
+public class TransportDriverFragment extends Fragment implements View.OnClickListener {
 
     private View transportDriverView;
     public FragmentManager fragmentManager; //fragment管理器
@@ -58,7 +58,7 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
      * 初始化数据
      */
     private void initFields(View view) {
-        this.fragmentManager = ((MainActivity)getActivity()).fragmentManager;
+        this.fragmentManager = ((MainActivity) getActivity()).fragmentManager;
         selectTransportRole = (RelativeLayout) view.findViewById(R.id.select_transport_role);
         enterpriseName = (TextView) view.findViewById(R.id.enterprise_name);
         transportRole = (TextView) view.findViewById(R.id.transport_role);
@@ -96,7 +96,11 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
                 Toast.makeText(getActivity().getApplicationContext(), "开发中...", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.ll_view_track: //查看轨迹
-                Toast.makeText(getActivity().getApplicationContext(), "开发中...", Toast.LENGTH_SHORT).show();
+               Toast.makeText(getActivity().getApplicationContext(), "你没有权限", Toast.LENGTH_SHORT).show();
+//                intent = new Intent(getActivity(), TrackListActivity.class);
+//                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+//                intent.putExtra("aspectType", aspectType);
+//                startActivity(intent);
                 break;
         }
     }
@@ -108,7 +112,7 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
         String txEnterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
         enterpriseName.setText(txEnterpriseName);
         String txTransportRole = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
-        if(txTransportRole!=null && !txTransportRole.equals("")) {
+        if (txTransportRole != null && !txTransportRole.equals("")) {
             int transportRoleId = Integer.valueOf(txTransportRole);
             switch (transportRoleId) {
                 case Constant.DRIVER_ROLE_ID: //司机

@@ -37,6 +37,7 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
     private Common common;
     private Common fixedCommon;
     private LinearLayout ll_history_orders;
+    private LinearLayout ll_view_track;
 
 
     @Nullable
@@ -71,12 +72,22 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
         content = getActivity();
         fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-
+        //发货方历史订单
         ll_history_orders = (LinearLayout) view.findViewById(R.id.ll_history_orders);//发货方历史订单
         ll_history_orders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getActivity(),ShipperHistoryOrderActivity.class);
+                startActivity(intent);
+            }
+        });
+        ll_view_track=(LinearLayout) view.findViewById(R.id.ll_view_track);
+        ll_view_track.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), TrackListActivity.class);
+                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+                intent.putExtra("aspectType", aspectType);
                 startActivity(intent);
             }
         });
