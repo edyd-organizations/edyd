@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -62,7 +63,7 @@ public class TrackListActivity extends Activity {
 
         initfield();
         initView();
-        fillDate(firstLoad,"");
+        fillDate(firstLoad, "");
     }
 
     private void initView() {
@@ -105,6 +106,26 @@ public class TrackListActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+        lv_track.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                switch (scrollState) {
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                        int lastPosition = lv_track.getLastVisiblePosition();
+                        if (lastPosition == infos.size() - 1) {
+                            page++;
+                            fillDate(moreLoad,"");
+                        }
+                        break;
+                }
+            }
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+            }
+        });
+
     }
 
     private void initfield() {
@@ -192,8 +213,9 @@ public class TrackListActivity extends Activity {
                 //是第一次加载数据
                 if(tempList.size()==0){
                     Common.showToast(mActivity, "暂无数据");
+                    return;
                 }
-                infos.addAll(tempList);
+                    infos.addAll(tempList);
                 break;
             case refreshLoad:
                 //如果是刷新加载
