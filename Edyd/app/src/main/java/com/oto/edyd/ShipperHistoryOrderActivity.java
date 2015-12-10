@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
@@ -14,7 +15,8 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.oto.edyd.model.TrackBean;
+import com.google.gson.Gson;
+import com.oto.edyd.model.ShipperHisOrderBean;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -25,10 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by lbz on 2015/12/7.
@@ -37,11 +36,38 @@ import java.util.Date;
 public class ShipperHistoryOrderActivity extends Activity {
     private ListView lv_his_order;
     private Common common;
-    private SwipeRefreshLayout mPullToRefreshScrollView;//刷新用到的控件
     private CusProgressDialog loadingDialog; //页面切换过度
     private Context mActivity;
-    private int page = 1;
-    private int rows = 10;
+    private static final int firstLoad = 0;//第一次加载
+    private static final int refreshLoad = 1;//刷新加载
+    private static final int moreLoad = 2;//下拉加载更多
+    private static final int searchLoad = 3;//查询加载
+    private int page = 1;//默认加载的页数
+    private int rows = 20;//默认加载的条数
+    private HisOrderAdapter adapter;
+    private SwipeRefreshLayout swipe_container;//刷新用到的控件
+    private Gson gson;
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0x12: //油卡金额数据返回执行
+                    //加载完成隐藏loading
+                    loadingDialog.getLoadingDialog().dismiss();
+
+                    if (adapter == null) {
+                        adapter = new HisOrderAdapter();
+                        lv_his_order.setAdapter(adapter);
+                    } else {
+                        adapter.notifyDataSetChanged();
+                    }
+                    break;
+            }
+        }
+    };
+    private ArrayList<ShipperHisOrderBean> infos;//数据源
+
 
 
     @Override
@@ -50,23 +76,18 @@ public class ShipperHistoryOrderActivity extends Activity {
         setContentView(R.layout.activity_shipper_hisorder);
         initField();
         initView();
-        requestData( true); //请求数据
+        requestData(firstLoad,""); //请求数据
 
     }
-    public void back(View view){
+
+    public void back(View view) {
         finish();
     }
 
-    private void initView() {
-        mPullToRefreshScrollView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            /**
-             * 刷新要做的操作
-             */
-            public void onRefresh() {
-                requestData( true);
-            }
-        });
 
+    private void initView() {
+
+        //分页滚动监听
         lv_his_order.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
@@ -89,24 +110,13 @@ public class ShipperHistoryOrderActivity extends Activity {
         lv_his_order.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Intent intent = new Intent(mActivity, ReceivingOrderDetail.class);
-//                intent.putExtra("primaryId", String.valueOf(primaryIdList.get(position)));
-//                intent.putExtra("position", String.valueOf(position));
-                startActivityForResult(intent, 0x21);
-            }
-        });
-        lv_his_order.setAdapter(new HisOrderAdapter() );
-        lv_his_order.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent(mActivity,ShipperHisOrderDetailActivity.class);
+                Intent intent = new Intent(mActivity, ShipperHisOrderDetailActivity.class);
                 startActivity(intent);
             }
         });
     }
 
-    class HisOrderAdapter extends BaseAdapter{
+    class HisOrderAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -125,40 +135,54 @@ public class ShipperHistoryOrderActivity extends Activity {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            View itemView=View.inflate(mActivity,R.layout.shipper_hisorder_item,null);
+            View itemView = View.inflate(mActivity, R.layout.shipper_hisorder_item, null);
             return itemView;
         }
     }
+
     /**
      * 加载数据
-
-     * @param isFist 是否是第一次
+     *
+     * @param loadType 是否是第一次
      */
-    private void requestData(final boolean isFist) {
-        String sessionUUID = common.getStringByKey(Constant.SESSION_UUID);
-        String url = Constant.ENTRANCE_PREFIX + "appSenderAndReceiverOrderListHistory.json?sessionUuid=" + sessionUUID + "&page=" + page + "&rows=" + rows;
-        //        Common.printErrLog("" + url);
+    private void requestData(final int loadType,String serachParames) {
+
+        Common fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
+        String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        String orgCode = common.getStringByKey(Constant.ORG_CODE);
+        String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+//        v1.1/appSenderAndReceiverOrderListHistory.json?sessionUuid=879425d835d34ac183dddddf831ecdc7&aspectType=2&enterpriseId=52&orgCode=1
+        String url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderListHistory.json?sessionUuid=" + sessionUuid +
+                "&aspectType=" + aspectType + "&page=" + page + "&rows=" + rows + "&enterpriseId=" + enterpriseId + "&orgCode=" + orgCode
+                +"&serachParames="+serachParames;
+
+        //第一次进来显示loading
+        if (loadType == firstLoad) {
+            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
+            loadingDialog.getLoadingDialog().show();
+        }
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
-//                loadingDialog.getLoadingDialog().dismiss();
+                loadingDialog.getLoadingDialog().dismiss();
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onResponse(String response) {
-//                Common.printErrLog("" + response);
                 JSONObject jsonObject;
                 JSONArray jsonArray;
                 try {
                     jsonObject = new JSONObject(response);
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), "返回信息失败", Toast.LENGTH_SHORT).show();
+                        loadingDialog.getLoadingDialog().dismiss();
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
 
-                    requestDistributeUserList(jsonArray, isFist);
+                    requestDistributeUserList(jsonArray, loadType);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -167,41 +191,73 @@ public class ShipperHistoryOrderActivity extends Activity {
         });
     }
 
-    private void requestDistributeUserList(JSONArray jsonArray, boolean isFist) {
-//        infos.clear();
-//        ArrayList<TrackBean> tempList = new ArrayList<TrackBean>();
-//        for (int i = 0; i < jsonArray.length(); i++) {
-//            JSONObject obj = jsonArray.getJSONObject(i);
-//            TrackBean bean = new TrackBean();
-//            bean.setPrimaryId(obj.getLong("primaryId"));
-//            bean.setControlNum(obj.getString("controlNum"));
-//            bean.setTruckNum(obj.getString("truckNum"));
-//            bean.setReserveNum(obj.getString("reserveNum"));
-//            bean.setOrderDate(obj.getString("orderDate"));
-//            tempList.add(bean);
-//        }
-//        if (tempList.size() == 0) {
-//
-//            if (isFirst) {
-//                //是第一次加载数据
-//                Common.showToast(mActivity, "暂无数据");
-//            } else {
-////                Common.showToast(mActivity, "没有更多数据");
-//            }
-//        } else {
-//            infos.addAll(tempList);
-//        }
-//        Message message = new Message();
-//        message.what = 1;
-//        handler.sendMessage(message);
+    private void requestDistributeUserList(JSONArray jsonArray, int loadType) {
+
+        ArrayList<ShipperHisOrderBean> tempList = new ArrayList<ShipperHisOrderBean>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                ShipperHisOrderBean bean=gson.fromJson(obj.toString(),ShipperHisOrderBean.class);
+
+                tempList.add(bean);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        switch (loadType) {
+            case firstLoad:
+                //是第一次加载数据
+                if (tempList.size() == 0) {
+                    Common.showToast(mActivity, "暂无数据");
+                    return;
+                }
+                infos.addAll(tempList);
+                break;
+            case refreshLoad:
+                //如果是刷新加载
+                infos.clear();
+                infos.addAll(tempList);
+                reSetPage();
+                break;
+            case moreLoad:
+                infos.addAll(tempList);
+                break;
+            case searchLoad:
+                //查询加载
+                infos.clear();
+                infos.addAll(tempList);
+                reSetPage();
+                break;
+        }
+        Message message = new Message();
+        message.what = 0x12;
+        handler.sendMessage(message);
+
+    }
+    /**
+     * 重置页数
+     */
+    private void reSetPage() {
+        page=1;
     }
 
     private void initField() {
-        mActivity=this;
+        mActivity = this;
         lv_his_order = (ListView) findViewById(R.id.lv_shipper_his_order);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-        mPullToRefreshScrollView = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-
+        gson = new Gson();
+        swipe_container = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            /**
+             * 刷新要做的操作
+             */
+            @Override
+            public void onRefresh() {
+                requestData(refreshLoad, "");
+            }
+        });
+        infos=new ArrayList<ShipperHisOrderBean>();
     }
 
 
