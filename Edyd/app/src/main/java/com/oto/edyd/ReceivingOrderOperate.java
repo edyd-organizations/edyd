@@ -71,7 +71,7 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
                 requestData(1, 10, 2);
             }
         });
-
+        
         receiveOrderList.setOnScrollListener(this);
         receiveOrderList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -142,7 +142,6 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
                 JSONArray jsonArray;
                 try {
                     jsonObject = new JSONObject(response);
-
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), getString(R.string.pull_info_exception), Toast.LENGTH_SHORT).show();
                         return;
@@ -154,13 +153,9 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
                         primaryIdList.add(tempJSON.getInt("primaryId"));
                         orderList.add(tempJSON.getString("controlNum"));
                         dateList.add(tempJSON.getString("controlDate"));
-                        //dateList.add(tempJSON.getString("controlDate"));
                         senderAddressList.add(tempJSON.getString("senderAddr"));
-                        //receiveAddressList.add(tempJSON.getString("receiverAddr"));
                         senderList.add(tempJSON.getString("senderContactPerson"));
                         phoneNumberList.add(tempJSON.getString("senderContactTel"));
-                        //consigneeList.add(tempJSON.getString("receiverContactPerson"));
-                       // consigneePhoneList.add(tempJSON.getString("receiverContactTel"));
                         orderStatusList.add(tempJSON.getInt("controlStatus"));
                     }
                     Message message = new Message();
@@ -226,6 +221,9 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
                     }
                     loadFlag = true;
                     jsonArray = jsonObject.getJSONArray("rows");
+                    if(jsonArray.length() == 0) {
+                        Toast.makeText(ReceivingOrderOperate.this, "暂无数据", Toast.LENGTH_SHORT).show();
+                    }
                     //listSize = jsonArray.length();
                     if (loadType == 2) {
                         clearData();

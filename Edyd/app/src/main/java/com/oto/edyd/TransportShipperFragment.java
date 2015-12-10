@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -36,6 +37,7 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
     private Common common;
     private Common fixedCommon;
     private LinearLayout ll_history_orders;
+    private LinearLayout ll_view_track;
 
 
     @Nullable
@@ -64,16 +66,28 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
         selectTransportRole = (RelativeLayout) view.findViewById(R.id.select_transport_role);
         enterpriseName = (TextView) view.findViewById(R.id.enterprise_name);
         transportRole = (TextView) view.findViewById(R.id.transport_role);
+        LinearLayout panorama = (LinearLayout) view.findViewById(R.id.ll_panorama);
+        panorama.setOnClickListener(this);//全景图
         llOnTheWayOrders = (LinearLayout) view.findViewById(R.id.ll_on_the_way_orders);
         content = getActivity();
         fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-
+        //发货方历史订单
         ll_history_orders = (LinearLayout) view.findViewById(R.id.ll_history_orders);//发货方历史订单
         ll_history_orders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getActivity(),ShipperHistoryOrderActivity.class);
+                startActivity(intent);
+            }
+        });
+        ll_view_track=(LinearLayout) view.findViewById(R.id.ll_view_track);
+        ll_view_track.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), TrackListActivity.class);
+                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+                intent.putExtra("aspectType", aspectType);
                 startActivity(intent);
             }
         });
@@ -123,6 +137,16 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
                 break;
             case R.id.ll_on_the_way_orders: //在途订单
                 intent = new Intent(content, ShipperOrderOperateActivity.class);
+                startActivity(intent);
+                break;
+            case  R.id.ll_panorama://全景图
+                String menterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+                int enterpriseId = Integer.parseInt(menterpriseId );
+                if (enterpriseId==0){
+                    Toast.makeText(getActivity(), "您没有权限查看", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                intent=new Intent(getActivity(),PanoramaActivity.class);
                 startActivity(intent);
                 break;
         }

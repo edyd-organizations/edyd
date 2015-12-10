@@ -77,6 +77,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                     }
                     line.addAll(pos);
                     line.color(Color.RED);
+                    line.width(5);
 
                     aMap.addPolyline(line);
                     onMapLoaded();
@@ -285,7 +286,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-
+        marker.hideInfoWindow();
     }
 
     @Override

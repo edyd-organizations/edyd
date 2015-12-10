@@ -31,7 +31,7 @@ public class ShipperHisOrderDetailActivity extends Activity {
     private TextView shipper; //发货人
     private TextView phoneNumber; //发货人联系电话
     private TextView fromAddress;//从哪到哪
-    private TextView toAddress;//查看轨迹
+    private TextView toAddress;
 
     private TextView goodsName, //货物名称
             goodsTotalVolume, //货物总体积

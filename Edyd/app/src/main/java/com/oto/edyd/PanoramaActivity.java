@@ -51,6 +51,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
     private GeocodeSearch geocoderSearch;
     List<CarInfo> addInfo;
     TextView address;//地址address
+    private Common fixedCommon;
     private LocationManagerProxy mAMapLocationManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
         mapView = (MapView) findViewById(R.id.map);
         // mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState); //此方法必须重写
+        fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
         init();
         requestport();//请求接口
     }
@@ -91,7 +93,8 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
 
     private void requestport() {
         addInfo = new ArrayList<CarInfo>();
-        location=Constant.ENTRANCE_PREFIX +"viewTruckPanorama.json?"+"&sessionUuid="+sessionUuid;//得到调度车辆的所有位置信息
+        String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        location=Constant.ENTRANCE_PREFIX_v1 +"appViewTruckPanorama.json?"+"&sessionUuid="+sessionUuid+"&aspectType="+aspectType;//得到调度车辆的所有位置信息
           //location="http://www.edyd.cn/api/v1.0/" +"viewTruckPanorama.json?"+"&sessionUuid="+"879425d835d34ac183dddddf831ecdc7";//得到调度车辆的所有位置信息
         OkHttpClientManager.getAsyn(location, new OkHttpClientManager.ResultCallback<String>() {
             @Override
@@ -149,10 +152,6 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                         double slat = Double.parseDouble(lat);
                         double slng = Double.parseDouble(lng);
                         CarInfo carinfo = new CarInfo();
-                        if (slat==0&&slng==0){
-                            Common.showToast(PanoramaActivity.this,"暂时没数据");
-                            return;
-                        }
                         carinfo.setDriverName(driverName);//司机名字
                         carinfo.setControlNum(controlNum);//调度单号
                         carinfo.setDriverTel(driverTel);//司机电话
@@ -161,10 +160,15 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                         carinfo.setOrder(order);
                         carinfo.setSlat(slat);
                         carinfo.setSlng(slng);
-                        addInfo.add(carinfo);
+                        if (!(slat==0&&slng==0)){
+                            addInfo.add(carinfo);
+                        }
                     }
                     if (addInfo.size()!=0){
                         onMapLoaded();
+                    }
+                    if (addInfo.size()==0){
+                        Common.showToast(PanoramaActivity.this, "暂时没数据");
                     }
                     Message message = Message.obtain();
                     message.what = 0x20;
@@ -294,6 +298,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
     @Override
     public void onInfoWindowClick(Marker marker) {
      //   Toast.makeText(this,"infowindow点击",Toast.LENGTH_SHORT).show();
+        marker.hideInfoWindow();
     }
 
     /**

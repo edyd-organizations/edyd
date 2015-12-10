@@ -12,11 +12,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 
-/**
+/** 收货方主界面
  * Created by yql on 2015/12/1.
  */
 public class TransportReceiverFragment extends Fragment implements View.OnClickListener{
@@ -30,6 +31,7 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
 
     private Common common;
     private Common fixedCommon;
+    private LinearLayout ll_view_track;
 
     @Nullable
     @Override
@@ -50,6 +52,12 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
         selectTransportRole = (RelativeLayout) view.findViewById(R.id.select_transport_role);
         enterpriseName = (TextView) view.findViewById(R.id.enterprise_name);
         transportRole = (TextView) view.findViewById(R.id.transport_role);
+        LinearLayout panorama = (LinearLayout) view.findViewById(R.id.ll_panorama);
+        panorama.setOnClickListener(this);//全景图
+        //查看轨迹
+        ll_view_track = (LinearLayout) view.findViewById(R.id.ll_view_track);
+        ll_view_track.setOnClickListener(this);
+
         LinearLayout ll_historyOrders = (LinearLayout) view.findViewById(R.id.ll_history_orders);
         LinearLayout ll_on_the_wayOrders = (LinearLayout) view.findViewById(R.id.ll_on_the_way_orders);
         ll_historyOrders.setOnClickListener(this);
@@ -72,6 +80,22 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
                 break;
             case  R.id.ll_on_the_way_orders://在途订单
                 intent=new Intent(getActivity(),ReceiveTransitOrderActivity.class);
+                startActivity(intent);
+                break;
+            case  R.id.ll_panorama://全景图
+                String menterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+                int enterpriseId = Integer.parseInt(menterpriseId );
+                if (enterpriseId==0){
+                    Toast.makeText(getActivity(), "您没有权限查看", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                intent=new Intent(getActivity(),PanoramaActivity.class);
+                startActivity(intent);
+                break;
+            case  R.id.ll_view_track://查看轨迹
+                intent = new Intent(getActivity(), TrackListActivity.class);
+                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+                intent.putExtra("aspectType", aspectType);
                 startActivity(intent);
                 break;
         }
