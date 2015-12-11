@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public class Orderdetail implements Serializable {
     String controlNum;//调度单号
-    Integer distance;//距离
+    double distance;//距离
     Integer orderStatus;//订单状态
     String detailedAddress;//详细地址
     String startAddrProviceAndCity;//起点省份
@@ -27,11 +27,11 @@ public class Orderdetail implements Serializable {
         this.controlNum = controlNum;
     }
 
-    public Integer getDistance() {
+    public double getDistance() {
         return distance;
     }
 
-    public void setDistance(Integer distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
 

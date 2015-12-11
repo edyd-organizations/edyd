@@ -392,7 +392,7 @@
 
                         <!-- 预留单号 -->
                         <TextView
-                            android:id="@+id/order_flow_number"
+                            android:id="@+id/order_number"
                             android:layout_toRightOf="@+id/iv_order_number"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
