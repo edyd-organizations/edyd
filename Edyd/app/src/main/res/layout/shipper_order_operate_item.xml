@@ -64,8 +64,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="@color/red_fe020e"
-                        android:text="3000"/>
+                        android:textColor="@color/red_fe020e" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -81,7 +80,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="北京海淀---福建厦门"
                 android:textColor="@color/gray_818181"
                 android:textSize="16sp"/>
             <LinearLayout
