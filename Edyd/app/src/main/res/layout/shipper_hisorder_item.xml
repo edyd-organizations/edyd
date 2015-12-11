@@ -10,7 +10,6 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/order_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -37,7 +36,7 @@
                     android:src="@mipmap/order_number" />
 
                 <TextView
-                    android:id="@+id/orderNumView"
+                    android:id="@+id/tv_controlNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -47,7 +46,7 @@
                     android:textColor="@color/gray_5d5d5d" />
 
                 <TextView
-                    android:id="@+id/tv_distance"
+                    android:id="@+id/tv_controlDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -64,6 +63,7 @@
                 android:gravity="left">
 
                 <TextView
+                    android:id="@+id/tv_senderAddrProviceAndCity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="福建省厦门市"
@@ -76,6 +76,7 @@
                     android:background="@color/gray_818181" />
 
                 <TextView
+                    android:id="@+id/tv_receiverAddrProviceAndCity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="福建省漳州市"
@@ -101,7 +102,7 @@
                         android:src="@mipmap/finishing_point" />
 
                     <TextView
-                        android:id="@+id/tv_addr_detail"
+                        android:id="@+id/tv_receiverAddr"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -145,7 +146,7 @@
                             android:textSize="14sp" />
 
                         <TextView
-                            android:id="@+id/shipper_name"
+                            android:id="@+id/tv_receiverName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
@@ -154,7 +155,7 @@
                             android:textSize="14sp" />
 
                         <TextView
-                            android:id="@+id/phone_number_one"
+                            android:id="@+id/tv_receiverContactTel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"

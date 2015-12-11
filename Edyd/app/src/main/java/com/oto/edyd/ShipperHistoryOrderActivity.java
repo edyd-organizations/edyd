@@ -13,6 +13,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -55,6 +56,7 @@ public class ShipperHistoryOrderActivity extends Activity {
                 case 0x12: //油卡金额数据返回执行
                     //加载完成隐藏loading
                     loadingDialog.getLoadingDialog().dismiss();
+                    swipe_container.setRefreshing(false);
 
                     if (adapter == null) {
                         adapter = new HisOrderAdapter();
@@ -90,22 +92,23 @@ public class ShipperHistoryOrderActivity extends Activity {
         lv_his_order.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-//                switch (scrollState) {
-//                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
-//                        int lastPosition = distributeDetailList.getLastVisiblePosition();
-//                        if (lastPosition == allocationBeanlist.size() - 1) {
-//                            page++;
-//                            getDate(false);
-//                        }
-//                        break;
-//                }
+                switch (scrollState) {
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                        int lastPosition = lv_his_order.getLastVisiblePosition();
+                        if (lastPosition == infos.size() - 1) {
+                            page++;
+                            requestData(moreLoad, "");
+                        }
+                        break;
+                }
             }
-
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
 
             }
         });
+
+
         lv_his_order.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -119,7 +122,7 @@ public class ShipperHistoryOrderActivity extends Activity {
 
         @Override
         public int getCount() {
-            return 5;
+            return infos.size();
         }
 
         @Override
@@ -135,6 +138,23 @@ public class ShipperHistoryOrderActivity extends Activity {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             View itemView = View.inflate(mActivity, R.layout.shipper_hisorder_item, null);
+            TextView tv_controlNum= (TextView) itemView.findViewById(R.id.tv_controlNum);
+            TextView tv_senderAddrProviceAndCity= (TextView) itemView.findViewById(R.id.tv_senderAddrProviceAndCity);
+            TextView tv_receiverAddrProviceAndCity= (TextView) itemView.findViewById(R.id.tv_receiverAddrProviceAndCity);
+            TextView tv_receiverAddr= (TextView) itemView.findViewById(R.id.tv_receiverAddr);
+            TextView tv_receiverName= (TextView) itemView.findViewById(R.id.tv_receiverName);
+            TextView tv_receiverContactTel= (TextView) itemView.findViewById(R.id.tv_receiverContactTel);
+            TextView tv_controlDate= (TextView) itemView.findViewById(R.id.tv_controlDate);
+
+            ShipperHisOrderBean bean=infos.get(i);
+            tv_controlNum.setText(bean.getControlNum());
+            tv_senderAddrProviceAndCity.setText(bean.getSenderAddrProviceAndCity());
+            tv_receiverAddrProviceAndCity.setText(bean.getReceiverAddrProviceAndCity());
+            tv_receiverAddr.setText(bean.getReceiverAddr());
+            tv_receiverName.setText(bean.getReceiverName());
+            tv_receiverContactTel.setText(bean.getReceiverContactTel());
+            tv_controlDate.setText(bean.getControlDate());
+
             return itemView;
         }
     }
@@ -165,6 +185,7 @@ public class ShipperHistoryOrderActivity extends Activity {
             @Override
             public void onError(Request request, Exception e) {
                 loadingDialog.getLoadingDialog().dismiss();
+                swipe_container.setRefreshing(false);
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
             }
 
@@ -177,6 +198,7 @@ public class ShipperHistoryOrderActivity extends Activity {
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), "返回信息失败", Toast.LENGTH_SHORT).show();
                         loadingDialog.getLoadingDialog().dismiss();
+                        swipe_container.setRefreshing(false);
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
@@ -188,22 +210,17 @@ public class ShipperHistoryOrderActivity extends Activity {
                 }
             }
         });
+
     }
 
-    private void requestDistributeUserList(JSONArray jsonArray, int loadType) {
+    private void requestDistributeUserList(JSONArray jsonArray, int loadType) throws JSONException {
 
         ArrayList<ShipperHisOrderBean> tempList = new ArrayList<ShipperHisOrderBean>();
         for (int i = 0; i < jsonArray.length(); i++) {
-            try {
                 JSONObject obj = jsonArray.getJSONObject(i);
                 ShipperHisOrderBean bean = gson.fromJson(obj.toString(), ShipperHisOrderBean.class);
-
                 tempList.add(bean);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
         }
-
         switch (loadType) {
             case firstLoad:
                 //是第一次加载数据
@@ -229,7 +246,7 @@ public class ShipperHistoryOrderActivity extends Activity {
                 reSetPage();
                 break;
         }
-        Message message = new Message();
+        Message message = Message.obtain();
         message.what = 0x12;
         handler.sendMessage(message);
 
@@ -259,6 +276,4 @@ public class ShipperHistoryOrderActivity extends Activity {
         });
         infos = new ArrayList<ShipperHisOrderBean>();
     }
-
-
 }
