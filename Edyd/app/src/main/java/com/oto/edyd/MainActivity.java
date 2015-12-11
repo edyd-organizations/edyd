@@ -332,6 +332,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             String roleName = common.getStringByKey(Constant.ROLE_NAME);
             Class tClass;
             String className;
+            Fragment fragment;
 
             leftMenuFragment.accountType.setText(enterpriseName);
             leftMenuFragment.roleType.setText(roleName);
@@ -354,59 +355,77 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 //                    if (!(transportDriverFragment.enterpriseName == null)) {
 //                        transportDriverFragment.enterpriseName.setText(enterpriseName);
 //                    }
-                    TransportDriverFragment transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
-                    tClass = transportDriverFragment.getClass();
+                    TransportDriverFragment transportDriverFragment;
+                    fragment = listFragment.get(2);
+                    tClass = fragment.getClass();
                     className = tClass.getSimpleName();
                     if(!className.equals("TransportDriverFragment")) {
                         transportDriverFragment = new TransportDriverFragment();
                         listFragment.set(2, transportDriverFragment);
                         fragmentsUpdateFlag[2] = true;
                         eAdapter.notifyDataSetChanged();
+                        //transportDriverFragment.enterpriseName.setText(enterpriseName);
+                    } else {
+                        transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
+                        if (!(transportDriverFragment.enterpriseName == null)) {
+                            transportDriverFragment.enterpriseName.setText(enterpriseName);
+                        }
                     }
-                    if (!(transportDriverFragment.enterpriseName == null)) {
-                        transportDriverFragment.enterpriseName.setText(enterpriseName);
-                    }
+
                     break;
                 case Constant.SHIPPER_ROLE_ID: //发货方
-                    TransportShipperFragment transportShipperFragment = (TransportShipperFragment) listFragment.get(2);
-                    tClass = transportShipperFragment.getClass();
+                    TransportShipperFragment transportShipperFragment;
+                    fragment = listFragment.get(2);
+                    tClass = fragment.getClass();
                     className = tClass.getSimpleName();
                     if(!className.equals("TransportShipperFragment")) {
                         transportShipperFragment = new TransportShipperFragment();
                         listFragment.set(2, transportShipperFragment);
                         fragmentsUpdateFlag[2] = true;
                         eAdapter.notifyDataSetChanged();
+                        //transportShipperFragment.enterpriseName.setText(enterpriseName);
+                    } else {
+                        transportShipperFragment = (TransportShipperFragment) listFragment.get(2);
+                        if (!(transportShipperFragment.enterpriseName == null)) {
+                            transportShipperFragment.enterpriseName.setText(enterpriseName);
+                        }
                     }
-                    if (!(transportShipperFragment.enterpriseName == null)) {
-                        transportShipperFragment.enterpriseName.setText(enterpriseName);
-                    }
+
                     break;
                 case Constant.RECEIVER_ROLE_ID: //收货方
-                    TransportReceiverFragment transportReceiverFragment = (TransportReceiverFragment) listFragment.get(2);
-                    tClass = transportReceiverFragment.getClass();
+                    TransportReceiverFragment transportReceiverFragment;
+                    fragment = listFragment.get(2);
+                    tClass = fragment.getClass();
                     className = tClass.getSimpleName();
                     if(!className.equals("TransportReceiverFragment")) {
                         transportReceiverFragment = new TransportReceiverFragment();
                         listFragment.set(2, transportReceiverFragment);
                         fragmentsUpdateFlag[2] = true;
                         eAdapter.notifyDataSetChanged();
-                    }
-                    if (!(transportReceiverFragment.enterpriseName == null)) {
-                        transportReceiverFragment.enterpriseName.setText(enterpriseName);
+                        //transportReceiverFragment.enterpriseName.setText(enterpriseName);
+                    } else {
+                        transportReceiverFragment = (TransportReceiverFragment) listFragment.get(2);
+                        if (!(transportReceiverFragment.enterpriseName == null)) {
+                            transportReceiverFragment.enterpriseName.setText(enterpriseName);
+                        }
                     }
                     break;
                 case Constant.UNDERTAKER_ROLE_ID: //承运方
-                    TransportUndertakeFragment transportUndertakeFragment = (TransportUndertakeFragment) listFragment.get(2);
-                    tClass = transportUndertakeFragment.getClass();
+                    TransportUndertakeFragment transportUndertakeFragment;
+                    fragment = (TransportUndertakeFragment) listFragment.get(2);
+                    tClass = fragment.getClass();
                     className = tClass.getSimpleName();
                     if(!className.equals("TransportUndertakeFragment")) {
                         transportUndertakeFragment = new TransportUndertakeFragment();
                         listFragment.set(2, transportUndertakeFragment);
                         fragmentsUpdateFlag[2] = true;
                         eAdapter.notifyDataSetChanged();
-                    }
-                    if (!(transportUndertakeFragment.enterpriseName == null)) {
-                        transportUndertakeFragment.enterpriseName.setText(enterpriseName);
+                        //transportUndertakeFragment.enterpriseName.setText(enterpriseName);
+                    } else {
+                        transportUndertakeFragment = (TransportUndertakeFragment) listFragment.get(2);
+                        if (!(transportUndertakeFragment.enterpriseName == null)) {
+                            transportUndertakeFragment.enterpriseName.setText(enterpriseName);
+                        }
                     }
                     break;
             }
