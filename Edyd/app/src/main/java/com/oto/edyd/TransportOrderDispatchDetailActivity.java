@@ -43,7 +43,7 @@ public class TransportOrderDispatchDetailActivity extends Activity implements Vi
     private TextView goodsTotalNumber; //货物总数量
     private TextView goodsTotalWeight; //货物总重量
     private TextView goodsTotalVolume; //货物总体积
-    private EditText tvDistributeOrderNumber;//调度单号
+    //private EditText tvDistributeOrderNumber;//调度单号
     private EditText driverName; //司机名称
     private EditText carNumber; //车牌号
     private EditText identityCard; //身份证
@@ -141,7 +141,7 @@ public class TransportOrderDispatchDetailActivity extends Activity implements Vi
         goodsTotalNumber = (TextView) findViewById(R.id.goods_total_number);
         goodsTotalWeight = (TextView) findViewById(R.id.goods_total_weight);
         goodsTotalVolume = (TextView) findViewById(R.id.goods_total_volume);
-        tvDistributeOrderNumber = (EditText) findViewById(R.id.tv_distribute_order_number);
+        //tvDistributeOrderNumber = (EditText) findViewById(R.id.tv_distribute_order_number);
         driverName = (EditText) findViewById(R.id.driver_name);
         carNumber = (EditText) findViewById(R.id.car_number);
         identityCard = (EditText) findViewById(R.id.identity_card);
@@ -183,8 +183,9 @@ public class TransportOrderDispatchDetailActivity extends Activity implements Vi
                         }).show();
                 break;
             case R.id.quick_dispatch: //快速调度
+                String orderFlowNumber = orderFlowWaterNumber.getText().toString();
                 intent = new Intent(TransportOrderDispatchDetailActivity.this, FastDistributeActivity.class);
-                intent.putExtra("distribute_order_number", globalDistributeOrderNumber);
+                intent.putExtra("distribute_order_number", orderFlowNumber);
                 intent.putExtra("order_id", transportDispatch.getId());
                 startActivityForResult(intent, 0x12);
                 break;
@@ -196,11 +197,13 @@ public class TransportOrderDispatchDetailActivity extends Activity implements Vi
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0x10: //货物名称请求返回
-                    requestDistributeOrderNumber(); //请求调度单号
-                    break;
-                case 0x11: //调度单号返回
+                    //requestDistributeOrderNumber(); //请求调度单号
                     setData(); //设置数据
                     loadingDialog.dismissDialog();
+                    break;
+                case 0x11: //调度单号返回
+//                    setData(); //设置数据
+//                    loadingDialog.dismissDialog();
                     break;
                 case 0x15: //调度成功返回
                     Toast.makeText(TransportOrderDispatchDetailActivity.this, "调度成功", Toast.LENGTH_SHORT).show();
@@ -310,7 +313,7 @@ public class TransportOrderDispatchDetailActivity extends Activity implements Vi
         goodsTotalNumber.setText(transportDispatch.getTotalNumber());
         goodsTotalWeight.setText(transportDispatch.getTotalWeight());
         goodsTotalVolume.setText(transportDispatch.getTotalVolume());
-        tvDistributeOrderNumber.setText(transportDispatch.getDistributeOrderNumber());
+        //tvDistributeOrderNumber.setText(transportDispatch.getDistributeOrderNumber());
     }
 
     @Override
@@ -360,7 +363,8 @@ public class TransportOrderDispatchDetailActivity extends Activity implements Vi
             return;
         }
 
-        String url = Constant.ENTRANCE_PREFIX_v1 + "appGenerateControlOrder.json?sessionUuid=" + sessionUuid + "&controlNum=" + transportDispatch.getDistributeOrderNumber() +
+        String orderFlowNumber = orderFlowWaterNumber.getText().toString();
+        String url = Constant.ENTRANCE_PREFIX_v1 + "appGenerateControlOrder.json?sessionUuid=" + sessionUuid + "&controlNum=" + orderFlowNumber +
                 "&trunckNum=" + driver.getCarId() + "&realAccoutId=" + driver.getDriverId() + "&driverName=" + driver.getDriverName() +
                 "&driverTel=" + driver.getDriverPhoneNumber() + "&idCard=" + driver.getIdentityCard() + "&orderId=" + transportDispatch.getId();
 
