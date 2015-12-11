@@ -332,7 +332,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
             switch (msg.what) {
                 case 1:
                     receiveOrderListAdapter = new ReceiveOrderListAdapter(getApplicationContext());
-                    receiveOrderList.setAdapter(receiveOrderListAdapter);
+                    receiveOrderList.setAdapter(receiveOrderListAdapter);;
                     receiveOrderDialog.getLoadingDialog().dismiss();
                     //setListViewHeightBasedOnChildren(receiveOrderList);
                     break;

@@ -513,4 +513,16 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         customViewPager.setCurrentItem(0);
         home.setChecked(true);
     }
+
+    /**
+     * 退出登录操作
+     */
+    public void exitOperate() {
+        TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
+        listFragment.set(2, transportDriverFragment);
+        fragmentsUpdateFlag[2] = true;
+        eAdapter.notifyDataSetChanged();
+        customViewPager.setCurrentItem(0);
+        home.setChecked(true);
+    }
 }

@@ -15,7 +15,7 @@ public class ShipperOrderOperateItem {
     private String address; //地址
     private String receiver; //收货人
     private String phoneNumber; //联系电话
-    private String orderStatus; //订单状态
+    private int orderStatus; //订单状态
 
     public String getPrimaryId() {
         return primaryId;
@@ -73,11 +73,11 @@ public class ShipperOrderOperateItem {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getOrderStatus() {
+    public int getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(int orderStatus) {
         this.orderStatus = orderStatus;
     }
 }

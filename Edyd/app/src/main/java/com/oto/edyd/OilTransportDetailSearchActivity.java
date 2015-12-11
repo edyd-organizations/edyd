@@ -41,7 +41,6 @@ public class OilTransportDetailSearchActivity extends Activity implements View.O
     private EditText blurContent; //模糊文本
     private TextView search; //搜索
     private ListView cardListView; //卡列表
-
     private Common common;
     private List<OilCardInfo> oilCardInfoSet = new ArrayList<OilCardInfo>(); //油卡集合
     private SelectCardAdapter selectCardAdapter;
