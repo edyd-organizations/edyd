@@ -34,6 +34,45 @@
             android:textStyle="bold"/>
     </RelativeLayout>
 
+    <!-- 发货方订单操作列表搜索 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_DDDDDD"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_margin="5dp">
+            <EditText
+                android:id="@+id/search_content"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:hint="请输入调度单号和订单号"
+                android:singleLine="true"
+                android:drawableLeft="@mipmap/search"
+                android:textColorHint="#CCCCCC"
+                android:textSize="14sp"
+                android:drawablePadding="5dp"
+                android:padding="5dp"
+                android:background="@color/white"/>
+            <Button
+                android:id="@+id/search"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="4"
+                android:text="查找"
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="2dp"
+                android:background="@drawable/border_corner_login_enable"/>
+        </LinearLayout>
+    </LinearLayout>
+
     <!-- 下拉刷新控件 -->
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_container"
