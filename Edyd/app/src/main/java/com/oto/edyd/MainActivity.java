@@ -330,43 +330,81 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         if (resultCode == Constant.ACCOUNT_TYPE_RESULT_CODE) {
             enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
             String roleName = common.getStringByKey(Constant.ROLE_NAME);
+            Class tClass;
+            String className;
 
             leftMenuFragment.accountType.setText(enterpriseName);
             leftMenuFragment.roleType.setText(roleName);
             int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
             switch (transportRoleId) {
                 case Constant.DRIVER_ROLE_ID: //司机
-                    String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
-                    TransportDriverFragment transportDriverFragment;
-                    if(enterpriseId.equals("0")) {
+//                    String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+//                    TransportDriverFragment transportDriverFragment;
+//                    if(enterpriseId.equals("0")) {
+//                        transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
+//                        if(!transportDriverFragment.isAdded()) {
+//                            listFragment.set(2, transportDriverFragment);
+//                            fragmentsUpdateFlag[2] = true;
+//                            eAdapter.notifyDataSetChanged();
+//                        }
+//                    } else {
+//                        transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
+//                    }
+//
+//                    if (!(transportDriverFragment.enterpriseName == null)) {
+//                        transportDriverFragment.enterpriseName.setText(enterpriseName);
+//                    }
+                    TransportDriverFragment transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
+                    tClass = transportDriverFragment.getClass();
+                    className = tClass.getSimpleName();
+                    if(!className.equals("TransportDriverFragment")) {
                         transportDriverFragment = new TransportDriverFragment();
-                        if(!transportDriverFragment.isAdded()) {
-                            listFragment.set(2, transportDriverFragment);
-                            fragmentsUpdateFlag[2] = true;
-                            eAdapter.notifyDataSetChanged();
-                        }
-                    } else {
-                        transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
+                        listFragment.set(2, transportDriverFragment);
+                        fragmentsUpdateFlag[2] = true;
+                        eAdapter.notifyDataSetChanged();
                     }
-
                     if (!(transportDriverFragment.enterpriseName == null)) {
                         transportDriverFragment.enterpriseName.setText(enterpriseName);
                     }
                     break;
                 case Constant.SHIPPER_ROLE_ID: //发货方
                     TransportShipperFragment transportShipperFragment = (TransportShipperFragment) listFragment.get(2);
+                    tClass = transportShipperFragment.getClass();
+                    className = tClass.getSimpleName();
+                    if(!className.equals("TransportShipperFragment")) {
+                        transportShipperFragment = new TransportShipperFragment();
+                        listFragment.set(2, transportShipperFragment);
+                        fragmentsUpdateFlag[2] = true;
+                        eAdapter.notifyDataSetChanged();
+                    }
                     if (!(transportShipperFragment.enterpriseName == null)) {
                         transportShipperFragment.enterpriseName.setText(enterpriseName);
                     }
                     break;
                 case Constant.RECEIVER_ROLE_ID: //收货方
                     TransportReceiverFragment transportReceiverFragment = (TransportReceiverFragment) listFragment.get(2);
+                    tClass = transportReceiverFragment.getClass();
+                    className = tClass.getSimpleName();
+                    if(!className.equals("TransportReceiverFragment")) {
+                        transportReceiverFragment = new TransportReceiverFragment();
+                        listFragment.set(2, transportReceiverFragment);
+                        fragmentsUpdateFlag[2] = true;
+                        eAdapter.notifyDataSetChanged();
+                    }
                     if (!(transportReceiverFragment.enterpriseName == null)) {
                         transportReceiverFragment.enterpriseName.setText(enterpriseName);
                     }
                     break;
                 case Constant.UNDERTAKER_ROLE_ID: //承运方
                     TransportUndertakeFragment transportUndertakeFragment = (TransportUndertakeFragment) listFragment.get(2);
+                    tClass = transportUndertakeFragment.getClass();
+                    className = tClass.getSimpleName();
+                    if(!className.equals("TransportUndertakeFragment")) {
+                        transportUndertakeFragment = new TransportUndertakeFragment();
+                        listFragment.set(2, transportUndertakeFragment);
+                        fragmentsUpdateFlag[2] = true;
+                        eAdapter.notifyDataSetChanged();
+                    }
                     if (!(transportUndertakeFragment.enterpriseName == null)) {
                         transportUndertakeFragment.enterpriseName.setText(enterpriseName);
                     }
@@ -518,10 +556,15 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
      * 退出登录操作
      */
     public void exitOperate() {
-        TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
-        listFragment.set(2, transportDriverFragment);
-        fragmentsUpdateFlag[2] = true;
-        eAdapter.notifyDataSetChanged();
+        Fragment fragment = listFragment.get(2);
+        Class tClass = fragment.getClass();
+        String className = tClass.getSimpleName();
+        if(!className.equals("TransportDriverFragment")) {
+            TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
+            listFragment.set(2, transportDriverFragment);
+            fragmentsUpdateFlag[2] = true;
+            eAdapter.notifyDataSetChanged();
+        }
         customViewPager.setCurrentItem(0);
         home.setChecked(true);
     }
