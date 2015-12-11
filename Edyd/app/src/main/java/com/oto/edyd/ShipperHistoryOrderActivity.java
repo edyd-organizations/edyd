@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,8 +59,7 @@ public class ShipperHistoryOrderActivity extends Activity {
             switch (msg.what) {
                 case 0x12: //油卡金额数据返回执行
                     //加载完成隐藏loading
-                    loadingDialog.getLoadingDialog().dismiss();
-                    swipe_container.setRefreshing(false);
+                    dimissLoading();
 
                     if (adapter == null) {
                         adapter = new HisOrderAdapter();
@@ -68,7 +71,18 @@ public class ShipperHistoryOrderActivity extends Activity {
             }
         }
     };
+
+    /**
+     * 取消加载动画
+     */
+    private void dimissLoading() {
+        loadingDialog.getLoadingDialog().dismiss();
+        swipe_container.setRefreshing(false);
+    }
+
     private ArrayList<ShipperHisOrderBean> infos;//数据源
+    private EditText et_input_seek;
+    private LinearLayout ll_clear_text;
 
 
     @Override
@@ -102,6 +116,7 @@ public class ShipperHistoryOrderActivity extends Activity {
                         break;
                 }
             }
+
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
 
@@ -113,6 +128,9 @@ public class ShipperHistoryOrderActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(mActivity, ShipperHisOrderDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("detailBean", infos.get(position));
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
@@ -138,15 +156,15 @@ public class ShipperHistoryOrderActivity extends Activity {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             View itemView = View.inflate(mActivity, R.layout.shipper_hisorder_item, null);
-            TextView tv_controlNum= (TextView) itemView.findViewById(R.id.tv_controlNum);
-            TextView tv_senderAddrProviceAndCity= (TextView) itemView.findViewById(R.id.tv_senderAddrProviceAndCity);
-            TextView tv_receiverAddrProviceAndCity= (TextView) itemView.findViewById(R.id.tv_receiverAddrProviceAndCity);
-            TextView tv_receiverAddr= (TextView) itemView.findViewById(R.id.tv_receiverAddr);
-            TextView tv_receiverName= (TextView) itemView.findViewById(R.id.tv_receiverName);
-            TextView tv_receiverContactTel= (TextView) itemView.findViewById(R.id.tv_receiverContactTel);
-            TextView tv_controlDate= (TextView) itemView.findViewById(R.id.tv_controlDate);
+            TextView tv_controlNum = (TextView) itemView.findViewById(R.id.tv_controlNum);
+            TextView tv_senderAddrProviceAndCity = (TextView) itemView.findViewById(R.id.tv_senderAddrProviceAndCity);
+            TextView tv_receiverAddrProviceAndCity = (TextView) itemView.findViewById(R.id.tv_receiverAddrProviceAndCity);
+            TextView tv_receiverAddr = (TextView) itemView.findViewById(R.id.tv_receiverAddr);
+            TextView tv_receiverName = (TextView) itemView.findViewById(R.id.tv_receiverName);
+            TextView tv_receiverContactTel = (TextView) itemView.findViewById(R.id.tv_receiverContactTel);
+            TextView tv_controlDate = (TextView) itemView.findViewById(R.id.tv_controlDate);
 
-            ShipperHisOrderBean bean=infos.get(i);
+            ShipperHisOrderBean bean = infos.get(i);
             tv_controlNum.setText(bean.getControlNum());
             tv_senderAddrProviceAndCity.setText(bean.getSenderAddrProviceAndCity());
             tv_receiverAddrProviceAndCity.setText(bean.getReceiverAddrProviceAndCity());
@@ -184,8 +202,7 @@ public class ShipperHistoryOrderActivity extends Activity {
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
-                loadingDialog.getLoadingDialog().dismiss();
-                swipe_container.setRefreshing(false);
+                dimissLoading();
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
             }
 
@@ -197,13 +214,12 @@ public class ShipperHistoryOrderActivity extends Activity {
                     jsonObject = new JSONObject(response);
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), "返回信息失败", Toast.LENGTH_SHORT).show();
-                        loadingDialog.getLoadingDialog().dismiss();
-                        swipe_container.setRefreshing(false);
+                        dimissLoading();
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
 
-                    requestDistributeUserList(jsonArray, loadType);
+                    fillList(jsonArray, loadType);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -213,13 +229,13 @@ public class ShipperHistoryOrderActivity extends Activity {
 
     }
 
-    private void requestDistributeUserList(JSONArray jsonArray, int loadType) throws JSONException {
+    private void fillList(JSONArray jsonArray, int loadType) throws JSONException {
 
         ArrayList<ShipperHisOrderBean> tempList = new ArrayList<ShipperHisOrderBean>();
         for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject obj = jsonArray.getJSONObject(i);
-                ShipperHisOrderBean bean = gson.fromJson(obj.toString(), ShipperHisOrderBean.class);
-                tempList.add(bean);
+            JSONObject obj = jsonArray.getJSONObject(i);
+            ShipperHisOrderBean bean = gson.fromJson(obj.toString(), ShipperHisOrderBean.class);
+            tempList.add(bean);
         }
         switch (loadType) {
             case firstLoad:
@@ -275,5 +291,35 @@ public class ShipperHistoryOrderActivity extends Activity {
             }
         });
         infos = new ArrayList<ShipperHisOrderBean>();
+        et_input_seek = (EditText) findViewById(R.id.et_input_seek);
+        et_input_seek.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                if (s.toString().length() != 0) {
+                    //当有文本是显示
+                    ll_clear_text.setVisibility(View.VISIBLE);
+                } else {
+                    ll_clear_text.setVisibility(View.INVISIBLE);
+                }
+                requestData(searchLoad, s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        ll_clear_text = (LinearLayout) findViewById(R.id.ll_clear_text);
+        ll_clear_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et_input_seek.setText("");
+            }
+        });
     }
 }

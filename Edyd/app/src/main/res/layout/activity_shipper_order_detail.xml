@@ -558,7 +558,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="7dp"
-                                    android:text="发货人"
+                                    android:text="收货人"
                                     android:textColor="@color/gray_5d5d5d"
                                     android:textSize="14sp" />
 
