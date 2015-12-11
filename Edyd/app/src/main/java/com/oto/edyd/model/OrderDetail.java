@@ -21,11 +21,11 @@ public class OrderDetail implements Serializable{
     private String phoneNumber; //发货人联系电话
     private String consignee; //收货人
     private String consigneePhoneNumber; //收货人联系人电话
+
     private List<String > goodNameLists; //货物名称集
     private String goodsTotalVolume; //货物总体积
     private String goodsTotalQuantity; //货物总数量
     private String goodsTotalWeight; //货物总质量
-
     List<OrderPerTime> orderPerTimeList; //时间集
 
     public int getControlId() {

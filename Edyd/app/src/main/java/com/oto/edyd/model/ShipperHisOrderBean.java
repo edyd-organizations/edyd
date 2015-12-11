@@ -1,10 +1,12 @@
 package com.oto.edyd.model;
 
+import java.io.Serializable;
+
 /**
  * Created by liubaozhong
  * 发货方历史列表；
  */
-public class ShipperHisOrderBean {
+public class ShipperHisOrderBean implements Serializable{
     private String controlNum;
     private int distance;
     private String orderNum;

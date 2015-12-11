@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_EEEEEE"
-    >
+    android:orientation="vertical">
 
     <!--模拟ActionBar-->
     <RelativeLayout
@@ -15,13 +14,15 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
+            android:gravity="center"
             android:onClick="back"
-            android:gravity="center">
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/ic_chevron_left_white_36dp"/>
+                android:background="@mipmap/ic_chevron_left_white_36dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,42 +35,60 @@
             android:id="@+id/tv_order_detail_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="发货方历史订单"
             android:gravity="center"
+            android:text="发货方历史订单"
             android:textColor="@android:color/white"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
     </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_margin="5dp"
+        android:background="@color/white"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:layout_margin="5dp">
+        android:orientation="horizontal">
+
         <EditText
-            android:id="@+id/input_number_or_card"
+            android:id="@+id/et_input_seek"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_weight="1"
-            android:hint="请输入调度单号或订单号"
-            android:singleLine="true"
+            android:background="@color/white"
             android:drawableLeft="@mipmap/search"
-            android:textColorHint="#CCCCCC"
-            android:textSize="14sp"
             android:drawablePadding="5dp"
+            android:hint="请输入调度单号或订单号"
             android:padding="5dp"
-            android:background="@color/white"/>
+            android:singleLine="true"
+            android:textColorHint="#CCCCCC"
+            android:textSize="14sp" />
+        <LinearLayout
+            android:id="@+id/ll_clear_text"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:visibility="gone"
+            android:gravity="center">
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/delete" />
+        </LinearLayout>
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ListView
             android:id="@+id/lv_shipper_his_order"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none"/>
+            android:scrollbars="none" />
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>
