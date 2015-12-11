@@ -1,12 +1,14 @@
 package com.oto.edyd;
 
+import java.io.Serializable;
+
 /**
  * Created by xhj on 2015/12/9.
  * 收发货人列表订单详情
  */
-public class Orderdetail {
+public class Orderdetail implements Serializable {
     String controlNum;//调度单号
-    double distance;//距离
+    Integer distance;//距离
     Integer orderStatus;//订单状态
     String detailedAddress;//详细地址
     String startAddrProviceAndCity;//起点省份
@@ -14,7 +16,8 @@ public class Orderdetail {
     String ContactTel;//联系电话
     String ContacrName;//联系人
     String orderNum;//订单号
-    String primaryId;//主键ID
+    Long primaryId;//主键ID
+    String controlDate;//操作时间
 
     public String getControlNum() {
         return controlNum;
@@ -24,11 +27,11 @@ public class Orderdetail {
         this.controlNum = controlNum;
     }
 
-    public double getDistance() {
+    public Integer getDistance() {
         return distance;
     }
 
-    public void setDistance(double distance) {
+    public void setDistance(Integer distance) {
         this.distance = distance;
     }
 
@@ -88,11 +91,19 @@ public class Orderdetail {
         this.orderNum = orderNum;
     }
 
-    public String getPrimaryId() {
+    public Long getPrimaryId() {
         return primaryId;
     }
 
-    public void setPrimaryId(String primaryId) {
+    public void setPrimaryId(Long primaryId) {
         this.primaryId = primaryId;
+    }
+
+    public String getControlDate() {
+        return controlDate;
+    }
+
+    public void setControlDate(String controlDate) {
+        this.controlDate = controlDate;
     }
 }
