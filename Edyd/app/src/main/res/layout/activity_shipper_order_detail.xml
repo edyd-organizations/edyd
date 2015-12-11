@@ -94,6 +94,7 @@
                             android:id="@+id/tv_first_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="接单" />
 
                         <TextView
@@ -101,6 +102,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="15:12"
                             android:textSize="12sp" />
 
@@ -108,6 +110,7 @@
                             android:id="@+id/execute_first_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/gray_5d5d5d"
                             android:layout_marginTop="5dp"
                             android:text="11-18"
                             android:textSize="10sp" />
@@ -156,6 +159,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="9-14"
                             android:textSize="10sp" />
 
@@ -163,6 +167,7 @@
                             android:id="@+id/execute_second_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="20:46"
                             android:textSize="12sp" />
 
@@ -170,6 +175,7 @@
                             android:id="@+id/tv_second_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/gray_5d5d5d"
                             android:layout_marginTop="10dp"
                             android:text="到达装货" />
                     </LinearLayout>
@@ -216,12 +222,14 @@
                             android:id="@+id/tv_third_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="装货完成" />
 
                         <TextView
                             android:id="@+id/execute_third_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/gray_5d5d5d"
                             android:layout_marginTop="10dp"
                             android:text="20:46"
                             android:textSize="12sp" />
@@ -230,6 +238,7 @@
                             android:id="@+id/execute_third_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/gray_5d5d5d"
                             android:layout_marginTop="5dp"
                             android:text="9-12"
                             android:textSize="10sp" />
@@ -279,12 +288,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:text="9-23"
+                            android:textColor="@color/gray_5d5d5d"
                             android:textSize="10sp" />
 
                         <TextView
                             android:id="@+id/execute_four_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="20:46"
                             android:textSize="12sp" />
 
@@ -292,6 +303,7 @@
                             android:id="@+id/tv_four_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/gray_5d5d5d"
                             android:layout_marginTop="10dp"
                             android:text="送货在途" />
                     </LinearLayout>
@@ -338,6 +350,7 @@
                             android:id="@+id/tv_five_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="到达收货" />
 
                         <TextView
@@ -345,12 +358,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="20:46"
                             android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/execute_five_date"
                             android:layout_width="wrap_content"
+                            android:textColor="@color/gray_5d5d5d"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:text="11-11"
