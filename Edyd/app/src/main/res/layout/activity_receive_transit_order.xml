@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
+    android:background="#eeeeee"
     android:layout_height="match_parent">
 
     <!--模拟ActionBar-->
@@ -9,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/user_icon_8">
+
 
         <LinearLayout
             android:id="@+id/receive_order_back"
@@ -40,8 +42,44 @@
             android:textStyle="bold"/>
         <!--右边菜单-->
     </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="5dp"
+        android:focusable="true"
+        android:background="@color/white"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_input_ordernum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:drawableLeft="@mipmap/search"
+                android:drawablePadding="5dp"
+                android:hint="请输入调度单号或订单号"
+                android:padding="10dp"
+
+                android:singleLine="true"
+                android:textColorHint="#CCCCCC"
+                android:textSize="14sp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"
+                android:id="@+id/delete"
+                android:layout_gravity="center"
+                android:src="@mipmap/delete"
+                />
+    </LinearLayout>
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_container"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ListView
