@@ -148,7 +148,6 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
             }
         }
     }
-
     /**
      * 获取sessionid
      * @return
