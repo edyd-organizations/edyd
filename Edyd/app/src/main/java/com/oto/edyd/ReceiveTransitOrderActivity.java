@@ -23,8 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.oto.edyd.model.TrackBean;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -130,7 +128,6 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
 
             }
         });
-
     }
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -187,7 +184,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tempJSON = jsonArray.getJSONObject(i);
                         Orderdetail orderdetail=new Orderdetail();
-                        orderdetail.setDistance(tempJSON.getInt("distance"));//距离
+                        orderdetail.setDistance(tempJSON.getDouble("distance"));
                         orderdetail.setControlNum(tempJSON.getString("controlNum"));//调度单
                         orderdetail.setOrderStatus(tempJSON.getInt("orderStatus"));
                         orderdetail.setStartAddrProviceAndCity(tempJSON.getString("senderAddrProviceAndCity"));//发货人省份
@@ -272,7 +269,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tempJSON = jsonArray.getJSONObject(i);
                         Orderdetail orderdetail=new Orderdetail();
-                        orderdetail.setDistance(tempJSON.getInt("distance"));//距离
+                        orderdetail.setDistance(tempJSON.getDouble("distance"));//距离
                         orderdetail.setControlNum(tempJSON.getString("controlNum"));//调度单
                         orderdetail.setOrderStatus(tempJSON.getInt("orderStatus"));
                         orderdetail.setStartAddrProviceAndCity(tempJSON.getString("senderAddrProviceAndCity"));//发货人省份
