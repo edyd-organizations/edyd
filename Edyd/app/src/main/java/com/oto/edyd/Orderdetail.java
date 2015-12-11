@@ -17,6 +17,7 @@ public class Orderdetail implements Serializable {
     String ContacrName;//联系人
     String orderNum;//订单号
     Long primaryId;//主键ID
+    String controlDate;//操作时间
 
     public String getControlNum() {
         return controlNum;
@@ -96,5 +97,13 @@ public class Orderdetail implements Serializable {
 
     public void setPrimaryId(Long primaryId) {
         this.primaryId = primaryId;
+    }
+
+    public String getControlDate() {
+        return controlDate;
+    }
+
+    public void setControlDate(String controlDate) {
+        this.controlDate = controlDate;
     }
 }

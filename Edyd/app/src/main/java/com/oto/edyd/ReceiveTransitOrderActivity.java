@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,14 +60,19 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receive_transit_order);
         initFields();
-        requestData(1, 10, 1,""); //请求数据
+        requestData(null); //请求数据
         mPullToRefreshScrollView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             /**
              * 刷新要做的操作
              */
             @Override
             public void onRefresh() {
-                requestData(1, 10, 2,"");
+                String searchText = et_input_ordernum.getText().toString();
+                if(TextUtils.isEmpty(searchText)) {
+                    requestData("");
+                } else {
+                    requestData(searchText);
+                }
             }
         });
 
@@ -105,15 +111,18 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
+
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 //     fillDate(searchLoad, s.toString());
-                if (s.toString().length() > 0) {
+                String searchText = s.toString();
+                if (searchText.length() > 0) {
                     imageDelete.setVisibility(View.VISIBLE);
+                    requestData(searchText);
                 } else {
                     imageDelete.setVisibility(View.INVISIBLE);
+                    requestData("");
                 }
-                requestData(1, 10, 3, s.toString());
             }
 
             @Override
@@ -133,7 +142,8 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                 loadFlag = false;
                 if(lastIndex % 10 == 0) {
                     int page = lastIndex / ROWS + 1;
-                    loadOrderData(page, ROWS);
+                    String searchText = et_input_ordernum.getText().toString();
+                    pageLoadOrderData(page, ROWS, searchText);
                 }
             }
         }
@@ -151,8 +161,9 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
      * 分页加载数据
      * @param page
      * @param rows
+     * @param  searchText
      */
-    private void loadOrderData(int page, int rows) {
+    private void pageLoadOrderData(int page, int rows, String searchText) {
         String sessionUUID = getSessionUUID();
         String url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderList.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows
                 +"&aspectType="+aspectType+"&enterpriseId="+enterpriseId+"&orgCode="+orgCode;
@@ -185,6 +196,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                         orderdetail.setContacrName(tempJSON.getString("senderName"));//发货人
                         orderdetail.setContactTel(tempJSON.getString("senderContactTel"));//发货人电话
                         orderdetail.setPrimaryId(tempJSON.getLong("primaryId"));//主键ID
+                        orderdetail.setControlDate(tempJSON.getString("controlDate"));//时间
                         addInfo.add(orderdetail);
                     }
                     Message message = new Message();
@@ -217,20 +229,25 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
 
     /**
      * 加载数据
-     * @param page 第几页
-     * @param rows 每页几条
-     * @param loadType 加载类型
+     * @param serachParames 查询文本
      */
-    private void requestData(int page, int rows, final int loadType,String serachParames) {
+    private void requestData(final String serachParames) {
         Common fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
         orgCode = common.getStringByKey(Constant.ORG_CODE);
         enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
         String sessionUUID = getSessionUUID();
-        String url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderList.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows
-                        +"&aspectType="+aspectType+"&enterpriseId="+enterpriseId+"&orgCode="+orgCode+"&serachParames"+serachParames;
-        OkHttpClientManager.getAsyn(url, new ReceiveOrderCallback<String>(loadType) {
+        String url = "";
+        if(serachParames == null) {
+            url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderList.json?sessionUuid="+sessionUUID+"&page=1"+"&rows=10"
+                    +"&aspectType="+aspectType+"&enterpriseId="+enterpriseId+"&orgCode="+orgCode;
+        } else {
+            url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderList.json?sessionUuid="+sessionUUID+"&page=1"+"&rows=10"
+                    +"&aspectType="+aspectType+"&enterpriseId="+enterpriseId+"&orgCode="+orgCode+"&serachParames="+serachParames;
+        }
+
+        OkHttpClientManager.getAsyn(url, new ReceiveOrderCallback<String>(serachParames) {
             @Override
             public void onError(Request request, Exception e) {
                 Toast.makeText(getApplicationContext(), "获取订单数据异常", Toast.LENGTH_SHORT).show();
@@ -242,20 +259,17 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                 JSONArray jsonArray;
                 try {
                     jsonObject = new JSONObject(response);
-
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), getString(R.string.pull_info_exception), Toast.LENGTH_SHORT).show();
                         return;
                     }
                     loadFlag = true;
                     jsonArray = jsonObject.getJSONArray("rows");
-                    if(jsonArray.length() == 0) {
+                    if(jsonArray.length() == 0&&serachParames==null) {
                         Toast.makeText(ReceiveTransitOrderActivity.this, "暂无数据", Toast.LENGTH_SHORT).show();
                     }
                     //listSize = jsonArray.length();
-                    if (loadType == 2) {
-                        clearData();
-                    }
+                    addInfo.clear();
                     ArrayList<Orderdetail> orderList = new ArrayList<Orderdetail>();
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tempJSON = jsonArray.getJSONObject(i);
@@ -269,25 +283,33 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                         orderdetail.setContacrName(tempJSON.getString("senderName"));//发货人
                         orderdetail.setContactTel(tempJSON.getString("senderContactTel"));//发货人电话
                         orderdetail.setPrimaryId(tempJSON.getLong("primaryId"));//主键ID
+                        orderdetail.setControlDate(tempJSON.getString("controlDate"));//时间
                         orderList.add(orderdetail);
                         addInfo.add(orderdetail);
                     }
-                    if (loadType == 3) {
-                        clearData();
-                        addInfo.addAll(orderList);
-                    }
-
-                    Message message = new Message();
-                    switch (loadType) {
-                        case 1:
-                            message.what = 1; //首次加载
-                            break;
-                        case 2:
-                            message.what = 2; //下拉刷新
-                            break;
-                        case 3:
-                            message.what = 3; //搜索
-                            break;
+                    Message message = Message.obtain();
+//                    if (loadType == 3) {
+//                        clearData();
+//                        addInfo.addAll(orderList);
+//                    }
+//
+//                    switch (loadType) {
+//                        case 1:
+//                            message.what = 1; //首次加载
+//                            break;
+//                        case 2:
+//                            message.what = 2; //下拉刷新
+//                            break;
+//                        case 3:
+//                            message.what = 3; //搜索
+//                            break;
+//                    }
+                    if(serachParames == null) {
+                        //首次加载
+                        message.what = 1;
+                    } else {
+                        //下拉加载
+                        message.what = 2;
                     }
                     handler.sendMessage(message);
                 } catch (JSONException e) {
@@ -298,15 +320,15 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
     }
     public abstract class ReceiveOrderCallback<T> extends OkHttpClientManager.ResultCallback<T>{
 
-        private int loadType;
+        private String searchText;
 
-        public ReceiveOrderCallback(int loadType) {
-            this.loadType = loadType;
+        public ReceiveOrderCallback(String searchText) {
+            this.searchText = searchText;
         }
         @Override
         public void onBefore() {
             //请求之前操作
-            if(loadType == 1) {
+            if(searchText == null) {
                 receiveOrderDialog = new CusProgressDialog(ReceiveTransitOrderActivity.this, "正在加载订单数据...");
                 receiveOrderDialog.getLoadingDialog().show();
             }
@@ -315,7 +337,9 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
         @Override
         public void onAfter() {
             //请求之后要做的操作
-
+            if(searchText == null) {
+                receiveOrderDialog.dismissDialog();
+            }
         }
     }
 
@@ -407,15 +431,13 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case 1:
+                case 1: //首次加载
                     receiveOrderListAdapter = new ReceiveOrderListAdapter(getApplicationContext());
                     receiveOrderList.setAdapter(receiveOrderListAdapter);
-                    receiveOrderDialog.getLoadingDialog().dismiss();
                     //setListViewHeightBasedOnChildren(receiveOrderList);
                     break;
                 case 2:
-                    receiveOrderListAdapter = new ReceiveOrderListAdapter(getApplicationContext());
-                    receiveOrderList.setAdapter(receiveOrderListAdapter);
+                    receiveOrderListAdapter.notifyDataSetChanged();
                     mPullToRefreshScrollView.setRefreshing(false); //停止刷新
                     break;
                 case 3:

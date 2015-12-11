@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.oto.edyd.model.OrderDetail;
 import com.oto.edyd.model.OrderPerTime;
 import com.oto.edyd.model.TrackBean;
@@ -22,13 +21,10 @@ import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.NumberFormat;
 import com.oto.edyd.utils.OkHttpClientManager;
-import com.oto.edyd.widget.CusOnClickListener;
 import com.squareup.okhttp.Request;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -192,7 +188,7 @@ public class ReceivingOrderDetail extends Activity {
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            OrderDetail orderDetail;
+           OrderDetail orderDetail;
             Bundle bundle;
             switch (msg.what) {
                 case 0x12:
@@ -429,7 +425,6 @@ public class ReceivingOrderDetail extends Activity {
         }
 
         orderNumber.setText(orderDetail.getControlNum());
-        orderDate.setText(orderDetail.getOrderDate());
         startPoint.setText(orderDetail.getStartPoint());
         shipper.setText(orderDetail.getShipper());
         phoneNumber.setText(orderDetail.getPhoneNumber());
@@ -472,8 +467,8 @@ public class ReceivingOrderDetail extends Activity {
         goodsTotalWeight.setText(orderDetail.getGoodsTotalWeight());
         startProvince.setText(orderdetail.getStartAddrProviceAndCity());
         stopProvince.setText(orderdetail.getStopAddrProviceAndCity());
+        orderDate.setText(orderdetail.getControlDate());
     }
-
 
     /**
      * 根据ID请求订单详情数据
