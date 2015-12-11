@@ -252,7 +252,6 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
             public void onError(Request request, Exception e) {
                 Toast.makeText(getApplicationContext(), "获取订单数据异常", Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onResponse(String response) {
                 JSONObject jsonObject;
@@ -268,7 +267,6 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                     if(jsonArray.length() == 0&&serachParames==null) {
                         Toast.makeText(ReceiveTransitOrderActivity.this, "暂无数据", Toast.LENGTH_SHORT).show();
                     }
-                    //listSize = jsonArray.length();
                     addInfo.clear();
                     ArrayList<Orderdetail> orderList = new ArrayList<Orderdetail>();
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -288,22 +286,6 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                         addInfo.add(orderdetail);
                     }
                     Message message = Message.obtain();
-//                    if (loadType == 3) {
-//                        clearData();
-//                        addInfo.addAll(orderList);
-//                    }
-//
-//                    switch (loadType) {
-//                        case 1:
-//                            message.what = 1; //首次加载
-//                            break;
-//                        case 2:
-//                            message.what = 2; //下拉刷新
-//                            break;
-//                        case 3:
-//                            message.what = 3; //搜索
-//                            break;
-//                    }
                     if(serachParames == null) {
                         //首次加载
                         message.what = 1;
@@ -434,7 +416,6 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                 case 1: //首次加载
                     receiveOrderListAdapter = new ReceiveOrderListAdapter(getApplicationContext());
                     receiveOrderList.setAdapter(receiveOrderListAdapter);
-                    //setListViewHeightBasedOnChildren(receiveOrderList);
                     break;
                 case 2:
                     receiveOrderListAdapter.notifyDataSetChanged();
