@@ -263,9 +263,10 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
                 break;
             case refreshLoad:
                 //如果是刷新加载
+                reSetPage();
                 allocationBeanlist.clear();
                 allocationBeanlist.addAll(tempList);
-                reSetPage();
+
                 break;
             case moreLoad:
                 allocationBeanlist.addAll(tempList);
