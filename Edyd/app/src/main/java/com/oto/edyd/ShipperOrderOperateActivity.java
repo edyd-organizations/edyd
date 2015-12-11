@@ -48,7 +48,7 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
     private ListView shipperOrderLists; //发货方订单操作列表
     private SwipeRefreshLayout swipeContainer; //下拉刷新控件
     private EditText etSearchText; //查询内容
-    private List<ShipperOrderOperateItem> shipperOrderOperateItemList = new ArrayList<ShipperOrderOperateItem>(); //订单集合
+    private List<Orderdetail> orderdetailList = new ArrayList<Orderdetail>(); //订单集合
     private int visibleLastIndex = 0; //最后可视项索引
     private boolean loadFlag = false;
     private final static int ROWS = 10; //分页加载数据每页10
@@ -106,8 +106,12 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
         shipperOrderLists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ShipperOrderOperateItem orderItem = shipperOrderOperateItemList.get(position);
+                Orderdetail orderItem = orderdetailList.get(position);
                 Intent intent = new Intent(ShipperOrderOperateActivity.this, ShipperOrderOperateItemDetailActivity.class);
+                //Intent intent = new Intent(ShipperOrderOperateActivity.this, ReceivingOrderDetail.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("orderdetail", orderItem);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
@@ -224,22 +228,22 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
                         common.showToast(context, "订单数据请求失败");
                         return;
                     }
-                    shipperOrderOperateItemList.clear();
+                    orderdetailList.clear();
                     loadFlag = true;
                     jsonArray = jsonObject.getJSONArray("rows");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         item = jsonArray.getJSONObject(i);
-                        ShipperOrderOperateItem shipperOrderOperateItem = new ShipperOrderOperateItem();
-                        shipperOrderOperateItem.setPrimaryId(item.getString("primaryId"));
-                        shipperOrderOperateItem.setOrderNumber(item.getString("controlNum")); //订单号
-                        shipperOrderOperateItem.setDistance(String.valueOf(item.getDouble("distance"))); //距离
-                        String startAndEndAddress = item.getString("senderAddrProviceAndCity") + "——" + item.getString("receiverAddrProviceAndCity");
-                        shipperOrderOperateItem.setStartAndEndAddress(startAndEndAddress); //起始和结束地址
-                        shipperOrderOperateItem.setAddress(item.getString("receiverAddr"));
-                        shipperOrderOperateItem.setReceiver(item.getString("receiverName")); //收货人名字
-                        shipperOrderOperateItem.setPhoneNumber(item.getString("receiverContactTel")); //收货人联系方式
-                        shipperOrderOperateItem.setOrderStatus(item.getInt("orderStatus")); //订单状态
-                        shipperOrderOperateItemList.add(shipperOrderOperateItem);
+                        Orderdetail orderdetail = new Orderdetail();
+                        orderdetail.setPrimaryId(item.getLong("primaryId"));
+                        orderdetail.setOrderNum(item.getString("controlNum")); //订单号
+                        orderdetail.setDistance(item.getDouble("distance")); //距离
+                        orderdetail.setStartAddrProviceAndCity(item.getString("senderAddrProviceAndCity"));
+                        orderdetail.setStopAddrProviceAndCity(item.getString("receiverAddrProviceAndCity"));
+                        orderdetail.setDetailedAddress(item.getString("receiverAddr"));
+                        orderdetail.setContacrName(item.getString("receiverName")); //收货人名字
+                        orderdetail.setContactTel(item.getString("receiverContactTel")); //收货人联系方式
+                        orderdetail.setOrderStatus(item.getInt("orderStatus")); //订单状态
+                        orderdetailList.add(orderdetail);
                     }
 
                     Message message = Message.obtain();
@@ -302,17 +306,17 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
                     jsonArray = jsonObject.getJSONArray("rows");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         item = jsonArray.getJSONObject(i);
-                        ShipperOrderOperateItem shipperOrderOperateItem = new ShipperOrderOperateItem();
-                        shipperOrderOperateItem.setPrimaryId(item.getString("primaryId"));
-                        shipperOrderOperateItem.setOrderNumber(item.getString("controlNum")); //订单号
-                        shipperOrderOperateItem.setDistance(String.valueOf(item.getDouble("distance"))); //距离
-                        String startAndEndAddress = item.getString("senderAddrProviceAndCity") + "——" + item.getString("receiverAddrProviceAndCity");
-                        shipperOrderOperateItem.setStartAndEndAddress(startAndEndAddress); //起始和结束地址
-                        shipperOrderOperateItem.setAddress(item.getString("receiverAddr"));
-                        shipperOrderOperateItem.setReceiver(item.getString("receiverName")); //收货人名字
-                        shipperOrderOperateItem.setPhoneNumber(item.getString("receiverContactTel")); //收货人联系方式
-                        shipperOrderOperateItem.setOrderStatus(item.getInt("orderStatus")); //订单状态
-                        shipperOrderOperateItemList.add(shipperOrderOperateItem);
+                        Orderdetail orderdetail = new Orderdetail();
+                        orderdetail.setPrimaryId(item.getLong("primaryId"));
+                        orderdetail.setOrderNum(item.getString("controlNum")); //订单号
+                        orderdetail.setDistance(item.getDouble("distance")); //距离
+                        orderdetail.setStartAddrProviceAndCity(item.getString("senderAddrProviceAndCity"));
+                        orderdetail.setStopAddrProviceAndCity(item.getString("receiverAddrProviceAndCity"));
+                        orderdetail.setDetailedAddress(item.getString("receiverAddr"));
+                        orderdetail.setContacrName(item.getString("receiverName")); //收货人名字
+                        orderdetail.setContactTel(item.getString("receiverContactTel")); //收货人联系方式
+                        orderdetail.setOrderStatus(item.getInt("orderStatus")); //订单状态
+                        orderdetailList.add(orderdetail);
                     }
 
                     Message message = Message.obtain();
@@ -338,12 +342,12 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
 
         @Override
         public int getCount() {
-            return shipperOrderOperateItemList.size();
+            return orderdetailList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return shipperOrderOperateItemList.get(position);
+            return orderdetailList.get(position);
         }
 
         @Override
@@ -362,7 +366,7 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
                 convertView = inflater.inflate(R.layout.shipper_order_operate_item, null);
                 //将布局中的对象存储在viewHolder中，避免再次查找，提高性能
                 viewHolder = new ViewHolder();
-                viewHolder.orderFlowNunber = (TextView) convertView.findViewById(R.id.order_flow_number);
+                viewHolder.orderFlowNumber = (TextView) convertView.findViewById(R.id.order_flow_number);
                 viewHolder.orderDistance = (TextView) convertView.findViewById(R.id.distance_load_goods);
                 viewHolder.orderStatus = (ImageView) convertView.findViewById(R.id.order_status);
                 viewHolder.startAndEndAddress = (TextView) convertView.findViewById(R.id.start_and_end_address);
@@ -377,10 +381,10 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
             }
 
             //设置数据
-            ShipperOrderOperateItem shipperOrderOperateItem = shipperOrderOperateItemList.get(position);
-            viewHolder.orderFlowNunber.setText(shipperOrderOperateItem.getOrderNumber());
-            viewHolder.orderDistance.setText(shipperOrderOperateItem.getDistance());
-            switch (shipperOrderOperateItem.getOrderStatus()) {
+            Orderdetail orderdetail = orderdetailList.get(position);
+            viewHolder.orderFlowNumber.setText(orderdetail.getOrderNum());
+            viewHolder.orderDistance.setText(String.valueOf(orderdetail.getDistance()));
+            switch (orderdetail.getOrderStatus()) {
                 case 17: //未接单
                     break;
                 case 20: //已接单
@@ -402,10 +406,10 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
                     viewHolder.orderStatus.setImageResource(R.mipmap.finished_receive); //收货完成
                     break;
             }
-            viewHolder.startAndEndAddress.setText(shipperOrderOperateItem.getStartAndEndAddress());
-            viewHolder.endAddress.setText(shipperOrderOperateItem.getAddress());
-            viewHolder.receiver.setText(shipperOrderOperateItem.getReceiver());
-            viewHolder.phoneNunber.setText(shipperOrderOperateItem.getPhoneNumber());
+            viewHolder.startAndEndAddress.setText(orderdetail.getStartAddrProviceAndCity() + "——" + orderdetail.getStopAddrProviceAndCity());
+            viewHolder.endAddress.setText(orderdetail.getDetailedAddress());
+            viewHolder.receiver.setText(orderdetail.getContacrName());
+            viewHolder.phoneNunber.setText(orderdetail.getContactTel());
             return convertView;
         }
     }
@@ -414,7 +418,7 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
      * 缓存list item对象
      */
     static class ViewHolder{
-        TextView orderFlowNunber; //订单流水号
+        TextView orderFlowNumber; //订单流水号
         TextView orderDistance; //距离装货地
         ImageView orderStatus; //订单状态
         TextView startAndEndAddress; //其实和结束地址

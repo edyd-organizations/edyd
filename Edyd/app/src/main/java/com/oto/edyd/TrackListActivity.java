@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -57,12 +58,12 @@ public class TrackListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.track_list_activity);
         //得到角色类型
-        Intent intent=getIntent();
-        aspectType=intent.getStringExtra("aspectType");
+        Intent intent = getIntent();
+        aspectType = intent.getStringExtra("aspectType");
 
         initfield();
         initView();
-        fillDate(firstLoad,"");
+        fillDate(firstLoad, "");
     }
 
     private void initView() {
@@ -73,7 +74,7 @@ public class TrackListActivity extends Activity {
              */
             @Override
             public void onRefresh() {
-                fillDate(refreshLoad,"");
+                fillDate(refreshLoad, "");
             }
         });
 
@@ -105,6 +106,27 @@ public class TrackListActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+        lv_track.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                switch (scrollState) {
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                        int lastPosition = lv_track.getLastVisiblePosition();
+                        if (lastPosition == infos.size() - 1) {
+                            page++;
+                            fillDate(moreLoad, "");
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+            }
+        });
+
     }
 
     private void initfield() {
@@ -121,6 +143,7 @@ public class TrackListActivity extends Activity {
                 case 0x12: //油卡金额数据返回执行
                     //加载完成隐藏loading
                     loadingDialog.getLoadingDialog().dismiss();
+                    swipe_container.setRefreshing(false);
 
                     if (adapter == null) {
                         adapter = new TrackListAdapter();
@@ -135,18 +158,19 @@ public class TrackListActivity extends Activity {
 
     private void fillDate(final int loadType, String controlNum) {
         //第一次进来显示loading
-        if (loadType==firstLoad) {
+        if (loadType == firstLoad) {
             loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
             loadingDialog.getLoadingDialog().show();
         }
         String url = Constant.ENTRANCE_PREFIX_v1 + "appTraceAllOrder.json?sessionUuid="
                 + sessionUuid + "&controlNum=" + controlNum + "&page=" + page + "&rows=" + rows
-                +"&aspectType="+aspectType;
+                + "&aspectType=" + aspectType;
 //        Common.printErrLog("轨迹" + url);
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
                 loadingDialog.getLoadingDialog().dismiss();
+                swipe_container.setRefreshing(false);
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
             }
 
@@ -160,6 +184,7 @@ public class TrackListActivity extends Activity {
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), "返回信息失败", Toast.LENGTH_SHORT).show();
                         loadingDialog.getLoadingDialog().dismiss();
+                        swipe_container.setRefreshing(false);
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
@@ -171,7 +196,6 @@ public class TrackListActivity extends Activity {
                 }
             }
         });
-        swipe_container.setRefreshing(false);
     }
 
     private void requestDistributeUserList(JSONArray jsonArray, int loadType) throws JSONException {
@@ -188,13 +212,14 @@ public class TrackListActivity extends Activity {
             tempList.add(bean);
         }
 
-        switch (loadType){
+        switch (loadType) {
             case firstLoad:
                 //是第一次加载数据
-                if(tempList.size()==0){
+                if (tempList.size() == 0) {
                     Common.showToast(mActivity, "暂无数据");
+                } else {
+                    infos.addAll(tempList);
                 }
-                infos.addAll(tempList);
                 break;
             case refreshLoad:
                 //如果是刷新加载
@@ -212,7 +237,7 @@ public class TrackListActivity extends Activity {
                 reSetPage();
                 break;
         }
-        Message message = new Message();
+        Message message = Message.obtain();
         message.what = 0x12;
         handler.sendMessage(message);
     }
@@ -221,7 +246,7 @@ public class TrackListActivity extends Activity {
      * 重置页数
      */
     private void reSetPage() {
-        page=1;
+        page = 1;
     }
 
     public void back(View view) {
