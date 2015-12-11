@@ -202,6 +202,11 @@ public class Common {
         return m.find();
     }
 
+    /**
+     * 把json字符窜转化成对象；
+     * @param jsonData
+     * @return
+     */
     static public TrackLineBean readJsonToCommandObject(String jsonData) {
         if (jsonData == null)
             return null;
@@ -217,6 +222,5 @@ public class Common {
         }
         return commandObject;
     }
-
 
 }

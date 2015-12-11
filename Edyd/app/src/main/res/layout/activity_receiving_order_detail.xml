@@ -514,6 +514,7 @@
                                     android:text="查看轨迹"
                                     android:layout_alignParentRight="true"
                                     android:layout_marginRight="10dp"
+                                    android:textSize="14sp"
                                     android:onClick="checkTrack"
                                     android:textColor="@color/white"
                                     android:background="@color/blue_106ab8"/>

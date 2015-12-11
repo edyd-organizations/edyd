@@ -84,7 +84,14 @@ public class SelectDriverActivity extends Activity implements View.OnClickListen
         driverList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                requestDriverPhoneNumber(driverSet.get(position));
+               // requestDriverPhoneNumber(driverSet.get(position));
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("driver", driverSet.get(position));
+                //Driver driver = (Driver) bundle.getSerializable("driver");
+                Intent intent = new Intent();
+                intent.putExtras(bundle);
+                setResult(0x30, intent);
+                finish();
             }
         });
     }
@@ -124,12 +131,12 @@ public class SelectDriverActivity extends Activity implements View.OnClickListen
                     selectDriverAdapter.notifyDataSetChanged();
                     break;
                 case 0x21: //返回司机号码
-                    Bundle bundle = msg.getData();
-                    //Driver driver = (Driver) bundle.getSerializable("driver");
-                    Intent intent = new Intent();
-                    intent.putExtras(bundle);
-                    setResult(0x30, intent);
-                    finish();
+//                    Bundle bundle = msg.getData();
+//                    //Driver driver = (Driver) bundle.getSerializable("driver");
+//                    Intent intent = new Intent();
+//                    intent.putExtras(bundle);
+//                    setResult(0x30, intent);
+//                    finish();
                     break;
             }
         }
@@ -176,6 +183,7 @@ public class SelectDriverActivity extends Activity implements View.OnClickListen
                         driver.setCarId(jsonObjectItem.getString("truckNumber"));
                         driver.setIdentityCard(jsonObjectItem.getString("cardId"));
                         driver.setDriverName(jsonObjectItem.getString("realName"));
+                        driver.setDriverPhoneNumber(jsonObjectItem.getString("driverMobile"));
                         driverSet.add(driver);
                     }
 
