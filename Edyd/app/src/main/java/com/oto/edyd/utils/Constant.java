@@ -43,7 +43,7 @@ public class Constant {
     public final static int NETWORK_EXCEPTION = 701; //网络异常
 
     //短信运营商状态吗
-    public final static String INVALID_VERIFICATION_CODE = "520"; //无效验证码
+    public final static String INVALID_VERIFICATION_CODE = "468"; //无效验证码
 
     //Activity返回码
     public final static int ACTIVITY_RETURN_CODE = 0x10; //Activity返回码
