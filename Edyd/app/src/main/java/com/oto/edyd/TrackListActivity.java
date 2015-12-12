@@ -223,9 +223,9 @@ public class TrackListActivity extends Activity {
                 break;
             case refreshLoad:
                 //如果是刷新加载
+                reSetPage();
                 infos.clear();
                 infos.addAll(tempList);
-                reSetPage();
                 break;
             case moreLoad:
                 infos.addAll(tempList);
