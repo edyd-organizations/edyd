@@ -11,6 +11,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.oto.edyd.R;
+import com.oto.edyd.pay.model.MerchantsBankOrder;
 import com.oto.edyd.utils.CusProgressDialog;
 
 /**
@@ -23,16 +24,18 @@ public class ConfirmPayActivity extends Activity {
 
     private WebView webView; //网页容器
     private CusProgressDialog transitionDialog; //加载过度
+    private final static int BACK_CODE = 0x20; //返回码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirm_pay);
-        //String url = "https://netpay.cmbchina.com/netpayment/BaseHttp.dll?MfcISAPICommand=TestPrePayWAP&BranchID=0592&CoNo=002968&BillNo=2015121402"+
-          //      "&Amount=0.01&Date=20151214";
+        Bundle bundle = getIntent().getExtras();
+        MerchantsBankOrder merchantsBankOrder = (MerchantsBankOrder) bundle.getSerializable("pay_order");
 
-        String url = "https://netpay.cmbchina.com/netpayment/BaseHttp.dll?MfcISAPICommand=PrePayWAP&BranchID=0592&CoNo=002968&BillNo=2015121403&Amount=0.01&\n" +
-                "Date=20151214&ExpireTimeSpan=3600&MerchantUrl=http://www.edyd.cn/callback/updateBillStatus.json";
+        String url = "https://netpay.cmbchina.com/netpayment/BaseHttp.dll?MfcISAPICommand=PrePayWAP&BranchID=" + merchantsBankOrder.getBranchId() +
+                "&CoNo=" + merchantsBankOrder.getCoNo() + "&BillNo=" + merchantsBankOrder.getBillNo() + "&Amount=" + merchantsBankOrder.getAmount() +
+                "&Date=" +merchantsBankOrder.getDate()+ "&ExpireTimeSpan=3600&MerchantUrl=http://www.edyd.cn/callback/updateBillStatus.json";
         init(url);
     }
 
@@ -90,15 +93,11 @@ public class ConfirmPayActivity extends Activity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if(keyCode == KeyEvent.KEYCODE_BACK) {
-//            if(webView.canGoBack()) {
-//                int steps = 0 - (webView.copyBackForwardList().getSize() - 1);
-//                webView.goBackOrForward(steps);
-//                return true;
-//            } else {
-//                finish(); //结束当前Activity
-//            }
-//        }
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            setResult(BACK_CODE);
+            finish();
+            return false;
+        }
         return super.onKeyDown(keyCode, event);
     }
 }

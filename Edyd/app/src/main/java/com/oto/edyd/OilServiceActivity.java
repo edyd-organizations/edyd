@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.oto.edyd.pay.activity.ChinaMerchantsBankPayActivity;
+
 /**
  * Created by yql on 2015/10/19.
  */
@@ -17,7 +19,8 @@ public class OilServiceActivity extends Activity implements View.OnClickListener
     private LinearLayout llDistributeDetail; //分配明细
     private LinearLayout llTransactionDetail; //交易明细
     private LinearLayout llOilCardApply; //油卡申请
-    private LinearLayout  llOilCardChange; //油卡变更
+    private LinearLayout llOilCardChange; //油卡变更
+    private LinearLayout llOilCardPay; //油卡充值
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,7 @@ public class OilServiceActivity extends Activity implements View.OnClickListener
         llTransactionDetail.setOnClickListener(this);
         llOilCardApply.setOnClickListener(this);
         llOilCardChange.setOnClickListener(this);
+        llOilCardPay.setOnClickListener(this);
     }
 
     private void initFields() {
@@ -42,6 +46,7 @@ public class OilServiceActivity extends Activity implements View.OnClickListener
         llTransactionDetail = (LinearLayout) findViewById(R.id.ll_transaction_detail);
         llOilCardApply = (LinearLayout) findViewById(R.id.ll_oil_card_apply);
         llOilCardChange = (LinearLayout) findViewById(R.id.ll_oil_card_change);
+        llOilCardPay = (LinearLayout) findViewById(R.id.ll_oil_card_pay);
     }
 
     @Override
@@ -73,6 +78,10 @@ public class OilServiceActivity extends Activity implements View.OnClickListener
                 break;
             case R.id.ll_oil_card_change: //油卡变更
                 intent = new Intent(getApplicationContext(), OilCardChangeActivity.class); //油卡申请
+                startActivity(intent);
+                break;
+            case R.id.ll_oil_card_pay: //油卡充值
+                intent = new Intent(getApplicationContext(), ChinaMerchantsBankPayActivity.class);
                 startActivity(intent);
                 break;
         }

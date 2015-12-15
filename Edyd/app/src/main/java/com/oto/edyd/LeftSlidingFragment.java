@@ -18,6 +18,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oto.edyd.pay.activity.ChinaMerchantsBankPayActivity;
 import com.oto.edyd.usercenter.activity.LoginActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -249,7 +250,6 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
             if(menuDes.equals("我的钱包")) {
                 intent = new Intent(getActivity().getApplicationContext(), WaitBuild.class);
                 intent.putExtra("wait_title", "我的钱包");
-                startActivity(intent);
             } else if(menuDes.equals("账户类型")){
                 intent = new Intent(getActivity(), AccountTypeActivity.class);
                 startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
