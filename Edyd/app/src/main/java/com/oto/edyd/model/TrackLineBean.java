@@ -3,7 +3,7 @@ package com.oto.edyd.model;
 import java.util.ArrayList;
 
 /**
- * Created by Administrator on 2015/12/2.
+ * Created by liubaozhong on 2015/12/2.
  */
 public class TrackLineBean {
     private String controlNum;
@@ -159,6 +159,5 @@ public class TrackLineBean {
     public void setTraceInfo(ArrayList<TrackPointBean> traceInfo) {
         this.traceInfo = traceInfo;
     }
-
 
 }
