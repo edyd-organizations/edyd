@@ -2,7 +2,6 @@ package com.oto.edyd;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,13 +22,10 @@ import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by yql on 2015/8/25.
@@ -249,7 +245,6 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
             if(menuDes.equals("我的钱包")) {
                 intent = new Intent(getActivity().getApplicationContext(), WaitBuild.class);
                 intent.putExtra("wait_title", "我的钱包");
-                startActivity(intent);
             } else if(menuDes.equals("账户类型")){
                 intent = new Intent(getActivity(), AccountTypeActivity.class);
                 startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
