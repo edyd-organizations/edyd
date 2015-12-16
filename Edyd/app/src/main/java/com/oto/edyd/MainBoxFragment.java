@@ -62,12 +62,12 @@ public class MainBoxFragment extends Fragment implements View.OnClickListener {
         Intent intent;
         switch (view.getId()) {
             case R.id.surrounding_oil: //周边加油
-                intent = new Intent(getActivity(),WaitBuild.class);
+                intent = new Intent(getActivity(),BoxRimAddCarActivity.class);
                 intent.putExtra("wait_title", "周边加油");
                 startActivity(intent);
                 break;
             case R.id.surrounding_sparking: //周边停车
-                intent = new Intent(getActivity(),WaitBuild.class);
+                intent = new Intent(getActivity(),BoxRimPark.class);
                 intent.putExtra("wait_title", "周边停车");
                 startActivity(intent);
                 break;
@@ -81,7 +81,7 @@ public class MainBoxFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.violate_payment: //违章缴费
-                intent = new Intent(getActivity(),WaitBuild.class);
+                intent = new Intent(getActivity(),BoxViolationPayActivity.class);
                 intent.putExtra("wait_title", "违章缴费");
                 startActivity(intent);
                 break;
@@ -91,7 +91,7 @@ public class MainBoxFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.phone_pay: //手机充值
-                intent = new Intent(getActivity(),WaitBuild.class);
+                intent = new Intent(getActivity(),BoxPhonePayActivity.class);
                 intent.putExtra("wait_title", "手机充值");
                 startActivity(intent);
                 break;

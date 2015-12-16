@@ -164,7 +164,7 @@
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         android:textSize="14sp"
-                        android:background="@drawable/border_corner_bg_blue"
+                        android:background="#106ab8"
                         android:text="拨打电话"/>
                 </RelativeLayout>
                 <LinearLayout
@@ -224,7 +224,7 @@
                             android:layout_weight="1"
                             android:layout_marginLeft="5dp"
                             android:textSize="14sp"
-                            android:background="@drawable/border_corner_bg_blue"
+                            android:background="#106ab8"
                             android:text="拨打电话"/>
                     </RelativeLayout>
                 </LinearLayout>
