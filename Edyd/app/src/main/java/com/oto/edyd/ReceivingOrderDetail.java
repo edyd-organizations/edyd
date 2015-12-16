@@ -96,7 +96,6 @@ public class ReceivingOrderDetail extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receiving_order_detail);
         initFields();
-      //  String primaryId = getIntent().getStringExtra("primaryId");
         Bundle bundle = getIntent().getExtras();
         orderdetail = (Orderdetail) bundle.get("orderdetail");
         Long primaryId = orderdetail.getPrimaryId();
@@ -229,7 +228,7 @@ public class ReceivingOrderDetail extends Activity {
                         executeFirstTime.setText(orderPerTimeList.get(i).getHour());
                         executeFirstDate.setText(orderPerTimeList.get(i).getDate());
                         //设置颜色...
-                        tvFirstTime.setTextColor(getResources().getColor(R.color.user_icon_8));
+                        tvFirstTime.setTextColor(getResources().getColor(R.color.gray_5d5d5d));
                         executeFirstTime.setTextColor(getResources().getColor(R.color.user_icon_8));
                         executeFirstDate.setTextColor(getResources().getColor(R.color.user_icon_8));
                     }
@@ -249,7 +248,7 @@ public class ReceivingOrderDetail extends Activity {
                         executeSecondTime.setTextColor(getResources().getColor(R.color.user_icon_8));
                         executeSecondDate.setTextColor(getResources().getColor(R.color.user_icon_8));
 
-                        tvFirstTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
+                        tvFirstTime.setTextColor(getResources().getColor(R.color.gray_5d5d5d));
                         executeFirstTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
                         executeFirstDate.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
                     } else if(i == 1) {
@@ -275,7 +274,7 @@ public class ReceivingOrderDetail extends Activity {
                         executeThirdTime.setTextColor(getResources().getColor(R.color.user_icon_8));
                         executeThirdDate.setTextColor(getResources().getColor(R.color.user_icon_8));
 
-                        tvSecondTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
+                        tvSecondTime.setTextColor(getResources().getColor(R.color.gray_5d5d5d));
                         executeSecondTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
                         executeSecondDate.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
                     } else if(i == 1) {
@@ -310,7 +309,7 @@ public class ReceivingOrderDetail extends Activity {
                         executeFourTime.setTextColor(getResources().getColor(R.color.user_icon_8));
                         executeFourDate.setTextColor(getResources().getColor(R.color.user_icon_8));
 
-                        tvThirdTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
+                        tvThirdTime.setTextColor(getResources().getColor(R.color.gray_5d5d5d));
                         executeThirdTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
                         executeThirdDate.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
                     } else if(i == 1) {
@@ -352,7 +351,7 @@ public class ReceivingOrderDetail extends Activity {
                         executeFiveTime.setTextColor(getResources().getColor(R.color.user_icon_8));
                         executeFiveDate.setTextColor(getResources().getColor(R.color.user_icon_8));
 
-                        tvFourTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
+                        tvFourTime.setTextColor(getResources().getColor(R.color.gray_5d5d5d));
                         executeFourTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
                         executeFourDate.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
                     } else if(i == 1) {
@@ -400,8 +399,7 @@ public class ReceivingOrderDetail extends Activity {
                         tvSixTime.setTextColor(getResources().getColor(R.color.user_icon_8));
                         executeSixTime.setTextColor(getResources().getColor(R.color.user_icon_8));
                         executeSixDate.setTextColor(getResources().getColor(R.color.user_icon_8));
-
-                        tvFiveTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
+                        tvFiveTime.setTextColor(getResources().getColor(R.color.gray_5d5d5d));
                         executeFiveTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
                         executeFiveDate.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
                     } else if(i == 1) {

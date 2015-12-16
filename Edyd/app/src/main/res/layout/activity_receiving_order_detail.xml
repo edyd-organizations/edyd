@@ -137,12 +137,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="9-14"
                             android:textSize="10sp" />
                         <TextView
                             android:id="@+id/execute_second_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="20:46"
                             android:textSize="12sp" />
                         <TextView

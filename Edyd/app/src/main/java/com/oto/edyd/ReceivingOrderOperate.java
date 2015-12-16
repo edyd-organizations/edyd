@@ -278,7 +278,6 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
                         orderList.add(orderdetail);
                         addInfo.add(orderdetail);
                     }
-
                     Message message =Message.obtain();
                     if(serachParames == null) {
                         //首次加载

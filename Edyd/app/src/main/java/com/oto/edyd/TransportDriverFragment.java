@@ -94,6 +94,7 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
                 break;
             case R.id.ll_waiting_execute_orders: //待执行订单
                 intent = new Intent(getActivity().getApplicationContext(), OrderOperateActivity.class);
+                intent.putExtra("order",0);
                 startActivity(intent);
                 break;
             case R.id.ll_history_orders: //历史订单
@@ -101,14 +102,16 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.ll_executing_orders: //执行订单
-                Toast.makeText(getActivity().getApplicationContext(), "开发中...", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getActivity().getApplicationContext(), OrderOperateActivity.class);
+                intent.putExtra("order",1);
+                startActivity(intent);
                 break;
             case R.id.ll_view_track: //查看轨迹
                Toast.makeText(getActivity().getApplicationContext(), "你没有权限", Toast.LENGTH_SHORT).show();
-//                intent = new Intent(getActivity(), TrackListActivity.class);
-//                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
-//                intent.putExtra("aspectType", aspectType);
-//                startActivity(intent);
+                /*intent = new Intent(getActivity(), TrackListActivity.class);
+                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+                intent.putExtra("aspectType", aspectType);
+                startActivity(intent);*/
                 break;
         }
     }

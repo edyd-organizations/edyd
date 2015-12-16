@@ -63,7 +63,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
     private List<String> consigneeList = new ArrayList<String>(); //收货人集合
     private List<String> consigneePhoneList = new ArrayList<String>(); //收货人联系电话
     private List<Integer> orderStatusList = new ArrayList<Integer>(); //订单状态
-
+    int flag;//接口参数
     //private int listSize; //订单数据总条数
 
     private int visibleLastIndex = 0; //最后可视项索引
@@ -111,13 +111,16 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
      */
     private void initFields() {
         receiveOrderBack = (LinearLayout) findViewById(R.id.receive_order_back);
-        //historyOrder = (TextView) findViewById(R.id.history_order);
         receiveOrderList = (ListView) findViewById(R.id.receive_order_list);
-        //loadMoreView = getLayoutInflater().inflate(R.layout.load_more, null);
-        //loadMoreButton = (Button)loadMoreView.findViewById(R.id.load_more_button);
-        //receiveOrderList.addFooterView(loadMoreView);
+        TextView orderTitle = (TextView) findViewById(R.id.tv_order_detail_title);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-
+        Intent intent = getIntent();
+        flag = intent.getIntExtra("order", 0);
+        if (flag==0){
+            orderTitle.setText("待执行订单");
+        }else{
+            orderTitle.setText("执行中的订单");
+        }
         mPullToRefreshScrollView = (SwipeRefreshLayout)findViewById(R.id.swipe_container);
     }
 
@@ -357,7 +360,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
      */
     private void requestData(int page, int rows, final int loadType) {
         String sessionUUID = getSessionUUID();
-        String url = Constant.ENTRANCE_PREFIX + "appQueryOrderList.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows;
+        //String url = Constant.ENTRANCE_PREFIX + "appQueryOrderList.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows;
+        String url = Constant.ENTRANCE_PREFIX_v1 + "appQueryOrderListByFlag.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows+"&flag="+flag;
         OkHttpClientManager.getAsyn(url, new ReceiveOrderCallback<String>(loadType) {
             @Override
             public void onError(Request request, Exception e) {
@@ -377,7 +381,9 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                     }
                     loadFlag = true;
                     jsonArray = jsonObject.getJSONArray("rows");
-                    //listSize = jsonArray.length();
+                    if (jsonArray.length()==0){
+                        Common.showToast(OrderOperateActivity.this,"暂无数据");
+                    }
                     if(loadType == 2) {
                         clearData();
                     }
