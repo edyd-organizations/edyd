@@ -12,12 +12,10 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
-import com.oto.edyd.utils.NetWork;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 import org.json.JSONArray;
@@ -35,8 +33,6 @@ import cn.smssdk.SMSSDK;
 public class OilCarSetPasswordActivity extends Activity implements View.OnClickListener {
     String autoCode;//验证码
     TextView teSubmit;//提交
-    /*String password;//密码
-    String surePassword;//确认密码*/
     Button sendCode;//发送验证码
     EditText edPassword;
     EditText edSurepassword;
@@ -45,6 +41,10 @@ public class OilCarSetPasswordActivity extends Activity implements View.OnClickL
     private Context context; //上下文对象
     private boolean asyncIsOver = false; //异步线程是否结束
     private VerificationCodeProgressAsyncTask asyncTask; //异步消息对象
+    private static final int VERIFICATION_AUTHENTICATE_SUCCESS = 0x20; //验证码认证成功
+    private final static int INVALID_MOBILE_PHONE = 467; //请求校验验证码频繁（5分钟内同一个appkey的同一个号码最多只能校验三次）
+    private final static int INVALID_VERIFICATION_CODE = 468; //无效验证码
+    private LinearLayout back; //返回
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +61,9 @@ public class OilCarSetPasswordActivity extends Activity implements View.OnClickL
         teSubmit.setOnClickListener(this);
         sendCode = (Button) findViewById(R.id.btnSendCode);
         sendCode.setOnClickListener(this);
+        context = OilCarSetPasswordActivity.this;
+        back = (LinearLayout) findViewById(R.id.back);
+        back.setOnClickListener(this);
         edPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -124,11 +127,14 @@ public class OilCarSetPasswordActivity extends Activity implements View.OnClickL
         EventHandler eh = new EventHandler(){
             @Override
             public void afterEvent(int event, int result, Object data) {
+                Message message;
                 if (result == SMSSDK.RESULT_COMPLETE) {
                     //回调完成
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         //提交验证码成功
-                        //register();
+                        message = Message.obtain();
+                        message.what = VERIFICATION_AUTHENTICATE_SUCCESS;
+                        handler.sendMessage(message);
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
                         //获取验证码成功
                     } else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
@@ -139,21 +145,22 @@ public class OilCarSetPasswordActivity extends Activity implements View.OnClickL
                     //这里不是UI线程，如果要更新或者操作UI，要调用UI线程
                     String dataStr = data.toString();
                     String str = dataStr.substring(dataStr.indexOf(":")+1).trim();
-                    Message message;
                     try {
                         JSONObject dataJson = new JSONObject(str);
                         int status = dataJson.getInt("status");
-                        if(String.valueOf(status).equals(Constant.INVALID_VERIFICATION_CODE)) { //无效验证码
-                            message = new Message();
-                            message.what = Integer.valueOf(Constant.INVALID_VERIFICATION_CODE);
-                            handler.sendMessage(message);
-                            return;
+                        message = Message.obtain();
+                        switch (status) {
+                            case INVALID_MOBILE_PHONE: //验证码请求频繁
+                                message.what = Integer.valueOf(Constant.INVALID_MOBILE_PHONE);
+                                handler.sendMessage(message);
+                                break;
+                            case INVALID_VERIFICATION_CODE: //无效验证码
+                                message.what = Integer.valueOf(Constant.INVALID_VERIFICATION_CODE);
+                                handler.sendMessage(message);
+                                break;
                         }
 
                     } catch (JSONException e) {
-                        message = new Message();
-                        message.what = Constant.NETWORK_EXCEPTION;
-                        handler.sendMessage(message);
                         e.printStackTrace();
                     }
                 }
@@ -169,41 +176,19 @@ public class OilCarSetPasswordActivity extends Activity implements View.OnClickL
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case 504:
-                    toastMessage(msg.what);
+                case VERIFICATION_AUTHENTICATE_SUCCESS: //验证码认证成功
+                    requestport();//请求接口
                     break;
-                case 520: //无效验证码
-                    toastMessage(msg.what);
+                case INVALID_VERIFICATION_CODE: //无效验证码
+                    common.showToast(context, "无效验证码");
                     break;
-                case 700:
-                    toastMessage(msg.what);
-                    break;
-                case 701:
-                    toastMessage(msg.what);
+                case INVALID_MOBILE_PHONE: //无效手机号
+                    common.showToast(context, "5分钟内同一个号码最多只能校验三次");
                     break;
                 default:
             }
         }
     };
-
-    /**
-     * 提示
-     * @param status
-     */
-    private void toastMessage(int status) {
-        switch (status) {
-            case 520:
-                Toast.makeText(this,"无效验证码", Toast.LENGTH_SHORT).show();
-                break;
-            case 700:
-                Toast.makeText(this,"用户注册异常", Toast.LENGTH_SHORT).show();
-                break;
-            case 701:
-                Toast.makeText(this,"网络异常", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-        }
-    }
 
     @Override
     public void onClick(View v) {
@@ -213,6 +198,10 @@ public class OilCarSetPasswordActivity extends Activity implements View.OnClickL
                 break;
             case R.id.btnSendCode:
                 requestVerificationCode(); //请求验证码
+                break;
+            case R.id.back: //返回
+                finish();
+                break;
         }
     }
 
@@ -242,40 +231,13 @@ public class OilCarSetPasswordActivity extends Activity implements View.OnClickL
             Common.showToast(this, "验证码不能为空");
             return;
         }
-     /*   //判断网络是否可用
-        if(!isNetworkAvailable(context)){
-            common.showToast(context, "网络不可用");
-            return;
-        }*/
         //校验验证码
         SMSSDK.submitVerificationCode("86", mobilePhone, autoCode);
-        requestport();//请求接口
-
     }
-
- /*   *//**
-     * 检查网络连通性
-     * @param context 上下文对象
-     * @return
-     *//*
-    private boolean isNetworkAvailable(Context context) {
-        NetWork netWork = new NetWork(context);
-        if(!netWork.isHaveInternet()){
-            //无网络访问
-            return false;
-        }
-        return true;
-    }*/
-
     /**
      * 请求验证码
      */
     private void requestVerificationCode() {
-/*        if(!isNetworkAvailable(context)){
-            //网络不可用
-            common.showToast(context, Constant.NOT_INTERNET_CONNECT);
-            return;
-        }*/
         String mobilePhone = common.getStringByKey(Constant.USER_NAME);
         //开启获取验证码按钮倒计时
         asyncTask = new VerificationCodeProgressAsyncTask();
@@ -302,7 +264,8 @@ public class OilCarSetPasswordActivity extends Activity implements View.OnClickL
                 try {
                     jsonObject = new JSONObject(response);
                     jsonArray = jsonObject.getJSONArray("rows");
-                    common.showToast(OilCarSetPasswordActivity.this, "成功");
+                    common.showToast(OilCarSetPasswordActivity.this, "设置密码成功");
+                    finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -399,5 +362,12 @@ public class OilCarSetPasswordActivity extends Activity implements View.OnClickL
     private void setVerificationCodeButtonEnable() {
         sendCode.setEnabled(true);
         sendCode.setBackgroundResource(R.drawable.border_corner_login_enable);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //SMSSDK.unregisterEventHandler(eh); //取消单个
+        SMSSDK.unregisterAllEventHandler(); //取消所有
     }
 }

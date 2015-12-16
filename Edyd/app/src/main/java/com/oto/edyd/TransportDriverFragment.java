@@ -107,14 +107,11 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.ll_view_track: //查看轨迹
-//               Toast.makeText(getActivity().getApplicationContext(), "你没有权限", Toast.LENGTH_SHORT).show();
-//                intent = new Intent(getActivity(), TrackListActivity.class);
-//                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
-//                intent.putExtra("aspectType", aspectType);
-//                startActivity(intent);
-                //测试油卡支付密码接口
-                intent = new Intent(getActivity().getApplicationContext(), OilCarSetPasswordActivity.class);
-                startActivity(intent);
+               Toast.makeText(getActivity().getApplicationContext(), "你没有权限", Toast.LENGTH_SHORT).show();
+                /*intent = new Intent(getActivity(), TrackListActivity.class);
+                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+                intent.putExtra("aspectType", aspectType);
+                startActivity(intent);*/
                 break;
         }
     }

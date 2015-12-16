@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.oto.edyd.OilCarSetPasswordActivity;
 import com.oto.edyd.R;
 import com.oto.edyd.pay.model.MerchantsBankOrder;
 import com.oto.edyd.utils.Common;
@@ -151,6 +152,8 @@ public class OilCardPayActivity extends Activity implements View.OnClickListener
                 verifyPayPassword(); //验证支付密码
                 break;
             case R.id.forget_pay_password: //忘记支付密码
+                Intent intent=new Intent(this,OilCarSetPasswordActivity.class);
+                startActivity(intent);
                 break;
         }
     }
