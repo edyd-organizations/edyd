@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.logging.LogRecord;
 
 /**
- * Created by Administrator on 2015/12/1.
+ * Created by liubaozhong on 2015/12/1.
  */
 public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickListener, AMap.InfoWindowAdapter, AMap.OnInfoWindowClickListener, AMap.OnMapLoadedListener, GeocodeSearch.OnGeocodeSearchListener {
     private Context mActivity;
@@ -62,6 +62,27 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0x12:
+                    if(tlb.getReceiverLat()!=0&&tlb.getSenderLat()!=0&&tlb.getReceiverLng()!=0&&tlb.getSenderLng()!=0) {
+
+                        //发货人图标
+                        LatLng senderPoint = new LatLng(tlb.getSenderLat(), tlb.getSenderLng());
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.deliveryside));
+                        markerOptions.position(senderPoint);
+                        markerOptions.title("发货方公司").draggable(true).anchor(0.5f, 1.0f);
+                        Marker marker = aMap.addMarker(markerOptions);
+                        marker.showInfoWindow();
+
+                        //收货人图标
+                        LatLng receiverPoint = new LatLng(tlb.getReceiverLat(), tlb.getReceiverLng());
+                        MarkerOptions marOptions = new MarkerOptions();
+                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.receivingparty));
+                        markerOptions.position(receiverPoint);
+                        markerOptions.title("收货方公司").draggable(true).anchor(0.5f, 1.0f);
+                        Marker receiverMarker = aMap.addMarker(marOptions);
+                        receiverMarker.showInfoWindow();
+                    }
+                    //画轨迹线
                     PolylineOptions line = new PolylineOptions();
                     ArrayList<TrackPointBean> list = tlb.getTraceInfo();
                     pos = new ArrayList<LatLng>();
@@ -69,17 +90,17 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                         Common.showToast(mActivity, "暂时没有轨迹");
                     }
                     for (int i = 0; i < list.size(); i++) {
-                        TrackPointBean point=list.get(i);
-
+                        TrackPointBean point = list.get(i);
                         LatLng latLng = new LatLng(point.getLat(), point.getLng());
                         pos.add(latLng);
-                            addMarker(point,i,list);//添加所有的位置
+                        addMarker(point, i, list);//添加所有的位置
                     }
+
                     line.addAll(pos);
                     line.color(Color.RED);
                     line.width(5);
-
                     aMap.addPolyline(line);
+
                     onMapLoaded();
                     break;
             }
@@ -110,24 +131,25 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     }
 
     /**
-     *添加标记到地图
+     * 添加标记到地图
+     *
      * @param point
      * @param index 表示第几个坐标
      */
 
-    private void addMarker(TrackPointBean point,int index,ArrayList<TrackPointBean> list) {
+    private void addMarker(TrackPointBean point, int index, ArrayList<TrackPointBean> list) {
         MarkerOptions markerOptions = new MarkerOptions();
-        if (index==0){
+        if (index == 0) {
             //如果是第一个坐标
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.getup));
-        }else if (index==(list.size()-1)) {
+        } else if (index == (list.size() - 1)) {
             //如果是最后一个坐标
-            if (!"收货完成".equals(list.get(list.size()-1).getControlStatus())){
+            if (!"收货完成".equals(list.get(list.size() - 1).getControlStatus())) {
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.car));
-            }else {
+            } else {
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ending));
             }
-        }else {
+        } else {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.abit));
         }
         markerOptions.position(new LatLng(point.getLat(), point.getLng()));
@@ -136,6 +158,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
 
         marker.setObject(point);
         marker.showInfoWindow();
+
     }
 
 
@@ -176,7 +199,6 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                     jsonArray = jsonObject.getJSONArray("rows");
                     JSONObject obj = (JSONObject) jsonArray.get(0);
                     String objStr = obj.toString();
-//                    Common.printErrLog("解析正常rows" + objStr);
                     tlb = Common.readJsonToCommandObject(objStr);
 
                     Message message = new Message();
@@ -275,8 +297,46 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
      */
     @Override
     public View getInfoWindow(Marker marker) {
+        View view;
+        if ("车辆信息".equals(marker.getTitle())) {
+            //轨迹普通的点窗口
+            view = render(marker);
+        } else {
+            //收发点窗口
+            view = senRecWindom(marker);
+        }
+        return view;
+    }
 
-        return render(marker);
+    private View senRecWindom(Marker marker) {
+        View infoWindow = View.inflate(mActivity, R.layout.track_info_windom_receiver_sender, null);
+        TextView tv_companyName = (TextView) infoWindow.findViewById(R.id.tv_companyName);//公司
+        TextView tv_ContactPerson = (TextView) infoWindow.findViewById(R.id.tv_ContactPerson);//联系人
+        TextView tv_tel = (TextView) infoWindow.findViewById(R.id.tv_tel);//电话
+        TextView tv_address = (TextView) infoWindow.findViewById(R.id.tv_address);//地址
+        LatLonPoint latLonPoint;
+        if("发货方公司".equals(marker.getTitle())) {
+            //发货方公司
+            tv_companyName.setText(tlb.getSenderName());
+            tv_ContactPerson.setText(tlb.getSenderContactPerson());
+            tv_tel.setText(tlb.getSenderContactTel());
+            tv_address.setText(tlb.getSenderAddr());
+            latLonPoint = new LatLonPoint(tlb.getSenderLat(),tlb.getSenderLng());
+        }else{
+            //收货方公司
+            tv_companyName.setText(tlb.getReceiverName());
+            tv_ContactPerson.setText(tlb.getReceiverContactPerson());
+            tv_tel.setText(tlb.getReceiverContactTel());
+            tv_address.setText(tlb.getReceiverAddr());
+            latLonPoint = new LatLonPoint(tlb.getReceiverLat(),tlb.getReceiverLng());
+        }
+        // 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+        RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 200,GeocodeSearch.AMAP);
+        geocoderSearch = new GeocodeSearch(this);
+        geocoderSearch.setOnGeocodeSearchListener(this);
+        geocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
+        return infoWindow;
+
     }
 
     @Override
@@ -293,10 +353,16 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     public void onMapLoaded() {
 
         LatLngBounds.Builder buidler = new LatLngBounds.Builder();
+        if(tlb!=null&&tlb.getReceiverLat()!=0&&tlb.getSenderLat()!=0&&tlb.getReceiverLng()!=0&&tlb.getSenderLng()!=0) {
+            buidler.include(new LatLng(tlb.getSenderLat(), tlb.getSenderLng()));
+            buidler.include(new LatLng(tlb.getReceiverLat(), tlb.getReceiverLng()));
+        }
         if (pos != null && pos.size() != 0) {
             for (LatLng po : pos) {
                 buidler.include(po);
             }
+//            buidler.include()
+
             LatLngBounds bounds = buidler.build();
             aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
         }
@@ -306,11 +372,9 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     @Override
     public void onRegeocodeSearched(RegeocodeResult result, int rCode) {
         if (rCode == 0) {
-
             String formatAddress = result.getRegeocodeAddress().getFormatAddress();
             address.setText(formatAddress);
         }
-
     }
 
     @Override
