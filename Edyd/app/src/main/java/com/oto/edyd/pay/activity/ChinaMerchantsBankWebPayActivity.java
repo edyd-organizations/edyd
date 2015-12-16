@@ -15,12 +15,12 @@ import com.oto.edyd.pay.model.MerchantsBankOrder;
 import com.oto.edyd.utils.CusProgressDialog;
 
 /**
- * 功能：确认支付WebView
+ * 功能：招行银行支付web页面
  * 文件名：com.oto.edyd.ConfirmPayActivity.java
  * 创建时间：2015/12/14
  * 作者：yql
  */
-public class ConfirmPayActivity extends Activity {
+public class ChinaMerchantsBankWebPayActivity extends Activity {
 
     private WebView webView; //网页容器
     private CusProgressDialog transitionDialog; //加载过度
@@ -34,8 +34,8 @@ public class ConfirmPayActivity extends Activity {
         MerchantsBankOrder merchantsBankOrder = (MerchantsBankOrder) bundle.getSerializable("pay_order");
 
         String url = "https://netpay.cmbchina.com/netpayment/BaseHttp.dll?MfcISAPICommand=PrePayWAP&BranchID=" + merchantsBankOrder.getBranchId() +
-                "&CoNo=" + merchantsBankOrder.getCoNo() + "&BillNo=" + merchantsBankOrder.getBillNo() + "&Amount=" + merchantsBankOrder.getAmount() +
-                "&Date=" +merchantsBankOrder.getDate()+ "&ExpireTimeSpan=3600&MerchantUrl=http://www.edyd.cn/callback/updateBillStatus.json";
+                "&CoNo=" + merchantsBankOrder.getCoNo() + "&BillNo=" + merchantsBankOrder.getBillNo()  + "&Amount=" + merchantsBankOrder.getAmount() +
+                "&Date=" +merchantsBankOrder.getDate()  + "&merchantPara="  + "&MerchantCode=" + merchantsBankOrder.getMerchantCode() + "&ExpireTimeSpan=3600&MerchantUrl=http://120.24.236.223/callback/updateBillStatus.json";
         init(url);
     }
 
@@ -53,7 +53,7 @@ public class ConfirmPayActivity extends Activity {
      */
     private void initFields() {
         webView = (WebView) findViewById(R.id.web_view);
-        transitionDialog = new CusProgressDialog(ConfirmPayActivity.this, "正在加载...");
+        transitionDialog = new CusProgressDialog(ChinaMerchantsBankWebPayActivity.this, "正在加载...");
     }
 
     /**

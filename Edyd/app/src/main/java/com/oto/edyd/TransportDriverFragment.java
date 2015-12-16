@@ -37,6 +37,7 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
 
     private Common common;
     private Common fixedCommon;
+    private Context context;
 
     @Nullable
     @Override
@@ -70,6 +71,7 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
 
         fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        context = getActivity();
     }
 
     @Override
@@ -79,6 +81,7 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
             case R.id.select_transport_role: //选择角色
                 String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
                 if(enterpriseId.equals("0")) {
+                    common.showToast(context, "个人不能切换角色");
                     return;
                 } else {
                     intent = new Intent(getActivity(), SelectTransportRole.class);

@@ -30,12 +30,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 功能：招商银行支付
+ * 功能：油卡充值主界面
  * 文件名：com.oto.edyd.ChinaMerchantsBankPayActivity.java
  * 创建时间：2015/12/14
  * 作者：yql
  */
-public class ChinaMerchantsBankPayActivity extends Activity implements View.OnClickListener {
+public class OilCardPayActivity extends Activity implements View.OnClickListener {
 
     private LinearLayout back; //返回
     private EditText etAccount; //金额
@@ -79,7 +79,7 @@ public class ChinaMerchantsBankPayActivity extends Activity implements View.OnCl
         etPayPassword = (EditText) findViewById(R.id.pay_password);
         forgetPayPassword = (TextView) findViewById(R.id.forget_pay_password);
         btPay = (TextView) findViewById(R.id.pay);
-        context = ChinaMerchantsBankPayActivity.this;
+        context = OilCardPayActivity.this;
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, context.MODE_PRIVATE));
         merchantsBankOrder = new MerchantsBankOrder();
         merchantsBankOrder.setBranchId(FIX_BRANCH_ID);
@@ -95,12 +95,10 @@ public class ChinaMerchantsBankPayActivity extends Activity implements View.OnCl
         forgetPayPassword.setOnClickListener(this);
         etAccount.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -120,12 +118,10 @@ public class ChinaMerchantsBankPayActivity extends Activity implements View.OnCl
         });
         etPayPassword.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -152,8 +148,6 @@ public class ChinaMerchantsBankPayActivity extends Activity implements View.OnCl
                 finish();
                 break;
             case R.id.pay: //支付
-//                Intent intent = new Intent(ChinaMerchantsBankPayActivity.this, ConfirmPayActivity.class);
-//                startActivity(intent);
                 verifyPayPassword(); //验证支付密码
                 break;
             case R.id.forget_pay_password: //忘记支付密码
@@ -172,6 +166,7 @@ public class ChinaMerchantsBankPayActivity extends Activity implements View.OnCl
 
             @Override
             public void onError(Request request, Exception e) {
+                //订单号请求异常
                 Message message = Message.obtain();
                 message.what = HANDLER_ORDER_NUMBER_REQUEST_EXCEPTION;
                 handler.sendMessage(message);
@@ -180,7 +175,6 @@ public class ChinaMerchantsBankPayActivity extends Activity implements View.OnCl
             @Override
             public void onResponse(String response) {
                 JSONObject jsonObject;
-                JSONArray jsonArray;
 
                 try {
                     jsonObject = new JSONObject(response);
@@ -210,7 +204,7 @@ public class ChinaMerchantsBankPayActivity extends Activity implements View.OnCl
         String password = etPayPassword.getText().toString(); //密码
         String array[] = amount.split("\\.");
 
-        if(!TextUtils.isEmpty(array[0])) {
+        if(array.length > 0 &&!TextUtils.isEmpty(array[0])) {
             Double dAmount = Double.valueOf(amount);
             if(dAmount == 0) {
                 common.showToast(context, "数值不能为零");
@@ -226,7 +220,7 @@ public class ChinaMerchantsBankPayActivity extends Activity implements View.OnCl
             }
             merchantsBankOrder.setAmount(tAmount);
         } else {
-            common.showToast(context, "充值金额格式错误");
+            common.showToast(context, "充值金额格式不正确");
             return;
         }
 
@@ -244,15 +238,15 @@ public class ChinaMerchantsBankPayActivity extends Activity implements View.OnCl
                 JSONArray jsonArray;
                 try {
                     jsonObject = new JSONObject(response);
-                    String status = jsonObject.getString("status");
-                    if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                    String status = jsonObject.getString("status"); //返回状态
+                    if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) { //判断是否成功返回
                         common.showToast(context, "验证失败");
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
                     boolean flag = jsonArray.getBoolean(0); //认证成功返回true， false不成功
                     Message message = Message.obtain();
                     if(flag) {
-                        message.what = HANDLER_PASSWORD_VERIFY_SUCCESS; //支付认证成功
+                        message.what = HANDLER_PASSWORD_VERIFY_SUCCESS; //支付密码认证成功
                     } else {
                         message.what = HANDLER_PASSWORD_VERIFY_FAIL; //支付密码认证失败
                     }
@@ -268,7 +262,16 @@ public class ChinaMerchantsBankPayActivity extends Activity implements View.OnCl
      * 请求校验码
      */
     private void requestCheckCode() {
-        String url = "";
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String billNoDate = sdf.format(date);
+        merchantsBankOrder.setDate(billNoDate);
+
+        String url = Constant.ENTRANCE_PREFIX_v1 + "appBulidVerifyCode.json?sessionUuid=" + sessionUuid +
+                "&branchId=" + merchantsBankOrder.getBranchId() + "&coNo=" + merchantsBankOrder.getCoNo() +
+                "&amount=" +merchantsBankOrder.getAmount() + "&date=" + merchantsBankOrder.getDate() +
+                "&billNo=" + merchantsBankOrder.getBillNo() + "&merchantPara=" + "&merchantUrl=http://120.24.236.223/callback/updateBillStatus.json";
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
 
             @Override
@@ -287,6 +290,7 @@ public class ChinaMerchantsBankPayActivity extends Activity implements View.OnCl
                         common.showToast(context, "校验码请求失败");
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
+                    merchantsBankOrder.setMerchantCode(jsonArray.getString(0));
                     Message message = Message.obtain();
                     message.what = HANDLER_CHECK_CODE_BACK;
                     handler.sendMessage(message);
@@ -306,21 +310,16 @@ public class ChinaMerchantsBankPayActivity extends Activity implements View.OnCl
         String accountId = common.getStringByKey("ACCOUNT_ID"); //账户ID
         String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
         String url = "";
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        String billNoDate = sdf.format(date);
-        merchantsBankOrder.setDate(billNoDate);
 
         if(enterpriseId.equals("0")) {
-            String orgCode = common.getStringByKey(Constant.ORG_CODE);
             url = Constant.ENTRANCE_PREFIX_v1 + "appInsertBillInfo.json?sessionUuid=" + sessionUuid + "&accountId=" + accountId +
                     "&enterpriseId=" + enterpriseId + "&branchId=" + FIX_BRANCH_ID + "&cono=" + FIX_CoNo +
-                    "&billNo=" + merchantsBankOrder.getBillNo() + "&billNoDate=" + billNoDate + "&amount=" + merchantsBankOrder.getAmount();
+                    "&billNo=" + merchantsBankOrder.getBillNo() + "&billNoDate=" + merchantsBankOrder.getDate() + "&amount=" + merchantsBankOrder.getAmount();
         } else {
             String orgCode = common.getStringByKey(Constant.ORG_CODE);
             url = Constant.ENTRANCE_PREFIX_v1 + "appInsertBillInfo.json?sessionUuid=" + sessionUuid + "&accountId=" + accountId +
                     "&enterpriseId=" + enterpriseId + "&orgCode=" + orgCode + "&branchId=" + FIX_BRANCH_ID + "&cono=" + FIX_CoNo +
-            "&billNo=" +merchantsBankOrder.getBillNo() + "&billNoDate=" + billNoDate + "&amount=" + merchantsBankOrder.getAmount();
+            "&billNo=" +merchantsBankOrder.getBillNo() + "&billNoDate=" + merchantsBankOrder.getDate() + "&amount=" + merchantsBankOrder.getAmount();
         }
 
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>(){
@@ -372,11 +371,11 @@ public class ChinaMerchantsBankPayActivity extends Activity implements View.OnCl
                     postOrder();
                     break;
                 case HANDLER_PREPARE_PAY_DATA_SAVE_SUCCESS: //预充值数据成功返回
-                    Intent intent = new Intent(ChinaMerchantsBankPayActivity.this, ConfirmPayActivity.class);
+                    Intent intent = new Intent(OilCardPayActivity.this, ChinaMerchantsBankWebPayActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("pay_order", merchantsBankOrder);
                     intent.putExtras(bundle);
-                    startActivityForResult(intent, 0x20);
+                    startActivityForResult(intent, BACK_CODE);
                     break;
             }
         }

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.oto.edyd.pay.activity.ChinaMerchantsBankPayActivity;
+import com.oto.edyd.pay.activity.OilCardPayActivity;
 
 /**
  * Created by yql on 2015/10/19.
@@ -81,7 +81,7 @@ public class OilServiceActivity extends Activity implements View.OnClickListener
                 startActivity(intent);
                 break;
             case R.id.ll_oil_card_pay: //油卡充值
-                intent = new Intent(getApplicationContext(), ChinaMerchantsBankPayActivity.class);
+                intent = new Intent(getApplicationContext(), OilCardPayActivity.class);
                 startActivity(intent);
                 break;
         }

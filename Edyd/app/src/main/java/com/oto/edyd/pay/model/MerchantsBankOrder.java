@@ -19,6 +19,7 @@ public class MerchantsBankOrder implements Serializable {
     private String enterpriseId; //公司ID
     private String orgCode; //组织ID
     private String accountId; //账号ID
+    private String merchantCode; //校验码
 
     public String getBranchId() {
         return branchId;
@@ -90,5 +91,13 @@ public class MerchantsBankOrder implements Serializable {
 
     public void setAccountId(String accountId) {
         this.accountId = accountId;
+    }
+
+    public String getMerchantCode() {
+        return merchantCode;
+    }
+
+    public void setMerchantCode(String merchantCode) {
+        this.merchantCode = merchantCode;
     }
 }
