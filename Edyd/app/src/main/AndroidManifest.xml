@@ -233,6 +233,10 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ShipperOrderOperateItemDetailActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".pay.activity.OilCardPayActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".pay.activity.ChinaMerchantsBankWebPayActivity"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".ShipperHistoryOrderActivity"

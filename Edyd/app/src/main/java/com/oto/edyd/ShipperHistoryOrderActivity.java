@@ -123,7 +123,6 @@ public class ShipperHistoryOrderActivity extends Activity {
             }
         });
 
-
         lv_his_order.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -248,9 +247,9 @@ public class ShipperHistoryOrderActivity extends Activity {
                 break;
             case refreshLoad:
                 //如果是刷新加载
+                reSetPage();
                 infos.clear();
                 infos.addAll(tempList);
-                reSetPage();
                 break;
             case moreLoad:
                 infos.addAll(tempList);
