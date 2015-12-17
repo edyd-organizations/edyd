@@ -7,6 +7,16 @@ public class TrackPointBean {
     private String controlStatus;
     private double lat;
     private double lng;
+    private String operTime;
+    private String addr;
+
+    public String getAddr() {
+        return addr;
+    }
+
+    public void setAddr(String addr) {
+        this.addr = addr;
+    }
 
     public String getControlStatus() {
         return controlStatus;
@@ -39,6 +49,4 @@ public class TrackPointBean {
     public void setOperTime(String operTime) {
         this.operTime = operTime;
     }
-
-    private String operTime;
 }
