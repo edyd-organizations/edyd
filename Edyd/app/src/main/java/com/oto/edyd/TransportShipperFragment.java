@@ -17,8 +17,6 @@ import android.widget.Toast;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 
-import retrofit.http.HEAD;
-
 /**
  * 功能：运输服务发货方主界面
  * 文件名：com.oto.edyd.TransportShipperFragment.java

@@ -208,7 +208,6 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
                     aspectType + "&enterpriseId=" + enterpriseId + "&orgCode=" + orgCode + "&page=1" + "&rows=10" + "&serachParames=" + searchText;
         }
 
-
         OkHttpClientManager.getAsyn(url, new ShipperOrderOperateResultCallback<String>(searchText) {
             @Override
             public void onError(Request request, Exception e) {

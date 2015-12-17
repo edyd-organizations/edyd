@@ -70,18 +70,20 @@ public class ShipperHisOrderDetailActivity extends Activity {
             goodsTotalQuantity.setText(orderDetail.getGoodsTotalQuantity());
             goodsTotalWeight.setText(orderDetail.getGoodsTotalWeight());
             List<OrderPerTime> list = orderDetail.getOrderPerTimeList();
-            executeFirstTime.setText(list.get(0).getHour());
-            executeFirstDate.setText(list.get(0).getDate());
-            executeSecondTime.setText(list.get(1).getHour());
-            executeSecondDate.setText(list.get(1).getDate());
-            executeThirdTime .setText(list.get(2).getHour());
-            executeThirdDate .setText(list.get(2).getDate());
-            executeFourTime.setText(list.get(3).getHour());
-            executeFourDate.setText(list.get(3).getDate());
-            executeFiveTime.setText(list.get(4).getHour());
-            executeFiveDate.setText(list.get(4).getDate());
-            executeSixTime.setText(list.get(5).getHour());
-            executeSixDate.setText(list.get(5).getDate());
+            if(list.size()>=6) {
+                executeFirstTime.setText(list.get(0).getHour());
+                executeFirstDate.setText(list.get(0).getDate());
+                executeSecondTime.setText(list.get(1).getHour());
+                executeSecondDate.setText(list.get(1).getDate());
+                executeThirdTime.setText(list.get(2).getHour());
+                executeThirdDate.setText(list.get(2).getDate());
+                executeFourTime.setText(list.get(3).getHour());
+                executeFourDate.setText(list.get(3).getDate());
+                executeFiveTime.setText(list.get(4).getHour());
+                executeFiveDate.setText(list.get(4).getDate());
+                executeSixTime.setText(list.get(5).getHour());
+                executeSixDate.setText(list.get(5).getDate());
+            }
             dimissLoading();
         }
     };
