@@ -167,7 +167,6 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
     }
 
     private class ReceiveOrderListAdapter extends BaseAdapter {
-
         private Context context;
         private LayoutInflater inflater;
         private int tOrderStatus = -1;
@@ -200,12 +199,6 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
             return position;
         }
 
-//        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//        public void otherVersion(TextView orderStatus) {
-//            orderStatus.setTranslationX(40); //平移，只有在API版本为11上才能运行
-//            orderStatus.setTranslationY(-20);
-//        }
-
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -230,41 +223,6 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
             }else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-
-
-//            TextView orderNumber; //订单号
-//            TextView orderDate; //订单日期
-//            TextView startPoint; //起始点
-//            TextView endPoint; //终点
-//            TextView shipper; //发货人
-//            TextView phoneNumber; //发货人联系电话
-//            TextView dial; //拨打发货人联系电话
-//            TextView consignee; //收货人
-//            TextView consigneePhoneNumber; //收货人联系人电话
-//            TextView consigneeDial; //拨打收货人联系电话
-//            TextView receiveOrder; //接单
-//            ImageView orderStatus; //单子状态
-//
-//
-//            convertView = inflater.inflate(R.layout.order_operation_item, null);
-//
-//            orderNumber = (TextView) convertView.findViewById(R.id.order_number);
-//            orderDate = (TextView) convertView.findViewById(R.id.order_date);
-//            startPoint = (TextView) convertView.findViewById(R.id.receive_order_start_address); //发货地址
-//            endPoint = (TextView) convertView.findViewById(R.id.receive_order_end_address); //收货地址
-//            shipper = (TextView) convertView.findViewById(R.id.shipper_name); //发货人
-//            phoneNumber = (TextView) convertView.findViewById(R.id.phone_number_one); //发货人联系电话
-//            dial = (TextView) convertView.findViewById(R.id.dialog_one); //拨打电话
-//            consignee = (TextView) convertView.findViewById(R.id.consignee); //收货人
-//            consigneePhoneNumber = (TextView) convertView.findViewById(R.id.consignee_phone_number); //收货人联系电话
-//            consigneeDial = (TextView) convertView.findViewById(R.id.consignee_dial);
-//            receiveOrder = (TextView) convertView.findViewById(R.id.receive_order); //接单
-//            orderStatus = (ImageView) convertView.findViewById(R.id.order_status); //订单状态
-
-//            Animation mAnimationRight = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_textview_one);
-//            mAnimationRight.setFillAfter(true);
-//            orderStatus.setAnimation(mAnimationRight); //旋转
-//            otherVersion(orderStatus);
             switch (orderStatusList.get(position)) {
                 case 17: //未接单
                     viewHolder.receiveOrder.setText(getString(R.string.receive_order));
@@ -476,6 +434,11 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     operationOrder(position, view);
+                                    if (flag==0){
+                                        idList.remove(position);
+                                        receiveOrderListAdapter.notifyDataSetChanged();//接单后刷新页面
+                                    }
+
                                 }
                             })
                             .setNegativeButton("否", new DialogInterface.OnClickListener() {

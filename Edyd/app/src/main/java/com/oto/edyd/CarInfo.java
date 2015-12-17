@@ -14,6 +14,7 @@ public class CarInfo implements Serializable{
     double slng;//经度
     String order;//调度单状况
     String operTime;//操作时间
+    String address;//地址
 
     public String getDriverName() {
         return driverName;
@@ -77,5 +78,13 @@ public class CarInfo implements Serializable{
 
     public void setTrunckNum(String trunckNum) {
         this.trunckNum = trunckNum;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
