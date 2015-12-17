@@ -200,6 +200,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
             @Override
             public void onError(Request request, Exception e) {
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
+                swipe_container.setRefreshing(false);
             }
 
             @Override
@@ -212,6 +213,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
                     jsonObject = new JSONObject(response);
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), "获取查询信息失败", Toast.LENGTH_SHORT).show();
+                        swipe_container.setRefreshing(false);
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
@@ -221,7 +223,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
                 }
             }
         });
-        swipe_container.setRefreshing(false);
+
     }
 
     public void clearAll(View view) {
@@ -325,6 +327,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0x12: //油卡金额数据返回执行
+                    swipe_container.setRefreshing(false);
                     if (adapter == null) {
                         adapter = new OilCardAmountDistributeAdapter(OilCardAmountDistributeActivity.this);
                         listDistributeUser.setAdapter(adapter);

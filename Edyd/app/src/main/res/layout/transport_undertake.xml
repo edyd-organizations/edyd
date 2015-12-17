@@ -156,7 +156,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:textStyle="bold"
-                        android:text="司机信息"/>
+                        android:text="历史订单"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
