@@ -12,6 +12,7 @@ import android.webkit.WebViewClient;
 
 import com.oto.edyd.R;
 import com.oto.edyd.pay.model.MerchantsBankOrder;
+import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 
 /**
@@ -35,7 +36,7 @@ public class ChinaMerchantsBankWebPayActivity extends Activity {
 
         String url = "https://netpay.cmbchina.com/netpayment/BaseHttp.dll?MfcISAPICommand=PrePayWAP&BranchID=" + merchantsBankOrder.getBranchId() +
                 "&CoNo=" + merchantsBankOrder.getCoNo() + "&BillNo=" + merchantsBankOrder.getBillNo()  + "&Amount=" + merchantsBankOrder.getAmount() +
-                "&Date=" +merchantsBankOrder.getDate()  + "&merchantPara="  + "&MerchantCode=" + merchantsBankOrder.getMerchantCode() + "&ExpireTimeSpan=3600&MerchantUrl=http://120.24.236.223/callback/updateBillStatus.json";
+                "&Date=" +merchantsBankOrder.getDate()  + "&merchantPara="  + "&MerchantCode=" + merchantsBankOrder.getMerchantCode() + "&ExpireTimeSpan=3600&MerchantUrl=" + Constant.CMB_CALLBACK_ADDRESS;
         init(url);
     }
 

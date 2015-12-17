@@ -274,7 +274,7 @@ public class OilCardPayActivity extends Activity implements View.OnClickListener
         String url = Constant.ENTRANCE_PREFIX_v1 + "appBulidVerifyCode.json?sessionUuid=" + sessionUuid +
                 "&branchId=" + merchantsBankOrder.getBranchId() + "&coNo=" + merchantsBankOrder.getCoNo() +
                 "&amount=" +merchantsBankOrder.getAmount() + "&date=" + merchantsBankOrder.getDate() +
-                "&billNo=" + merchantsBankOrder.getBillNo() + "&merchantPara=" + "&merchantUrl=http://120.24.236.223/callback/updateBillStatus.json";
+                "&billNo=" + merchantsBankOrder.getBillNo() + "&merchantPara=" + "&merchantUrl=" + Constant.CMB_CALLBACK_ADDRESS;
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
 
             @Override

@@ -23,6 +23,8 @@ import com.oto.edyd.usercenter.activity.LoginActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.widget.CustomViewPager;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UmengRegistrar;
 import com.umeng.update.UmengUpdateAgent;
 
 import java.io.IOException;
@@ -47,6 +49,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     private Common common;
     //private Common globalCommon;
     private Common fixedCommon;
+    private Context context;
     private TextView mainTitle; //标题
     private LeftSlidingFragment leftMenuFragment;
     private long exitTime = 0; // 定义一个变量，来标识退出时间
@@ -62,6 +65,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         initFields(); //初始化字段
         initLeftMenu();//初始化侧滑栏
         initViewPager(); //初始化ViewPager
+        initUmengMessage(); //初始化友盟消息推送服务
 
         home.setOnClickListener(this);
         market.setOnClickListener(this);
@@ -137,6 +141,17 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         //globalCommon = new Common(getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
         fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
+        context = MainActivity.this;
+    }
+
+    /**
+     * 初始化友盟消息推送服务
+     */
+    private void initUmengMessage() {
+        PushAgent mPushAgent = PushAgent.getInstance(context);
+        mPushAgent.enable();
+        PushAgent.getInstance(MainActivity.this).onAppStart();
+        //String device_token = UmengRegistrar.getRegistrationId(context); //获取Device Token
     }
 
     /**
