@@ -7,20 +7,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-<!--        <TextView
-            android:id="@+id/order_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:background="#ff6600"
-            android:text="未完成"
-            android:textColor="@color/white"
-            android:textSize="12sp"/>-->
 
         <ImageView
             android:id="@+id/order_status"

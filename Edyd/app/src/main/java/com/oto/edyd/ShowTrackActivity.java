@@ -32,6 +32,7 @@ import com.oto.edyd.model.TrackLineBean;
 import com.oto.edyd.model.TrackPointBean;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 
@@ -55,6 +56,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     private AMap aMap;
     private TrackLineBean tlb;
     private ArrayList<LatLng> pos;
+    private CusProgressDialog loadingDialog; //页面切换过度
 
 
     private Handler handler = new Handler() {
@@ -63,6 +65,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0x12:
+                    loadingDialog.getLoadingDialog().dismiss();
                     if (tlb.getReceiverLat() != 0 && tlb.getSenderLat() != 0 && tlb.getReceiverLng() != 0 && tlb.getSenderLng() != 0) {
 
                         //发货人图标
@@ -175,8 +178,12 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     }
 
     private void getInfo(final boolean isFist) {
-        long primaryId = bean.getPrimaryId();
+        if (isFist) {
+            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
+            loadingDialog.getLoadingDialog().show();
+        }
 
+        long primaryId = bean.getPrimaryId();
         String url = Constant.ENTRANCE_PREFIX + "getTruckPosition.json?sessionUuid="
                 + sessionUuid + "&primaryId=" + primaryId;
 //        Common.printErrLog("轨迹地图" + url);
@@ -184,6 +191,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
             @Override
             public void onError(Request request, Exception e) {
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
+                loadingDialog.getLoadingDialog().dismiss();
             }
 
             @Override
@@ -195,6 +203,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                     jsonObject = new JSONObject(response);
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), "返回信息失败", Toast.LENGTH_SHORT).show();
+                        loadingDialog.getLoadingDialog().dismiss();
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");

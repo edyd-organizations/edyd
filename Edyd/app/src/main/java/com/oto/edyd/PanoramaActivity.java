@@ -149,6 +149,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                         String driverTel = jsonObject.getString("driverTel");
                         String trunckNum = jsonObject.getString("trunckNum");
                         String operTime = jsonObject.getString("operTime");
+                        String addR = jsonObject.getString("addr");
                         double slat = Double.parseDouble(lat);
                         double slng = Double.parseDouble(lng);
                         CarInfo carinfo = new CarInfo();
@@ -157,6 +158,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
                         carinfo.setDriverTel(driverTel);//司机电话
                         carinfo.setTrunckNum(trunckNum);//车牌好
                         carinfo.setOperTime(operTime);//操作时间
+                        carinfo.setAddress(addR);//地址
                         carinfo.setOrder(order);
                         carinfo.setSlat(slat);
                         carinfo.setSlng(slng);
@@ -343,13 +345,13 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
        /* TextView time = (TextView) infoWindow.findViewById(R.id.time);//时间
         time.setText("时  间："+carInfo.getOperTime());*/
         address = (TextView) infoWindow.findViewById(R.id.address);
-        LatLonPoint latLonPoint=new LatLonPoint(carInfo.getSlat(),carInfo.getSlng());
+        address.setText("地       址："+carInfo.getAddress());
+     /*   LatLonPoint latLonPoint=new LatLonPoint(carInfo.getSlat(),carInfo.getSlng());
         RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 200,
                 GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
         geocoderSearch = new GeocodeSearch(this);
         geocoderSearch.setOnGeocodeSearchListener(this);
-        geocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
-
+        geocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求*/
 
     }
     @Override
@@ -376,11 +378,11 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
      */
     @Override
     public void onRegeocodeSearched(RegeocodeResult result, int rCode) {
-        if (rCode == 0) {
+     /*   if (rCode == 0) {
             String formatAddress = result.getRegeocodeAddress().getFormatAddress();
             address.setText("地       址："+formatAddress);
         }
-
+*/
     }
 
     /**

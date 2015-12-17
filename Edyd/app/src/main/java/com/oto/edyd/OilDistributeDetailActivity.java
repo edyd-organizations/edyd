@@ -38,7 +38,7 @@ import java.util.Map;
 
 /**
  * Created by liubaozhong
- * 分配明细
+ * 分配明细模块
  */
 public class OilDistributeDetailActivity extends Activity implements View.OnClickListener {
 
@@ -121,6 +121,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
             public void onError(Request request, Exception e) {
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
                 loadingDialog.getLoadingDialog().dismiss();
+                swipe_container.setRefreshing(false);
             }
 
             @Override
@@ -132,6 +133,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), "返回信息失败", Toast.LENGTH_SHORT).show();
                         loadingDialog.getLoadingDialog().dismiss();
+                        swipe_container.setRefreshing(false);
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
@@ -143,7 +145,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
                 }
             }
         });
-        swipe_container.setRefreshing(false);
+
     }
 
     /**
@@ -226,6 +228,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
             switch (msg.what) {
                 case 0x12: //油卡金额数据返回执行
                     loadingDialog.getLoadingDialog().dismiss();
+                    swipe_container.setRefreshing(false);
                     if (adapter == null) {
                         adapter = new OilCardDistributeDetailAdapter(mActivity);
                         distributeListView.setAdapter(adapter);
