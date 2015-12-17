@@ -353,6 +353,10 @@
             android:name=".OilCarSetPasswordActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".CarrierHisOrderActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

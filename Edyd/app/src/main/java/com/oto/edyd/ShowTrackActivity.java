@@ -44,8 +44,9 @@ import java.util.logging.LogRecord;
 
 /**
  * Created by liubaozhong on 2015/12/1.
+ * 显示地图轨迹。
  */
-public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickListener, AMap.InfoWindowAdapter, AMap.OnInfoWindowClickListener, AMap.OnMapLoadedListener, GeocodeSearch.OnGeocodeSearchListener {
+public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickListener, AMap.InfoWindowAdapter, AMap.OnInfoWindowClickListener, AMap.OnMapLoadedListener {
     private Context mActivity;
     private TrackBean bean;
     private String sessionUuid;
@@ -54,7 +55,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     private AMap aMap;
     private TrackLineBean tlb;
     private ArrayList<LatLng> pos;
-    private TextView address;
+
 
     private Handler handler = new Handler() {
         @Override
@@ -62,7 +63,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0x12:
-                    if(tlb.getReceiverLat()!=0&&tlb.getSenderLat()!=0&&tlb.getReceiverLng()!=0&&tlb.getSenderLng()!=0) {
+                    if (tlb.getReceiverLat() != 0 && tlb.getSenderLat() != 0 && tlb.getReceiverLng() != 0 && tlb.getSenderLng() != 0) {
 
                         //发货人图标
                         LatLng senderPoint = new LatLng(tlb.getSenderLat(), tlb.getSenderLng());
@@ -272,14 +273,15 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
         state.setText(trackPointBean.getControlStatus());
         TextView time = (TextView) infoWindow.findViewById(R.id.time);//时间
         time.setText(trackPointBean.getOperTime());
-        address = (TextView) infoWindow.findViewById(R.id.address);//时间
+        TextView address = (TextView) infoWindow.findViewById(R.id.address);//地址
+        address.setText(trackPointBean.getAddr());
 
-        LatLonPoint latLonPoint = new LatLonPoint(trackPointBean.getLat(), trackPointBean.getLng());
-        RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 200,
-                GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
-        geocoderSearch = new GeocodeSearch(this);
-        geocoderSearch.setOnGeocodeSearchListener(this);
-        geocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
+//        LatLonPoint latLonPoint = new LatLonPoint(trackPointBean.getLat(), trackPointBean.getLng());
+//        RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 200,
+//                GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+//        geocoderSearch = new GeocodeSearch(this);
+//        geocoderSearch.setOnGeocodeSearchListener(this);
+//        geocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
         return infoWindow;
     }
 
@@ -314,27 +316,20 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
         TextView tv_ContactPerson = (TextView) infoWindow.findViewById(R.id.tv_ContactPerson);//联系人
         TextView tv_tel = (TextView) infoWindow.findViewById(R.id.tv_tel);//电话
         TextView tv_address = (TextView) infoWindow.findViewById(R.id.tv_address);//地址
-        LatLonPoint latLonPoint;
-        if("发货方公司".equals(marker.getTitle())) {
+        if ("发货方公司".equals(marker.getTitle())) {
             //发货方公司
             tv_companyName.setText(tlb.getSenderName());
             tv_ContactPerson.setText(tlb.getSenderContactPerson());
             tv_tel.setText(tlb.getSenderContactTel());
             tv_address.setText(tlb.getSenderAddr());
-            latLonPoint = new LatLonPoint(tlb.getSenderLat(),tlb.getSenderLng());
-        }else{
+        } else {
             //收货方公司
             tv_companyName.setText(tlb.getReceiverName());
             tv_ContactPerson.setText(tlb.getReceiverContactPerson());
             tv_tel.setText(tlb.getReceiverContactTel());
             tv_address.setText(tlb.getReceiverAddr());
-            latLonPoint = new LatLonPoint(tlb.getReceiverLat(),tlb.getReceiverLng());
         }
-        // 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
-        RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 200,GeocodeSearch.AMAP);
-        geocoderSearch = new GeocodeSearch(this);
-        geocoderSearch.setOnGeocodeSearchListener(this);
-        geocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
+
         return infoWindow;
 
     }
@@ -353,7 +348,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     public void onMapLoaded() {
 
         LatLngBounds.Builder buidler = new LatLngBounds.Builder();
-        if(tlb!=null&&tlb.getReceiverLat()!=0&&tlb.getSenderLat()!=0&&tlb.getReceiverLng()!=0&&tlb.getSenderLng()!=0) {
+        if (tlb != null && tlb.getReceiverLat() != 0 && tlb.getSenderLat() != 0 && tlb.getReceiverLng() != 0 && tlb.getSenderLng() != 0) {
             buidler.include(new LatLng(tlb.getSenderLat(), tlb.getSenderLng()));
             buidler.include(new LatLng(tlb.getReceiverLat(), tlb.getReceiverLng()));
         }
@@ -369,16 +364,4 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
 
     }
 
-    @Override
-    public void onRegeocodeSearched(RegeocodeResult result, int rCode) {
-        if (rCode == 0) {
-            String formatAddress = result.getRegeocodeAddress().getFormatAddress();
-            address.setText(formatAddress);
-        }
-    }
-
-    @Override
-    public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
-
-    }
 }
