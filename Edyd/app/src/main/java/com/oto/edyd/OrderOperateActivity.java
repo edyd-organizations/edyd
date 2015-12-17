@@ -64,6 +64,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
     private List<String> consigneePhoneList = new ArrayList<String>(); //收货人联系电话
     private List<Integer> orderStatusList = new ArrayList<Integer>(); //订单状态
     int flag;//接口参数
+    private int page;
     //private int listSize; //订单数据总条数
 
     private int visibleLastIndex = 0; //最后可视项索引
@@ -146,7 +147,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
             if(loadFlag) {
                 loadFlag = false;
                 if(lastIndex % 10 == 0) {
-                    int page = lastIndex / ROWS + 1;
+                    page = lastIndex / ROWS + 1;
                     loadOrderData(page, ROWS);
                 }
             }
@@ -206,7 +207,6 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
             if(convertView == null) {
                 convertView = inflater.inflate(R.layout.order_operation_item, null);
                 viewHolder = new ViewHolder();
-
                 viewHolder.orderNumber = (TextView) convertView.findViewById(R.id.order_number);
                 viewHolder.orderDate = (TextView) convertView.findViewById(R.id.order_date);
                 viewHolder.startPoint = (TextView) convertView.findViewById(R.id.receive_order_start_address); //发货地址
@@ -219,6 +219,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                 viewHolder.consigneeDial = (TextView) convertView.findViewById(R.id.consignee_dial);
                 viewHolder.receiveOrder = (TextView) convertView.findViewById(R.id.receive_order); //接单
                 viewHolder.orderStatus = (ImageView) convertView.findViewById(R.id.order_status); //订单状态
+
                 convertView.setTag(viewHolder);
             }else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -284,8 +285,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
          TextView consigneePhoneNumber; //收货人联系人电话
          TextView consigneeDial; //拨打收货人联系电话
          TextView receiveOrder; //接单
-         ImageView orderStatus; //单子状态
-    }
+         ImageView orderStatus; //单子状
+     }
 
     Handler handler = new Handler(){
         @Override
@@ -435,8 +436,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                                 public void onClick(DialogInterface dialog, int which) {
                                     operationOrder(position, view);
                                     if (flag==0){
-                                        idList.remove(position);
-                                        receiveOrderListAdapter.notifyDataSetChanged();//接单后刷新页面
+                                        requestData(page, 10, 2); //请求数据
+                                        //receiveOrderListAdapter.notifyDataSetChanged();//接单后刷新页面
                                     }
 
                                 }
@@ -562,10 +563,10 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                             orderStatusList.set(position, 60);
                             break;
                         case 60: //到达收货
-                            imageView.setImageResource(R.mipmap.finished_receive); //收货完成
-                            textView.setText("完成订单");
-                            textView.setBackgroundResource(R.drawable.border_corner_login);
-                            textView.setEnabled(false);
+                            //imageView.setImageResource(R.mipmap.finished_receive); //收货完成
+                            //textView.setText("完成订单");
+                            //textView.setBackgroundResource(R.drawable.border_corner_login);
+                            //textView.setEnabled(false);
                             //imageView.setVisibility(View.GONE);
                             break;
                     }
@@ -579,6 +580,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                     } else if(controlStatus == 60) {
                         //ServiceUtil.invokeTimerPOIService(getApplicationContext(), String.valueOf(controlId), String.valueOf(controlStatus));
                         mLocation = new MLocation(getApplicationContext(), common, String.valueOf(controlId), String.valueOf(99));
+                        requestData(page, 10,2); //请求数据
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

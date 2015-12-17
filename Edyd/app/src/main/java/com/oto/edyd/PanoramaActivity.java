@@ -50,7 +50,6 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
     MarkerOptions markerOptions;//标记对象
     private GeocodeSearch geocoderSearch;
     List<CarInfo> addInfo;
-    TextView address;//地址address
     private Common fixedCommon;
     private LocationManagerProxy mAMapLocationManager;
     @Override
@@ -344,7 +343,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
         state.setText("状       态："+carInfo.getOrder());
        /* TextView time = (TextView) infoWindow.findViewById(R.id.time);//时间
         time.setText("时  间："+carInfo.getOperTime());*/
-        address = (TextView) infoWindow.findViewById(R.id.address);
+        TextView address = (TextView) infoWindow.findViewById(R.id.address);
         address.setText("地       址："+carInfo.getAddress());
      /*   LatLonPoint latLonPoint=new LatLonPoint(carInfo.getSlat(),carInfo.getSlng());
         RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 200,
