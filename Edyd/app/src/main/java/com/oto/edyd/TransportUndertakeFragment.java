@@ -81,7 +81,8 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
                 startActivity(intent);
                 break;
             case R.id.ll_driver_info: //司机信息
-                Toast.makeText(getActivity().getApplicationContext(), "开发中...", Toast.LENGTH_SHORT).show();
+                intent=new Intent(getActivity(),CarrierHisOrderActivity.class);
+                startActivity(intent);
                 break;
             case R.id.ll_track_search:
                 String seId = common.getStringByKey(Constant.ENTERPRISE_ID);

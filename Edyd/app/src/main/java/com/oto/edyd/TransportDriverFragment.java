@@ -32,8 +32,8 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
     private LinearLayout llWaitingExecuteOrders; //待执行订单
     private LinearLayout llHistoryOrders; //历史订单
     private LinearLayout llExecutingOrders; //执行中的订单
-    private LinearLayout llViewTrack; //查看轨迹
-    private ImageView ivReceiveOrder; //接单
+    //private LinearLayout llViewTrack; //查看轨迹
+    //private ImageView ivReceiveOrder; //接单
 
     private Common common;
     private Common fixedCommon;
@@ -50,8 +50,8 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
         llWaitingExecuteOrders.setOnClickListener(this);
         llHistoryOrders.setOnClickListener(this);
         llExecutingOrders.setOnClickListener(this);
-        llViewTrack.setOnClickListener(this);
-        ivReceiveOrder.setOnClickListener(this);
+        //llViewTrack.setOnClickListener(this);
+        //ivReceiveOrder.setOnClickListener(this);
         return transportDriverView;
     }
 
@@ -66,8 +66,8 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
         llWaitingExecuteOrders = (LinearLayout) view.findViewById(R.id.ll_waiting_execute_orders);
         llHistoryOrders = (LinearLayout) view.findViewById(R.id.ll_history_orders);
         llExecutingOrders = (LinearLayout) view.findViewById(R.id.ll_executing_orders);
-        llViewTrack = (LinearLayout) view.findViewById(R.id.ll_view_track);
-        ivReceiveOrder = (ImageView) view.findViewById(R.id.iv_receive_order);
+        //llViewTrack = (LinearLayout) view.findViewById(R.id.ll_view_track);
+        //ivReceiveOrder = (ImageView) view.findViewById(R.id.iv_receive_order);
 
         fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
@@ -88,10 +88,10 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
                     startActivityForResult(intent, 0x10);
                 }
                 break;
-            case R.id.iv_receive_order: //接单
-                intent = new Intent(getActivity().getApplicationContext(), OrderOperateActivity.class);
-                startActivity(intent);
-                break;
+//            case R.id.iv_receive_order: //接单
+//                intent = new Intent(getActivity().getApplicationContext(), OrderOperateActivity.class);
+//                startActivity(intent);
+//                break;
             case R.id.ll_waiting_execute_orders: //待执行订单
                 intent = new Intent(getActivity().getApplicationContext(), OrderOperateActivity.class);
                 intent.putExtra("order",0);
@@ -106,13 +106,13 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
                 intent.putExtra("order",1);
                 startActivity(intent);
                 break;
-            case R.id.ll_view_track: //查看轨迹
-               Toast.makeText(getActivity().getApplicationContext(), "你没有权限", Toast.LENGTH_SHORT).show();
-                /*intent = new Intent(getActivity(), TrackListActivity.class);
-                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
-                intent.putExtra("aspectType", aspectType);
-                startActivity(intent);*/
-                break;
+//            case R.id.ll_view_track: //查看轨迹
+//               Toast.makeText(getActivity().getApplicationContext(), "你没有权限", Toast.LENGTH_SHORT).show();
+//                /*intent = new Intent(getActivity(), TrackListActivity.class);
+//                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+//                intent.putExtra("aspectType", aspectType);
+//                startActivity(intent);*/
+//                break;
         }
     }
 
