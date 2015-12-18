@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.maps2d.model.LatLng;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -62,6 +63,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
     private List<String> phoneNumberList = new ArrayList<String>(); //发货人联系电话集合
     private List<String> consigneeList = new ArrayList<String>(); //收货人集合
     private List<String> consigneePhoneList = new ArrayList<String>(); //收货人联系电话
+    private List<Double> latList = new ArrayList<Double>(); //纬度集合
+    private List<Double> lngList = new ArrayList<Double>(); //经度集合
     private List<Integer> orderStatusList = new ArrayList<Integer>(); //订单状态
     int flag;//接口参数
     private int page;
@@ -219,7 +222,10 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                 viewHolder.consigneeDial = (TextView) convertView.findViewById(R.id.consignee_dial);
                 viewHolder.receiveOrder = (TextView) convertView.findViewById(R.id.receive_order); //接单
                 viewHolder.orderStatus = (ImageView) convertView.findViewById(R.id.order_status); //订单状态
-
+                viewHolder.mNavigation = (TextView) convertView.findViewById(R.id.Navigation);//导航
+                if (flag==1){
+                    viewHolder.mNavigation.setVisibility(View.VISIBLE);
+                }
                 convertView.setTag(viewHolder);
             }else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -268,6 +274,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
             viewHolder.dial.setOnClickListener(new CusOnClickListener(position, convertView));
             viewHolder.consigneeDial.setOnClickListener(new CusOnClickListener(position, convertView));
             viewHolder.receiveOrder.setOnClickListener(new CusOnClickListener(position, convertView));
+            viewHolder.mNavigation.setOnClickListener(new CusOnClickListener(position, convertView));
 
             return convertView;
         }
@@ -286,6 +293,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
          TextView consigneeDial; //拨打收货人联系电话
          TextView receiveOrder; //接单
          ImageView orderStatus; //单子状
+         TextView mNavigation;//导航
      }
 
     Handler handler = new Handler(){
@@ -371,6 +379,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                         consigneeList.add(tempJSON.getString("receiverContactPerson"));
                         consigneePhoneList.add(tempJSON.getString("receiverContactTel"));
                         orderStatusList.add(tempJSON.getInt("controlStatus"));
+                        latList.add(tempJSON.getDouble("lat"));
+                        lngList.add(tempJSON.getDouble("lng"));
                     }
 
                     Message message = new Message();
@@ -492,6 +502,13 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                     } else {
                         Toast.makeText(getApplicationContext(), "电话号码不能为空", Toast.LENGTH_SHORT).show();
                     }
+                    break;
+                case R.id.Navigation:
+                  //  common.showToast(OrderOperateActivity.this,"开发中");
+                    Intent intent=new Intent(OrderOperateActivity.this,MainActivity.class);
+                    intent.putExtra("lag",latList.get(position));
+                    intent.putExtra("lng",lngList.get(position));
+                    startActivity(intent);
                     break;
             }
         }
@@ -619,6 +636,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
         consigneeList.clear();
         consigneePhoneList.clear();
         orderStatusList.clear();
+        latList.clear();
+        lngList.clear();
     }
 
 
@@ -659,6 +678,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                         consigneeList.add(tempJSON.getString("receiverContactPerson"));
                         consigneePhoneList.add(tempJSON.getString("receiverContactTel"));
                         orderStatusList.add(tempJSON.getInt("controlStatus"));
+                        latList.add(tempJSON.getDouble("lat"));
+                        lngList.add(tempJSON.getDouble("lng"));
                     }
                     Message message = new Message();
                     message.what = 3;
