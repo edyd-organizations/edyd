@@ -230,6 +230,10 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
                     orderdetailList.clear();
                     loadFlag = true;
                     jsonArray = jsonObject.getJSONArray("rows");
+                    if(jsonArray.length() == 0) {
+                        common.showToast(context, "暂无数据");
+                        return;
+                    }
                     for (int i = 0; i < jsonArray.length(); i++) {
                         item = jsonArray.getJSONObject(i);
                         Orderdetail orderdetail = new Orderdetail();

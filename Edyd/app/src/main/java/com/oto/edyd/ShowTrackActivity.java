@@ -47,7 +47,7 @@ import java.util.logging.LogRecord;
  * Created by liubaozhong on 2015/12/1.
  * 显示地图轨迹。
  */
-public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickListener, AMap.InfoWindowAdapter, AMap.OnInfoWindowClickListener, AMap.OnMapLoadedListener {
+public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickListener, AMap.InfoWindowAdapter, AMap.OnInfoWindowClickListener,AMap.OnMapLoadedListener{
     private Context mActivity;
     private TrackBean bean;
     private String sessionUuid;
@@ -170,7 +170,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
 
         aMap.setMapType(AMap.MAP_TYPE_NORMAL); // 矢量地图模式
         aMap.setOnMarkerClickListener(this);// 设置点击marker事件监听器
-        aMap.setOnMapLoadedListener(this);// 设置amap加载成功事件监听器
+//        aMap.setOnMapLoadedListener(this);// 设置amap加载成功事件监听器
         aMap.setMyLocationEnabled(true);//默认地图可以自动定位
         aMap.setOnInfoWindowClickListener(this);// 设置点击infoWindow事件监听器
         aMap.setInfoWindowAdapter(this);// 设置自定义InfoWindow样式
@@ -353,7 +353,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
         marker.hideInfoWindow();
     }
 
-    @Override
+
     public void onMapLoaded() {
 
         LatLngBounds.Builder buidler = new LatLngBounds.Builder();
