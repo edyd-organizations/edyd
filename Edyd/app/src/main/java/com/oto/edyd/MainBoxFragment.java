@@ -86,7 +86,7 @@ public class MainBoxFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.vehicle_navigation: //车辆导航
-                intent = new Intent(getActivity(),WaitBuild.class);
+                intent = new Intent(getActivity(),BoxGPSActivity.class);
                 intent.putExtra("wait_title", "车辆导航");
                 startActivity(intent);
                 break;

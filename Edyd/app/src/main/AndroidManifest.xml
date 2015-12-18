@@ -481,6 +481,10 @@
             android:name=".CarrierHisOrderActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".BoxGPSActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>
