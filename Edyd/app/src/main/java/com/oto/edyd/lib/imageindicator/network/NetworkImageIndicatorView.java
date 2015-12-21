@@ -6,6 +6,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView.ScaleType;
 
+import com.oto.edyd.EdydApplication;
 import com.oto.edyd.lib.imageindicator.ImageIndicatorView;
 import com.android.http.WebImageView;
 import com.oto.edyd.R;
@@ -43,7 +44,7 @@ public class NetworkImageIndicatorView extends ImageIndicatorView {
 				pageItem.setScaleType(ScaleType.FIT_XY);
 				pageItem.setDefaultImageResId(R.mipmap.ic_launcher);
 				pageItem.setImageUrl(urlList.get(index),
-						NetworkApp.getImageLoader());
+						EdydApplication.getImageLoader());
 				addViewItem(pageItem);
 			}
 		}

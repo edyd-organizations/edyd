@@ -60,12 +60,10 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 >
-        <!-- 高德地图 -->
-        <!--
+        <!-- 高德地图 正式地址-->
          <meta-data
          android:name="com.amap.api.v2.apikey"
          android:value="391bb51068ef790c94b3f93fe9852186" />
-        -->
 
 
         <!--
@@ -74,9 +72,9 @@
             android:value="b0da2264df3bf64e1b5b9143dff0b427" />
         -->
 
-            <meta-data
+           <!-- <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />
+            android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />-->
 
         <!-- 正式key -->
         <!--
@@ -414,17 +412,17 @@
 
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        android:process=":DownloadingService"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:process=":DownloadingService"/>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".ForgetPasswordActivity"
+            android:name=".usercenter.activity.ForgetPasswordActivity"
             android:screenOrientation="portrait" />
-        android:screenOrientation="portrait"/>
+
         <receiver android:name=".components.SmsReceiver" >
             <intent-filter android:priority="800" >
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
