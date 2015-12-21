@@ -15,6 +15,9 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
+import com.android.http.RequestManager;
+import com.android.volley.toolbox.ImageLoader;
+import com.oto.edyd.lib.imageindicator.network.NetworkImageCache;
 import com.oto.edyd.service.TimerService;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -38,10 +41,24 @@ public class EdydApplication extends Application {
 
 	PowerManager powerManager = null;
 	PowerManager.WakeLock wakeLock = null;
+
+	private static ImageLoader sImageLoader = null;
+
+	private final NetworkImageCache imageCacheMap = new NetworkImageCache();
+
+	public static ImageLoader getImageLoader() {
+		return sImageLoader;
+	}
+
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
+
+		RequestManager.getInstance().init(EdydApplication.this);
+		sImageLoader = new ImageLoader(RequestManager.getInstance()
+				.getRequestQueue(), imageCacheMap);
+
 		powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wakeLock = this.powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Lock");
 
