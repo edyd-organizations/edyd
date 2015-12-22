@@ -16,6 +16,7 @@ public class Constant {
     public final static String USER_NAME = "user_name"; //偏好设置用户名key
     public final static String PASSWORD = "password"; //偏好设置密码key
     public final static String ENTERPRISE_ID = "enterprise_id"; //企业ID
+    public final static String ACCOUNT_ID = "ACCOUNT_ID"; //账户ID
     public final static String TENANT_ID = "tenant_id"; //租户ID
     public final static String ORG_CODE = "org_code"; //组织ID
     public final static String ROLE_NAME = "role_name"; //组织名称

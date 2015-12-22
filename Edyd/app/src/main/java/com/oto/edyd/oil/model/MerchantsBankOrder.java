@@ -1,4 +1,4 @@
-package com.oto.edyd.pay.model;
+package com.oto.edyd.oil.model;
 
 import java.io.Serializable;
 

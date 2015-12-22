@@ -196,6 +196,7 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
      */
     private void playSlides() {
         imageIndicatorView.setupLayoutByImageUrl(urlList);
+        urlList.clear();
         imageIndicatorView.show();
         //是否启动自动轮播
         if(isAutoPlay){

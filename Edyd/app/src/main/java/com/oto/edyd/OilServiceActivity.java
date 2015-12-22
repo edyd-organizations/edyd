@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.oto.edyd.pay.activity.OilCardPayActivity;
+import com.oto.edyd.oil.activity.OilCardPayMainActivity;
 
 /**
  * Created by yql on 2015/10/19.
@@ -81,12 +81,9 @@ public class OilServiceActivity extends Activity implements View.OnClickListener
                 startActivity(intent);
                 break;
             case R.id.ll_oil_card_pay: //油卡充值
-                intent = new Intent(getApplicationContext(), OilCardPayActivity.class);
+                intent = new Intent(getApplicationContext(), OilCardPayMainActivity.class);
                 startActivity(intent);
                 break;
         }
     }
 }
-//intent = new Intent(getActivity(), OilCardApplicationActivity.class); //油卡申请
-//intent = new Intent(getActivity(), OilCardAmountDistributeActivity.class); //油卡金额分配
-//intent = new Intent(getActivity(), AddOilActivity.class); //油卡金额分配
