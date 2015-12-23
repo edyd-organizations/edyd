@@ -46,6 +46,7 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
     private EditText etAccount; //金额
     private EditText etPayPassword; //支付密码
     private TextView forgetPayPassword; //忘记支付密码
+    private TextView payWho; //支付给谁
     private TextView btPay; //支付按钮
 
     //---------------------变量---------------------
@@ -78,6 +79,8 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
         initFields(); //初始化字段
         initListener(); //初始化监听
         requestOrderNumber(); //请求订单号
+        String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
+        payWho.setText("注：支付对象为" + enterpriseName+ "账户");
     }
 
     /**
@@ -88,6 +91,7 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
         etAccount = (EditText) findViewById(R.id.pay_amount);
         etPayPassword = (EditText) findViewById(R.id.pay_password);
         forgetPayPassword = (TextView) findViewById(R.id.forget_pay_password);
+        payWho = (TextView) findViewById(R.id.pay_who);
         btPay = (TextView) findViewById(R.id.pay);
         context = OilCardPayMainActivity.this;
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, context.MODE_PRIVATE));
@@ -515,7 +519,7 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
     private void confirmPayDialog() {
         String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
         new AlertDialog.Builder(OilCardPayMainActivity.this).setTitle("支付")
-                .setMessage("确定支付给" + enterpriseName)
+                .setMessage("确定支付对象为" + enterpriseName + "账户")
                 .setPositiveButton("是", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

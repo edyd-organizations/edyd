@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
@@ -92,6 +93,8 @@ public class ImageIndicatorView extends RelativeLayout {
 	 * 最近一次划动时间
 	 */
 	private long refreshTime = 0l;
+
+	private MyPagerAdapter myPagerAdapter;
 
 	/**
 	 * 广告位置监听接口
@@ -287,9 +290,11 @@ public class ImageIndicatorView extends RelativeLayout {
 			final View indicater = new ImageView(getContext());
 			this.indicateLayout.addView(indicater, index);
 		}
+
 		this.refreshHandler.sendEmptyMessage(currentIndex);
 		// 为ViewPager配置数据
-		this.viewPager.setAdapter(new MyPagerAdapter(this.viewList));
+		myPagerAdapter = new MyPagerAdapter(this.viewList);
+		this.viewPager.setAdapter(myPagerAdapter);
 		this.viewPager.setCurrentItem(currentIndex, false);
 	}
 
