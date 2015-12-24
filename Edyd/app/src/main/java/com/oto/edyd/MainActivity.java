@@ -25,11 +25,8 @@ import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.widget.CustomViewPager;
 import com.umeng.message.PushAgent;
-import com.umeng.message.UmengRegistrar;
 import com.umeng.update.UmengUpdateAgent;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

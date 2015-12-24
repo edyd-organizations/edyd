@@ -58,7 +58,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private Button btRegister; //注册按钮
     private Button btAlreadyRegister; //已经注册
     private VerificationCodeProgressAsyncTask asyncTask; //异步消息对象
-    private boolean asyncIsOver = false; //异步线程是否结束
+    private boolean asyncIsOver = true; //异步线程是否结束
     private CusProgressDialog transitionDialog; //过度对话框
     private Context context; //上下文对象
     private Common common;
@@ -133,10 +133,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
             @Override
             public void afterTextChanged(Editable s) {
                 String content = s.toString(); //手机号码
-                if(!TextUtils.isEmpty(content)) { //判断手机号码是否为空
+                if(!TextUtils.isEmpty(content) && asyncIsOver) { //判断手机号码是否为空，且判断异步线程是否结束
                     //手机号码不为空
                     int length = s.length(); //手机号码长度
-                    if(length == MOBILE_PHONE_LENGTH) { //判断手机号码长度是否11位
+                    if(length == MOBILE_PHONE_LENGTH && asyncIsOver) { //判断手机号码长度是否11位
                         //手机号码长度11位
                         setVerificationCodeButtonEnable(); //设置获取验证码按钮橙色且可用
                         String verificationCode = etRegisterVerificationCode.getText().toString(); //获取验证码
@@ -822,6 +822,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
          */
         @Override
         protected void onPreExecute() {
+            asyncIsOver = false;
             setVerificationCodeButtonDisable(); //设置获取验证码按钮为灰色不可用
         }
 

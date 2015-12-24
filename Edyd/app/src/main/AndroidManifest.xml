@@ -60,12 +60,10 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 >
-        <!-- 高德地图 -->
-        <!--
+        <!-- 高德地图 正式地址-->
          <meta-data
          android:name="com.amap.api.v2.apikey"
          android:value="391bb51068ef790c94b3f93fe9852186" />
-        -->
 
 
         <!--
@@ -75,6 +73,7 @@
         -->
 
          <!--   <meta-data
+>>>>>>> bf0f7d5f1321621c7b77ea0a66d6554da505d1e4
             android:name="com.amap.api.v2.apikey"
             android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />-->
 
@@ -369,9 +368,9 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ShipperOrderOperateItemDetailActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".pay.activity.OilCardPayActivity"
+        <activity android:name=".oil.activity.OilCardPayMainActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".pay.activity.ChinaMerchantsBankWebPayActivity"
+        <activity android:name=".oil.activity.ChinaMerchantsBankWebPayActivity"
             android:screenOrientation="portrait"/>
 
         <activity
@@ -414,17 +413,17 @@
 
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        android:process=":DownloadingService"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:process=":DownloadingService"/>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".ForgetPasswordActivity"
+            android:name=".usercenter.activity.ForgetPasswordActivity"
             android:screenOrientation="portrait" />
-        android:screenOrientation="portrait"/>
+
         <receiver android:name=".components.SmsReceiver" >
             <intent-filter android:priority="800" >
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
