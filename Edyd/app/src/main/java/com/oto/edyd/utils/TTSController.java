@@ -2,6 +2,7 @@ package com.oto.edyd.utils;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.amap.api.navi.AMapNaviListener;
 import com.amap.api.navi.model.AMapNaviInfo;

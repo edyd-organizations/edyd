@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.oto.edyd" >
+    package="com.oto.edyd">
 
     <!-- 支持多屏 -->
     <supports-screens
@@ -17,17 +17,16 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
+    <!--<uses-permission android:name="android.permission.GET_TASKS" />-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- 短信服务 -->
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <!--<uses-permission android:name="android.permission.RECEIVE_SMS" />-->
     <!-- 拨打电话的权限 -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <!-- 高德地图 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <!-- 屏幕常亮 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -58,13 +57,12 @@
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
->
+        android:theme="@style/AppTheme">
+        >
         <!-- 高德地图 正式地址-->
-         <meta-data
+        <!-- <meta-data
          android:name="com.amap.api.v2.apikey"
-         android:value="391bb51068ef790c94b3f93fe9852186" />
-
+         android:value="391bb51068ef790c94b3f93fe9852186" />-->
 
         <!--
             <meta-data
@@ -72,21 +70,15 @@
             android:value="b0da2264df3bf64e1b5b9143dff0b427" />
         -->
 
-           <!-- <meta-data
+        <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />-->
-
-        <!-- 正式key -->
+            android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />
         <!--
-            <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="391bb51068ef790c94b3f93fe9852186" />
-        -->
-        <!--  <meta-data
+        <meta-data
              android:name="com.amap.api.v2.apikey"
-             android:value="b751da55d5392f83be3e89d0924c587d" />
- -->
-         <!-- 聚合数据 -->
+             android:value="b751da55d5392f83be3e89d0924c587d" />-->
+
+        <!-- 聚合数据 -->
         <meta-data
             android:name="com.thinkland.juheapi.openid"
             android:value="JH5ba55e75578ecf0b44c6d8a4de432b52" />
@@ -98,18 +90,16 @@
 
         <meta-data
             android:name="UMENG_MESSAGE_SECRET"
-            android:value="917244bd3186a7a7578cbff3fa87b4c1" >
-        </meta-data>
+            android:value="917244bd3186a7a7578cbff3fa87b4c1"></meta-data>
 
         <!-- 监听通知点击或者忽略处理的广播 -->
         <receiver
             android:name="com.umeng.message.NotificationProxyBroadcastReceiver"
-            android:exported="false" >
-        </receiver>
+            android:exported="false"></receiver>
         <!-- 监听开机运行、网络连接变化、卸载的广播 -->
         <receiver
             android:name="com.umeng.message.SystemReceiver"
-            android:process=":push" >
+            android:process=":push">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -125,7 +115,7 @@
         <receiver
             android:name="com.umeng.message.MessageReceiver"
             android:exported="false"
-            android:process=":push" >
+            android:process=":push">
             <intent-filter>
                 <action android:name="org.agoo.android.intent.action.RECEIVE" />
             </intent-filter>
@@ -133,7 +123,7 @@
         <!-- 监听宿主选举的广播 -->
         <receiver
             android:name="com.umeng.message.ElectionReceiver"
-            android:process=":push" >
+            android:process=":push">
             <intent-filter>
                 <action android:name="org.agoo.android.intent.action.ELECTION_RESULT_V4" />
                 <category android:name="umeng" />
@@ -143,12 +133,12 @@
         <!-- 【应用包名】字符串需要替换成本应用的应用包名 -->
         <receiver
             android:name="com.umeng.message.RegistrationReceiver"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.oto.edyd.intent.action.COMMAND" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.umeng.message.UmengMessageBootReceiver" >
+        <receiver android:name="com.umeng.message.UmengMessageBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -158,9 +148,9 @@
         <!-- 【应用包名】字符串需要替换成本应用的应用包名 -->
         <service
             android:name="com.umeng.message.UmengService"
-            android:label="PushService"
             android:exported="true"
-            android:process=":push" >
+            android:label="PushService"
+            android:process=":push">
             <intent-filter>
                 <action android:name="com.oto.edyd.intent.action.START" />
             </intent-filter>
@@ -173,13 +163,14 @@
             </intent-filter>
         </service>
         <!-- Umeng的消息接收服务 -->
-        <service android:name="com.umeng.message.UmengIntentService"
+        <service
+            android:name="com.umeng.message.UmengIntentService"
             android:process=":push" />
         <!-- Umeng的消息路由服务 -->
         <service
             android:name="com.umeng.message.UmengMessageIntentReceiverService"
-            android:process=":push"
-            android:exported="true" >
+            android:exported="true"
+            android:process=":push">
             <intent-filter>
                 <action android:name="org.android.agoo.client.MessageReceiverService" />
             </intent-filter>
@@ -188,32 +179,34 @@
             </intent-filter>
         </service>
         <!-- v2.4.1添加的Service，Umeng的消息接收后的处理服务 -->
-        <service android:name="com.umeng.message.UmengMessageCallbackHandlerService"
+        <service
+            android:name="com.umeng.message.UmengMessageCallbackHandlerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.umeng.messge.registercallback.action" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.umeng.message.unregistercallback.action"/>
+                <action android:name="com.umeng.message.unregistercallback.action" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.umeng.message.message.handler.action"/>
+                <action android:name="com.umeng.message.message.handler.action" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.umeng.message.autoupdate.handler.action"/>
+                <action android:name="com.umeng.message.autoupdate.handler.action" />
             </intent-filter>
         </service>
         <!-- V1.3.0添加的service，负责下载通知的资源 -->
         <service android:name="com.umeng.message.UmengDownloadResourceService" />
         <!-- V2.5.0添加的Service，用于本地通知 -->
         <!-- 如果不使用本地通知，可以注释掉本地通知服务的配置 -->
-        <service android:name="com.umeng.message.local.UmengLocalNotificationService"
+        <service
+            android:name="com.umeng.message.local.UmengLocalNotificationService"
             android:exported="false" />
 
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -365,12 +358,15 @@
         <activity
             android:name=".ShipperOrderOperateActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ShipperOrderOperateItemDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".oil.activity.OilCardPayMainActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".oil.activity.ChinaMerchantsBankWebPayActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ShipperOrderOperateItemDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".oil.activity.OilCardPayMainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".oil.activity.ChinaMerchantsBankWebPayActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ShipperHistoryOrderActivity"
@@ -388,7 +384,7 @@
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
-            android:noHistory="true" >
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -412,8 +408,8 @@
 
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:process=":DownloadingService"/>
+            android:process=":DownloadingService"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -423,14 +419,12 @@
             android:name=".usercenter.activity.ForgetPasswordActivity"
             android:screenOrientation="portrait" />
 
-        <receiver android:name=".components.SmsReceiver" >
-            <intent-filter android:priority="800" >
+        <receiver android:name=".components.SmsReceiver">
+            <intent-filter android:priority="800">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".service.WeatherService" />
-        <service android:name=".service.TimerService" />
 
         <activity
             android:name=".Chooseprovince"
@@ -450,41 +444,43 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ReceivingOrderDetail"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ReceiveTransitOrderActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".BoxRimAddCarActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".BoxRimPark"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".BoxViolationPayActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".BoxPhonePayActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".OilCarSetPasswordActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".CarrierHisOrderActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".BoxGPSActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".common.message.DriverMessageActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".DriverGPSActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".DriverGPSPathActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".WelcomeActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

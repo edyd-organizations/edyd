@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.maps2d.model.LatLng;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -62,8 +63,11 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
     private List<String> phoneNumberList = new ArrayList<String>(); //发货人联系电话集合
     private List<String> consigneeList = new ArrayList<String>(); //收货人集合
     private List<String> consigneePhoneList = new ArrayList<String>(); //收货人联系电话
+    private List<Double> latList = new ArrayList<Double>(); //纬度集合
+    private List<Double> lngList = new ArrayList<Double>(); //经度集合
     private List<Integer> orderStatusList = new ArrayList<Integer>(); //订单状态
     int flag;//接口参数
+    private int page;
     //private int listSize; //订单数据总条数
 
     private int visibleLastIndex = 0; //最后可视项索引
@@ -146,7 +150,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
             if(loadFlag) {
                 loadFlag = false;
                 if(lastIndex % 10 == 0) {
-                    int page = lastIndex / ROWS + 1;
+                    page = lastIndex / ROWS + 1;
                     loadOrderData(page, ROWS);
                 }
             }
@@ -206,7 +210,6 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
             if(convertView == null) {
                 convertView = inflater.inflate(R.layout.order_operation_item, null);
                 viewHolder = new ViewHolder();
-
                 viewHolder.orderNumber = (TextView) convertView.findViewById(R.id.order_number);
                 viewHolder.orderDate = (TextView) convertView.findViewById(R.id.order_date);
                 viewHolder.startPoint = (TextView) convertView.findViewById(R.id.receive_order_start_address); //发货地址
@@ -219,6 +222,10 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                 viewHolder.consigneeDial = (TextView) convertView.findViewById(R.id.consignee_dial);
                 viewHolder.receiveOrder = (TextView) convertView.findViewById(R.id.receive_order); //接单
                 viewHolder.orderStatus = (ImageView) convertView.findViewById(R.id.order_status); //订单状态
+                viewHolder.mNavigation = (TextView) convertView.findViewById(R.id.Navigation);//导航
+                if (flag==1){
+                    viewHolder.mNavigation.setVisibility(View.VISIBLE);
+                }
                 convertView.setTag(viewHolder);
             }else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -267,6 +274,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
             viewHolder.dial.setOnClickListener(new CusOnClickListener(position, convertView));
             viewHolder.consigneeDial.setOnClickListener(new CusOnClickListener(position, convertView));
             viewHolder.receiveOrder.setOnClickListener(new CusOnClickListener(position, convertView));
+            viewHolder.mNavigation.setOnClickListener(new CusOnClickListener(position, convertView));
 
             return convertView;
         }
@@ -284,8 +292,9 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
          TextView consigneePhoneNumber; //收货人联系人电话
          TextView consigneeDial; //拨打收货人联系电话
          TextView receiveOrder; //接单
-         ImageView orderStatus; //单子状态
-    }
+         ImageView orderStatus; //单子状
+         TextView mNavigation;//导航
+     }
 
     Handler handler = new Handler(){
         @Override
@@ -370,6 +379,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                         consigneeList.add(tempJSON.getString("receiverContactPerson"));
                         consigneePhoneList.add(tempJSON.getString("receiverContactTel"));
                         orderStatusList.add(tempJSON.getInt("controlStatus"));
+                        latList.add(tempJSON.getDouble("lat"));
+                        lngList.add(tempJSON.getDouble("lng"));
                     }
 
                     Message message = new Message();
@@ -435,8 +446,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                                 public void onClick(DialogInterface dialog, int which) {
                                     operationOrder(position, view);
                                     if (flag==0){
-                                        idList.remove(position);
-                                        receiveOrderListAdapter.notifyDataSetChanged();//接单后刷新页面
+                                        requestData(page, 10, 2); //请求数据
+                                        //receiveOrderListAdapter.notifyDataSetChanged();//接单后刷新页面
                                     }
 
                                 }
@@ -491,6 +502,13 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                     } else {
                         Toast.makeText(getApplicationContext(), "电话号码不能为空", Toast.LENGTH_SHORT).show();
                     }
+                    break;
+                case R.id.Navigation:
+                  //  common.showToast(OrderOperateActivity.this,"开发中");
+                    Intent intent=new Intent(OrderOperateActivity.this,DriverGPSPathActivity.class);
+                    intent.putExtra("lag",latList.get(position));
+                    intent.putExtra("lng",lngList.get(position));
+                    startActivity(intent);
                     break;
             }
         }
@@ -562,10 +580,10 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                             orderStatusList.set(position, 60);
                             break;
                         case 60: //到达收货
-                            imageView.setImageResource(R.mipmap.finished_receive); //收货完成
-                            textView.setText("完成订单");
-                            textView.setBackgroundResource(R.drawable.border_corner_login);
-                            textView.setEnabled(false);
+                            //imageView.setImageResource(R.mipmap.finished_receive); //收货完成
+                            //textView.setText("完成订单");
+                            //textView.setBackgroundResource(R.drawable.border_corner_login);
+                            //textView.setEnabled(false);
                             //imageView.setVisibility(View.GONE);
                             break;
                     }
@@ -579,6 +597,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                     } else if(controlStatus == 60) {
                         //ServiceUtil.invokeTimerPOIService(getApplicationContext(), String.valueOf(controlId), String.valueOf(controlStatus));
                         mLocation = new MLocation(getApplicationContext(), common, String.valueOf(controlId), String.valueOf(99));
+                        requestData(page, 10,2); //请求数据
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -617,6 +636,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
         consigneeList.clear();
         consigneePhoneList.clear();
         orderStatusList.clear();
+        latList.clear();
+        lngList.clear();
     }
 
 
@@ -657,6 +678,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                         consigneeList.add(tempJSON.getString("receiverContactPerson"));
                         consigneePhoneList.add(tempJSON.getString("receiverContactTel"));
                         orderStatusList.add(tempJSON.getInt("controlStatus"));
+                        latList.add(tempJSON.getDouble("lat"));
+                        lngList.add(tempJSON.getDouble("lng"));
                     }
                     Message message = new Message();
                     message.what = 3;
