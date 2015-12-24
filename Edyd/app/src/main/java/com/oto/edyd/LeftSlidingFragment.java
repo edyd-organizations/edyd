@@ -17,7 +17,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.oto.edyd.broadcast.TestImageView;
 import com.oto.edyd.usercenter.activity.LoginActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -244,7 +243,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
             TextView textView = (TextView) view.findViewById(R.id.list_text);
             String menuDes = textView.getText().toString();
             if(menuDes.equals("我的钱包")) {
-                intent = new Intent(getActivity().getApplicationContext(), TestImageView.class);
+                intent = new Intent(getActivity().getApplicationContext(), WaitBuild.class);
                 intent.putExtra("wait_title", "我的钱包");
                 startActivity(intent);
             } else if(menuDes.equals("账户类型")){

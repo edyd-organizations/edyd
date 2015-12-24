@@ -483,6 +483,8 @@
             android:name=".BoxGPSActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".common.message.DriverMessageActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

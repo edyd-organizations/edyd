@@ -162,8 +162,7 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
                 finish();
                 break;
             case R.id.pay: //支付
-                //verifyPayPassword(); //验证支付密码
-                confirmPayDialog();
+                confirmAccountIsExist(); //验证账户是否存在
                 break;
             case R.id.forget_pay_password: //忘记支付密码
                 Intent intent=new Intent(this,OilCarSetPasswordActivity.class);
@@ -428,13 +427,13 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
                     finish();
                     break;
                 case HANDLER_PASSWORD_VERIFY_SUCCESS: //密码认证成功
-                    requestCheckCode();
+                    confirmPayDialog(); //弹出确认框
                     break;
                 case HANDLER_PASSWORD_VERIFY_FAIL: //密码认证失败
                     common.showToast(context, "密码不正确");
                     break;
                 case HANDLER_CHECK_CODE_BACK: //校验码返回成功
-                    postOrder();
+                    postOrder(); //提交订单
                     break;
                 case HANDLER_PREPARE_PAY_DATA_SAVE_SUCCESS: //预充值数据成功返回
                     Intent intent = new Intent(OilCardPayMainActivity.this, ChinaMerchantsBankWebPayActivity.class);
@@ -523,7 +522,7 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
                 .setPositiveButton("是", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        confirmAccountIsExist(); //验证当前登录用户账户是否存在
+                        requestCheckCode(); //请求校验码
                     }
                 })
                 .setNegativeButton("否", new DialogInterface.OnClickListener() {
