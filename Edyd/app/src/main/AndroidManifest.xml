@@ -17,17 +17,16 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
+    <!--<uses-permission android:name="android.permission.GET_TASKS" />-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- 短信服务 -->
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <!--<uses-permission android:name="android.permission.RECEIVE_SMS" />-->
     <!-- 拨打电话的权限 -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <!-- 高德地图 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <!-- 屏幕常亮 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -61,9 +60,9 @@
         android:theme="@style/AppTheme" >
 >
         <!-- 高德地图 正式地址-->
-         <meta-data
+        <!-- <meta-data
          android:name="com.amap.api.v2.apikey"
-         android:value="391bb51068ef790c94b3f93fe9852186" />
+         android:value="391bb51068ef790c94b3f93fe9852186" />-->
 
 
         <!--
@@ -73,16 +72,9 @@
         -->
 
          <!--   <meta-data
->>>>>>> bf0f7d5f1321621c7b77ea0a66d6554da505d1e4
+
             android:name="com.amap.api.v2.apikey"
             android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />-->
-
-        <!-- 正式key -->
-        <!--
-            <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="391bb51068ef790c94b3f93fe9852186" />
-        -->
         <meta-data
              android:name="com.amap.api.v2.apikey"
              android:value="b751da55d5392f83be3e89d0924c587d" />
@@ -430,8 +422,6 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".service.WeatherService" />
-        <service android:name=".service.TimerService" />
 
         <activity
             android:name=".Chooseprovince"
