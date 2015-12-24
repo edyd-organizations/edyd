@@ -3,8 +3,11 @@ package com.oto.edyd;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +19,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.lib.imageindicator.AutoPlayManager;
-import com.oto.edyd.lib.imageindicator.ImageIndicatorView;
+import com.oto.edyd.lib.imageindicator.network.NetworkImageIndicatorView;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.NetWork;
+import com.oto.edyd.utils.OkHttpClientManager;
+import com.squareup.okhttp.Request;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yql on 2015/8/25.
@@ -28,7 +42,7 @@ import com.oto.edyd.utils.NetWork;
 public class MainIndexFragment extends Fragment implements View.OnClickListener{
 
     private View mainIndexView; //首页
-    private ImageIndicatorView imageIndicatorView; //图片指示器
+    private NetworkImageIndicatorView imageIndicatorView; //图片指示器
     private boolean isAutoPlay = true; //是否自动播放图片
     private LinearLayout locationWeather; //本地天气
     private LinearLayout locationPosition;
@@ -44,13 +58,20 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
     private RelativeLayout discountMain; //打折
 
     private Intent intent; //跳转
+    private Common commonFixed;
+    private List<String> urlList= new ArrayList<String>(); //幻灯片集合
+    private final static int HANDLER_NETWORK_PICTURE_REQUEST_SUCCESS = 0x10; //网络图片请求成功
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mainIndexView = inflater.inflate(R.layout.main_index, null);
         initFields(mainIndexView);
-        playSlides(); //播放幻灯片
+        requestAdvertiseList(); //播放幻灯片
+        String firstLaunch = commonFixed.getStringByKey("FIRST_LAUNCH");
+        if(!TextUtils.isEmpty(firstLaunch)) {
+            playSlides(0); //播放幻灯片
+        }
         locationWeather.setOnClickListener(this);
         locationPosition.setOnClickListener(this);
         oilService.setOnClickListener(this);
@@ -160,7 +181,7 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
      * @param view
      */
     private void initFields(View view) {
-        imageIndicatorView = (ImageIndicatorView)view.findViewById(R.id.indicate_view); //图片轮播
+        imageIndicatorView = (NetworkImageIndicatorView)view.findViewById(R.id.network_indicate_view); //图片轮播
         locationWeather = (LinearLayout) view.findViewById(R.id.weather_main); //本地天气
         locationPosition = (LinearLayout) view.findViewById(R.id.position_main); //本地位置
         latestNews = (TextView) view.findViewById(R.id.latest_news); //最新
@@ -173,6 +194,7 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
         todayOrder = (LinearLayout) view.findViewById(R.id.order_today); //今日订单
         panorama = (LinearLayout) view.findViewById(R.id.panorama); //全景图
         discountMain = (RelativeLayout) view.findViewById(R.id.discount_main);
+        commonFixed = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
 
         Animation mAnimationRight = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_textview);
         mAnimationRight.setFillAfter(true);
@@ -181,10 +203,20 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
     /**
      * 图片轮播
      */
-    private void playSlides() {
-        Integer[] resArray = new Integer[] { R.mipmap.slide_01, R.mipmap.slide_02 };
-        imageIndicatorView.setupLayoutByDrawable(resArray);
-        imageIndicatorView.setIndicateStyle(ImageIndicatorView.INDICATE_ARROW_ROUND_STYLE);
+    private void playSlides(int type) {
+        List<String> networkList;
+
+        if(type == 0) {
+            String networkStr = commonFixed.getStringByKey("SLIDE_URL");
+            String arrayUrl[] = networkStr.split(";");
+            networkList = java.util.Arrays.asList(arrayUrl);
+        } else {
+            networkList = urlList;
+        }
+
+
+        imageIndicatorView.setupLayoutByImageUrl(networkList);
+        urlList.clear();
         imageIndicatorView.show();
         //是否启动自动轮播
         if(isAutoPlay){
@@ -199,7 +231,76 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
         AutoPlayManager autoBrocastManager =  new AutoPlayManager(imageIndicatorView);
         autoBrocastManager.setBroadcastEnable(true);
         autoBrocastManager.setBroadCastTimes(5);//loop times
-        autoBrocastManager.setBroadcastTimeIntevel(3 * 1000, 3 * 1000);//set first play time and interval
+        autoBrocastManager.setBroadcastTimeIntevel(5 * 1000, 10 * 1000);//set first play time and interval
         autoBrocastManager.loop();
     }
+
+    /**
+     * 请求网络图片列表地址
+     */
+    private void requestAdvertiseList() {
+        String url = Constant.ENTRANCE_PREFIX_v1 + "inquireAdsListByType.json?type=6";
+        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>(){
+
+            @Override
+            public void onError(Request request, Exception e) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                JSONObject jsonObject;
+                JSONArray jsonArray;
+                JSONObject item;
+                try {
+                    jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+                    if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        Toast.makeText(getActivity(), "加载网络图片失败", Toast.LENGTH_SHORT).show();
+                    }
+                    jsonArray = jsonObject.getJSONArray("rows");
+                    String networkUrl = "";
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        item = jsonArray.getJSONObject(i);
+                        String strItem = item.getString("picture");
+                        strItem =  strItem.replaceAll("\n", "");
+                        strItem = strItem.replaceAll("\r", "");
+                        urlList.add(strItem);
+                        if(i == jsonArray.length()-1) {
+                            networkUrl += strItem;
+                        } else {
+                            networkUrl += strItem + ";";
+                        }
+                    }
+
+                    Message message = Message.obtain();
+                    message.what = HANDLER_NETWORK_PICTURE_REQUEST_SUCCESS;
+                    message.obj = networkUrl;
+                    handler.sendMessage(message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case HANDLER_NETWORK_PICTURE_REQUEST_SUCCESS: //网络图片请求成功
+                    String networkStr = (String) msg.obj;
+                    Map<Object, Object> map = new HashMap<Object, Object>();
+                    map.put("SLIDE_URL", networkStr);
+                    if(!commonFixed.isSave(map)) {
+                        commonFixed.showToast(getActivity(), "幻灯片地址保存异常");
+                    }
+                    String firstLaunch = commonFixed.getStringByKey("FIRST_LAUNCH");
+                    if(TextUtils.isEmpty(firstLaunch)) {
+                        playSlides(1); //播放幻灯片
+                    }
+                    break;
+            }
+        }
+    };
 }

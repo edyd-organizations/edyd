@@ -11,8 +11,13 @@
         android:src="@mipmap/slide_01"
         android:adjustViewBounds="true"/>-->
 
-    <com.oto.edyd.lib.imageindicator.ImageIndicatorView
-        android:id="@+id/indicate_view"
+    <!--<com.oto.edyd.lib.imageindicator.ImageIndicatorView-->
+        <!--android:id="@+id/indicate_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="120dp" />-->
+
+    <com.oto.edyd.lib.imageindicator.network.NetworkImageIndicatorView
+        android:id="@+id/network_indicate_view"
         android:layout_width="match_parent"
         android:layout_height="120dp" />
     <LinearLayout

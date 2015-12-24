@@ -113,6 +113,15 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/pay_who"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:textColor="@color/orange_FF6600"/>
+
+    <TextView
         android:id="@+id/pay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

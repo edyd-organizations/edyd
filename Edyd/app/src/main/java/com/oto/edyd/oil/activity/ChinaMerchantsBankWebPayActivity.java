@@ -1,4 +1,4 @@
-package com.oto.edyd.pay.activity;
+package com.oto.edyd.oil.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +11,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.oto.edyd.R;
-import com.oto.edyd.pay.model.MerchantsBankOrder;
+import com.oto.edyd.oil.model.MerchantsBankOrder;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 
@@ -23,16 +23,19 @@ import com.oto.edyd.utils.CusProgressDialog;
  */
 public class ChinaMerchantsBankWebPayActivity extends Activity {
 
+    //---------------------View基本控件---------------------
     private WebView webView; //网页容器
+
+    //---------------------变量---------------------
     private CusProgressDialog transitionDialog; //加载过度
-    private final static int BACK_CODE = 0x20; //返回码
+    private final static int BACK_CODE = 0x20; //关闭页面返回码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirm_pay);
         Bundle bundle = getIntent().getExtras();
-        MerchantsBankOrder merchantsBankOrder = (MerchantsBankOrder) bundle.getSerializable("pay_order");
+        MerchantsBankOrder merchantsBankOrder = (MerchantsBankOrder) bundle.getSerializable("pay_order"); //订单实体
 
         String url = "https://netpay.cmbchina.com/netpayment/BaseHttp.dll?MfcISAPICommand=PrePayWAP&BranchID=" + merchantsBankOrder.getBranchId() +
                 "&CoNo=" + merchantsBankOrder.getCoNo() + "&BillNo=" + merchantsBankOrder.getBillNo()  + "&Amount=" + merchantsBankOrder.getAmount() +
@@ -46,7 +49,7 @@ public class ChinaMerchantsBankWebPayActivity extends Activity {
      */
     private void init(String url) {
         initFields(); //初始化字段
-        initWebView(url);
+        initWebView(url); //初始化WebView容器
     }
 
     /**

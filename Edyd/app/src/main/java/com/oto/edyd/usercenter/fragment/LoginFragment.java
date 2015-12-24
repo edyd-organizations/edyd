@@ -21,8 +21,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.oto.edyd.ForgetPasswordActivity;
 import com.oto.edyd.R;
+import com.oto.edyd.usercenter.activity.ForgetPasswordActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;

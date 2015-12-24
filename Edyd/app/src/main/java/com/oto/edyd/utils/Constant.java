@@ -16,6 +16,7 @@ public class Constant {
     public final static String USER_NAME = "user_name"; //偏好设置用户名key
     public final static String PASSWORD = "password"; //偏好设置密码key
     public final static String ENTERPRISE_ID = "enterprise_id"; //企业ID
+    public final static String ACCOUNT_ID = "ACCOUNT_ID"; //账户ID
     public final static String TENANT_ID = "tenant_id"; //租户ID
     public final static String ORG_CODE = "org_code"; //组织ID
     public final static String ROLE_NAME = "role_name"; //组织名称
@@ -133,11 +134,13 @@ public class Constant {
     public static final String PERMISSION_URL = TIPS + "http://wiki.connect.qq.com/openapi权限申请"
             + END_TIPS;
 
-    //正则表达式
+    //-----------------------------正则表达式---------------------
     //手机格式
     public static final String MATCH_MOBILE_PHONE = "^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$";
     //注册密码格式
     public static final String MATCH_REGISTER_PASSWORD = "^(?!\\D+$)(?![^a-zA-Z]+$)\\S{6,20}$";
+    //修改密码格式
+    public static final String MATCH_MODIFY_PASSWORD = "^(?!\\D+$)(?![^a-zA-Z]+$)\\S{6,20}$";
 
 
 }
