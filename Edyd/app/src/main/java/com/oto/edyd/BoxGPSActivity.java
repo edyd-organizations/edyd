@@ -28,7 +28,6 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps2d.overlay.PoiOverlay;
 import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.model.NaviLatLng;
 import com.amap.api.services.core.AMapException;
@@ -43,7 +42,6 @@ import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.oto.edyd.utils.Common;
 
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
