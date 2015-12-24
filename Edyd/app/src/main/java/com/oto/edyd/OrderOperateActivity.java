@@ -505,7 +505,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                     break;
                 case R.id.Navigation:
                   //  common.showToast(OrderOperateActivity.this,"开发中");
-                    Intent intent=new Intent(OrderOperateActivity.this,MainActivity.class);
+                    Intent intent=new Intent(OrderOperateActivity.this,DriverGPSPathActivity.class);
                     intent.putExtra("lag",latList.get(position));
                     intent.putExtra("lng",lngList.get(position));
                     startActivity(intent);

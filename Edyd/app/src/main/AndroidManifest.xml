@@ -485,6 +485,18 @@
             android:name=".BoxGPSActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".DriverGPSActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".DriverGPSPathActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".WelcomeActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

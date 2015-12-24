@@ -2,6 +2,7 @@ package com.oto.edyd;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -60,7 +61,20 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE); //设置ActionBar无标题
-        setContentView(R.layout.activity_main);
+        //新手引导判断
+        SharedPreferences preferences = getSharedPreferences("isFirst", 0);
+        final boolean isNew = preferences.getBoolean("isfirst", true);
+        if (isNew) {
+            Intent intent = new Intent(this, WelcomeActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            finish();
+        } else {
+            setContentView(R.layout.activity_main);
+        }
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putBoolean("isfirst", false);
+        edit.commit();
 
         initFields(); //初始化字段
         initLeftMenu();//初始化侧滑栏
