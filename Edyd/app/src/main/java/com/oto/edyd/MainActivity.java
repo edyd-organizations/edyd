@@ -159,7 +159,8 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
      * 初始化友盟消息推送服务
      */
     private void initUmengMessage() {
-        PushAgent mPushAgent = PushAgent.getInstance(context);
+        //PushAgent mPushAgent = PushAgent.getInstance(context);
+        PushAgent mPushAgent = EdydApplication.mPushAgent;
         mPushAgent.enable();
         PushAgent.getInstance(MainActivity.this).onAppStart();
         //String device_token = UmengRegistrar.getRegistrationId(context); //获取Device Token

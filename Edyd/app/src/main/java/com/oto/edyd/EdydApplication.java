@@ -23,6 +23,10 @@ import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.ServiceUtil;
 import com.thinkland.sdk.android.JuheSDKInitializer;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UmengMessageHandler;
+import com.umeng.message.UmengNotificationClickHandler;
+import com.umeng.message.entity.UMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +42,11 @@ public class EdydApplication extends Application {
 	private boolean mIsBound = false; //判断服务是否绑定
 
 	private PendingIntent alarmSender;
-
 	PowerManager powerManager = null;
 	PowerManager.WakeLock wakeLock = null;
-
 	private static ImageLoader sImageLoader = null;
-
 	private final NetworkImageCache imageCacheMap = new NetworkImageCache();
+	public static PushAgent mPushAgent;
 
 	public static ImageLoader getImageLoader() {
 		return sImageLoader;
@@ -127,6 +129,34 @@ public class EdydApplication extends Application {
 //		intent.setAction("LOCATION_SERVICE_ACTION");
 //		alarmSender = PendingIntent.getService(getApplicationContext(), 0x20, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 //		AlarmManager am = (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
+
+		//友盟消息推送
+		mPushAgent = PushAgent.getInstance(getApplicationContext());
+		UmengMessageHandler messageHandler = new UmengMessageHandler() {
+			@Override
+			public void dealWithCustomMessage(Context context, UMessage uMessage) {
+				super.dealWithCustomMessage(context, uMessage);
+			}
+
+			@Override
+			public void dealWithNotificationMessage(Context context, UMessage uMessage) {
+				super.dealWithNotificationMessage(context, uMessage);
+			}
+
+		};
+		UmengNotificationClickHandler umengNotificationClickHandler = new UmengNotificationClickHandler() {
+			@Override
+			public void dealWithCustomAction(Context context, UMessage uMessage) {
+				super.dealWithCustomAction(context, uMessage);
+			}
+
+			@Override
+			public void openActivity(Context context, UMessage uMessage) {
+				super.openActivity(context, uMessage);
+			}
+		};
+		mPushAgent.setMessageHandler(messageHandler);
+		mPushAgent.setNotificationClickHandler(umengNotificationClickHandler);
 	}
 
 	/**
