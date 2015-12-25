@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.TextView;
@@ -47,7 +48,7 @@ import java.util.logging.LogRecord;
  * Created by liubaozhong on 2015/12/1.
  * 显示地图轨迹。
  */
-public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickListener, AMap.InfoWindowAdapter, AMap.OnInfoWindowClickListener,AMap.OnMapLoadedListener{
+public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickListener, AMap.InfoWindowAdapter, AMap.OnInfoWindowClickListener, AMap.OnMapLoadedListener {
     private Context mActivity;
     private TrackBean bean;
     private String sessionUuid;
@@ -97,7 +98,9 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                         TrackPointBean point = list.get(i);
                         LatLng latLng = new LatLng(point.getLat(), point.getLng());
                         pos.add(latLng);
-                        addMarker(point, i, list);//添加所有的位置
+                        if (!TextUtils.isEmpty(point.getAddr())) {
+                            addMarker(point, i, list);//添加所有的位置
+                        }
                     }
 
                     line.addAll(pos);
@@ -184,9 +187,14 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
         }
 
         long primaryId = bean.getPrimaryId();
-        String url = Constant.ENTRANCE_PREFIX + "getTruckPosition.json?sessionUuid="
+
+//        String url = Constant.ENTRANCE_PREFIX + "getTruckPosition.json?sessionUuid="
+//                + sessionUuid + "&primaryId=" + primaryId;
+        //        v1.1/getRealMapLineTest.json?sessionUuid=879425d835d34ac183dddddf831ecdc7&primaryId=124
+
+        String url = Constant.ENTRANCE_PREFIX_v1 + "getRealMapLineTest.json?sessionUuid="
                 + sessionUuid + "&primaryId=" + primaryId;
-//        Common.printErrLog("轨迹地图" + url);
+
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {

@@ -73,6 +73,7 @@
                 android:completionThreshold="1"
                 android:dropDownVerticalOffset="1.0dip"
                 android:hint="起点：我的位置"
+                android:textColorHint="@color/gray_5d5d5d"
                 android:imeOptions="actionDone"
                 android:inputType="text|textAutoComplete"
                 android:maxLength="20"
@@ -127,6 +128,7 @@
         android:background="@color/white"
         android:gravity="center"
         android:text="开始导航"
+        android:clickable="true"
         android:textColor="@color/user_icon_8"
         android:textSize="18dp" />
 
