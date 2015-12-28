@@ -207,11 +207,11 @@
             android:windowSoftInputMode="stateUnchanged|adjustPan"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".module.usercenter.activity.LoginActivity"
@@ -484,6 +484,14 @@
         <activity
             android:name=".module.oil.activity.OilCardPayMainActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".StartActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

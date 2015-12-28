@@ -58,7 +58,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE); //设置ActionBar无标题
-        //新手引导判断
+ /*       //新手引导判断
         SharedPreferences preferences = getSharedPreferences("isFirst", 0);
         final boolean isNew = preferences.getBoolean("isfirst", true);
         if (isNew) {
@@ -68,7 +68,9 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             finish();
         } else {
             setContentView(R.layout.activity_main);
-        }
+        }*/
+        setContentView(R.layout.activity_main);
+        SharedPreferences preferences = getSharedPreferences("isFirst", 0);
         SharedPreferences.Editor edit = preferences.edit();
         edit.putBoolean("isfirst", false);
         edit.commit();
