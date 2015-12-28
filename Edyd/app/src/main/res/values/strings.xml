@@ -190,4 +190,6 @@
     <string name="preference_title_tts_pitch">语调</string>
     <string name="preference_default_tts_pitch">50</string>
     <string name="intell_bd_title">智能播报</string>
+    <!--输入框下限制-->
+    <string name="register_name_digits">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ@._</string>
 </resources>

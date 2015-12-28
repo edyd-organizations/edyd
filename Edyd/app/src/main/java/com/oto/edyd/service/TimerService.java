@@ -306,8 +306,8 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
             direction = amapLocation.getBearing(); //定位方向
 
             for(int i = 0; i < controlIDList.size(); i++) {
-                url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?lng="+longitude+"&lat="+latitude+"&controlId"
-                        +controlIDList.get(i)+"&tel"+tel+"&speed="+speed+"&direction"+direction;
+                url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?lng="+longitude+"&lat="+latitude+"&controlId="
+                        +controlIDList.get(i)+"&tel="+tel+"&speed="+speed+"&direction="+direction+"&controlStatus="+controlStatusList.get(i);
                 OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
                     @Override
                     public void onError(Request request, Exception e) {
