@@ -1,4 +1,4 @@
-package com.oto.edyd.usercenter.activity;
+package com.oto.edyd.module.usercenter.activity;
 
 import android.app.Activity;
 import android.content.Context;

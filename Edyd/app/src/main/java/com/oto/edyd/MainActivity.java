@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.oto.edyd.lib.slidingmenu.SlidingMenu;
 import com.oto.edyd.lib.slidingmenu.app.SlidingFragmentActivity;
-import com.oto.edyd.usercenter.activity.LoginActivity;
+import com.oto.edyd.module.usercenter.activity.LoginActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.widget.CustomViewPager;

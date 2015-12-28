@@ -1,4 +1,4 @@
-package com.oto.edyd.oil.activity;
+package com.oto.edyd.module.oil.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,7 +19,8 @@ import android.widget.TextView;
 
 import com.oto.edyd.OilCarSetPasswordActivity;
 import com.oto.edyd.R;
-import com.oto.edyd.oil.model.MerchantsBankOrder;
+import com.oto.edyd.module.oil.activity.ChinaMerchantsBankWebPayActivity;
+import com.oto.edyd.module.oil.model.MerchantsBankOrder;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.NumberFormat;
