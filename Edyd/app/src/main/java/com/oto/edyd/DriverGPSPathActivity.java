@@ -391,7 +391,6 @@ public class DriverGPSPathActivity extends Activity implements AMapNaviListener,
     public void onMapLoaded() {
         if (mRouteOverLay != null) {
             mRouteOverLay.zoomToSpan();
-
         }
     }
 }

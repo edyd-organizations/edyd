@@ -1,7 +1,7 @@
 package com.oto.edyd.model;
 
 /**
- * Created by Administrator on 2015/12/2.
+ * Created by liubaozhong on 2015/12/2.
  */
 public class TrackPointBean {
     private String controlStatus;
@@ -9,6 +9,15 @@ public class TrackPointBean {
     private double lng;
     private String operTime;
     private String addr;
+    private long primaryId;
+
+    public long getPrimaryId() {
+        return primaryId;
+    }
+
+    public void setPrimaryId(long primaryId) {
+        this.primaryId = primaryId;
+    }
 
     public String getAddr() {
         return addr;
