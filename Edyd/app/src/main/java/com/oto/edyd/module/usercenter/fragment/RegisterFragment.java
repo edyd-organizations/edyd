@@ -1,4 +1,4 @@
-package com.oto.edyd.usercenter.fragment;
+package com.oto.edyd.module.usercenter.fragment;
 
 import android.content.Context;
 import android.content.Intent;

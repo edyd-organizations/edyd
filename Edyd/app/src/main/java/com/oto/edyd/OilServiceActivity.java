@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.oto.edyd.oil.activity.OilCardPayMainActivity;
+import com.oto.edyd.module.oil.activity.OilCardPayMainActivity;
 
 /**
  * Created by yql on 2015/10/19.

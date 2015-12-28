@@ -1,4 +1,4 @@
-package com.oto.edyd.tts.activity;
+package com.oto.edyd.module.tts.activity;
 
 import android.app.Activity;
 import android.os.Bundle;

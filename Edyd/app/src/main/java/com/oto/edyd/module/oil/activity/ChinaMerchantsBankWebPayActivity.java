@@ -1,4 +1,4 @@
-package com.oto.edyd.oil.activity;
+package com.oto.edyd.module.oil.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +11,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.oto.edyd.R;
-import com.oto.edyd.oil.model.MerchantsBankOrder;
+import com.oto.edyd.module.oil.model.MerchantsBankOrder;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 
