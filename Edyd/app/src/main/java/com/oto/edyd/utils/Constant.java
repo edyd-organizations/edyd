@@ -116,7 +116,7 @@ public class Constant {
     public final static String APPSECRET = "63d9051492bf34576212710e76e7f94d";// 填写从短信SDK应用后台注册得到的APPSECRET
 
 
-    public static final int ELAPSED_TIME = 10 * 60 * 1000;
+    public static final int ELAPSED_TIME = 1 * 60 * 1000;
     public static final int RETRIVE_SERVICE_COUNT = 50;
     public static final int ELAPSED_TIME_DELAY = 2*60*1000;//get GPS delayed
     public static final int BROADCAST_ELAPSED_TIME_DELAY = 2*60*1000;
