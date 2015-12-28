@@ -30,6 +30,7 @@ import com.umeng.message.entity.UMessage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class EdydApplication extends Application {
 
@@ -140,7 +141,10 @@ public class EdydApplication extends Application {
 
 			@Override
 			public void dealWithNotificationMessage(Context context, UMessage uMessage) {
-				super.dealWithNotificationMessage(context, uMessage);
+				common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+				if(common.isLogin()) {
+					super.dealWithNotificationMessage(context, uMessage);
+				}
 			}
 
 		};
@@ -153,10 +157,15 @@ public class EdydApplication extends Application {
 			@Override
 			public void openActivity(Context context, UMessage uMessage) {
 				super.openActivity(context, uMessage);
+				Intent intent = new Intent(context, OrderOperateActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.putExtra("order",0);
+				startActivity(intent);
 			}
 		};
 		mPushAgent.setMessageHandler(messageHandler);
 		mPushAgent.setNotificationClickHandler(umengNotificationClickHandler);
+		mPushAgent.setMergeNotificaiton(false);  //合并通知消息 true始终只会看到一条消息
 	}
 
 	/**
