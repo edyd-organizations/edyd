@@ -1,2 +1,3 @@
-//查看keystore信息
+//edyd.keystore为多一点正式签名库
+//查看edyd.keystore信息
 keytool -list -v -keystore edyd.keystore

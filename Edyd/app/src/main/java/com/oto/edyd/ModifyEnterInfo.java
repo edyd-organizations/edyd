@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.model.UpdateEnterprise;
+import com.oto.edyd.module.usercenter.activity.AccountInformationActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.OkHttpClientManager;
@@ -95,7 +96,7 @@ public class ModifyEnterInfo extends Fragment implements View.OnClickListener {
     }
 
     private void initFields(View view, String order) {
-        accountEnterFragmentManager = ((AccountInformationActivity) getActivity()).accountInformationFragmentManager;
+        accountEnterFragmentManager = getActivity().getSupportFragmentManager();
         if(order.equals("first")) {
             modifyEnterInfoBack = (LinearLayout) view.findViewById(R.id.modify_enter_info_back);
             modifyEnterInfoTitle = (TextView) view.findViewById(R.id.tv_enter_info_title);

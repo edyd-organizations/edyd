@@ -23,7 +23,6 @@ import android.widget.TextView;
 
 import com.oto.edyd.R;
 import com.oto.edyd.module.usercenter.activity.ForgetPasswordActivity;
-import com.oto.edyd.module.usercenter.fragment.RegisterFragment;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;

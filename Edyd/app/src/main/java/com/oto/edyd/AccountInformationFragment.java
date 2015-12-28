@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.model.UpdatePerson;
+import com.oto.edyd.module.usercenter.activity.AccountInformationActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -137,7 +138,7 @@ public class AccountInformationFragment extends Fragment implements View.OnClick
         personList = (ListView)view.findViewById(R.id.personal_list);
         personListSec = (ListView)view.findViewById(R.id.personal_list_sec);
 
-        accountInformationFragmentManager = ((AccountInformationActivity)getActivity()).accountInformationFragmentManager;
+        accountInformationFragmentManager = getActivity().getSupportFragmentManager();
     }
 
     Handler handler = new Handler() {

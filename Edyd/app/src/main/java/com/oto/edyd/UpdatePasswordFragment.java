@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.oto.edyd.module.usercenter.activity.AccountInformationActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -54,7 +55,7 @@ public class UpdatePasswordFragment extends Fragment implements View.OnClickList
         etNewPassword = (EditText) view.findViewById(R.id.et_new_password);
         etConfirmPassword = (EditText) view.findViewById(R.id.et_confirm_password);
         btSave = (Button) view.findViewById(R.id.personal_info_save);
-        AccountFragmentManager = ((AccountInformationActivity)getActivity()).accountInformationFragmentManager;
+        AccountFragmentManager = getActivity().getSupportFragmentManager();
     }
 
     @Override

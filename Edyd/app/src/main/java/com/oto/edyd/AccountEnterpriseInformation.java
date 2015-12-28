@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.model.UpdateEnterprise;
+import com.oto.edyd.module.usercenter.activity.AccountInformationActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -155,7 +156,7 @@ public class AccountEnterpriseInformation extends Fragment implements View.OnCli
 
         idResources = new int[]{R.id.enterprise_info_title, R.id.enterprise_info_content};
 
-        accountEnterFragmentManager = ((AccountInformationActivity)getActivity()).accountInformationFragmentManager;
+        accountEnterFragmentManager = getActivity().getSupportFragmentManager();
     }
 
     Handler handler = new Handler(){

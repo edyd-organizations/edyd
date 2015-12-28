@@ -17,6 +17,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oto.edyd.module.usercenter.activity.AccountInformationActivity;
 import com.oto.edyd.module.usercenter.activity.LoginActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
