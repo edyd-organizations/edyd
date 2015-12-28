@@ -235,7 +235,7 @@
             android:name=".AccountTypeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AccountInformationActivity"
+            android:name=".module.usercenter.activity.AccountInformationActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MyWayBillActivity"

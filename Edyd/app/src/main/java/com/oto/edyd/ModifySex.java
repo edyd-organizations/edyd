@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.model.UpdatePerson;
+import com.oto.edyd.module.usercenter.activity.AccountInformationActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.OkHttpClientManager;
@@ -120,7 +121,7 @@ public class ModifySex extends Fragment implements View.OnClickListener{
         modifySexList = (ListView) modifySexView.findViewById(R.id.select_sex_list);
         modifyEnterInfoBack = (LinearLayout) modifySexView.findViewById(R.id.modify_enter_info_back);
         modifyEnterInfoTitle = (TextView) modifySexView.findViewById(R.id.tv_enter_info_title);
-        accountInformationFragmentManager = ((AccountInformationActivity)getActivity()).accountInformationFragmentManager;
+        accountInformationFragmentManager = getActivity().getSupportFragmentManager();
     }
 
     public static ModifySex newInstance(UpdatePerson updatePerson) {
