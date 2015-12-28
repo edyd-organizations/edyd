@@ -80,7 +80,7 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
                 intent = new Intent(getActivity(), PanoramaActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.ll_driver_info: //司机信息
+            case R.id.ll_driver_info: //历史订单
                 intent=new Intent(getActivity(),CarrierHisOrderActivity.class);
                 startActivity(intent);
                 break;

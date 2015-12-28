@@ -29,6 +29,7 @@ import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.NetWork;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
+import com.umeng.message.UmengRegistrar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,6 +64,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private static final int HANDLER_ACCOUNT_TYPE_SUCCESS_STATUS_CODE = 0x11; //账户类型请求成功返回码
     private static final int HANDLER_ROLE_TYPE_SUCCESS_CODE = 0x12; //角色类型请求成功返回码
     private static final int HANDLER_ACCOUNT_TYPE_SUCCESS_CODE = 0x13; //用户账户ID请求成功返回码
+    private static final int HANDLER_DEVICE_TOKEN_CODE = 0x14; //用户友盟设备ID请求成功返回码
 
     @Nullable
     @Override
@@ -394,9 +396,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      * @param sessionUuid
      */
     private void requestAccountId(String sessionUuid) {
-        String accountIDUrl = Constant.ENTRANCE_PREFIX + "getAccountIdBySessionUuid.json?sessionUuid=" + sessionUuid;
+        String url = Constant.ENTRANCE_PREFIX + "getAccountIdBySessionUuid.json?sessionUuid=" + sessionUuid;
 
-        OkHttpClientManager.getAsyn(accountIDUrl, new LoginResultCallback<String>(2) {
+        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
                 //请求异常
@@ -423,6 +425,40 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                     Message message = Message.obtain();
                     message.what = HANDLER_ACCOUNT_TYPE_SUCCESS_CODE;
+                    handler.sendMessage(message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * 上传设备ID号
+     * @param sessionUuid 用户唯一标示
+     */
+    private void uploadDeviceToken(String sessionUuid) {
+        String deviceToken = UmengRegistrar.getRegistrationId(context);
+        String url = Constant.ENTRANCE_PREFIX_v1 + "insertOrUpdatePhoneToken.json?sessionUuid=" + sessionUuid + "&deviceToken=" + deviceToken;
+        OkHttpClientManager.getAsyn(url, new LoginResultCallback<String>(2) {
+
+            @Override
+            public void onError(Request request, Exception e) {
+                common.showToast(context, "设备ID获取异常");
+            }
+
+            @Override
+            public void onResponse(String response) {
+                JSONObject jsonObject;
+                JSONArray jsonArray;
+                try {
+                    jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+                    if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        common.showToast(context, "设备ID上传失败");
+                    }
+                    Message message = Message.obtain();
+                    message.what = HANDLER_DEVICE_TOKEN_CODE;
                     handler.sendMessage(message);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -500,6 +536,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     requestAccountId(sessionUuid);
                     break;
                 case HANDLER_ACCOUNT_TYPE_SUCCESS_CODE: //账户ID请求返回成功
+                    initTransportServiceRoleType();
+                    //sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+                    //uploadDeviceToken(sessionUuid);
+                    break;
+                case HANDLER_DEVICE_TOKEN_CODE: //设备ID上传成功返回码
                     initTransportServiceRoleType();
                     break;
             }

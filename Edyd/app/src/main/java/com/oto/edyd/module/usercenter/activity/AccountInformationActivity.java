@@ -19,7 +19,6 @@ import com.oto.edyd.utils.Constant;
  */
 public class AccountInformationActivity extends FragmentActivity{
     private FragmentManager eFragmentManager; //布局管理器
-    //private Context context; //想下文对象
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,6 @@ public class AccountInformationActivity extends FragmentActivity{
      */
     private void initFields() {
         eFragmentManager = getSupportFragmentManager();
-        //context = AccountInformationActivity.this;
     }
 
     /**
