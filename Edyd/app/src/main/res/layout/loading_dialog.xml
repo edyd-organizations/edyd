@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:minHeight="60dp"
-    android:minWidth="180dp"
+    android:minWidth="60dp"
     android:gravity="center"
     android:padding="10dp">
     <ImageView
@@ -14,10 +14,10 @@
         android:layout_height="wrap_content"
         android:src="@mipmap/ic_loading_2"
         />
-    <TextView
+<!--    <TextView
         android:id="@+id/tipTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10sp"
-        android:text="数据加载中……" />
+        android:text="数据加载中……" />-->
 </LinearLayout>

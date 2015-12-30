@@ -102,7 +102,7 @@ public class CarrierHisOrderActivity extends Activity{
     private void initView() {
 
         title= (TextView) findViewById(R.id.tv_order_list_title);
-        title.setText("承运商历史订单");
+        title.setText("历史订单");
 
         //分页滚动监听
         lv_his_order.setOnScrollListener(new AbsListView.OnScrollListener() {
