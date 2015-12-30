@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -57,6 +59,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private EditText etRegisterPassword; //注册密码
     private Button btRegister; //注册按钮
     private Button btAlreadyRegister; //已经注册
+    private ImageView visiblePassword; //密码是否可见
     private VerificationCodeProgressAsyncTask asyncTask; //异步消息对象
     private boolean asyncIsOver = true; //异步线程是否结束
     private CusProgressDialog transitionDialog; //过度对话框
@@ -106,6 +109,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         etRegisterVerificationCode = (EditText) view.findViewById(R.id.register_verification_code);
         etRegisterPassword = (EditText) view.findViewById(R.id.register_user_password);
         btRegister = (Button) view.findViewById(R.id.bt_register);
+        visiblePassword = (ImageView) view.findViewById(R.id.visible_password);
         btAlreadyRegister = (Button) view.findViewById(R.id.bt_already_register);
         eFragmentManager = getActivity().getSupportFragmentManager();
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
@@ -121,6 +125,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         btObtainVerificationCode.setOnClickListener(this);
         btRegister.setOnClickListener(this);
         btAlreadyRegister.setOnClickListener(this);
+        visiblePassword.setOnClickListener(this);
 
         //手机号码输入框注册监听器
         etRegisterPhoneNumber.addTextChangedListener(new TextWatcher() {
@@ -278,6 +283,18 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.bt_already_register: //返回登录页面
                 eFragmentManager.popBackStack();
+                break;
+            case R.id.visible_password:
+                int isVisible = etRegisterPassword.getInputType();
+                if(isVisible == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) { //当前密码显示
+                    etRegisterPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); //设置隐藏
+                    etRegisterPassword.setSelection(etRegisterPassword.length()); //设置光标位置
+                    visiblePassword.setImageResource(R.mipmap.cipher_text);
+                } else { //当前密码隐藏
+                    etRegisterPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); //设置显示
+                    etRegisterPassword.setSelection(etRegisterPassword.length());
+                    visiblePassword.setImageResource(R.mipmap.plain_text);
+                }
                 break;
             default:
                 break;

@@ -87,6 +87,10 @@ public class Constant {
     public final static int SHIPPER_ROLE_ID = 2; //发货方
     public final static int UNDERTAKER_ROLE_ID = 3; //承运方
 
+    //消息类型
+    public final static String DRIVER_MESSAGE_TYPE = "1"; //司机
+    public final static String ENTERPRISE_MESSAGE_TYPE = "2"; //企业
+
 
     //认证类别
     public final static String NOT_AUTHENTICATED = "未认证"; //0

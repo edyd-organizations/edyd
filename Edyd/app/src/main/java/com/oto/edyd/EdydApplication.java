@@ -157,10 +157,17 @@ public class EdydApplication extends Application {
 			@Override
 			public void openActivity(Context context, UMessage uMessage) {
 				super.openActivity(context, uMessage);
-				Intent intent = new Intent(context, OrderOperateActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra("order",0);
-				startActivity(intent);
+				Map<String, String> map = uMessage.extra;
+				String messageType = map.get("messageType");
+				if(messageType.equals(Constant.DRIVER_MESSAGE_TYPE)) { //司机消息
+					Intent intent = new Intent(context, OrderOperateActivity.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.putExtra("order",0);
+					startActivity(intent);
+				} else if(messageType.equals(Constant.ENTERPRISE_MESSAGE_TYPE)) {
+					common.showToast(getApplicationContext(), "企业消息");
+				}
+
 			}
 		};
 		mPushAgent.setMessageHandler(messageHandler);

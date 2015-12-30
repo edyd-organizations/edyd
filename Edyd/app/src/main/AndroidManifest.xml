@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.oto.edyd">
 
     <!-- 支持多屏 -->
@@ -50,6 +51,9 @@
     <uses-permission android:name="android.permission.BROADCAST_PACKAGE_INSTALL" />
     <uses-permission android:name="android.permission.BROADCAST_PACKAGE_REPLACED" />
     <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+
+    <!-- 模块配置 -->
+    <uses-sdk tools:overrideLibrary="com.edyd.entity"/>
 
     <!-- 聚合官网 -->
     <application
@@ -419,13 +423,6 @@
             android:name=".module.usercenter.activity.ForgetPasswordActivity"
             android:screenOrientation="portrait" />
 
-        <receiver android:name=".components.SmsReceiver">
-            <intent-filter android:priority="800">
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-            </intent-filter>
-        </receiver>
-
-
         <activity
             android:name=".Chooseprovince"
             android:screenOrientation="portrait" />
@@ -470,8 +467,7 @@
             android:name=".BoxGPSActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".common.message.DriverMessageActivity"
-            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".DriverGPSActivity"
             android:screenOrientation="portrait"></activity>
