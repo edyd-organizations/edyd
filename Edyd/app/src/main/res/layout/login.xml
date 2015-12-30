@@ -97,20 +97,31 @@
             android:paddingRight="15dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp">
-            <EditText
-                android:id="@+id/login_password"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/ic_login_password"
-                android:hint="密码"
-                android:background="@null"
-                android:textSize="16dp"
-                android:drawablePadding="10dp"
-                android:textColorHint="#CCCCCC"
-                android:layout_marginTop="10dp"
-                android:maxLength="30"
-                android:inputType="textPassword" />
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/login_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_login_password"
+                    android:hint="密码"
+                    android:background="@null"
+                    android:textSize="16dp"
+                    android:drawablePadding="10dp"
+                    android:textColorHint="#CCCCCC"
+                    android:maxLength="30"
+                    android:inputType="textPassword" />
+                <ImageView
+                    android:id="@+id/visible_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/cipher_text"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 

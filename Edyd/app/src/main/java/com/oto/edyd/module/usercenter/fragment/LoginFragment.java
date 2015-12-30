@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -55,6 +56,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private TextView tvForgetPassword; //忘记密码
     private LinearLayout linearLayoutRemember;//点击记住密码
     private ImageView ivRememberPassword; //记住密码显示图片
+    private ImageView visiblePassword; //密码是否可见
     private CusProgressDialog transitionDialog; //页面切换过度
     private Context context; //上下文对象
     private Common common; //share对象
@@ -95,6 +97,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         btLogin = (Button) view.findViewById(R.id.bt_login);
         tvForgetPassword = (TextView) view.findViewById(R.id.forget_password);
         ivRememberPassword = (ImageView) view.findViewById(R.id.remember_password);
+        visiblePassword = (ImageView) view.findViewById(R.id.visible_password);
         linearLayoutRemember = (LinearLayout) view.findViewById(R.id.ll_remember);
         context = getActivity();
         common = new Common(context.getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
@@ -110,6 +113,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         linearLayoutRemember.setOnClickListener(this);
         tvRegister.setOnClickListener(this);
         tvForgetPassword.setOnClickListener(this);
+        visiblePassword.setOnClickListener(this);
         etUserName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -212,6 +216,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 } else {
                     ivRememberPassword.setImageResource(R.mipmap.ic_agree_protocol);
                     ivRememberPassword.setTag(R.id.remember_password, true);
+                }
+                break;
+            case R.id.visible_password:
+                int isVisible = etPassword.getInputType();
+                if(isVisible == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) { //当前密码显示
+                    etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); //设置隐藏
+                    etPassword.setSelection(etPassword.length()); //设置光标位置
+                    visiblePassword.setImageResource(R.mipmap.cipher_text);
+                } else { //当前密码隐藏
+                    etPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); //设置显示
+                    etPassword.setSelection(etPassword.length());
+                    visiblePassword.setImageResource(R.mipmap.plain_text);
                 }
                 break;
             default:
@@ -537,8 +553,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     break;
                 case HANDLER_ACCOUNT_TYPE_SUCCESS_CODE: //账户ID请求返回成功
                     initTransportServiceRoleType();
-                    //sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
-                    //uploadDeviceToken(sessionUuid);
+                    sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+                    uploadDeviceToken(sessionUuid);
                     break;
                 case HANDLER_DEVICE_TOKEN_CODE: //设备ID上传成功返回码
                     initTransportServiceRoleType();
