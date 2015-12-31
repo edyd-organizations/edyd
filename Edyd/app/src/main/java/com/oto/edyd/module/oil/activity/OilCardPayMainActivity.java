@@ -219,7 +219,7 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
         String orgCode = common.getStringByKey(Constant.ORG_CODE); //组织ID
         String accountId = common.getStringByKey(Constant.ACCOUNT_ID); //账户ID
 
-        String url = Constant.ENTRANCE_PREFIX_v1 + "iqueryOilShengByEnterpriseInfo.json?sessionUuid=" + sessionUuid + "&enterpriseId=" + enterpriseId +
+        String url = Constant.ENTRANCE_PREFIX_v1 + "isShengAccountValidate.json?sessionUuid=" + sessionUuid + "&enterpriseId=" + enterpriseId +
                 "&accountId=" + accountId;
         if(!TextUtils.isEmpty(orgCode)) {
             url = url + "&OrgCode=" + orgCode;
@@ -242,8 +242,9 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
                         common.showToast(context, "验证账户请求错误");
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
+                    boolean isExist = jsonArray.getBoolean(0);
                     Message message = Message.obtain();
-                    if(jsonArray.length() > 0) {
+                    if(isExist) {
                         message.what = HANDLER_CONFIRM_ACCOUNT_SUCCESS;
                         handler.sendMessage(message);
                     } else {
