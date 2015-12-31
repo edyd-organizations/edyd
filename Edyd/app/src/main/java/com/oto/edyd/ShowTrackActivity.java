@@ -67,7 +67,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
             switch (msg.what) {
                 case 0x12:
                     loadingDialog.getLoadingDialog().dismiss();
-                    if (tlb.getReceiverLat() != 0 && tlb.getSenderLat() != 0 && tlb.getReceiverLng() != 0 && tlb.getSenderLng() != 0) {
+                    if (tlb.getReceiverLat() > 0 && tlb.getSenderLat() > 0 && tlb.getReceiverLng() > 0 && tlb.getSenderLng() > 0) {
 
                         //发货人图标
                         LatLng senderPoint = new LatLng(tlb.getSenderLat(), tlb.getSenderLng());
