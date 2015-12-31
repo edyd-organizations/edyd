@@ -322,12 +322,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
         CarInfo carInfo = (CarInfo) marker.getObject();
         TextView titleUi = ((TextView) infoWindow.findViewById(R.id.title));
         if (title != null) {
-            SpannableString titleText = new SpannableString(title);
-            titleText.setSpan(new ForegroundColorSpan(Color.BLUE), 0,
-                    titleText.length(), 0);
-            titleUi.setTextSize(12);
-            titleUi.setText(titleText);
-
+            titleUi.setText(title);
         } else {
             titleUi.setText("");
         }
