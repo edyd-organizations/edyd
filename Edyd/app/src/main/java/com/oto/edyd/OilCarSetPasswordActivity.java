@@ -215,12 +215,14 @@ public class OilCarSetPasswordActivity extends Activity implements View.OnClickL
         String surePassword = edSurepassword.getText().toString().trim();
         String autoCode = edAutoCode.getText().toString().trim();
         String mobilePhone = common.getStringByKey(Constant.USER_NAME);
-        if (!(password.length()>=6&&password.length()<=20)){
-            Common.showToast(this,"密码设置在6-20位");
-            return;
-        }
         if(password != null && password.equals("")){
            Common.showToast(this,"密码不能为空");
+            return;
+        }
+        Pattern pattern = Pattern.compile("^(?!\\D+$)(?![^a-zA-Z]+$)\\S{6,20}$"); //字母数字
+        Matcher matcher = pattern.matcher(password);
+        if(!matcher.matches()) {
+            Common.showToast(this, "密码必须包含数字、字母、特殊字符且长度为6-20");
             return;
         }
         if(surePassword != null && surePassword.equals("")){
