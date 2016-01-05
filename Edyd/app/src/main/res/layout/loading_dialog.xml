@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dialog_view"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
     android:orientation="horizontal"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:minHeight="60dp"
-    android:minWidth="60dp"
-    android:gravity="center"
-    android:padding="10dp">
+    android:background="@color/gray_5d5d5d">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/loading_cir_bg"
+        android:gravity="center"
+        android:padding="10dp">
+
     <ImageView
         android:id="@+id/img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_loading_2"
-        />
-<!--    <TextView
-        android:id="@+id/tipTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10sp"
-        android:text="数据加载中……" />-->
+        android:src="@mipmap/ic_loading_2" />
+    </LinearLayout>
+
 </LinearLayout>

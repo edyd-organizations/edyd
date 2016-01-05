@@ -1,7 +1,6 @@
 package com.oto.edyd;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -24,6 +23,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
@@ -45,6 +45,7 @@ import com.amap.api.services.help.Tip;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.oto.edyd.utils.Common;
+import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.TTSController;
 
 import java.util.ArrayList;
@@ -133,9 +134,9 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
             if (location != null && location.getAMapException().getErrorCode() == 0) {
                 mIsGetGPS = true;
                 mStartPoint = new NaviLatLng(location.getLatitude(), location.getLongitude());
-                mGPSMarker.setPosition(new LatLng(
-                        mStartPoint.getLatitude(), mStartPoint
-                        .getLongitude()));
+//                mGPSMarker.setPosition(new LatLng(
+//                        mStartPoint.getLatitude(), mStartPoint
+//                        .getLongitude()));
                 mStartPoints.clear();
                 mStartPoints.add(mStartPoint);
 
@@ -155,6 +156,7 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
     private AMapNaviListener mAmapNaviListener;
 
     private boolean mIsCalculateRouteSuccess = false;
+    private CusProgressDialog loadingDialog;
 
 
     @Override
@@ -164,6 +166,45 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
         initField();
         initView(savedInstanceState);
         initMapAndNavi();
+        firstOrientation();
+    }
+
+    private void firstOrientation() {
+
+        mLocationManger = LocationManagerProxy.getInstance(this);
+        //进行一次定位
+        mLocationManger.requestLocationData(LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
+                    @Override
+                    public void onLocationChanged(AMapLocation location) {
+                        dissmissProgressDialog();
+                        if (location != null && location.getAMapException().getErrorCode() == 0) {
+                            NaviLatLng point = new NaviLatLng(location.getLatitude(), location.getLongitude());
+                            mGPSMarker.setPosition(new LatLng(point.getLatitude(), point.getLongitude()));
+                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            mAmap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+                        } else {
+                            Common.showToast(mActivity, "定位出现异常");
+                        }
+                    }
+
+                    @Override
+                    public void onLocationChanged(Location location) {
+                    }
+
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String provider) {
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String provider) {
+                    }
+                }
+        );
+        showProgressDialog();// 显示进度框
     }
 
     private void initField() {
@@ -321,7 +362,7 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
     private void startSearchQuery(int isStartEnd) {
         showProgressDialog();// 显示进度框
         currentPage = 0;
-        if (isStartEnd==IS_START) {
+        if (isStartEnd == IS_START) {
             // 第一个参数表示搜索字符串，第二个参数表示poi搜索类型，第三个参数表示poi搜索区域（空字符串代表全国）
             query = new PoiSearch.Query(startPointStr, "", "厦门");
         } else {
@@ -339,14 +380,13 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
     /**
      * 显示进度框
      */
+
     private void showProgressDialog() {
-        if (mProgressDialog == null)
-            mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setIndeterminate(false);
-        mProgressDialog.setCancelable(true);
-        mProgressDialog.setMessage("线路规划中");
-        mProgressDialog.show();
+        if (loadingDialog == null) {
+            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
+        }
+        loadingDialog.getLoadingDialog().show();
+
     }
 
     /**
@@ -426,39 +466,11 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
 
     }
 
-    private ProgressDialog mProgressDialog;// 路径规划过程显示状态
-    private ProgressDialog mGPSProgressDialog;// GPS过程显示状态
-
-    /**
-     * 隐藏进度框
-     */
-    private void dissmissGPSProgressDialog() {
-        if (mGPSProgressDialog != null) {
-            mGPSProgressDialog.dismiss();
-        }
-    }
-
-    /**
-     * 显示GPS进度框
-     */
-    private void showGPSProgressDialog() {
-        if (mGPSProgressDialog == null)
-            mGPSProgressDialog = new ProgressDialog(this);
-        mGPSProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mGPSProgressDialog.setIndeterminate(false);
-        mGPSProgressDialog.setCancelable(true);
-        mGPSProgressDialog.setMessage("定位中...");
-        mGPSProgressDialog.show();
-    }
-
-
     /**
      * 隐藏进度框
      */
     private void dissmissProgressDialog() {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-        }
+        loadingDialog.getLoadingDialog().dismiss();
     }
 
     Handler handler = new Handler() {
@@ -468,7 +480,7 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
             switch (msg.what) {
                 case 1:
                     // 驾车导航
-                    isSecond=false;
+                    isSecond = false;
                     int driverIndex = calculateDriverRoute();
                     if (driverIndex == CALCULATEERROR) {
                         Common.showToast(mActivity, "路线计算失败,检查参数情况");
@@ -481,7 +493,7 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
 //                    showProgressDialog();
                     break;
                 case 2:
-                    isSecond=true;
+                    isSecond = true;
                     startSearchQuery(IS_END);
                     break;
             }
@@ -490,7 +502,7 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
 
     @Override
     public void onPoiSearched(PoiResult result, int rCode) {
-//        dissmissProgressDialog();// 隐藏对话框
+
         if (rCode == 0) {
             if (result != null && result.getQuery() != null) {// 搜索poi的结果
                 if (result.getQuery().equals(query)) {// 是否是同一条
@@ -503,27 +515,27 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
                     if (poiItems != null && poiItems.size() > 0) {
                         PoiItem location = poiItems.get(0);
                         //判断通过是否是用自己的位置当起点
-                        if (mStartPointMethod==POI_SEARCH_POSITION) {
+                        if (mStartPointMethod == POI_SEARCH_POSITION) {
                             //不是用自己的位置当起点
-                                if(isSecond){
-                                    mEndPoint = new NaviLatLng(location.getLatLonPoint().getLatitude(),
-                                            location.getLatLonPoint().getLongitude());
-                                    mEndPoints.clear();
-                                    mEndPoints.add(mEndPoint);
-                                    Message msg = Message.obtain();
-                                    msg.what = 1;
-                                    handler.sendMessage(msg);
+                            if (isSecond) {
+                                mEndPoint = new NaviLatLng(location.getLatLonPoint().getLatitude(),
+                                        location.getLatLonPoint().getLongitude());
+                                mEndPoints.clear();
+                                mEndPoints.add(mEndPoint);
+                                Message msg = Message.obtain();
+                                msg.what = 1;
+                                handler.sendMessage(msg);
 
-                                }else {
-                                    mStartPoint = new NaviLatLng(location.getLatLonPoint().getLatitude(),
-                                            location.getLatLonPoint().getLongitude());
-                                    mStartPoints.clear();
-                                    mStartPoints.add(mStartPoint);
-                                    Message msg = Message.obtain();
-                                    msg.what = 2;
-                                    handler.sendMessage(msg);
-                                }
-                        }else {
+                            } else {
+                                mStartPoint = new NaviLatLng(location.getLatLonPoint().getLatitude(),
+                                        location.getLatLonPoint().getLongitude());
+                                mStartPoints.clear();
+                                mStartPoints.add(mStartPoint);
+                                Message msg = Message.obtain();
+                                msg.what = 2;
+                                handler.sendMessage(msg);
+                            }
+                        } else {
                             //用自己的位置当起点
                             mEndPoint = new NaviLatLng(location.getLatLonPoint().getLatitude(),
                                     location.getLatLonPoint().getLongitude());
@@ -683,6 +695,7 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
         mMapView.onDestroy();
         // 删除监听
         mAmapNavi.destroy();
+        mLocationManger.destroy();
     }
 
     @Override
