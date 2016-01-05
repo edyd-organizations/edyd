@@ -134,9 +134,9 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
             if (location != null && location.getAMapException().getErrorCode() == 0) {
                 mIsGetGPS = true;
                 mStartPoint = new NaviLatLng(location.getLatitude(), location.getLongitude());
-                mGPSMarker.setPosition(new LatLng(
-                        mStartPoint.getLatitude(), mStartPoint
-                        .getLongitude()));
+//                mGPSMarker.setPosition(new LatLng(
+//                        mStartPoint.getLatitude(), mStartPoint
+//                        .getLongitude()));
                 mStartPoints.clear();
                 mStartPoints.add(mStartPoint);
 
@@ -166,7 +166,7 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
         initField();
         initView(savedInstanceState);
         initMapAndNavi();
-//        firstOrientation();
+        firstOrientation();
     }
 
     private void firstOrientation() {
@@ -186,14 +186,22 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
                             Common.showToast(mActivity, "定位出现异常");
                         }
                     }
+
                     @Override
-                    public void onLocationChanged(Location location) {}
+                    public void onLocationChanged(Location location) {
+                    }
+
                     @Override
-                    public void onStatusChanged(String provider, int status, Bundle extras) {}
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+                    }
+
                     @Override
-                    public void onProviderEnabled(String provider) {}
+                    public void onProviderEnabled(String provider) {
+                    }
+
                     @Override
-                    public void onProviderDisabled(String provider) {}
+                    public void onProviderDisabled(String provider) {
+                    }
                 }
         );
         showProgressDialog();// 显示进度框
@@ -374,8 +382,11 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
      */
 
     private void showProgressDialog() {
-        loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
+        if (loadingDialog == null) {
+            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
+        }
         loadingDialog.getLoadingDialog().show();
+
     }
 
     /**
@@ -491,6 +502,7 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
 
     @Override
     public void onPoiSearched(PoiResult result, int rCode) {
+
         if (rCode == 0) {
             if (result != null && result.getQuery() != null) {// 搜索poi的结果
                 if (result.getQuery().equals(query)) {// 是否是同一条
