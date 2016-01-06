@@ -88,9 +88,21 @@ public class Constant {
     public final static int UNDERTAKER_ROLE_ID = 3; //承运方
 
     //消息类型
-    public final static String DRIVER_MESSAGE_TYPE = "1"; //司机
-    public final static String ENTERPRISE_MESSAGE_TYPE = "2"; //企业
+    public final static String DRIVER_MESSAGE_TYPE = "1"; //司机待执行订单
+    public final static String ENTERPRISE_MESSAGE_TYPE = "2"; //企业消息
 
+    //司机订单执行状态
+    public final static String WAIT_EXECUTE_STATUS = "0"; //待执行订单
+    public final static String EXECUTING_STATUS = "1"; //执行订单
+
+    //设备类型 1-Android设备；2-iOS设备
+    public final static String DEVICE_TYPE = "1"; //Android设备
+
+    //加载次序
+    public final static int FIRST_LOAD = 1; //首次加载
+    public final static int SECOND_LOAD = 2; //第二次加载
+    public final static int THIRD_LOAD = 3; //第三次加载
+    public final static int FOUR_LOAD = 4; //第四次加载
 
     //认证类别
     public final static String NOT_AUTHENTICATED = "未认证"; //0

@@ -18,6 +18,7 @@ import android.util.Log;
 import com.android.http.RequestManager;
 import com.android.volley.toolbox.ImageLoader;
 import com.oto.edyd.lib.imageindicator.network.NetworkImageCache;
+import com.oto.edyd.module.common.activity.NoticeActivity;
 import com.oto.edyd.service.TimerService;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -159,13 +160,16 @@ public class EdydApplication extends Application {
 				super.openActivity(context, uMessage);
 				Map<String, String> map = uMessage.extra;
 				String messageType = map.get("messageType");
+				Intent intent;
 				if(messageType.equals(Constant.DRIVER_MESSAGE_TYPE)) { //司机消息
-					Intent intent = new Intent(context, OrderOperateActivity.class);
+					intent = new Intent(context, OrderOperateActivity.class);
 					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.putExtra("order",0);
 					startActivity(intent);
 				} else if(messageType.equals(Constant.ENTERPRISE_MESSAGE_TYPE)) {
-					common.showToast(getApplicationContext(), "企业消息");
+					intent = new Intent(context, NoticeActivity.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(intent);
 				}
 
 			}
