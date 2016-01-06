@@ -24,6 +24,9 @@ public class CusProgressDialog {
     public CusProgressDialog(Context context, String msg) {
         this.loadingDialog = createLoadingDialog(context, msg);
     }
+    public CusProgressDialog(Context context) {
+        this.loadingDialog = createLoadingDialog(context, "");
+    }
 
     public Dialog createLoadingDialog(Context context, String msg) {
         LayoutInflater inflater = LayoutInflater.from(context);

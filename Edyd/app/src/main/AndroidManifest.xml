@@ -64,15 +64,13 @@
         android:theme="@style/AppTheme">
         >
         <!-- 高德地图 正式地址-->
-         <meta-data
+         <!--<meta-data
          android:name="com.amap.api.v2.apikey"
-         android:value="391bb51068ef790c94b3f93fe9852186" />
+         android:value="391bb51068ef790c94b3f93fe9852186" />-->
 
-        <!--
             <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="b0da2264df3bf64e1b5b9143dff0b427" />
-        -->
 
         <!--<meta-data
             android:name="com.amap.api.v2.apikey"
@@ -484,6 +482,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".module.common.activity.NoticeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".module.common.activity.NoticeDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".module.tts.activity.DriverWaitExecuteOrderActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

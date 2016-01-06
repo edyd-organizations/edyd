@@ -455,7 +455,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      */
     private void uploadDeviceToken(String sessionUuid) {
         String deviceToken = UmengRegistrar.getRegistrationId(context);
-        String url = Constant.ENTRANCE_PREFIX_v1 + "insertOrUpdatePhoneToken.json?sessionUuid=" + sessionUuid + "&deviceToken=" + deviceToken;
+        String url = Constant.ENTRANCE_PREFIX_v1 + "insertOrUpdatePhoneToken.json?sessionUuid=" + sessionUuid + "&deviceToken=" + deviceToken + "&phoneType=" + Constant.DEVICE_TYPE;
         OkHttpClientManager.getAsyn(url, new LoginResultCallback<String>(2) {
 
             @Override
