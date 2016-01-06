@@ -196,7 +196,6 @@ public class BoxRimPark extends Activity  implements PoiSearch.OnPoiSearchListen
         super.onResume();
         mMapView.onResume();
         // 以上两句必须重写
-
     }
 
     @Override
@@ -215,12 +214,9 @@ public class BoxRimPark extends Activity  implements PoiSearch.OnPoiSearchListen
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             finish();
-
         }
         return super.onKeyDown(keyCode, event);
     }
-
 }

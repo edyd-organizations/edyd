@@ -63,17 +63,16 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
     private boolean isSecond = false;//是否是第二次查询
 
     // --------------View基本控件---------------------
-    private ImageView iv_reverse;
-    private AutoCompleteTextView et_mStartPoint;// 起点输入
-    private AutoCompleteTextView et_mEndPoint;// 终点输入
-    private TextView tv_route;// 路径规划
-    private MapView mMapView;// 地图控件
-    private TextView tv_navi;// 导航按钮
-    private Context mActivity;
 
+    private ImageView iv_reverse;
+    private AutoCompleteTextView et_mStartPoint; // 起点输入
+    private AutoCompleteTextView et_mEndPoint; // 终点输入
+    private TextView tv_route; // 路径规划
+    private MapView mMapView; // 地图控件
+    private TextView tv_navi; // 导航按钮
+    private Context mActivity;
     // 规划线路
     private RouteOverLay mRouteOverLay;
-
     // 地图和导航核心逻辑类
     private AMap mAmap;
     private AMapNavi mAmapNavi;
@@ -143,7 +142,8 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
                 calculateRoute();
 
             } else {
-                Common.showToast(mActivity, "定位出现异常");
+                Common.showToastlong(mActivity, "定位异常,规划路径失败");
+                dissmissProgressDialog();
             }
         }
     };
@@ -166,7 +166,7 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
         initField();
         initView(savedInstanceState);
         initMapAndNavi();
-        firstOrientation();
+//        firstOrientation();
     }
 
     private void firstOrientation() {
@@ -183,7 +183,8 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
                             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                             mAmap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
                         } else {
-                            Common.showToast(mActivity, "定位出现异常");
+                            Common.showToastlong(mActivity, "定位出现异常");
+                            dissmissProgressDialog();
                         }
                     }
 
@@ -331,7 +332,10 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
         //起终点字符串
         startPointStr = et_mStartPoint.getText().toString().trim();
         endPointStr = et_mEndPoint.getText().toString().trim();
-        if (!TextUtils.isEmpty(startPointStr)) {
+        if (TextUtils.isEmpty(startPointStr)) {
+            //他是用自己的位置当起点的
+            mStartPointMethod = BY_MY_POSITION;
+        } else {
             mStartPointMethod = POI_SEARCH_POSITION;
         }
         if (TextUtils.isEmpty(endPointStr)) {
