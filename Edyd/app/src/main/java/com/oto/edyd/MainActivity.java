@@ -2,170 +2,91 @@ package com.oto.edyd;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.lib.slidingmenu.SlidingMenu;
 import com.oto.edyd.lib.slidingmenu.app.SlidingFragmentActivity;
-import com.oto.edyd.module.usercenter.activity.LoginActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
-import com.oto.edyd.widget.CustomViewPager;
 import com.umeng.message.PushAgent;
 import com.umeng.update.UmengUpdateAgent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+/**
+ * 功能：主Activity
+ * 文件名：com.oto.edyd.MainActivity.java
+ * 创建时间：2015/12/14
+ * 作者：yql
+ */
 public class MainActivity extends SlidingFragmentActivity implements View.OnClickListener {
-
-    private CustomViewPager customViewPager;
-    private FragmentPagerAdapter mAdapter; //ViewPager适配器
-    public EFragmentAdapter eAdapter;
-    private List<Fragment> listFragment = new ArrayList<Fragment>(); //存储Fragment
+    //----------基础View控件-------------
+    private TextView mainTitle; //标题
     private RadioButton home; //首页
     private RadioButton market; //商城
     private RadioButton vehicleServer; //车辆服务
     private RadioButton box; //百宝箱
-    public FragmentManager fragmentManager; //fragment管理器
 
-    private Common common;
-    //private Common globalCommon;
-    private Common fixedCommon;
-    private Context context;
-    private TextView mainTitle; //标题
-    private LeftSlidingFragment leftMenuFragment;
-    private long exitTime = 0; // 定义一个变量，来标识退出时间
+    //----------变量-------------
+    private MainViewHolder mainViewHolder; //用于主界面暂存Fragment
+    private FragmentManager fragmentManager; //fragment管理器
+    private long eOldTime; //记录点击退出时间
+    private Common common; //共享文件LOGIN_PREFERENCES_FILE
+    private Common fixedCommon; //共享文件FIXED_FILE
+    private LeftSlidingFragment leftMenuFragment; //侧滑Fragment
+    private final static int HANDLER_ACCOUNT_TYPE_CODE = 0x10; //账户类型切换码
+    private final static int HANDLER_SWITCH_DURATION = 500; //账户类型切换等待时间，单位：毫秒
 
-    boolean[] fragmentsUpdateFlag = { false, false, false, false };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE); //设置ActionBar无标题
- /*       //新手引导判断
-        SharedPreferences preferences = getSharedPreferences("isFirst", 0);
-        final boolean isNew = preferences.getBoolean("isfirst", true);
-        if (isNew) {
-            Intent intent = new Intent(this, WelcomeActivity.class);
-            startActivity(intent);
-            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-            finish();
-        } else {
-            setContentView(R.layout.activity_main);
-        }*/
         setContentView(R.layout.activity_main);
-        SharedPreferences preferences = getSharedPreferences("isFirst", 0);
-        SharedPreferences.Editor edit = preferences.edit();
-        edit.putBoolean("isfirst", false);
-        edit.commit();
-
-        initFields(); //初始化字段
-        initLeftMenu();//初始化侧滑栏
-        initViewPager(); //初始化ViewPager
-        initUmengMessage(); //初始化友盟消息推送服务
-
-        home.setOnClickListener(this);
-        market.setOnClickListener(this);
-        vehicleServer.setOnClickListener(this);
-        box.setOnClickListener(this);
-
-        UmengUpdateAgent.setUpdateOnlyWifi(false);
-        UmengUpdateAgent.update(this);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        init(); //数据初始化
     }
 
     /**
-     * 处理底部菜单点击事件,根据不同按钮刷新不同页面
-     *
-     * @param v
+     * 数据初始化
      */
-    @Override
-    public void onClick(View v) {
-        Intent intent;
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        switch (v.getId()) {
-            case R.id.main_home:
-                mainTitle.setText("首页");
-                customViewPager.setCurrentItem(0);
-                break;
-            case R.id.main_market:
-                mainTitle.setText("商城");
-                customViewPager.setCurrentItem(1);
-                //intent = new Intent(MainActivity.this, WaitBuild.class);
-                //startActivity(intent);
-                break;
-            case R.id.main_vehicle_server:
-                mainTitle.setText("运输服务");
-                if (!common.isLogin()) {
-                    Toast.makeText(getApplicationContext(), "用户未登录，请先登录", Toast.LENGTH_LONG).show();
-                    intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivityForResult(intent, 0x03);
-                    return;
-                }
-                customViewPager.setCurrentItem(2);
-                break;
-            case R.id.main_box:
-                mainTitle.setText("百宝箱");
-                customViewPager.setCurrentItem(3);
-                break;
-            default:
-                Toast.makeText(getApplicationContext(), "错误导航", Toast.LENGTH_SHORT);
-                break;
-        }
+    private void init() {
+        initFields(); //初始化字段
+        initListener(); //初始化监听器
+        initLeftMenu(); //初始化侧边栏
+        initMainIndex(); //初始化主界面
+        initUmengMessage(); //初始化友盟消息推送服务
     }
 
     /**
      * 初始化数据
      */
     private void initFields() {
-        home = (RadioButton) findViewById(R.id.main_home); //底部菜单-首页
-        market = (RadioButton) findViewById(R.id.main_market); //底部菜单-商城
-        vehicleServer = (RadioButton) findViewById(R.id.main_vehicle_server); //底部菜单-交通服务
-        box = (RadioButton) findViewById(R.id.main_box); //底部菜单-百宝箱
-        customViewPager = (CustomViewPager) findViewById(R.id.content_viewpager); //获取ViewPager实现多页面滑动
-        customViewPager.setIsScrollable(false); //设置不能滚动
-        fragmentManager = getSupportFragmentManager();
         mainTitle = (TextView) findViewById(R.id.main_title);
+        home = (RadioButton) findViewById(R.id.main_home);
+        market = (RadioButton) findViewById(R.id.main_market);
+        vehicleServer = (RadioButton) findViewById(R.id.main_vehicle_server);
+        box = (RadioButton) findViewById(R.id.main_box);
+        fragmentManager = getSupportFragmentManager();
+        mainViewHolder = new MainViewHolder();
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-        //globalCommon = new Common(getSharedPreferences(Constant.GLOBAL_FILE, Context.MODE_PRIVATE));
         fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
-        context = MainActivity.this;
     }
 
     /**
-     * 初始化友盟消息推送服务
+     * 初始化监听器
      */
-    private void initUmengMessage() {
-        //PushAgent mPushAgent = PushAgent.getInstance(context);
-        PushAgent mPushAgent = EdydApplication.mPushAgent;
-        mPushAgent.enable();
-        PushAgent.getInstance(MainActivity.this).onAppStart();
-        //String device_token = UmengRegistrar.getRegistrationId(context); //获取Device Token
+    private void initListener() {
+        home.setOnClickListener(this);
+        market.setOnClickListener(this);
+        vehicleServer.setOnClickListener(this);
+        box.setOnClickListener(this);
     }
 
     /**
@@ -198,67 +119,64 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 //        Fragment rightMenuFragment = new MenuRightFragment();
 //        getSupportFragmentManager().beginTransaction().replace(R.id.id_right_menu_frame, rightMenuFragment).commit();
     }
-
-    /**
-     * 初始化ViewPager
-     */
-    private void initViewPager() {
-        MainIndexFragment indexFragment = new MainIndexFragment();
-        MainMarketFragment marketFragment = new MainMarketFragment();
-
-        listFragment.add(indexFragment);
-        listFragment.add(marketFragment);
-        String txTransportId = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
-        if(!TextUtils.isEmpty(txTransportId)) {
-            int transportRoleId = Integer.valueOf(txTransportId);
-            switch (transportRoleId) {
-                case Constant.DRIVER_ROLE_ID: //司机
-                    TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
-                    listFragment.add(transportDriverFragment);
-                    break;
-                case Constant.SHIPPER_ROLE_ID: //发货方
-                    //listFragment.add(transportServiceFragment);
-                    TransportShipperFragment transportShipperFragment = new TransportShipperFragment();
-                    listFragment.add(transportShipperFragment);
-                    break;
-                case Constant.RECEIVER_ROLE_ID: //收货方
-                    //listFragment.add(transportServiceFragment);
-                    TransportReceiverFragment transportReceiverFragment = new TransportReceiverFragment();
-                    listFragment.add(transportReceiverFragment);
-                    break;
-                case Constant.UNDERTAKER_ROLE_ID: //承运方
-                    TransportUndertakeFragment transportServiceFragment = new TransportUndertakeFragment();
-                    listFragment.add(transportServiceFragment);
-                    break;
-            }
-        } else {
-            TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
-            listFragment.add(transportDriverFragment);
-        }
-
-        MainBoxFragment boxFragment = new MainBoxFragment();
-        listFragment.add(boxFragment);
-        eAdapter = new EFragmentAdapter(fragmentManager);
-        customViewPager.setAdapter(eAdapter);
-    }
-
     /**
      * 显示左侧菜单
-     *
      * @param view
      */
     public void showLeftMenu(View view) {
         getSlidingMenu().showMenu();
     }
 
+    /**
+     * 初始化主界面
+     */
+    private void initMainIndex() {
+        mainViewHolder.indexFragment = new MainIndexFragment();
+        fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.indexFragment).commit();
+    }
+
+    /**
+     * 初始化友盟消息推送服务
+     */
+    private void initUmengMessage() {
+        PushAgent mPushAgent = EdydApplication.mPushAgent;
+        mPushAgent.enable();
+        PushAgent.getInstance(MainActivity.this).onAppStart();
+        UmengUpdateAgent.setUpdateOnlyWifi(false);
+        UmengUpdateAgent.update(this);
+    }
+
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.main_home:
+                switchFooterMenu(1); //切换首页
+                break;
+            case R.id.main_market:
+                switchFooterMenu(2); //切换商城
+                break;
+            case R.id.main_vehicle_server:
+                switchFooterMenu(3); //切换运输服务
+                break;
+            case R.id.main_box:
+                mainTitle.setText("百宝箱");
+                switchFooterMenu(4); //切换百宝箱
+                break;
+        }
+    }
+
+    /**
+     * 暂存已经创建的Fragment
+     */
+    static class MainViewHolder {
+        MainIndexFragment indexFragment; //首页
+        MainMarketFragment marketFragment; //商城
+        Fragment transportFragment; //运输服务
+        MainBoxFragment boxFragment; //百宝箱
     }
 
     /**
      * 用于接收Activity返回数据
-     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -266,236 +184,76 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         String enterpriseName;
-        TransportUndertakeFragment transportServiceFragment;
         //登录返回
         if (resultCode == Constant.LOGIN_ACTIVITY_RETURN_CODE) {
-            String username = data.getExtras().getString("username");
-            leftMenuFragment.userAlias.setText(username);
-            leftMenuFragment.exit.setVisibility(View.VISIBLE);
-            leftMenuFragment.slidingBottomLine.setVisibility(View.VISIBLE);
-            //Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-            //String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
-            //if(enterpriseName != null) {
-            leftMenuFragment.accountType.setText("个人");
-            //}
-
-            leftMenuFragment.dataSets.clear();
-            for (int i = 0; i < leftMenuFragment.textResources.length; i++) {
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("list_image", leftMenuFragment.imageResources[i]);
-                map.put("list_text", leftMenuFragment.textResources[i]);
-                map.put("list_arrow", R.mipmap.right_arrow);
-                leftMenuFragment.dataSets.add(map);
+            String userName = data.getExtras().getString("username");
+            leftMenuFragment.adapterData(userName);
+            //返回首页
+            //判断首页是否已经缓存
+            if(mainViewHolder.indexFragment == null) {
+                //未缓存，创建新对象
+                mainViewHolder.indexFragment = new MainIndexFragment();
             }
-            leftMenuFragment.simpleAdapter.notifyDataSetChanged();
-            comeBackIndex();
-//            enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
-//            int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
-//            switch (transportRoleId) {
-//                case 0: //司机
-//                    //TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
-//                    TransportDriverFragment transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
-//                    transportDriverFragment.enterpriseName.setText(enterpriseName);
-//                    break;
-//                case 1: //发货方
-//                    //TransportShipperFragment transportShipperFragment = new TransportShipperFragment();
-//                    TransportShipperFragment transportShipperFragment = (TransportShipperFragment) listFragment.get(2);
-//                    transportShipperFragment.enterpriseName.setText(enterpriseName);
-//                    break;
-//                case 2: //收货方
-//                    //TransportReceiverFragment transportReceiverFragment = new TransportReceiverFragment();
-//                    TransportReceiverFragment transportReceiverFragment = (TransportReceiverFragment) listFragment.get(2);
-//                    transportReceiverFragment.enterpriseName.setText(enterpriseName);
-//                    break;
-//                case 3: //承运方
-//                    //TransportUndertakeFragment transportUndertakeFragment = new TransportUndertakeFragment();
-//                    TransportUndertakeFragment transportUndertakeFragment = (TransportUndertakeFragment) listFragment.get(2);
-//                    transportUndertakeFragment.enterpriseName.setText(enterpriseName);
-//                    break;
-//            }
+            fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.indexFragment).commitAllowingStateLoss();
+            home.setChecked(true);
         }
         //注册返回
         if (resultCode == Constant.REGISTER_ACTIVITY_RETURN_CODE) {
-            String username = data.getExtras().getString("username");
-            leftMenuFragment.userAlias.setText(username);
-            leftMenuFragment.accountType.setText("个人");
-            leftMenuFragment.exit.setVisibility(View.VISIBLE);
-            leftMenuFragment.slidingBottomLine.setVisibility(View.VISIBLE);
-            leftMenuFragment.dataSets.clear();
-            for (int i = 0; i < leftMenuFragment.textResources.length; i++) {
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("list_image", leftMenuFragment.imageResources[i]);
-                map.put("list_text", leftMenuFragment.textResources[i]);
-                map.put("list_arrow", R.mipmap.right_arrow);
-                leftMenuFragment.dataSets.add(map);
+            String userName = data.getExtras().getString("username");
+            leftMenuFragment.adapterData(userName);
+            //返回首页
+            //判断首页是否已经缓存
+            if(mainViewHolder.indexFragment == null) {
+                //未缓存，创建新对象
+                mainViewHolder.indexFragment = new MainIndexFragment();
             }
-            leftMenuFragment.simpleAdapter.notifyDataSetChanged();
-//            enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
-//            int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
-//            switch (transportRoleId) {
-//                case 0: //司机
-//                    //TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
-//                    TransportDriverFragment transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
-//                    transportDriverFragment.enterpriseName.setText(enterpriseName);
-//                    break;
-//                case 1: //发货方
-//                    //TransportShipperFragment transportShipperFragment = new TransportShipperFragment();
-//                    TransportShipperFragment transportShipperFragment = (TransportShipperFragment) listFragment.get(2);
-//                    transportShipperFragment.enterpriseName.setText(enterpriseName);
-//                    break;
-//                case 2: //收货方
-//                    //TransportReceiverFragment transportReceiverFragment = new TransportReceiverFragment();
-//                    TransportReceiverFragment transportReceiverFragment = (TransportReceiverFragment) listFragment.get(2);
-//                    transportReceiverFragment.enterpriseName.setText(enterpriseName);
-//                    break;
-//                case 3: //承运方
-//                    //TransportUndertakeFragment transportUndertakeFragment = new TransportUndertakeFragment();
-//                    TransportUndertakeFragment transportUndertakeFragment = (TransportUndertakeFragment) listFragment.get(2);
-//                    transportUndertakeFragment.enterpriseName.setText(enterpriseName);
-//                    break;
-//            }
+            fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.indexFragment).commitAllowingStateLoss();
+            home.setChecked(true);
         }
         //账户类型返回
         if (resultCode == Constant.ACCOUNT_TYPE_RESULT_CODE) {
+            int enterpriseId = Integer.valueOf(common.getStringByKey(Constant.ENTERPRISE_ID));
             enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
             String roleName = common.getStringByKey(Constant.ROLE_NAME);
-            Class tClass;
-            String className;
-            Fragment fragment;
-
             leftMenuFragment.accountType.setText(enterpriseName);
             leftMenuFragment.roleType.setText(roleName);
-            int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
-            switch (transportRoleId) {
-                case Constant.DRIVER_ROLE_ID: //司机
-//                    String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
-//                    TransportDriverFragment transportDriverFragment;
-//                    if(enterpriseId.equals("0")) {
-//                        transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
-//                        if(!transportDriverFragment.isAdded()) {
-//                            listFragment.set(2, transportDriverFragment);
-//                            fragmentsUpdateFlag[2] = true;
-//                            eAdapter.notifyDataSetChanged();
-//                        }
-//                    } else {
-//                        transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
-//                    }
-//
-//                    if (!(transportDriverFragment.enterpriseName == null)) {
-//                        transportDriverFragment.enterpriseName.setText(enterpriseName);
-//                    }
-                    TransportDriverFragment transportDriverFragment;
-                    fragment = listFragment.get(2);
-                    tClass = fragment.getClass();
-                    className = tClass.getSimpleName();
-                    if(!className.equals("TransportDriverFragment")) {
-                        transportDriverFragment = new TransportDriverFragment();
-                        listFragment.set(2, transportDriverFragment);
-                        fragmentsUpdateFlag[2] = true;
-                        eAdapter.notifyDataSetChanged();
-                        //transportDriverFragment.enterpriseName.setText(enterpriseName);
-                    } else {
-                        transportDriverFragment = (TransportDriverFragment) listFragment.get(2);
-                        if (!(transportDriverFragment.enterpriseName == null)) {
-                            transportDriverFragment.enterpriseName.setText(enterpriseName);
-                        }
-                    }
 
-                    break;
-                case Constant.SHIPPER_ROLE_ID: //发货方
-                    TransportShipperFragment transportShipperFragment;
-                    fragment = listFragment.get(2);
-                    tClass = fragment.getClass();
-                    className = tClass.getSimpleName();
-                    if(!className.equals("TransportShipperFragment")) {
-                        transportShipperFragment = new TransportShipperFragment();
-                        listFragment.set(2, transportShipperFragment);
-                        fragmentsUpdateFlag[2] = true;
-                        eAdapter.notifyDataSetChanged();
-                        //transportShipperFragment.enterpriseName.setText(enterpriseName);
-                    } else {
-                        transportShipperFragment = (TransportShipperFragment) listFragment.get(2);
-                        if (!(transportShipperFragment.enterpriseName == null)) {
-                            transportShipperFragment.enterpriseName.setText(enterpriseName);
-                        }
-                    }
-
-                    break;
-                case Constant.RECEIVER_ROLE_ID: //收货方
-                    TransportReceiverFragment transportReceiverFragment;
-                    fragment = listFragment.get(2);
-                    tClass = fragment.getClass();
-                    className = tClass.getSimpleName();
-                    if(!className.equals("TransportReceiverFragment")) {
-                        transportReceiverFragment = new TransportReceiverFragment();
-                        listFragment.set(2, transportReceiverFragment);
-                        fragmentsUpdateFlag[2] = true;
-                        eAdapter.notifyDataSetChanged();
-                        //transportReceiverFragment.enterpriseName.setText(enterpriseName);
-                    } else {
-                        transportReceiverFragment = (TransportReceiverFragment) listFragment.get(2);
-                        if (!(transportReceiverFragment.enterpriseName == null)) {
-                            transportReceiverFragment.enterpriseName.setText(enterpriseName);
-                        }
-                    }
-                    break;
-                case Constant.UNDERTAKER_ROLE_ID: //承运方
-                    TransportUndertakeFragment transportUndertakeFragment;
-                    fragment = (TransportUndertakeFragment) listFragment.get(2);
-                    tClass = fragment.getClass();
-                    className = tClass.getSimpleName();
-                    if(!className.equals("TransportUndertakeFragment")) {
-                        transportUndertakeFragment = new TransportUndertakeFragment();
-                        listFragment.set(2, transportUndertakeFragment);
-                        fragmentsUpdateFlag[2] = true;
-                        eAdapter.notifyDataSetChanged();
-                        //transportUndertakeFragment.enterpriseName.setText(enterpriseName);
-                    } else {
-                        transportUndertakeFragment = (TransportUndertakeFragment) listFragment.get(2);
-                        if (!(transportUndertakeFragment.enterpriseName == null)) {
-                            transportUndertakeFragment.enterpriseName.setText(enterpriseName);
-                        }
-                    }
-                    break;
+            //判断MainActivity状态栏是否切换在运输服务，如果是则要更新公司角色
+            if(vehicleServer.isChecked()) {
+                //判断是否为个人账户
+                if(enterpriseId ==0) {
+                    //个人，切换司机角色
+                    mainViewHolder.transportFragment = new TransportDriverFragment();
+                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
+                }
+                new Thread(new WaitSwitchThread()).start();
             }
         }
 
         //运输服务角色选择返回更新
         if (resultCode == Constant.TRANSPORT_ROLE_CODE) {
-            //transportServiceFragment = (TransportServiceFragment)listFragment.get(2);
             int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
             switch (transportRoleId) {
                 case Constant.DRIVER_ROLE_ID: //司机
-                    //transportServiceFragment.transportRole.setText("司机");
-                    TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
-                    listFragment.set(2, transportDriverFragment);
-                    fragmentsUpdateFlag[2] = true;
-                    eAdapter.notifyDataSetChanged();
+                    mainViewHolder.transportFragment = new TransportDriverFragment();
+                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
                     break;
                 case Constant.SHIPPER_ROLE_ID: //发货方
-                    //transportServiceFragment.transportRole.setText("发货方");
-                    TransportShipperFragment transportShipperFragment = new TransportShipperFragment();
-                    listFragment.set(2, transportShipperFragment);
-                    fragmentsUpdateFlag[2] = true;
-                    eAdapter.notifyDataSetChanged();
+                    mainViewHolder.transportFragment = new TransportShipperFragment();
+                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
                     break;
                 case Constant.RECEIVER_ROLE_ID: //收货方
-                    //transportServiceFragment.transportRole.setText("收货方");
-                    TransportReceiverFragment transportReceiverFragment = new TransportReceiverFragment();
-                    listFragment.set(2, transportReceiverFragment);
-                    fragmentsUpdateFlag[2] = true;
-                    eAdapter.notifyDataSetChanged();
+                    mainViewHolder.transportFragment = new TransportReceiverFragment();
+                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
                     break;
                 case Constant.UNDERTAKER_ROLE_ID: //承运方
-                    //transportServiceFragment.transportRole.setText("承运方");
-                    TransportUndertakeFragment transportUndertakeFragment = new TransportUndertakeFragment();
-                    listFragment.set(2, transportUndertakeFragment);
-                    fragmentsUpdateFlag[2] = true;
-                    eAdapter.notifyDataSetChanged();
+                    mainViewHolder.transportFragment = new TransportUndertakeFragment();
+                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
                     break;
             }
         }
     }
+
 
     /**
      * 按键监听
@@ -506,7 +264,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            exit();
+            inTwoSecondsDBClickExit();
             return false;
         }
         return super.onKeyDown(keyCode, event);
@@ -515,105 +273,125 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     /**
      * 2秒内连续按返回键退出程序
      */
-    public void exit() {
-        if ((System.currentTimeMillis() - exitTime) > 2000) {
+    public void inTwoSecondsDBClickExit() {
+        if ((System.currentTimeMillis() - eOldTime) > 2000) {
             Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
-            exitTime = System.currentTimeMillis();
+            eOldTime = System.currentTimeMillis();
         } else {
             finish();
         }
     }
-
     /**
-     * FragmentPager刷新Fragment
-     * FragmentPager适配器
-     */
-    class EFragmentAdapter extends FragmentPagerAdapter {
-        FragmentManager fm;
-
-        EFragmentAdapter(FragmentManager fm) {
-            super(fm);
-            this.fm = fm;
-        }
-
-        @Override
-        public int getCount() {
-            return listFragment.size();
-        }
-
-        /**
-         * 返回指定位置Fragment
-         * @param position
-         * @return
-         */
-        @Override
-        public Fragment getItem(int position) {
-            return listFragment.get(position);
-        }
-
-        /**
-         * 这里存在POSITION_UNCHANGED和POSITION_NONE这两种情况
-         * 1、返回POSITION_UNCHANGED表示item位置没有变换，会使用FragmentManager缓存中的Fragment,所以
-         * 即使调用了notifyDataSetChanged没有刷新数据的效果
-         * 2、返回POSITION_NONE表示item不存在，需要重新绘制，此时会从新加载数据源中的数据
-         * @param object
-         * @return
-         */
-        @Override
-        public int getItemPosition(Object object) {
-            return POSITION_NONE;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            //得到缓存的fragment
-            Fragment fragment = (Fragment) super.instantiateItem(container,
-                    position);
-            //得到tag，这点很重要
-            String fragmentTag = fragment.getTag();
-
-            if (fragmentsUpdateFlag[position]) {
-                //如果这个fragment需要更新
-                FragmentTransaction ft = fm.beginTransaction();
-                //移除旧的fragment
-                ft.remove(fragment);
-                //换成新的fragment
-                fragment = listFragment.get(position);
-                //添加新fragment时必须用前面获得的tag，这点很重要
-                ft.add(container.getId(), fragment, fragmentTag);
-                ft.attach(fragment);
-                ft.commitAllowingStateLoss();
-                ft = null;
-                //复位更新标志
-                fragmentsUpdateFlag[position] = false;
-            }
-
-            return fragment;
-        }
-    }
-
-    /**
-     * 返回首页
-     */
-    public void comeBackIndex() {
-        customViewPager.setCurrentItem(0);
-        home.setChecked(true);
-    }
-
-    /**
-     * 退出登录操作
+     * 退出操作
      */
     public void exitOperate() {
-        Fragment fragment = listFragment.get(2);
-        Class tClass = fragment.getClass();
-        String className = tClass.getSimpleName();
-        if(!className.equals("TransportDriverFragment")) {
-            TransportDriverFragment transportDriverFragment = new TransportDriverFragment();
-            listFragment.set(2, transportDriverFragment);
-            fragmentsUpdateFlag[2] = true;
-            eAdapter.notifyDataSetChanged();
+        mainTitle.setText("首页");
+        //判断首页是否已经缓存
+        if(mainViewHolder.indexFragment == null) {
+            //未缓存，创建新对象
+            mainViewHolder.indexFragment = new MainIndexFragment();
         }
-        customViewPager.setCurrentItem(0);
+        fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.indexFragment).commit();
         home.setChecked(true);
+    }
+
+    /**
+     * 等待切换
+     */
+    private class WaitSwitchThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(HANDLER_SWITCH_DURATION);
+                Message message = new Message();
+                message.what = HANDLER_ACCOUNT_TYPE_CODE;
+                handler.sendMessage(message);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
+            switch (msg.what) {
+                case HANDLER_ACCOUNT_TYPE_CODE:
+                    Class transportClass = mainViewHolder.transportFragment.getClass();
+                    String className = transportClass.getSimpleName();
+                    if(className.equals("TransportDriverFragment")) {
+                        ((TransportDriverFragment)mainViewHolder.transportFragment).enterpriseName.setText(enterpriseName);
+                    } else if(className.equals("TransportShipperFragment")) {
+                        ((TransportShipperFragment)mainViewHolder.transportFragment).enterpriseName.setText(enterpriseName);
+                    }
+                    else if(className.equals("TransportReceiverFragment")) {
+                        ((TransportReceiverFragment)mainViewHolder.transportFragment).enterpriseName.setText(enterpriseName);
+                    }
+                    else if(className.equals("TransportUndertakeFragment")) {
+                        ((TransportUndertakeFragment)mainViewHolder.transportFragment).enterpriseName.setText(enterpriseName);
+                    }
+                    break;
+            }
+        }
+    };
+
+    /**
+     * 切换底部菜单栏
+     * @param index 底部菜单所以
+     */
+    private void switchFooterMenu(int index) {
+        switch (index) {
+            case 1: //首页
+                mainTitle.setText("首页");
+                //判断首页是否已经缓存
+                if(mainViewHolder.indexFragment == null) {
+                    //未缓存，创建新对象
+                    mainViewHolder.indexFragment = new MainIndexFragment();
+                }
+                fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.indexFragment).commitAllowingStateLoss();
+                break;
+            case 2: //商城
+                mainTitle.setText("商城");
+                //判断商城是否已经缓存
+                if(mainViewHolder.marketFragment == null) {
+                    //未缓存，创建新对象
+                    mainViewHolder.marketFragment = new MainMarketFragment();
+                }
+                fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.marketFragment).commitAllowingStateLoss();
+                break;
+            case 3: //运输服务
+                mainTitle.setText("运输服务");
+                if (!common.isLogin()) {
+                    Toast.makeText(getApplicationContext(), "用户未登录，请先登录", Toast.LENGTH_LONG).show();
+//                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                    startActivityForResult(intent, 0x03);
+                    return;
+                }
+                int enterpriseId = Integer.valueOf(common.getStringByKey(Constant.ENTERPRISE_ID));
+                //判断是否为个人
+                if(enterpriseId == 0) {
+                    //个人只显示司机
+                    mainViewHolder.transportFragment = new TransportDriverFragment();
+                } else {
+                    //判断运输服务是否已经缓存
+                    if(mainViewHolder.transportFragment == null) {
+                        //未缓存，创建新对象
+                        mainViewHolder.transportFragment = new TransportDriverFragment();
+                    }
+                }
+
+                fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
+                break;
+            case 4: //百宝箱
+                mainTitle.setText("百宝箱");
+                //判断百宝箱是否已经缓存
+                if(mainViewHolder.boxFragment == null) {
+                    //未缓存，创建新对象
+                    mainViewHolder.boxFragment = new MainBoxFragment();
+                }
+                fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.boxFragment).commitAllowingStateLoss();
+                break;
+        }
     }
 }

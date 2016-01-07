@@ -9,45 +9,41 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/user_icon_8">
-    <ImageButton
-        android:id="@+id/actionbar_left_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
-        android:background="@mipmap/main_actionbar_show_right"
-        android:onClick="showLeftMenu"/>
+        <ImageButton
+            android:id="@+id/actionbar_left_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:background="@mipmap/main_actionbar_show_right"
+            android:onClick="showLeftMenu"/>
 
-    <TextView
-        android:id="@+id/main_title"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="首页"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
-    <!--右边菜单-->
-    <!--        <ImageButton
-                android:id="@+id/id_iv_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="3dp"
-                android:onClick="showRightMenu"
-                android:background="@mipmap/ic_person" />-->
+        <TextView
+            android:id="@+id/main_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="首页"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
     </RelativeLayout>
 
     <!--自定义ViewPager-->
-    <com.oto.edyd.widget.CustomViewPager
+    <!--<com.oto.edyd.widget.CustomViewPager
         android:id="@+id/content_viewpager"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@android:color/white">
-    </com.oto.edyd.widget.CustomViewPager>
+    </com.oto.edyd.widget.CustomViewPager>-->
+
+    <FrameLayout
+        android:id="@+id/main_contain"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <RadioGroup
         android:id="@+id/main_menu_group"

@@ -48,7 +48,7 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
      * 初始化数据
      */
     private void initFields(View view) {
-        this.fragmentManager = ((MainActivity)getActivity()).fragmentManager;
+        this.fragmentManager = getActivity().getSupportFragmentManager();
         selectTransportRole = (RelativeLayout) view.findViewById(R.id.select_transport_role);
         enterpriseName = (TextView) view.findViewById(R.id.enterprise_name);
         transportRole = (TextView) view.findViewById(R.id.transport_role);

@@ -31,26 +31,29 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by yql on 2015/8/25.
- * 主界面左侧滑
+ * 功能：主Activity侧滑界面
+ * 文件名：com.oto.edyd.LeftSlidingFragment.java
+ * 创建时间：2015/12/14
+ * 作者：yql
  */
 public class LeftSlidingFragment extends Fragment implements View.OnClickListener{
-
-    private View leftSlidingView; //取得左侧滑布局文件
+    //----------------基础View控件-----------------
+    private View leftSlidingView; //左侧滑布局文件
     private ListView leftSlidingListView; //左侧划ListView
     private LinearLayout userLogin; //用户登入
     public LinearLayout exit; //退出登入
-    public TextView userAlias;
+    public TextView userAlias; //用户名
     public TextView accountType; //账户类型
     public TextView roleType; //角色类型
     public View slidingBottomLine; //侧滑底部线条
+    //----------------变量-----------------
+    List<SlideInnerMessage> slideInnerMessageList = new ArrayList<SlideInnerMessage>(); //侧边栏ListView数据源
 
     //ListView资源
     public String[] textResources; //文字资源
     public int[] imageResources; //图片资源
     public int[] idResources; //ID资源
 
-    private boolean isRuning = true;
     private CusProgressDialog exitProgressDialog;
     private Intent intent;
     public SimpleAdapter simpleAdapter;
@@ -152,61 +155,6 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
         }
     }
 
-//    /**
-//     * 用于接收Activity返回数据
-//     * @param requestCode
-//     * @param resultCode
-//     * @param data
-//     */
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        //登录返回
-//        if(resultCode == Constant.LOGIN_ACTIVITY_RETURN_CODE){
-//            String username = data.getExtras().getString("username");
-//            userAlias.setText(username);
-//            exit.setVisibility(View.VISIBLE);
-//            slidingBottomLine.setVisibility(View.VISIBLE);
-//            //Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-//            //String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
-//            //if(enterpriseName != null) {
-//                accountType.setText("个人");
-//            //}
-//
-//            dataSets.clear();
-//            for(int i = 0; i < textResources.length; i++) {
-//                Map<String, Object> map = new HashMap<String, Object>();
-//                map.put("list_image", imageResources[i]);
-//                map.put("list_text", textResources[i]);
-//                map.put("list_arrow", R.mipmap.right_arrow);
-//                dataSets.add(map);
-//            }
-//            simpleAdapter.notifyDataSetChanged();
-//        }
-//        //注册返回
-//        if(resultCode == Constant.REGISTER_ACTIVITY_RETURN_CODE) {
-//            String username = data.getExtras().getString("username");
-//            userAlias.setText(username);
-//            accountType.setText("个人");
-//            exit.setVisibility(View.VISIBLE);
-//            slidingBottomLine.setVisibility(View.VISIBLE);
-//            dataSets.clear();
-//            for(int i = 0; i < textResources.length; i++) {
-//                Map<String, Object> map = new HashMap<String, Object>();
-//                map.put("list_image", imageResources[i]);
-//                map.put("list_text", textResources[i]);
-//                map.put("list_arrow", R.mipmap.right_arrow);
-//                dataSets.add(map);
-//            }
-//            simpleAdapter.notifyDataSetChanged();
-//        }
-//        //账户类型返回
-//        if(resultCode == Constant.ACCOUNT_TYPE_RESULT_CODE) {
-//            String accountTypeStr = data.getExtras().getString("account_type");
-//            accountType.setText(accountTypeStr);
-//
-//        }
-//    }
-
     /**
      * 初始化数据
      */
@@ -237,12 +185,6 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
     private class SlidingListItemOnClickListener implements AdapterView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            if(!isLogin()) {
-//                Toast.makeText(getActivity(), "用户未登录，请先登录", Toast.LENGTH_SHORT).show();
-//                //intent = new Intent(getActivity(), LoginActivity.class);
-//                //startActivity(intent);
-//                return;
-//            }
             TextView textView = (TextView) view.findViewById(R.id.list_text);
             String menuDes = textView.getText().toString();
             if(menuDes.equals("我的钱包")) {
@@ -265,25 +207,6 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                 intent = new Intent(getActivity(), SetUpActivity.class);
                 startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
             }
-//            switch (position) {
-//                case 0:
-//                    break;
-//                case 1: //选择账户类型
-//                    intent = new Intent(getActivity(), AccountTypeActivity.class);
-//                    startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
-//                    break;
-//                case 2:
-//                    break;
-//                case 3:
-//                    break;
-//                case 4: //设置
-//                    intent = new Intent(getActivity(), SetUpActivity.class);
-//                    startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
-//                    break;
-//                case 5:
-//                    break;
-//            }
-
         }
     }
 
@@ -327,5 +250,34 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 适配数据
+     * @param userName 登录名
+     */
+    public void adapterData(String userName) {
+        userAlias.setText(userName);
+        exit.setVisibility(View.VISIBLE);
+        slidingBottomLine.setVisibility(View.VISIBLE);
+        accountType.setText("个人");
+        dataSets.clear();
+        for (int i = 0; i < textResources.length; i++) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("list_image", imageResources[i]);
+            map.put("list_text", textResources[i]);
+            map.put("list_arrow", R.mipmap.right_arrow);
+            dataSets.add(map);
+        }
+        simpleAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 侧边栏资源实体类
+     */
+    private class SlideInnerMessage{
+        public String textResources; //文字资源
+        public int imageResources; //图片资源
+        public int idResources; //ID资源
     }
 }
