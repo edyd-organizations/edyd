@@ -18,4 +18,5 @@
 
     <dimen name="order_item_text_line">3dp</dimen>
     <dimen name="hisorder_item_text_line">8dp</dimen>
+    <dimen name="default_circle_view_size">200dp</dimen>
 </resources>
