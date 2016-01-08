@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.module.common.activity.NoticeActivity;
-import com.oto.edyd.module.common.model.Notice;
 import com.oto.edyd.module.usercenter.activity.AccountInformationActivity;
 import com.oto.edyd.module.usercenter.activity.LoginActivity;
 import com.oto.edyd.utils.Common;
@@ -38,8 +37,7 @@ import java.util.Map;
  */
 public class LeftSlidingFragment extends Fragment implements View.OnClickListener{
     //----------------基础View控件-----------------
-    private View leftSlidingView; //左侧滑布局文件
-    private ListView leftSlidingListView; //左侧划ListView
+    private ListView listView; //左侧划ListView
     private LinearLayout userLogin; //用户登入
     public LinearLayout exit; //退出登入
     public TextView userAlias; //用户名
@@ -48,6 +46,8 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
     public View slidingBottomLine; //侧滑底部线条
     //----------------变量-----------------
     List<SlideInnerMessage> slideInnerMessageList = new ArrayList<SlideInnerMessage>(); //侧边栏ListView数据源
+    private Common common; //共享文件 LOGIN_PREFERENCES_FILE
+
 
     //ListView资源
     public String[] textResources; //文字资源
@@ -63,11 +63,10 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        leftSlidingView = inflater.inflate(R.layout.left_sliding, null);
-        initField(leftSlidingView);
+        View view = inflater.inflate(R.layout.left_sliding, null); //左侧滑布局文件
+        initField(view);
 
         dataSets.clear();
-
         for(int i = 0; i < textResources.length; i++) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("list_image", imageResources[i]);
@@ -77,26 +76,21 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
         }
         simpleAdapter = new SimpleAdapter(getActivity().getApplicationContext(), dataSets, R.layout.left_sliding_item,
                 new String[]{"list_image", "list_text", "list_arrow"}, idResources); //ListView适配器
-        leftSlidingListView.setAdapter(simpleAdapter); //设置适配器
+        listView.setAdapter(simpleAdapter); //设置适配器
 
         /**
          * 是否登入控制退出按钮是否可用,以及登录后更新侧边栏信息
          */
-        if(isLogin()) {
-            Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-            String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
-            if(!sessionUuid.equals("")) {
-                userAlias.setText(common.getStringByKey(Constant.USER_NAME));
-                exit.setVisibility(View.VISIBLE);
-                slidingBottomLine.setVisibility(View.VISIBLE);
-            }
+        if(common.isLogin()) {
+            userAlias.setText(common.getStringByKey(Constant.USER_NAME));
+            exit.setVisibility(View.VISIBLE);
+            slidingBottomLine.setVisibility(View.VISIBLE);
             String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
             String txRoleType = common.getStringByKey(Constant.ROLE_NAME);
-            if(enterpriseName != null) {
-                accountType.setText(enterpriseName);
-                roleType.setText(txRoleType);
-            }
-        }else {
+            accountType.setText(enterpriseName);
+            roleType.setText(txRoleType);
+        } else {
+            dataSets.remove(0);
             dataSets.remove(0);
             dataSets.remove(0);
             simpleAdapter.notifyDataSetChanged();
@@ -106,8 +100,40 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
 
         userLogin.setOnClickListener(this);
         exit.setOnClickListener(this);
-        leftSlidingListView.setOnItemClickListener(new SlidingListItemOnClickListener());
-        return leftSlidingView;
+        listView.setOnItemClickListener(new SlidingListItemOnClickListener());
+        return view;
+    }
+
+    /**
+     * 初始化数据
+     */
+    private void init() {
+
+    }
+
+    /**
+     * 初始化数据
+     */
+    private void initField(View view) {
+        listView = (ListView)view.findViewById(R.id.left_sliding_list);
+        userLogin = (LinearLayout)view.findViewById(R.id.user_login);
+        userAlias = (TextView) view.findViewById(R.id.user_alias);
+        accountType = (TextView) view.findViewById(R.id.account_type);
+        roleType = (TextView) view.findViewById(R.id.role_type);
+        exit = (LinearLayout)view.findViewById(R.id.exit);
+        slidingBottomLine = (View) view.findViewById(R.id.sliding_bottom_line);
+        textResources = this.getResources().getStringArray(R.array.left_sliding_list_string);
+        imageResources = new int[]{R.mipmap.my_purse, R.mipmap.select_user_type, R.mipmap.notice,
+                R.mipmap.share, R.mipmap.setting};
+        idResources = new int[]{R.id.list_image, R.id.list_text, R.id.list_arrow};
+        common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+    }
+
+    /**
+     * 初始化监听器
+     */
+    private void initListener() {
+
     }
 
     @Override
@@ -153,24 +179,6 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
             default:
                 break;
         }
-    }
-
-    /**
-     * 初始化数据
-     */
-    private void initField(View view) {
-        leftSlidingListView = (ListView)view.findViewById(R.id.left_sliding_list);
-        textResources = this.getResources().getStringArray(R.array.left_sliding_list_string);
-        exit = (LinearLayout)view.findViewById(R.id.exit);
-        userLogin = (LinearLayout)view.findViewById(R.id.user_login);
-        userAlias = (TextView) view.findViewById(R.id.user_alias);
-        accountType = (TextView) view.findViewById(R.id.account_type);
-        roleType = (TextView) view.findViewById(R.id.role_type);
-        slidingBottomLine = (View) view.findViewById(R.id.sliding_bottom_line);
-
-        imageResources = new int[]{R.mipmap.my_purse, R.mipmap.select_user_type, R.mipmap.notice,
-                R.mipmap.share, R.mipmap.setting};
-        idResources = new int[]{R.id.list_image, R.id.list_text, R.id.list_arrow};
     }
 
     /**
@@ -220,6 +228,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                     slidingBottomLine.setVisibility(View.GONE);
                     accountType.setText("");
                     roleType.setText("");
+                    dataSets.remove(0);
                     dataSets.remove(0);
                     dataSets.remove(0);
                     simpleAdapter.notifyDataSetChanged();

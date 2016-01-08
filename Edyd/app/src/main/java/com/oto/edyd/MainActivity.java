@@ -42,6 +42,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     private Common common; //共享文件LOGIN_PREFERENCES_FILE
     private Common fixedCommon; //共享文件FIXED_FILE
     private LeftSlidingFragment leftMenuFragment; //侧滑Fragment
+    private SlidingMenu slidingMenu; //侧滑对象
     private final static int HANDLER_ACCOUNT_TYPE_CODE = 0x10; //账户类型切换码
     private final static int HANDLER_SWITCH_DURATION = 500; //账户类型切换等待时间，单位：毫秒
 
@@ -94,7 +95,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
      */
     private void initLeftMenu() {
         setBehindContentView(R.layout.left_sliding_frame); //布局layout容器
-        SlidingMenu slidingMenu = getSlidingMenu();
+        slidingMenu = getSlidingMenu();
         slidingMenu.setMode(SlidingMenu.LEFT);
         //触屏模式
         slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
@@ -264,7 +265,11 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            inTwoSecondsDBClickExit();
+            //判断侧滑菜单是否显示
+            if(!slidingMenu.isMenuShowing()) {
+                //侧滑菜单不显示
+                inTwoSecondsDBClickExit();
+            }
             return false;
         }
         return super.onKeyDown(keyCode, event);
