@@ -47,7 +47,6 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
     //----------------变量-----------------
     List<SlideInnerMessage> slideInnerMessageList = new ArrayList<SlideInnerMessage>(); //侧边栏ListView数据源
     private Common common; //共享文件 LOGIN_PREFERENCES_FILE
-    private boolean isLogin; //是否登录，true已登录，false未登录
     private SimpleAdapter simpleAdapter; //ListView适配器
     private Context context; //上下文对象
 
@@ -94,9 +93,8 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
         idResources = new int[]{R.id.list_image, R.id.list_text, R.id.list_arrow};
         context = getActivity();
         common = new Common(context.getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-        isLogin = common.isLogin();
         //判断是否登录，加载不同的菜单资源
-        if(isLogin) {
+        if(common.isLogin()) {
             textResources = context.getResources().getStringArray(R.array.left_sliding_list_string);
             imageResources = new int[]{R.mipmap.my_purse, R.mipmap.select_user_type, R.mipmap.notice,
                     R.mipmap.share, R.mipmap.setting};
@@ -120,7 +118,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
      */
     private void initLeftMenuInfo() {
         //是否登入控制退出按钮是否可用,以及登录后更新侧边栏信息
-        if(isLogin) {
+        if(common.isLogin()) {
             userAlias.setText(common.getStringByKey(Constant.USER_NAME));
             exit.setVisibility(View.VISIBLE);
             slidingBottomLine.setVisibility(View.VISIBLE);
@@ -159,7 +157,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.user_login: //用户登入
-                if(isLogin){
+                if(common.isLogin()){
                     //用户已登入跳转到个人详细信息
                     Intent intent = new Intent(context, AccountInformationActivity.class);
                     startActivity(intent);
@@ -278,7 +276,8 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
         slidingBottomLine.setVisibility(View.VISIBLE);
         accountType.setText("个人");
         textResources = context.getResources().getStringArray(R.array.left_sliding_list_string);
-        imageResources = new int[]{R.mipmap.share, R.mipmap.setting};
+        imageResources = new int[]{R.mipmap.my_purse, R.mipmap.select_user_type, R.mipmap.notice,
+                R.mipmap.share, R.mipmap.setting};
         updateDataSource();
         simpleAdapter.notifyDataSetChanged();
     }

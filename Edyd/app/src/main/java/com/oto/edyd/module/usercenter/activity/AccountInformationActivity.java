@@ -50,6 +50,7 @@ public class AccountInformationActivity extends FragmentActivity{
         String roleId = common.getStringByKey(getString(R.string.role_id));
         if(roleId.equals("")){
             common.showToast(AccountInformationActivity.this, "角色切换错误");
+            return;
         }
         switch(Integer.valueOf(roleId)) {
             case 0: //超级管理员
