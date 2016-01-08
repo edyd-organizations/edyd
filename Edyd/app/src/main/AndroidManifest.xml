@@ -66,7 +66,7 @@
         <!-- 高德地图 正式地址-->
          <meta-data
          android:name="com.amap.api.v2.apikey"
-         android:value="391bb51068ef790c94b3f93fe9852186" />
+         android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />
 
         <!--  <meta-data
             android:name="com.amap.api.v2.apikey"
