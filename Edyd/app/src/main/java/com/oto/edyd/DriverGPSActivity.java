@@ -42,6 +42,7 @@ public class DriverGPSActivity extends Activity implements AMapNaviViewListener{
         AMapNavi.getInstance(this).startNavi(AMapNavi.GPSNaviMode);
 
         initView(savedInstanceState);
+
     }
     private void initView(Bundle savedInstanceState) {
         mAmapAMapNaviView = (AMapNaviView) findViewById(R.id.customnavimap);
@@ -70,6 +71,7 @@ public class DriverGPSActivity extends Activity implements AMapNaviViewListener{
         viewOptions.setCameraInfoUpdateEnabled(mCameraFlag);// 设置摄像头播报
         viewOptions.setScreenAlwaysBright(mScreenFlag);// 设置屏幕常亮情况
         //viewOptions.setNaviViewTopic(mThemeStle);// 设置导航界面主题样式
+        viewOptions.setTrafficLine(true);
 
         mAmapAMapNaviView.setViewOptions(viewOptions);
 

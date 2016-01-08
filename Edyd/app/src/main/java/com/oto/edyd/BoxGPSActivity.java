@@ -699,7 +699,9 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
         mMapView.onDestroy();
         // 删除监听
         mAmapNavi.destroy();
-        mLocationManger.destroy();
+        if (mLocationManger != null) {
+            mLocationManger.destroy();
+        }
     }
 
     @Override

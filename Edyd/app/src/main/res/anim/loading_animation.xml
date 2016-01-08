@@ -12,7 +12,7 @@
         android:pivotY="50%"
         android:fromDegrees="0"
         android:toDegrees="+360"
-        android:duration="800"
+        android:duration="1000"
         android:startOffset="-1"
         android:repeatCount="-1"
         android:repeatMode="restart">
