@@ -64,13 +64,10 @@
         android:theme="@style/AppTheme">
         >
         <!-- 高德地图 正式地址-->
-         <!--<meta-data
-         android:name="com.amap.api.v2.apikey"
-         android:value="391bb51068ef790c94b3f93fe9852186" />-->
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="b0da2264df3bf64e1b5b9143dff0b427" />
+            android:value="391bb51068ef790c94b3f93fe9852186" />
 
         <!--<meta-data
              android:name="com.amap.api.v2.apikey"
