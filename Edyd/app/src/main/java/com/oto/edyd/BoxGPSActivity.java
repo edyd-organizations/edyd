@@ -166,7 +166,7 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
         initField();
         initView(savedInstanceState);
         initMapAndNavi();
-//        firstOrientation();
+        firstOrientation();
     }
 
     private void firstOrientation() {

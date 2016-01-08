@@ -16,8 +16,8 @@ android {
         applicationId "com.oto.edyd"
         minSdkVersion 9
         targetSdkVersion 23
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "1.0.5"
 //        multiDexEnabled true
     }
     buildTypes {

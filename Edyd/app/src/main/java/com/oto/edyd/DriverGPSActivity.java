@@ -44,6 +44,7 @@ public class DriverGPSActivity extends Activity implements AMapNaviViewListener{
         initView(savedInstanceState);
 
     }
+
     private void initView(Bundle savedInstanceState) {
         mAmapAMapNaviView = (AMapNaviView) findViewById(R.id.customnavimap);
         mAmapAMapNaviView.onCreate(savedInstanceState);
@@ -298,8 +299,6 @@ public class DriverGPSActivity extends Activity implements AMapNaviViewListener{
 
     @Override
     public void onLockMap(boolean arg0) {
-
         // TODO Auto-generated method stub
-
     }
 }

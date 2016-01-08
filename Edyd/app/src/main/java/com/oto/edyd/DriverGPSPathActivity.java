@@ -420,9 +420,9 @@ public class DriverGPSPathActivity extends Activity implements AMapNaviListener,
 //        }
 //    }
 
-    /**
-     * 停止定位
-     */
+//    /**
+//     * 停止定位
+//     */
 //    @Override
 //    public void deactivate() {
 //        mListener = null;
@@ -475,13 +475,4 @@ public class DriverGPSPathActivity extends Activity implements AMapNaviListener,
     public void onProviderDisabled(String provider) {
 
     }
-
-//    // 监听amap地图加载成功事件回调
-//    @Override
-//    public void onMapLoaded() {
-//        if (mRouteOverLay != null) {
-//            mRouteOverLay.zoomToSpan();
-//        }
-//    }
-
 }

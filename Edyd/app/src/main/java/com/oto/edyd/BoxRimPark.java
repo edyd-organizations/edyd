@@ -10,6 +10,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
@@ -78,6 +79,7 @@ public class BoxRimPark extends Activity  implements PoiSearch.OnPoiSearchListen
         }
     };
     private CusProgressDialog loadingDialog;
+    private TextView tv_order_list_title;
 
 
     @Override
@@ -132,7 +134,8 @@ public class BoxRimPark extends Activity  implements PoiSearch.OnPoiSearchListen
         mMapView = (MapView) findViewById(R.id.refuel_mapview);
         mMapView.onCreate(savedInstanceState);
         aMap = mMapView.getMap();
-
+        tv_order_list_title=(TextView)findViewById(R.id.tv_order_list_title);
+        tv_order_list_title.setText("周边停车");
 
     }
 
