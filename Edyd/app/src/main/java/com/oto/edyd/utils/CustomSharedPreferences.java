@@ -28,6 +28,15 @@ public class CustomSharedPreferences {
     }
 
     /**
+     * 检索偏好设置中的布尔值
+     * @param key
+     * @return
+     */
+    public boolean getPreferencesBooleanByKey(String key) {
+        return sharedPreferences.getBoolean(key, false);
+    }
+
+    /**
      * 检索偏好设置中的整数
      * @param key
      * @return

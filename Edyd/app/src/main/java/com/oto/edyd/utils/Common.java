@@ -68,6 +68,14 @@ public class Common {
     }
 
     /**
+     * 获取boolean值
+     * @return
+     */
+    public boolean getBooleanByKey(String key) {
+        return cusSharedPreferences.getPreferencesBooleanByKey(key);
+    }
+
+    /**
      * 清除账户信息
      * @return
      */

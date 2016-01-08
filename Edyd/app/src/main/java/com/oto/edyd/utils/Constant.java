@@ -26,6 +26,7 @@ public class Constant {
     public final static String USER_INFO_FILE = "users.xml"; //用户信息
     public final static String FIXED_FILE = "fixed_file"; //不清理数据
     public final static String SESSION_UUID = "session_uuid";
+    public final static String FIRST_ENTER = "first_enter";
     //public final static String ACCOUNT_ID = "account_id";
 
     //网络地址
