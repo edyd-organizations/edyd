@@ -319,12 +319,12 @@ public class DriverGPSPathActivity extends Activity implements AMapNaviListener,
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent intent = new Intent(DriverGPSPathActivity.this, OrderOperateActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivity(intent);
-            finish();
-        }
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            Intent intent = new Intent(DriverGPSPathActivity.this, OrderOperateActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//            startActivity(intent);
+//            finish();
+//        }
         return super.onKeyDown(keyCode, event);
     }
 
