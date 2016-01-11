@@ -490,6 +490,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".module.tts.activity.DriverExecutingOrderActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".module.tts.activity.DriverHistoryOrderActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -702,7 +702,6 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
                             break;
                     }
                     mLocation = new MLocation(getApplicationContext(), common, String.valueOf(orderDetail.getControlId()), String.valueOf(tControlStatus));
-
                     Message message = new Message();
                     message.what = 0x13;
                     handler.sendMessage(message);
