@@ -94,7 +94,7 @@ public class Constant {
 
     //司机订单执行状态
     public final static String WAIT_EXECUTE_STATUS = "0"; //待执行订单
-    public final static String EXECUTING_STATUS = "1"; //执行订单
+    public final static String EXECUTING_STATUS = "1"; //执行中的订单
 
     //设备类型 1-Android设备；2-iOS设备
     public final static String DEVICE_TYPE = "1"; //Android设备

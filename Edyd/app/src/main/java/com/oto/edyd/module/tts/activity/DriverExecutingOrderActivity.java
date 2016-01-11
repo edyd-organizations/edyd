@@ -22,9 +22,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oto.edyd.DriverGPSPathActivity;
 import com.oto.edyd.OrderDetailActivity;
 import com.oto.edyd.R;
-import com.oto.edyd.module.tts.model.DriverOrderBean;
+import com.oto.edyd.module.tts.model.DriverExecutingOrderBean;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -43,37 +44,38 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 功能：司机-待执行订单
- * 文件名：com.oto.edyd.module.tts.activity.DriverWaitExecuteOrderActivity.java
- * 创建时间：2016/1/5
+ * 功能：司机-执行中的订单
+ * 文件名：com.oto.edyd.module.tts.activity.DriverExecutingOrderActivity.java
+ * 创建时间：2016/1/11
  * 作者：yql
  */
-public class DriverWaitExecuteOrderActivity extends Activity implements View.OnClickListener, AbsListView.OnScrollListener {
+public class DriverExecutingOrderActivity extends Activity implements View.OnClickListener, AbsListView.OnScrollListener  {
     //--------基本View控件---------
     private LinearLayout back; //返回
     private ListView receiveOrderList; //接单
     private SwipeRefreshLayout swipeRefreshLayout = null; //下拉组件
-
-    //--------变量---------
+    //------------变量-------------
     private Common common; //login.xml偏好文件
     private Context context; //上下文对象
     private CusProgressDialog dialog; //对话框
-    private WaitExecuteOrderListAdapter waitExecuteOrderListAdapter; //待执行订单列表适配器
-    private List<DriverOrderBean> driverOrderBeanList = new ArrayList<DriverOrderBean>();
+    private ExecutingOrderListAdapter executingOrderListAdapter; //待执行订单列表适配器
+    private List<DriverExecutingOrderBean> driverExecutingOrderBeanList = new ArrayList<DriverExecutingOrderBean>(); //订单容器
     private final static int ROWS = 10; //每页条数
     private int visibleLastIndex = 0; //最后可视项索引
     private boolean loadFlag = false;
     private int page; //记录当前页
-    private final static int HANDLER_WAIT_ORDER_REQUEST_CODE = 0x10; //待执行订单成功返回
+    //--------网络请求返回码---------
+    private final static int HANDLER_EXECUTING_ORDER_REQUEST_CODE = 0x10; //待执行订单成功返回
     private final static int HANDLER_PULL_DOWN_REQUEST_CODE = 0x11; //下拉刷新成功返回
     private final static int HANDLER_UP_DOWN_REQUEST_CODE = 0x12; //上拉加载
     private final static int HANDLER_UPDATE_ORDER_CODE = 0x13; //订单更新成功返回码
+    private final static int ACTIVITY_RESULT_EXECUTING_ORDER_CODE = 0x20; //执行中的订单返回码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order_operation);
-        init(); //数据初始化
+        init(); //初始化数据
     }
 
     /**
@@ -82,7 +84,7 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
     private void init() {
         initFields();
         initListener();
-        requestWaitExecuteOrderData(1, ROWS, Constant.FIRST_LOAD);
+        requestExecutingOrderData(1, ROWS, Constant.FIRST_LOAD);
     }
 
     /**
@@ -92,7 +94,7 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
         back = (LinearLayout) findViewById(R.id.receive_order_back);
         receiveOrderList = (ListView) findViewById(R.id.receive_order_list);
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_container);
-        context = DriverWaitExecuteOrderActivity.this;
+        context = DriverExecutingOrderActivity.this;
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
     }
 
@@ -106,10 +108,11 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //订单详情
-                DriverOrderBean driverOrderBean = driverOrderBeanList.get(position);
+                DriverExecutingOrderBean driverOrderBean = driverExecutingOrderBeanList.get(position);
                 Intent intent = new Intent(context, OrderDetailActivity.class);
                 intent.putExtra("primaryId", String.valueOf(driverOrderBean.getPrimary()));
-                startActivity(intent);
+                intent.putExtra("position", position);
+                startActivityForResult(intent, ACTIVITY_RESULT_EXECUTING_ORDER_CODE);
             }
         });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -118,7 +121,7 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
              */
             @Override
             public void onRefresh() {
-                requestWaitExecuteOrderData(1, ROWS, Constant.SECOND_LOAD);
+                requestExecutingOrderData(1, ROWS, Constant.SECOND_LOAD);
             }
         });
     }
@@ -134,14 +137,14 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        int lastIndex = waitExecuteOrderListAdapter.getCount(); //数据集最后一项的索引
+        int lastIndex = executingOrderListAdapter.getCount(); //数据集最后一项的索引
         if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE  && visibleLastIndex ==lastIndex){
             //如果是自动加载,可以在这里放置异步加载数据的代码
             if(loadFlag) {
                 loadFlag = false;
                 if(lastIndex % ROWS == 0) {
                     page = lastIndex / ROWS + 1;
-                    requestWaitExecuteOrderData(page, ROWS, Constant.THIRD_LOAD);
+                    requestExecutingOrderData(page, ROWS, Constant.THIRD_LOAD);
                 }
             }
         }
@@ -165,11 +168,10 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
      * @param rows
      * @param requestSequence
      */
-    private void requestWaitExecuteOrderData(int page, int rows, int requestSequence) {
+    private void requestExecutingOrderData(int page, int rows, int requestSequence) {
         String sessionUUID = common.getStringByKey(Constant.SESSION_UUID);
-
-        String url = Constant.ENTRANCE_PREFIX_v1 + "appQueryOrderListByFlag.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows+"&flag="+Constant.WAIT_EXECUTE_STATUS;
-        OkHttpClientManager.getAsyn(url, new WaitExecuteOrderCallback<String>(requestSequence) {
+        String url = Constant.ENTRANCE_PREFIX_v1 + "appQueryOrderListByFlag.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows+"&flag="+Constant.EXECUTING_STATUS;
+        OkHttpClientManager.getAsyn(url, new ExecutingOrderCallback<String>(requestSequence) {
             @Override
             public void onError(Request request, Exception e) {
                 common.showToast(context, "请求待执行订单异常");
@@ -190,17 +192,17 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
                     loadFlag = true;
                     //判断是否上拉加载数据，如果不是都要清除数据源，重新加载数据
                     if(this.requestSequence != 3) {
-                        driverOrderBeanList.clear();
+                        driverExecutingOrderBeanList.clear();
                         if (jsonArray.length() == 0) {
                             common.showToast(context, "暂无数据");
                         }
                     }
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject item = jsonArray.getJSONObject(i);
-                        DriverOrderBean driverOrderBean = new DriverOrderBean();
-                        driverOrderBean.setId(item.getInt("ID"));
-                        driverOrderBean.setPrimary(item.getInt("primaryId"));
-                        driverOrderBean.setControlNum(item.getString("controlNum"));
+                        DriverExecutingOrderBean driverExecutingOrderBean = new DriverExecutingOrderBean();
+                        driverExecutingOrderBean.setId(item.getInt("ID"));
+                        driverExecutingOrderBean.setPrimary(item.getInt("primaryId"));
+                        driverExecutingOrderBean.setControlNum(item.getString("controlNum"));
                         String tDate = item.getString("controlDate");
                         if (tDate != null && !(tDate.equals(""))) {
                             Date date = null;
@@ -209,26 +211,28 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                            driverOrderBean.setDate(sdf.format(date));
+                            driverExecutingOrderBean.setDate(sdf.format(date));
                         } else {
-                            driverOrderBean.setDate("");
+                            driverExecutingOrderBean.setDate("");
                         }
-                        driverOrderBean.setSenderAddress(item.getString("senderAddr"));
-                        driverOrderBean.setReceiveAddress(item.getString("receiverAddr"));
-                        driverOrderBean.setSender(item.getString("senderContactPerson"));
-                        driverOrderBean.setsMobilePhoneNumber(item.getString("senderContactTel"));
-                        driverOrderBean.setReceiver(item.getString("receiverContactPerson"));
-                        driverOrderBean.setrMobilePhoneNumber(item.getString("receiverContactTel"));
-                        driverOrderBean.setOrderStatus(item.getInt("controlStatus"));
-                        driverOrderBean.setLongitude(item.getDouble("lng"));
-                        driverOrderBean.setLatitude(item.getDouble("lat"));
-                        driverOrderBeanList.add(driverOrderBean);
+                        driverExecutingOrderBean.setSenderAddress(item.getString("senderAddr"));
+                        driverExecutingOrderBean.setReceiveAddress(item.getString("receiverAddr"));
+                        driverExecutingOrderBean.setSender(item.getString("senderContactPerson"));
+                        driverExecutingOrderBean.setsMobilePhoneNumber(item.getString("senderContactTel"));
+                        driverExecutingOrderBean.setReceiver(item.getString("receiverContactPerson"));
+                        driverExecutingOrderBean.setrMobilePhoneNumber(item.getString("receiverContactTel"));
+                        driverExecutingOrderBean.setOrderStatus(item.getInt("controlStatus"));
+                        driverExecutingOrderBean.setSenderPrimaryId(item.getLong("senderPrimaryId"));
+                        driverExecutingOrderBean.setReceiverPrimaryId(item.getLong("receiverPrimaryId"));
+                        driverExecutingOrderBean.setLongitude(item.getDouble("lng"));
+                        driverExecutingOrderBean.setLatitude(item.getDouble("lat"));
+                        driverExecutingOrderBeanList.add(driverExecutingOrderBean);
                     }
 
                     Message message = Message.obtain();
                     switch (this.requestSequence) {
                         case Constant.FIRST_LOAD: //首次加载
-                            message.what = HANDLER_WAIT_ORDER_REQUEST_CODE; //首次加载
+                            message.what = HANDLER_EXECUTING_ORDER_REQUEST_CODE; //首次加载
                             break;
                         case Constant.SECOND_LOAD: //下拉刷新
                             message.what = HANDLER_PULL_DOWN_REQUEST_CODE;
@@ -248,12 +252,12 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
     /**
      * 更新待执行订单
      * @param controlId 订单ID
+     * @param orderStatus  订单状态
      */
-    private void updateWaitExecuteOrder(final String controlId) {
+    private void updateExecutingOrder(final String controlId, final String orderStatus) {
         String sessionUUID = common.getStringByKey(Constant.SESSION_UUID);
-
         String url = Constant.ENTRANCE_PREFIX + "appAutoUpdateOrderStatus.json?sessionUuid=" + sessionUUID + "&controlId=" + controlId;
-        OkHttpClientManager.getAsyn(url, new WaitExecuteOrderCallback<String>(Constant.FOUR_LOAD) {
+        OkHttpClientManager.getAsyn(url, new ExecutingOrderCallback<String>(Constant.FOUR_LOAD) {
 
             @Override
             public void onError(Request request, Exception e) {
@@ -264,13 +268,36 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
             public void onResponse(String response) {
                 JSONObject jsonObject;
                 MLocation mLocation;
+                String tOrderStatus; //订单状态
                 try {
                     jsonObject = new JSONObject(response);
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         common.showToast(context, "待执行订单更新失败");
                         return;
                     }
-                    mLocation = new MLocation(getApplicationContext(), common, controlId, "20"); //订单发送经纬度，待执行订单状态传20
+                    tOrderStatus =  orderStatus;
+                    switch (Integer.valueOf(tOrderStatus)) {
+                        case 17: //下一个状态
+                            tOrderStatus = "20";
+                            break;
+                        case 20:
+                            tOrderStatus = "30";
+                            break;
+                        case 30:
+                            tOrderStatus = "40";
+                            break;
+                        case 40:
+                            tOrderStatus = "50";
+                            break;
+                        case 50: //送货在途
+                            tOrderStatus = "60";
+                            break;
+                        case 60: //到达收货
+                            tOrderStatus = "99";
+                            common.showToast(context, "订单已完成");
+                            break;
+                    }
+                    mLocation = new MLocation(context, common, controlId, tOrderStatus); //订单发送经纬度，待执行订单状态传20
                     Message message = Message.obtain();
                     message.what = HANDLER_UPDATE_ORDER_CODE;
                     handler.sendMessage(message);
@@ -288,47 +315,49 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case HANDLER_WAIT_ORDER_REQUEST_CODE: //待执行订单成功返回
-                    waitExecuteOrderListAdapter = new WaitExecuteOrderListAdapter(context);
-                    receiveOrderList.setAdapter(waitExecuteOrderListAdapter);
+                case HANDLER_EXECUTING_ORDER_REQUEST_CODE: //待执行订单成功返回
+                    executingOrderListAdapter = new ExecutingOrderListAdapter(context);
+                    receiveOrderList.setAdapter(executingOrderListAdapter);
                     break;
                 case HANDLER_PULL_DOWN_REQUEST_CODE: //下拉刷新成功返回
-                    waitExecuteOrderListAdapter.notifyDataSetChanged(); //通知更新
+                    executingOrderListAdapter.notifyDataSetChanged(); //通知更新
                     swipeRefreshLayout.setRefreshing(false);
                     break;
                 case HANDLER_UP_DOWN_REQUEST_CODE: //上拉加载
-                    waitExecuteOrderListAdapter.notifyDataSetChanged(); //通知ListView更新// 载
+                    executingOrderListAdapter.notifyDataSetChanged(); //通知ListView更新// 载
                     break;
                 case HANDLER_UPDATE_ORDER_CODE: //订单更新成功返回
-                    int dataSize = driverOrderBeanList.size();
+                    int dataSize = driverExecutingOrderBeanList.size();
                     //控制页数
                     if(page > 1 && dataSize % 10 ==1) {
                         page = page - 1;
-                        requestWaitExecuteOrderData(page, ROWS, Constant.SECOND_LOAD);
+                        requestExecutingOrderData(page, ROWS, Constant.SECOND_LOAD);
                     } else {
-                        requestWaitExecuteOrderData(page, ROWS, Constant.SECOND_LOAD);
+                        requestExecutingOrderData(page, ROWS, Constant.SECOND_LOAD);
                     }
-                    common.showToast(context, "接单成功");
                     break;
             }
         }
     };
 
-    private class WaitExecuteOrderListAdapter extends BaseAdapter {
+    /**
+     * 执行中的订单适配器
+     */
+    private class ExecutingOrderListAdapter extends BaseAdapter {
         private LayoutInflater inflater;
 
-        public WaitExecuteOrderListAdapter(Context context) {
+        public ExecutingOrderListAdapter(Context context) {
             this.inflater = LayoutInflater.from(context);
         }
 
         @Override
         public int getCount() {
-            return driverOrderBeanList.size();
+            return driverExecutingOrderBeanList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return driverOrderBeanList.get(position);
+            return driverExecutingOrderBeanList.get(position);
         }
 
         @Override
@@ -341,7 +370,7 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
             ViewHolder viewHolder;
 
             if(convertView == null) {
-                convertView = inflater.inflate(R.layout.wait_execute_order_item, null);
+                convertView = inflater.inflate(R.layout.executing_order_item, null);
                 viewHolder = new ViewHolder();
                 viewHolder.orderNumber = (TextView) convertView.findViewById(R.id.order_number);
                 viewHolder.orderDate = (TextView) convertView.findViewById(R.id.order_date);
@@ -354,23 +383,60 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
                 viewHolder.consigneePhoneNumber = (TextView) convertView.findViewById(R.id.consignee_phone_number); //收货人联系电话
                 viewHolder.consigneeDial = (TextView) convertView.findViewById(R.id.consignee_dial);
                 viewHolder.receiveOrder = (TextView) convertView.findViewById(R.id.receive_order); //接单
+                viewHolder.orderStatus = (ImageView) convertView.findViewById(R.id.order_status); //订单状态
+                viewHolder.navigation = (TextView) convertView.findViewById(R.id.receive_order_navigation);//导航
                 convertView.setTag(viewHolder);
             }else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            DriverOrderBean driverOrderBean = driverOrderBeanList.get(position);
+
+            DriverExecutingOrderBean driverExecutingOrderBean = driverExecutingOrderBeanList.get(position);
             viewHolder.receiveOrder.setText(getString(R.string.receive_order));
-            viewHolder.orderNumber.setText(driverOrderBean.getControlNum());
-            viewHolder.orderDate.setText(driverOrderBean.getDate());
-            viewHolder.startPoint.setText(driverOrderBean.getSenderAddress());
-            viewHolder.endPoint.setText(driverOrderBean.getReceiveAddress());
-            viewHolder.shipper.setText(driverOrderBean.getSender());
-            viewHolder.tPhoneNumber.setText(driverOrderBean.getsMobilePhoneNumber());
-            viewHolder.consignee.setText(driverOrderBean.getReceiver());
-            viewHolder.consigneePhoneNumber.setText(driverOrderBean.getrMobilePhoneNumber());
-            viewHolder.dial.setOnClickListener(new CusOnClickListener(driverOrderBean, convertView));
-            viewHolder.consigneeDial.setOnClickListener(new CusOnClickListener(driverOrderBean, convertView));
-            viewHolder.receiveOrder.setOnClickListener(new CusOnClickListener(driverOrderBean, convertView));
+            viewHolder.orderNumber.setText(driverExecutingOrderBean.getControlNum());
+            viewHolder.orderDate.setText(driverExecutingOrderBean.getDate());
+            viewHolder.startPoint.setText(driverExecutingOrderBean.getSenderAddress());
+            viewHolder.endPoint.setText(driverExecutingOrderBean.getReceiveAddress());
+            viewHolder.shipper.setText(driverExecutingOrderBean.getSender());
+            viewHolder.tPhoneNumber.setText(driverExecutingOrderBean.getsMobilePhoneNumber());
+            viewHolder.consignee.setText(driverExecutingOrderBean.getReceiver());
+            viewHolder.consigneePhoneNumber.setText(driverExecutingOrderBean.getrMobilePhoneNumber());
+            switch (driverExecutingOrderBean.getOrderStatus()) {
+                case 20: //已接单
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_loading_way);
+                    viewHolder.receiveOrder.setText("到达装货");
+                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
+                    break;
+                case 30: //	到达装货
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_arrived_load);
+                    viewHolder.receiveOrder.setText("装货完成");
+                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
+                    break;
+                case 40: //装货完成
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_completion_load);
+                    viewHolder.receiveOrder.setText("送货在途");
+                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
+                    break;
+                case 50: //送货在途
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_delivery_way);
+                    viewHolder.receiveOrder.setText("到达收货");
+                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
+                    break;
+                case 60: //到达收货
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_arrived_receive);
+                    viewHolder.receiveOrder.setText("收货完成");
+                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
+                    break;
+                case 99: //收货完成
+                    viewHolder.orderStatus.setImageResource(R.mipmap.finished_receive); //收货完成
+                    viewHolder.receiveOrder.setText("完成订单");
+                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login);
+                    viewHolder.receiveOrder.setEnabled(false);
+                    break;
+            }
+            viewHolder.navigation.setOnClickListener(new CusOnClickListener(driverExecutingOrderBean, convertView));
+            viewHolder.dial.setOnClickListener(new CusOnClickListener(driverExecutingOrderBean, convertView));
+            viewHolder.consigneeDial.setOnClickListener(new CusOnClickListener(driverExecutingOrderBean, convertView));
+            viewHolder.receiveOrder.setOnClickListener(new CusOnClickListener(driverExecutingOrderBean, convertView));
             return convertView;
         }
     }
@@ -387,14 +453,19 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
         TextView consigneePhoneNumber; //收货人联系人电话
         TextView consigneeDial; //拨打收货人联系电话
         TextView receiveOrder; //接单
+        ImageView orderStatus; //订单状态
+        TextView navigation; //导航
     }
 
+    /**
+     * 自定义监听事件
+     */
     private class CusOnClickListener implements View.OnClickListener {
-        private DriverOrderBean driverOrderBean; //订单实体
+        private DriverExecutingOrderBean driverExecutingOrderBean; //执行订单实体
         private View view; //当前订单view对象
 
-        public CusOnClickListener(DriverOrderBean driverOrderBean, View view){
-            this.driverOrderBean = driverOrderBean;
+        public CusOnClickListener(DriverExecutingOrderBean driverExecutingOrderBean, View view){
+            this.driverExecutingOrderBean = driverExecutingOrderBean;
             this.view = view;
         }
         @Override
@@ -410,7 +481,7 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
                             .setPositiveButton("是", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    updateWaitExecuteOrder(String.valueOf(driverOrderBean.getId()));
+                                    updateExecutingOrder(String.valueOf(driverExecutingOrderBean.getId()), String.valueOf(driverExecutingOrderBean.getOrderStatus()));
                                 }
                             })
                             .setNegativeButton("否", new DialogInterface.OnClickListener() {
@@ -421,7 +492,7 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
                             }).show();
                     break;
                 case R.id.dialog_one:
-                    final String content = driverOrderBean.getsMobilePhoneNumber();
+                    final String content = driverExecutingOrderBean.getsMobilePhoneNumber();
                     if(content != null && (!content.equals(""))) {
                         new AlertDialog.Builder(context).setTitle("拨打电话")
                                 .setMessage("确认拨打"+content+"吗?")
@@ -443,11 +514,11 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
                                     }
                                 }).show();
                     } else {
-                        Toast.makeText(getApplicationContext(), "电话号码不能为空", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "电话号码不能为空", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.consignee_dial:
-                    final String consignee = driverOrderBean.getrMobilePhoneNumber();
+                    final String consignee = driverExecutingOrderBean.getrMobilePhoneNumber();
                     if(consignee != null && (!consignee.equals(""))) {
                         new AlertDialog.Builder(context).setTitle("拨打电话")
                                 .setMessage("确认拨打"+consignee.toString()+"吗?")
@@ -469,17 +540,27 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
                                     }
                                 }).show();
                     } else {
-                        Toast.makeText(getApplicationContext(), "电话号码不能为空", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "电话号码不能为空", Toast.LENGTH_SHORT).show();
                     }
+                    break;
+                case R.id.receive_order_navigation: //导航
+                    Intent intent = new Intent(context, DriverGPSPathActivity.class);
+                    if (driverExecutingOrderBean.getOrderStatus() == 20) {
+                        //装货在途,导航到装货地
+                        intent.putExtra("PrimaryId",driverExecutingOrderBean.getSenderPrimaryId());
+                    }else{
+                        //导航到卸货地
+                        intent.putExtra("PrimaryId", driverExecutingOrderBean.getReceiverPrimaryId());
+                    }
+                    startActivity(intent);
                     break;
             }
         }
     }
-
-    private abstract class WaitExecuteOrderCallback<T> extends OkHttpClientManager.ResultCallback<T>{
+    private abstract class ExecutingOrderCallback<T> extends OkHttpClientManager.ResultCallback<T>{
         public int requestSequence; //访问次序
 
-        public WaitExecuteOrderCallback(int requestSequence) {
+        public ExecutingOrderCallback(int requestSequence) {
             this.requestSequence = requestSequence;
         }
         @Override
@@ -499,5 +580,15 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
             }
         }
     }
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 0x15) {
+            int position = data.getIntExtra("position", -1);
+            DriverExecutingOrderBean driverExecutingOrderBean = driverExecutingOrderBeanList.get(position);
+            int controlStatus = data.getIntExtra("controlStatus", 0);
+            driverExecutingOrderBean.setOrderStatus(controlStatus);
+            driverExecutingOrderBeanList.set(position, driverExecutingOrderBean);
+            executingOrderListAdapter.notifyDataSetChanged();
+        }
+    }
 }

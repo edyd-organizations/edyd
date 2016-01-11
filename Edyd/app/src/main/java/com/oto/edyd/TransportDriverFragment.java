@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oto.edyd.module.tts.activity.DriverExecutingOrderActivity;
 import com.oto.edyd.module.tts.activity.DriverWaitExecuteOrderActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -104,8 +105,8 @@ public class TransportDriverFragment extends Fragment implements View.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.ll_executing_orders: //执行订单
-                intent = new Intent(getActivity().getApplicationContext(), OrderOperateActivity.class);
-                intent.putExtra("order",1);
+                intent = new Intent(getActivity().getApplicationContext(), DriverExecutingOrderActivity.class);
+                //intent.putExtra("order",1);
                 startActivity(intent);
                 break;
 //            case R.id.ll_view_track: //查看轨迹
