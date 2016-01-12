@@ -183,6 +183,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                 }
                 Map<Object, Object> map = new HashMap<Object, Object>();
                 map.put(Constant.TRANSPORT_ROLE, Constant.DRIVER_ROLE_ID);
+                map.put(Constant.TYPE_CODE, "");
                 if(!commonFixed.isSave(map)) {
                     common.showToast(context, "初始化司机");
                     return;

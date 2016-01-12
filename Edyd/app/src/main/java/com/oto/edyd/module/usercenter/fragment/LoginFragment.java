@@ -29,6 +29,7 @@ import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.NetWork;
 import com.oto.edyd.utils.OkHttpClientManager;
+import com.oto.edyd.utils.ServiceUtil;
 import com.squareup.okhttp.Request;
 import com.umeng.message.UmengRegistrar;
 
@@ -67,6 +68,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private static final int HANDLER_ROLE_TYPE_SUCCESS_CODE = 0x12; //角色类型请求成功返回码
     private static final int HANDLER_ACCOUNT_TYPE_SUCCESS_CODE = 0x13; //用户账户ID请求成功返回码
     private static final int HANDLER_DEVICE_TOKEN_CODE = 0x14; //用户友盟设备ID请求成功返回码
+    private static final int HANDLER_DRIVER_ROLE = 0x15; //司机返回码
 
     @Nullable
     @Override
@@ -456,7 +458,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private void uploadDeviceToken(String sessionUuid) {
         String deviceToken = UmengRegistrar.getRegistrationId(context);
         String url = Constant.ENTRANCE_PREFIX_v1 + "insertOrUpdatePhoneToken.json?sessionUuid=" + sessionUuid + "&deviceToken=" + deviceToken + "&phoneType=" + Constant.DEVICE_TYPE;
-        OkHttpClientManager.getAsyn(url, new LoginResultCallback<String>(2) {
+        OkHttpClientManager.getAsyn(url,new OkHttpClientManager.ResultCallback<String>() {
 
             @Override
             public void onError(Request request, Exception e) {
@@ -475,6 +477,49 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     }
                     Message message = Message.obtain();
                     message.what = HANDLER_DEVICE_TOKEN_CODE;
+                    handler.sendMessage(message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * 判断是否为司机
+     */
+    private void isDriver(String sessionUuid) {
+        String url = Constant.ENTRANCE_PREFIX_v1 + "getUserType.json?sessionUuid=" + sessionUuid;
+        OkHttpClientManager.getAsyn(url, new LoginResultCallback<String>(2) {
+
+            @Override
+            public void onError(Request request, Exception e) {
+                common.showToast(context, "司机代码获取异常");
+            }
+
+            @Override
+            public void onResponse(String response) {
+                JSONObject jsonObject;
+                JSONArray jsonArray;
+                try {
+                    jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+                    if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        common.showToast(context, "司机代码获取失败");
+                    }
+                    Map<Object, Object> map = new HashMap<Object, Object>();
+                    jsonArray = jsonObject.getJSONArray("rows");
+                    if(jsonArray.length() > 0 ) {
+                        map.put(Constant.TYPE_CODE, "0");
+                        ServiceUtil.invokeTimerPOIService(context);
+                    } else {
+                        map.put(Constant.TYPE_CODE, "");
+                    }
+                    if(!common.isSave(map)) {
+                        common.showToast(context, "用户类型报错失败");
+                    }
+                    Message message = Message.obtain();
+                    message.what = HANDLER_DRIVER_ROLE;
                     handler.sendMessage(message);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -537,26 +582,27 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         public void handleMessage(Message msg) {
             String sessionUuid;
             String enterpriseId; //企业ID
+            sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
             switch (msg.what) {
                 case HANDLER_LOGIN_SUCCESS_STATUS_CODE: //登录请求返回成功
-                    sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
                     requestAccountTypeInfo(sessionUuid);
                     break;
                 case HANDLER_ACCOUNT_TYPE_SUCCESS_STATUS_CODE: //账户类型请求返回成功
-                    sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
                     enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
                     requestRoleType(sessionUuid, enterpriseId);
                     break;
                 case HANDLER_ROLE_TYPE_SUCCESS_CODE: //角色类型请求返回成功
-                    sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
                     requestAccountId(sessionUuid);
                     break;
                 case HANDLER_ACCOUNT_TYPE_SUCCESS_CODE: //账户ID请求返回成功
                     initTransportServiceRoleType();
-                    sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
                     uploadDeviceToken(sessionUuid);
                     break;
                 case HANDLER_DEVICE_TOKEN_CODE: //设备ID上传成功返回码
+                    //initTransportServiceRoleType();
+                    isDriver(sessionUuid);
+                    break;
+                case HANDLER_DRIVER_ROLE: //判断是否为司机成功返回码
                     initTransportServiceRoleType();
                     break;
             }
@@ -586,7 +632,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             if(requestSequence == START_ACCESS) {
                 //首次访问
                 transitionDialog = new CusProgressDialog(getActivity(), "正在登录...");
-                transitionDialog.getLoadingDialog().show();
+                transitionDialog.showDialog();
             }
         }
 
@@ -595,7 +641,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             //请求之后要做的操作
             if(requestSequence == END_ACCESS) {
                 //末次访问
-                transitionDialog.getLoadingDialog().dismiss();
+                if(transitionDialog.isShow()) {
+                    transitionDialog.dismissDialog();
+                }
             }
         }
     }
