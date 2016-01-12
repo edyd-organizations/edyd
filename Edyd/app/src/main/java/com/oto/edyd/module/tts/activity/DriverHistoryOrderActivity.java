@@ -70,7 +70,7 @@ public class DriverHistoryOrderActivity extends Activity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.order_operation);
+        setContentView(R.layout.history_transport_order);
         init(); //数据初始化
     }
 
@@ -87,7 +87,7 @@ public class DriverHistoryOrderActivity extends Activity implements View.OnClick
      * 初始化字段
      */
     private void initFields() {
-        back = (LinearLayout) findViewById(R.id.receive_order_back);
+        back = (LinearLayout) findViewById(R.id.history_transport_order_back);
         receiveOrderList = (ListView) findViewById(R.id.receive_order_list);
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_container);
         context = DriverHistoryOrderActivity.this;
@@ -124,7 +124,7 @@ public class DriverHistoryOrderActivity extends Activity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.receive_order_back: //返回
+            case R.id.history_transport_order_back: //返回
                 finish();
                 break;
         }
