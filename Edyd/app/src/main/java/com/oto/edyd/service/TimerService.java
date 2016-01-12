@@ -45,16 +45,19 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
     public static OnLocationChangedListener mListener = null;
     private LocationManagerProxy mAMapLocationManager;
     private TimerServiceBinder binder = new TimerServiceBinder();
+    private Context context;
 
     private Common common;
     private List<Integer> controlIDList = new ArrayList<Integer>(); //用于存储调度单号
     private List<Integer> controlStatusList = new ArrayList<Integer>(); //用于存储调度单号
     private AMapLocation location;
+    private final static int HANDLER_TRIGGER_CODE = 0x10; //触发定位返回码
 
     @Override
     public void onCreate() {
         super.onCreate();
         init();
+        checkIsNeedLocation();
     }
 
     @Override
@@ -69,10 +72,13 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
      * 初始化AMap对象
      */
     private void init() {
+        context = getApplicationContext();
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         //startTimer(); //每隔十五秒执行一次
         mapView = new MapView(getApplicationContext());
 
+    }
+    private void initLocation() {
         if (aMap == null) {
             aMap = mapView.getMap();
             setUpMap();
@@ -98,7 +104,8 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
 
         if (mListener != null && amapLocation != null) {
             if (amapLocation != null && amapLocation.getAMapException().getErrorCode() == 0) {
-                getTimerOrder();
+                //getTimerOrder();
+                sendLocationInfo(amapLocation);
                 deactivate();
             } else {
                 Log.e("AmapErr","Location ERR:" + amapLocation.getAMapException().getErrorCode());
@@ -192,10 +199,13 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case 0x11:
-                    if (controlIDList.size() > 0) {
-                        sendLocationInfo(location);
-                    }
+//                case 0x11:
+//                    if (controlIDList.size() > 0) {
+//                        sendLocationInfo(location);
+//                    }
+//                    break;
+                case HANDLER_TRIGGER_CODE:
+                    initLocation();
                     break;
             }
         }
@@ -211,45 +221,120 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
     /**
      * 查询订单数据
      */
-    private void getTimerOrder() {
-        String sessionUUID = getSessionUUID();
-        if(sessionUUID == null || sessionUUID.equals("")) {
-            return;
-        }
-        String url = Constant.ENTRANCE_PREFIX + "appQueryOrderList.json?sessionUuid="+sessionUUID+"&page="+1+"&rows="+10;
+//    private void getTimerOrder() {
+//        String sessionUUID = getSessionUUID();
+//        if(sessionUUID == null || sessionUUID.equals("")) {
+//            return;
+//        }
+//        String url = Constant.ENTRANCE_PREFIX + "appQueryOrderList.json?sessionUuid="+sessionUUID+"&page="+1+"&rows="+10;
+//        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+//            @Override
+//            public void onError(Request request, Exception e) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(String response) {
+//                JSONObject jsonObject;
+//                JSONArray jsonArray;
+//                controlIDList.clear();
+//                controlStatusList.clear();
+//                try {
+//                    jsonObject = new JSONObject(response);
+//                    if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
+//                        //Toast.makeText(getApplicationContext(), "定时器订单列表数据获取失败", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//                    jsonArray = jsonObject.getJSONArray("rows");
+//                    if (controlIDList != null) {
+//                        controlIDList.clear();
+//                    }
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject JSONOrder = jsonArray.getJSONObject(i);
+//                        int controlStatus = JSONOrder.getInt("controlStatus");
+//                        if (controlStatus > 17 && controlStatus < 99) {
+//                            controlIDList.add(JSONOrder.getInt("ID"));
+//                            controlStatusList.add(controlStatus);
+//                        }
+//                    }
+//                    Message message = new Message();
+//                    message.what = 0x11;
+//                    handler.sendMessage(message);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//    }
+
+    /**
+     * 检查是否需要定位
+     * 有订单-进行定位,无订单-不定位
+     */
+    private void checkIsNeedLocation() {
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID); //当前用户会话ID
+        String url = Constant.ENTRANCE_PREFIX_v1 + "appPositioningFlag.json?sessionUuid="+sessionUuid;
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+
             @Override
             public void onError(Request request, Exception e) {
-
+                common.showToast(context, "是否触发定位异常");
             }
 
             @Override
             public void onResponse(String response) {
                 JSONObject jsonObject;
-                JSONArray jsonArray;
-                controlIDList.clear();
-                controlStatusList.clear();
+                boolean flag; //是否需要触发定位标志 ture触发定位，false不触发
                 try {
                     jsonObject = new JSONObject(response);
-                    if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        //Toast.makeText(getApplicationContext(), "定时器订单列表数据获取失败", Toast.LENGTH_SHORT).show();
+                    String status = jsonObject.getString("status");
+                    if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        common.showToast(context, "是否触发定位失败");
                         return;
                     }
-                    jsonArray = jsonObject.getJSONArray("rows");
-                    if (controlIDList != null) {
-                        controlIDList.clear();
+                    flag = jsonObject.getJSONArray("rows").getBoolean(0);
+                    if(flag) {
+                        Message message = Message.obtain();
+                        message.what = HANDLER_TRIGGER_CODE;
+                        handler.sendMessage(message);
                     }
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject JSONOrder = jsonArray.getJSONObject(i);
-                        int controlStatus = JSONOrder.getInt("controlStatus");
-                        if (controlStatus > 17 && controlStatus < 99) {
-                            controlIDList.add(JSONOrder.getInt("ID"));
-                            controlStatusList.add(controlStatus);
-                        }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    /**
+     * 发送定位信息
+     * @param amapLocation
+     */
+    private void sendLocationInfo(AMapLocation amapLocation) {
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID); //当前用户会话ID
+        double longitude = amapLocation.getLongitude(); //经度
+        double latitude = amapLocation.getLatitude(); //纬度
+        float speed = amapLocation.getSpeed(); //速度方向
+        float direction = amapLocation.getBearing(); //获取方向
+        String url = Constant.ENTRANCE_PREFIX_v1 + "appAutoRecordTrackInfo.json?sessionUuid="+sessionUuid+"&lng="+longitude+"&lat="+latitude+"&speed="+speed+"&direction="+direction;
+        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+
+            @Override
+            public void onError(Request request, Exception e) {
+                //common.showToast(context, "定位异常");
+            }
+
+            @Override
+            public void onResponse(String response) {
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+                    if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        //Toast.makeText(getApplicationContext(), "lib定位数据异常", Toast.LENGTH_SHORT).show();
+                        return;
                     }
-                    Message message = new Message();
-                    message.what = 0x11;
-                    handler.sendMessage(message);
+                    //Toast.makeText(getApplicationContext(), "发送经纬度", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -261,78 +346,78 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
      * 发送定位信息
      * @param amapLocation
      */
-    private void sendLocationInfo(AMapLocation amapLocation) {
-        String url = ""; //访问地址
-        // String accountId= common.getStringByKey("ACCOUNT_ID"); //登录用户ID
-        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID); //会话ID
-        String tel = common.getStringByKey("user_name"); //电话号码
-        String provider = amapLocation.getProvider(); //定位类型
-        double longitude = amapLocation.getLongitude(); //经度
-        double latitude = amapLocation.getLatitude(); //纬度
-        float speed = 0f;
-        float direction = 0f;
-
-
-
-        if(provider.equals("lbs")) { //网格定位
-            for(int i = 0; i < controlIDList.size(); i++) {
-                url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?sessionUuid="+sessionUuid+"&lng="+longitude+"&lat="+latitude+"&controlId="+controlIDList.get(i)+"&tel="+tel
-                +"&controlStatus="+controlStatusList.get(i);
-                OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
-                    @Override
-                    public void onError(Request request, Exception e) {
-
-                    }
-
-                    @Override
-                    public void onResponse(String response) {
-                        JSONObject jsonObject;
-                        JSONArray jsonArray;
-                        try {
-                            jsonObject = new JSONObject(response);
-                            if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                                //Toast.makeText(getApplicationContext(), "lib定位数据异常", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            //Toast.makeText(getApplicationContext(), "发送经纬度", Toast.LENGTH_SHORT).show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-        } else if(provider.equals("gps")) { //定位
-            speed = amapLocation.getSpeed(); //速度
-            direction = amapLocation.getBearing(); //定位方向
-
-            for(int i = 0; i < controlIDList.size(); i++) {
-                url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?lng="+longitude+"&lat="+latitude+"&controlId="
-                        +controlIDList.get(i)+"&tel="+tel+"&speed="+speed+"&direction="+direction+"&controlStatus="+controlStatusList.get(i) + "&sessionUuid=" + sessionUuid;
-                OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
-                    @Override
-                    public void onError(Request request, Exception e) {
-
-                    }
-
-                    @Override
-                    public void onResponse(String response) {
-                        JSONObject jsonObject;
-                        JSONArray jsonArray;
-                        try {
-                            jsonObject = new JSONObject(response);
-                            if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                                Toast.makeText(getApplicationContext(), "gps定位数据异常", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                });
-            }
-        }
-    }
+//    private void sendLocationInfo(AMapLocation amapLocation) {
+//        String url = ""; //访问地址
+//        // String accountId= common.getStringByKey("ACCOUNT_ID"); //登录用户ID
+//        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID); //会话ID
+//        String tel = common.getStringByKey("user_name"); //电话号码
+//        String provider = amapLocation.getProvider(); //定位类型
+//        double longitude = amapLocation.getLongitude(); //经度
+//        double latitude = amapLocation.getLatitude(); //纬度
+//        float speed = 0f;
+//        float direction = 0f;
+//
+//
+//
+//        if(provider.equals("lbs")) { //网格定位
+//            for(int i = 0; i < controlIDList.size(); i++) {
+//                url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?sessionUuid="+sessionUuid+"&lng="+longitude+"&lat="+latitude+"&controlId="+controlIDList.get(i)+"&tel="+tel
+//                +"&controlStatus="+controlStatusList.get(i);
+//                OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+//                    @Override
+//                    public void onError(Request request, Exception e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onResponse(String response) {
+//                        JSONObject jsonObject;
+//                        JSONArray jsonArray;
+//                        try {
+//                            jsonObject = new JSONObject(response);
+//                            if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
+//                                //Toast.makeText(getApplicationContext(), "lib定位数据异常", Toast.LENGTH_SHORT).show();
+//                                return;
+//                            }
+//                            //Toast.makeText(getApplicationContext(), "发送经纬度", Toast.LENGTH_SHORT).show();
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//            }
+//        } else if(provider.equals("gps")) { //定位
+//            speed = amapLocation.getSpeed(); //速度
+//            direction = amapLocation.getBearing(); //定位方向
+//
+//            for(int i = 0; i < controlIDList.size(); i++) {
+//                url = Constant.ENTRANCE_PREFIX + "appRecordTrackInfo.json?lng="+longitude+"&lat="+latitude+"&controlId="
+//                        +controlIDList.get(i)+"&tel="+tel+"&speed="+speed+"&direction="+direction+"&controlStatus="+controlStatusList.get(i) + "&sessionUuid=" + sessionUuid;
+//                OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+//                    @Override
+//                    public void onError(Request request, Exception e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onResponse(String response) {
+//                        JSONObject jsonObject;
+//                        JSONArray jsonArray;
+//                        try {
+//                            jsonObject = new JSONObject(response);
+//                            if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
+//                                Toast.makeText(getApplicationContext(), "gps定位数据异常", Toast.LENGTH_SHORT).show();
+//                                return;
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//                });
+//            }
+//        }
+//    }
 
     /**
      * 启动定时器

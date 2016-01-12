@@ -267,7 +267,6 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
             @Override
             public void onResponse(String response) {
                 JSONObject jsonObject;
-                MLocation mLocation;
                 String tOrderStatus; //订单状态
                 try {
                     jsonObject = new JSONObject(response);
@@ -297,7 +296,7 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
                             common.showToast(context, "订单已完成");
                             break;
                     }
-                    mLocation = new MLocation(context, common, controlId, tOrderStatus); //订单发送经纬度，待执行订单状态传20
+                    new MLocation(context, common, controlId, tOrderStatus); //订单发送经纬度，待执行订单状态传20
                     Message message = Message.obtain();
                     message.what = HANDLER_UPDATE_ORDER_CODE;
                     handler.sendMessage(message);
@@ -433,10 +432,10 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
                     viewHolder.receiveOrder.setEnabled(false);
                     break;
             }
-            viewHolder.navigation.setOnClickListener(new CusOnClickListener(driverExecutingOrderBean, convertView));
-            viewHolder.dial.setOnClickListener(new CusOnClickListener(driverExecutingOrderBean, convertView));
-            viewHolder.consigneeDial.setOnClickListener(new CusOnClickListener(driverExecutingOrderBean, convertView));
-            viewHolder.receiveOrder.setOnClickListener(new CusOnClickListener(driverExecutingOrderBean, convertView));
+            viewHolder.navigation.setOnClickListener(new CusOnClickListener(position, convertView));
+            viewHolder.dial.setOnClickListener(new CusOnClickListener(position, convertView));
+            viewHolder.consigneeDial.setOnClickListener(new CusOnClickListener(position, convertView));
+            viewHolder.receiveOrder.setOnClickListener(new CusOnClickListener(position, convertView));
             return convertView;
         }
     }
@@ -461,15 +460,18 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
      * 自定义监听事件
      */
     private class CusOnClickListener implements View.OnClickListener {
-        private DriverExecutingOrderBean driverExecutingOrderBean; //执行订单实体
+        //private DriverExecutingOrderBean driverExecutingOrderBean; //执行订单实体
+        private int position;
         private View view; //当前订单view对象
 
-        public CusOnClickListener(DriverExecutingOrderBean driverExecutingOrderBean, View view){
-            this.driverExecutingOrderBean = driverExecutingOrderBean;
+        public CusOnClickListener(int position, View view){
+            //this.driverExecutingOrderBean = driverExecutingOrderBean;
+            this.position = position;
             this.view = view;
         }
         @Override
         public void onClick(View v) {
+            DriverExecutingOrderBean driverExecutingOrderBean = driverExecutingOrderBeanList.get(position);
             switch (v.getId()) {
                 case R.id.receive_order:
                     if((((TextView)v).getText().toString().equals("完成订单"))) {
@@ -481,6 +483,7 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
                             .setPositiveButton("是", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    DriverExecutingOrderBean driverExecutingOrderBean = driverExecutingOrderBeanList.get(position);
                                     updateExecutingOrder(String.valueOf(driverExecutingOrderBean.getId()), String.valueOf(driverExecutingOrderBean.getOrderStatus()));
                                 }
                             })

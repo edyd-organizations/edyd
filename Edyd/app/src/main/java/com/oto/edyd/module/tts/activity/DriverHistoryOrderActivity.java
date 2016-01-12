@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.oto.edyd.OrderDetailActivity;
 import com.oto.edyd.OrderDetailHistoryActivity;
 import com.oto.edyd.R;
 import com.oto.edyd.module.tts.model.DriverOrderBean;
