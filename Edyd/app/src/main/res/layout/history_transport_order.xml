@@ -29,7 +29,6 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_order_detail_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/history_transport_order"

@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 public class MerchantsBankOrder implements Serializable {
 
+    //----------------变量------------------
     private String branchId; //商户开户分行号
     private String coNo; //商户号
     private String billNo; //订单号

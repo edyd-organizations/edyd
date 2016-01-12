@@ -46,7 +46,6 @@
         <ListView
             android:id="@+id/receive_order_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none"/>
+            android:layout_height="wrap_content" />
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

@@ -96,7 +96,7 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
 
     private Common common; //common偏好设置
     private int reOrderStatus; //订单状态
-    private String position; //保存位置
+    private int position; //保存位置
     private String primaryId; //订单主键ID
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +104,7 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
         setContentView(R.layout.order_detail);
         initFields();
         primaryId = getIntent().getStringExtra("primaryId");
-        position = getIntent().getStringExtra("position");
+        position = getIntent().getIntExtra("position", -1);
 //        TranView tView = (TranView)getIntent().getSerializableExtra("S_VIEW");
 //        View view = tView.getView();
 
@@ -121,10 +121,12 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.order_detail_back:
-                Intent intent = new Intent();
-                intent.putExtra("position", position);
-                intent.putExtra("controlStatus", tControlStatus);
-                setResult(0x15, intent);
+                if(position != -1) {
+                    Intent intent = new Intent();
+                    intent.putExtra("position", position);
+                    intent.putExtra("controlStatus", tControlStatus);
+                    setResult(0x15, intent);
+                }
                 finish();
                 break;
         }
@@ -133,10 +135,12 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Intent intent = new Intent();
-            intent.putExtra("position", position);
-            setResult(0x15, intent);
-            intent.putExtra("controlStatus", tControlStatus);
+            if(position != -1) {
+                Intent intent = new Intent();
+                intent.putExtra("position", position);
+                intent.putExtra("controlStatus", tControlStatus);
+                setResult(0x15, intent);
+            }
             finish();
             return false;
         } else {
@@ -698,7 +702,6 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
                             break;
                     }
                     mLocation = new MLocation(getApplicationContext(), common, String.valueOf(orderDetail.getControlId()), String.valueOf(tControlStatus));
-
                     Message message = new Message();
                     message.what = 0x13;
                     handler.sendMessage(message);

@@ -373,7 +373,8 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 //                    startActivityForResult(intent, 0x03);
                     return;
                 }
-                int enterpriseId = Integer.valueOf(common.getStringByKey(Constant.ENTERPRISE_ID));
+                int enterpriseId = Integer.valueOf(common.getStringByKey(Constant.ENTERPRISE_ID)); //企业ID
+                int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE)); //运输角色
                 //判断是否为个人
                 if(enterpriseId == 0) {
                     //个人只显示司机
@@ -381,8 +382,21 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 } else {
                     //判断运输服务是否已经缓存
                     if(mainViewHolder.transportFragment == null) {
-                        //未缓存，创建新对象
-                        mainViewHolder.transportFragment = new TransportDriverFragment();
+                        //未缓存，根据当前运输服务角色切换到，司机、发货方、收货方、承运方的一个
+                        switch (transportRoleId) {
+                            case 0: //司机
+                                mainViewHolder.transportFragment = new TransportDriverFragment();
+                                break;
+                            case 1: //收货方
+                                mainViewHolder.transportFragment = new TransportReceiverFragment();
+                                break;
+                            case 2: //发货方
+                                mainViewHolder.transportFragment = new TransportShipperFragment();
+                                break;
+                            case 3: //承运方
+                                mainViewHolder.transportFragment = new TransportUndertakeFragment();
+                                break;
+                        }
                     }
                 }
 

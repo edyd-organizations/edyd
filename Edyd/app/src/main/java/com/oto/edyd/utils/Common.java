@@ -2,6 +2,7 @@ package com.oto.edyd.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Environment;
 import android.support.v4.net.ConnectivityManagerCompat;
@@ -230,5 +231,4 @@ public class Common {
         }
         return commandObject;
     }
-
 }
