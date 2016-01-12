@@ -28,6 +28,7 @@ import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.NetWork;
 import com.oto.edyd.utils.OkHttpClientManager;
+import com.oto.edyd.utils.ServiceUtil;
 import com.squareup.okhttp.Request;
 
 import org.json.JSONArray;
@@ -80,6 +81,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private static final int HANDLER_ACCOUNT_TYPE_SUCCESS_CODE = 0x18; //账户ID请求成功返回码
     private static final int INVALID_VERIFICATION_CODE = 0x19; //无效验证码
     private static final int VERIFICATION_AUTHENTICATE_SUCCESS = 0x20; //验证码认证成功
+    private static final int HANDLER_DRIVER_ROLE = 0x21; //司机返回码
 
     @Nullable
     @Override
@@ -436,8 +438,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            String sessionUuid;
             String enterpriseId;
+            String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
             switch (msg.what) {
                 case MOBILE_PHONE_ALREADY_REGISTER: //账号已注册，不能获取验证码
                     common.showToast(context, getString(R.string.account_have_been_register));
@@ -449,19 +451,20 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                     registerSubCompany(); //注册子公司
                     break;
                 case USER_REGISTER_SUB_COMPANY_SUCCESS: //用户注册公司成功返回码
-                    sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
                     requestAccountTypeInfo(sessionUuid); //请求账户类型
                     break;
                 case HANDLER_ACCOUNT_TYPE_SUCCESS_STATUS_CODE: //账户类型成功返回码
-                    sessionUuid = common.getStringByKey(Constant.SESSION_UUID); //用户唯一标示
                     enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID); //企业ID
                     requestRoleType(sessionUuid, enterpriseId);
                     break;
                 case HANDLER_ROLE_TYPE_SUCCESS_CODE: //角色成功返回码
-                    sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
                     requestAccountId(sessionUuid);
                     break;
                 case HANDLER_ACCOUNT_TYPE_SUCCESS_CODE: //账户ID成功返回
+                    //initTransportServiceRoleType();
+                    isDriver(sessionUuid);
+                    break;
+                case HANDLER_DRIVER_ROLE: //是否有司机
                     initTransportServiceRoleType();
                     break;
                 case INVALID_VERIFICATION_CODE: //无效验证码
@@ -681,7 +684,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private void requestAccountId(String sessionUuid) {
         String accountIDUrl = Constant.ENTRANCE_PREFIX + "getAccountIdBySessionUuid.json?sessionUuid=" + sessionUuid;
 
-        OkHttpClientManager.getAsyn(accountIDUrl, new RegisterResultCallback<String>(2) {
+        OkHttpClientManager.getAsyn(accountIDUrl, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
                 //请求异常
@@ -708,6 +711,49 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 
                     Message message = Message.obtain();
                     message.what = HANDLER_ACCOUNT_TYPE_SUCCESS_CODE;
+                    handler.sendMessage(message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * 判断是否为司机
+     */
+    private void isDriver(String sessionUuid) {
+        String url = Constant.ENTRANCE_PREFIX_v1 + "getUserType.json?sessionUuid=" + sessionUuid;
+        OkHttpClientManager.getAsyn(url, new RegisterResultCallback<String>(2) {
+
+            @Override
+            public void onError(Request request, Exception e) {
+                common.showToast(context, "司机代码获取异常");
+            }
+
+            @Override
+            public void onResponse(String response) {
+                JSONObject jsonObject;
+                JSONArray jsonArray;
+                try {
+                    jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+                    if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        common.showToast(context, "司机代码获取失败");
+                    }
+                    Map<Object, Object> map = new HashMap<Object, Object>();
+                    jsonArray = jsonObject.getJSONArray("rows");
+                    if(jsonArray.length() > 0 ) {
+                        map.put(Constant.TYPE_CODE, "0");
+                        ServiceUtil.invokeTimerPOIService(context);
+                    } else {
+                        map.put(Constant.TYPE_CODE, "");
+                    }
+                    if(!common.isSave(map)) {
+                        common.showToast(context, "用户类型报错失败");
+                    }
+                    Message message = Message.obtain();
+                    message.what = HANDLER_DRIVER_ROLE;
                     handler.sendMessage(message);
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -75,7 +75,7 @@ public class EdydApplication extends Application {
 				activityList.add(activity);
 				if(activityList.size() == 1) {
 					//ServiceUtil.cancelAlarmManager(getApplicationContext());
-					ServiceUtil.invokeTimerPOIService(getApplicationContext());
+					//ServiceUtil.invokeTimerPOIService(getApplicationContext());
 					wakeLock.acquire();
 				}
 			}
@@ -109,16 +109,7 @@ public class EdydApplication extends Application {
 			public void onActivityDestroyed(Activity activity) {
 				activityList.remove(activity);
 				if (activityList.size() == 0) {
-					//
-					// timerService.unbindService(conn);
-//					if(mIsBound) {
-//						//timerService.unbindService(conn);
-//						//timerService.stopTimer();
-//						unbindService(conn);
-//						mIsBound = false;
-//						System.exit(0); //结束整个应用程序
-//					}
-					ServiceUtil.cancelAlarmManager(getApplicationContext());
+					//ServiceUtil.cancelAlarmManager(getApplicationContext());
 					wakeLock.release();
 					System.exit(0); //结束整个应用程序
 				}

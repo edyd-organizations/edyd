@@ -17,8 +17,12 @@ import com.oto.edyd.lib.slidingmenu.SlidingMenu;
 import com.oto.edyd.lib.slidingmenu.app.SlidingFragmentActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.ServiceUtil;
 import com.umeng.message.PushAgent;
 import com.umeng.update.UmengUpdateAgent;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -41,6 +45,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     private long eOldTime; //记录点击退出时间
     private Common common; //共享文件LOGIN_PREFERENCES_FILE
     private Common fixedCommon; //共享文件FIXED_FILE
+    private Context context; //上下文对象
     private LeftSlidingFragment leftMenuFragment; //侧滑Fragment
     private SlidingMenu slidingMenu; //侧滑对象
     private final static int HANDLER_ACCOUNT_TYPE_CODE = 0x10; //账户类型切换码
@@ -63,6 +68,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         initLeftMenu(); //初始化侧边栏
         initMainIndex(); //初始化主界面
         initUmengMessage(); //初始化友盟消息推送服务
+        invokeTimer(); //是否开启定时器
     }
 
     /**
@@ -78,6 +84,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         mainViewHolder = new MainViewHolder();
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
+        context= MainActivity.this;
     }
 
     /**
@@ -298,6 +305,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         }
         fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.indexFragment).commit();
         home.setChecked(true);
+        stopTimer(); //停止定时
     }
 
     /**
@@ -368,7 +376,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             case 3: //运输服务
                 mainTitle.setText("运输服务");
                 if (!common.isLogin()) {
-                    Toast.makeText(getApplicationContext(), "用户未登录，请先登录", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "用户未登录，请先登录", Toast.LENGTH_LONG).show();
 //                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 //                    startActivityForResult(intent, 0x03);
                     return;
@@ -412,5 +420,22 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.boxFragment).commitAllowingStateLoss();
                 break;
         }
+    }
+
+    /**
+     * 是否开启定时器
+     */
+    private void invokeTimer() {
+        String typeCode = common.getStringByKey(Constant.TYPE_CODE); //用户代码
+        if(typeCode!=null && !typeCode.equals("")) {
+            ServiceUtil.invokeTimerPOIService(context);
+        }
+    }
+
+    /**
+     * 结束定时器
+     */
+    public void stopTimer() {
+        ServiceUtil.cancelAlarmManager(context);
     }
 }

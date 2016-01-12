@@ -67,4 +67,8 @@ public class CusProgressDialog {
     public void dismissDialog() {
         loadingDialog.dismiss();
     }
+
+    public boolean isShow() {
+        return loadingDialog.isShowing();
+    }
 }

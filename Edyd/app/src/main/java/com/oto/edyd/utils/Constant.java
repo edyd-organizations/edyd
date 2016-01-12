@@ -99,6 +99,9 @@ public class Constant {
     //设备类型 1-Android设备；2-iOS设备
     public final static String DEVICE_TYPE = "1"; //Android设备
 
+    //用户类型, 0-司机
+    public final static String TYPE_CODE = "type_code";
+
     //加载次序
     public final static int FIRST_LOAD = 1; //首次加载
     public final static int SECOND_LOAD = 2; //第二次加载
