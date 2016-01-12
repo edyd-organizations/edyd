@@ -50,6 +50,9 @@ import java.util.logging.LogRecord;
  * 显示地图轨迹。
  */
 public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickListener, AMap.InfoWindowAdapter, AMap.OnInfoWindowClickListener, AMap.OnMapLoadedListener {
+    private static final int SHOW_TRACK = 1;//显示轨迹
+    private static final int SHOW_POLYLINE = 0;//显示折线
+
     private Context mActivity;
     private TrackBean bean;
     private String sessionUuid;
@@ -66,6 +69,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            aMap.clear();
             switch (msg.what) {
                 case 0x12:
                     loadingDialog.getLoadingDialog().dismiss();
@@ -135,7 +139,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
         bean = (TrackBean) bundle.getSerializable("detailBean");
         if (bean != null) {
             initFields(); //初始化数据
-            getInfo(true);
+            getInfo(SHOW_POLYLINE);
         }
     }
 
@@ -182,26 +186,27 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
 
     }
 
-    private void getInfo(final boolean isFist) {
-        if (isFist) {
-            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
-            loadingDialog.getLoadingDialog().show();
-        }
+    private void getInfo(final int isTrack) {
+        loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
+        loadingDialog.getLoadingDialog().show();
+
         long primaryId = bean.getPrimaryId();
-
-        String url = Constant.ENTRANCE_PREFIX + "getTruckPosition.json?sessionUuid="
-                + sessionUuid + "&primaryId=" + primaryId;
-
-//        String url = Constant.ENTRANCE_PREFIX_v1 + "getRealMapLineTest.json?sessionUuid="
-//                + sessionUuid + "&primaryId=" + primaryId;
-
+        String url;
+        if (isTrack==SHOW_TRACK) {
+            //轨迹
+            url = Constant.ENTRANCE_PREFIX_v1 + "getRealMapLineTest.json?sessionUuid="
+                    + sessionUuid + "&primaryId=" + primaryId;
+        } else {
+            //折线
+            url = Constant.ENTRANCE_PREFIX + "getTruckPosition.json?sessionUuid="
+                    + sessionUuid + "&primaryId=" + primaryId;
+        }
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
                 loadingDialog.getLoadingDialog().dismiss();
             }
-
             @Override
             public void onResponse(String response) {
 //                Common.printErrLog("轨迹地图" + response);
@@ -236,16 +241,16 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     private void initFields() {
         Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
-        cb_switchTrack= (CheckBox) findViewById(R.id.cb_switchTrack);
+        cb_switchTrack = (CheckBox) findViewById(R.id.cb_switchTrack);
         cb_switchTrack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((CheckBox)v).isChecked()){
+                if (((CheckBox) v).isChecked()) {
                     //选中就用轨迹图
-
-                }else{
+                    getInfo(SHOW_TRACK);
+                } else {
                     //未选中折现图
-
+                    getInfo(SHOW_POLYLINE);
                 }
             }
         });
