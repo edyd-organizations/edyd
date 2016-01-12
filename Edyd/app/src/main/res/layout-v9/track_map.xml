@@ -41,21 +41,20 @@
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
+
+        <CheckBox
+            android:id="@+id/cb_switchTrack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="轨迹"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <!--
-            <CheckBox
-                android:id="@+id/cb_switchTrack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="轨迹" />
-    -->
-        <com.amap.api.maps2d.MapView xmlns:android="http://schemas.android.com/apk/res/android"
+        <com.amap.api.maps2d.MapView
             android:id="@+id/track_mapview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
-    </RelativeLayout>
+
 </LinearLayout>
