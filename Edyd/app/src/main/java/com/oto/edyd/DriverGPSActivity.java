@@ -12,6 +12,8 @@ import com.amap.api.navi.model.AMapNaviLocation;
 import com.amap.api.navi.model.NaviInfo;
 import android.content.Intent;
 import android.view.KeyEvent;
+
+import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.TTSController;
 
 /**
@@ -29,9 +31,12 @@ public class DriverGPSActivity extends Activity implements AMapNaviViewListener{
     private boolean mCameraFlag =true;// 默认进行摄像头播报
     private boolean mScreenFlag = true;// 默认是屏幕常亮
     private AMapNaviListener mAmapNaviListener;
+    private DriverGPSActivity mActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity=this;
         setContentView(R.layout.activity_simplegps_navi);
         TTSController ttsManager = TTSController.getInstance(this);// 初始化语音模块
         ttsManager.init();
@@ -71,10 +76,12 @@ public class DriverGPSActivity extends Activity implements AMapNaviViewListener{
         viewOptions.setTrafficInfoUpdateEnabled(mTrafficFlag);// 设置是否更新路况
         viewOptions.setCameraInfoUpdateEnabled(mCameraFlag);// 设置摄像头播报
         viewOptions.setScreenAlwaysBright(mScreenFlag);// 设置屏幕常亮情况
-        //viewOptions.setNaviViewTopic(mThemeStle);// 设置导航界面主题样式
-        viewOptions.setTrafficLine(true);
+
+        viewOptions.setTrafficLine(true);//设置是否绘制显示交通路况的线路
+        viewOptions.setTrafficLayerEnabled(true);//设置[实时交通图层开关按钮]是否显示
 
         mAmapAMapNaviView.setViewOptions(viewOptions);
+        mAmapAMapNaviView.getMap().setTrafficEnabled(true);
 
     }
     private AMapNaviListener getAMapNaviListener() {

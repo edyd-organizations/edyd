@@ -145,7 +145,6 @@ public class DriverGPSPathActivity extends Activity implements AMapNaviListener,
                 dissmissProgressDialog();
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onResponse(String response) {
                 JSONObject jsonObject;
@@ -242,7 +241,7 @@ public class DriverGPSPathActivity extends Activity implements AMapNaviListener,
         mRouteOverLay.addToMap();
         mIsCalculateRouteSuccess = true;
         mRouteOverLay.zoomToSpan();
-        mAMap.setTrafficEnabled(true);
+//        mAMap.setTrafficEnabled(true);
     }
 
     @Override
@@ -328,27 +327,7 @@ public class DriverGPSPathActivity extends Activity implements AMapNaviListener,
         return super.onKeyDown(keyCode, event);
     }
 
-//    /**
-//     * 显示GPS进度框
-//     */
-//    private void showGPSProgressDialog() {
-//        if (mGPSProgressDialog == null)
-//            mGPSProgressDialog = new ProgressDialog(this);
-//        mGPSProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//        mGPSProgressDialog.setIndeterminate(false);
-//        mGPSProgressDialog.setCancelable(true);
-//        mGPSProgressDialog.setMessage("定位中...");
-//        mGPSProgressDialog.show();
-//    }
-//
-//    /**
-//     * 隐藏进度框
-//     */
-//    private void dissmissGPSProgressDialog() {
-//        if (mGPSProgressDialog != null) {
-//            mGPSProgressDialog.dismiss();
-//        }
-//    }
+
     // ------------------生命周期重写函数---------------------------
 
     @Override
@@ -362,7 +341,6 @@ public class DriverGPSPathActivity extends Activity implements AMapNaviListener,
     public void onPause() {
         super.onPause();
         mMapView.onPause();
-//        deactivate();
     }
 
     /**

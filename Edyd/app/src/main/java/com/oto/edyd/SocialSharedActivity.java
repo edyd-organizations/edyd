@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
@@ -245,12 +246,9 @@ public class SocialSharedActivity extends Activity implements View.OnClickListen
 
     private void performShare(SHARE_MEDIA platform) {
         mController.postShare(mActivity, platform, new SocializeListeners.SnsPostListener() {
-
             @Override
             public void onStart() {
-
             }
-
             @Override
             public void onComplete(SHARE_MEDIA platform, int eCode, SocializeEntity entity) {
                 String showText = platform.toString();
@@ -259,7 +257,7 @@ public class SocialSharedActivity extends Activity implements View.OnClickListen
                 } else {
                     showText += "平台分享失败";
                 }
-                Toast.makeText(mActivity, showText, Toast.LENGTH_SHORT).show();
+                Common.showToast(mActivity,showText);
             }
         });
     }

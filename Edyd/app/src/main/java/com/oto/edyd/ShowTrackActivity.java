@@ -11,6 +11,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +59,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     private TrackLineBean tlb;
     private ArrayList<LatLng> pos;
     private CusProgressDialog loadingDialog; //页面切换过度
+    private CheckBox cb_switchTrack;
 
 
     private Handler handler = new Handler() {
@@ -185,15 +187,13 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
             loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
             loadingDialog.getLoadingDialog().show();
         }
-
         long primaryId = bean.getPrimaryId();
 
-//        String url = Constant.ENTRANCE_PREFIX + "getTruckPosition.json?sessionUuid="
-//                + sessionUuid + "&primaryId=" + primaryId;
-        //        v1.1/getRealMapLineTest.json?sessionUuid=879425d835d34ac183dddddf831ecdc7&primaryId=124
-
-        String url = Constant.ENTRANCE_PREFIX_v1 + "getRealMapLineTest.json?sessionUuid="
+        String url = Constant.ENTRANCE_PREFIX + "getTruckPosition.json?sessionUuid="
                 + sessionUuid + "&primaryId=" + primaryId;
+
+//        String url = Constant.ENTRANCE_PREFIX_v1 + "getRealMapLineTest.json?sessionUuid="
+//                + sessionUuid + "&primaryId=" + primaryId;
 
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
@@ -236,6 +236,19 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     private void initFields() {
         Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+        cb_switchTrack= (CheckBox) findViewById(R.id.cb_switchTrack);
+        cb_switchTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(((CheckBox)v).isChecked()){
+                    //选中就用轨迹图
+
+                }else{
+                    //未选中折现图
+
+                }
+            }
+        });
     }
 
     /**
@@ -374,11 +387,8 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                 buidler.include(po);
             }
 //            buidler.include()
-
             LatLngBounds bounds = buidler.build();
             aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
         }
-
     }
-
 }
