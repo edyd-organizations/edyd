@@ -325,6 +325,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         }
     }
 
+
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -388,24 +389,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                     //个人只显示司机
                     mainViewHolder.transportFragment = new TransportDriverFragment();
                 } else {
-                    //判断运输服务是否已经缓存
-                    if(mainViewHolder.transportFragment == null) {
-                        //未缓存，根据当前运输服务角色切换到，司机、发货方、收货方、承运方的一个
-                        switch (transportRoleId) {
-                            case 0: //司机
-                                mainViewHolder.transportFragment = new TransportDriverFragment();
-                                break;
-                            case 1: //收货方
-                                mainViewHolder.transportFragment = new TransportReceiverFragment();
-                                break;
-                            case 2: //发货方
-                                mainViewHolder.transportFragment = new TransportShipperFragment();
-                                break;
-                            case 3: //承运方
-                                mainViewHolder.transportFragment = new TransportUndertakeFragment();
-                                break;
-                        }
-                    }
+                    switchTransportRole(transportRoleId);
                 }
 
                 fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
@@ -418,6 +402,27 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                     mainViewHolder.boxFragment = new MainBoxFragment();
                 }
                 fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.boxFragment).commitAllowingStateLoss();
+                break;
+        }
+    }
+
+    /**
+     * 切换运输角色
+     * @param transportRoleId
+     */
+    private void switchTransportRole(int transportRoleId) {
+        switch (transportRoleId) {
+            case 0: //司机
+                mainViewHolder.transportFragment = new TransportDriverFragment();
+                break;
+            case 1: //收货方
+                mainViewHolder.transportFragment = new TransportReceiverFragment();
+                break;
+            case 2: //发货方
+                mainViewHolder.transportFragment = new TransportShipperFragment();
+                break;
+            case 3: //承运方
+                mainViewHolder.transportFragment = new TransportUndertakeFragment();
                 break;
         }
     }
