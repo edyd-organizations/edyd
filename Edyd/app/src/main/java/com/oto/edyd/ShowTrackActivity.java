@@ -365,7 +365,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                         tv_traffic_detail.setVisibility(View.VISIBLE);
                         String strDis = drivePath.getDistance() / 1000 + "公里；";//返回驾车距离，单位米。
                         String strTime = drivePath.getDuration() / 60 + "分钟；";//返回驾车预计时间，单位秒
-                        tv_traffic_detail.setText("距离收货地大约：" + strDis );
+                        tv_traffic_detail.setText("距离发货地大约：" + strDis );
                         tv_traff_time.setVisibility(View.VISIBLE);
                         tv_traff_time.setText("大约需要：" + strTime);
 //                        drivingRouteOverlay.zoomToSpan();

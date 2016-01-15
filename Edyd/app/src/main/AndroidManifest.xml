@@ -53,7 +53,7 @@
     <uses-permission android:name="android.permission.RESTART_PACKAGES" />
 
     <!-- 模块配置 -->
-    <uses-sdk tools:overrideLibrary="com.edyd.entity"/>
+    <uses-sdk tools:overrideLibrary="com.edyd.entity" />
 
     <!-- 聚合官网 -->
     <application
@@ -65,14 +65,14 @@
         >
         <!-- 高德地图 正式地址-->
         <!-- gd 正式版 key-->
-        <!-- <meta-data
+        <!--   <meta-data
              android:name="com.amap.api.v2.apikey"
              android:value="391bb51068ef790c94b3f93fe9852186" />-->
 
-         <!-- lbz gd debug key -->
+        <!-- lbz gd debug key -->
         <meta-data
-             android:name="com.amap.api.v2.apikey"
-             android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />
+            android:name="com.amap.api.v2.apikey"
+            android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />
 
         <!-- yql gd debug key -->
         <!--  <meta-data
@@ -80,7 +80,7 @@
                android:value="b0da2264df3bf64e1b5b9143dff0b427" />-->
 
 
-          <!-- 聚合数据 -->
+        <!-- 聚合数据 -->
         <meta-data
             android:name="com.thinkland.juheapi.openid"
             android:value="JH5ba55e75578ecf0b44c6d8a4de432b52" />
@@ -207,11 +207,10 @@
 
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="stateUnchanged|adjustPan"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:screenOrientation="portrait">
-        </activity>
+            android:windowSoftInputMode="stateUnchanged|adjustPan"></activity>
         <activity
             android:name=".module.usercenter.activity.LoginActivity"
             android:screenOrientation="portrait" />
@@ -463,8 +462,7 @@
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".BoxGPSActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name=".DriverGPSActivity"
@@ -486,20 +484,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".module.common.activity.NoticeActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".module.common.activity.NoticeDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".module.tts.activity.DriverWaitExecuteOrderActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".module.tts.activity.DriverExecutingOrderActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".module.tts.activity.DriverHistoryOrderActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".module.common.activity.VersionInfoActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".module.common.activity.WebViewActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.common.activity.NoticeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.common.activity.NoticeDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.tts.activity.DriverWaitExecuteOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.tts.activity.DriverExecutingOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.tts.activity.DriverHistoryOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.common.activity.VersionInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.common.activity.WebViewActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
