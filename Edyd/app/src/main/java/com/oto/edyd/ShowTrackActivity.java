@@ -64,7 +64,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     private TrackLineBean tlb;
     private ArrayList<LatLng> pos;
     private CusProgressDialog loadingDialog; //页面切换过度
-//    private CheckBox cb_switchTrack;
+    //    private CheckBox cb_switchTrack;
     private RouteSearch routeSearch;
 
     private LatLonPoint startPoint;
@@ -73,7 +73,9 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     private DriveRouteResult driveRouteResult;
     private TextView tv_traffic_detail;
     private LinearLayout ll_switch_track;//轨迹图和折线图的切换按钮
-    private boolean isTrack=false;//表示现在地图上显示的是否是轨迹
+    private boolean isTrack = false;//表示现在地图上显示的是否是轨迹
+
+    private boolean isShippingEndPoint = false;
 
     private Handler handler = new Handler() {
         @Override
@@ -127,14 +129,14 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                     aMap.addPolyline(line);
                     onMapLoaded();
                     if ((Integer) msg.obj == SHOW_TRACK) {
-                        isTrack=true;
+                        isTrack = true;
                         tv_track_name.setText("折线");
                         if (startPoint != null && endPoint != null) {
                             //汽车未走完的规划路径
                             calculateDriveRoute(startPoint, endPoint);
                         }
-                    }else{
-                        isTrack=false;
+                    } else {
+                        isTrack = false;
                         tv_track_name.setText("轨迹");
                         dissmissProgressDialog();
                         tv_traffic_detail.setVisibility(View.GONE);
@@ -210,9 +212,11 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                 if (point.getControlStatusInt() >= 30) {
                     //终点是收货地
                     endPoint = new LatLonPoint(tlb.getReceiverLat(), tlb.getReceiverLng());
+                    isShippingEndPoint = false;
                 } else {
                     //终点是发货地
                     endPoint = new LatLonPoint(tlb.getSenderLat(), tlb.getSenderLng());
+                    isShippingEndPoint = true;
                 }
             } else {
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ending));
@@ -319,7 +323,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     private void initFields() {
 
         tv_track_name = (TextView) findViewById(R.id.tv_track_name);
-        tv_traff_time=(TextView)findViewById(R.id.tv_traff_time);
+        tv_traff_time = (TextView) findViewById(R.id.tv_traff_time);
         tv_traffic_detail = (TextView) findViewById(R.id.tv_traff_detail);
         final Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
@@ -338,11 +342,11 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                         driveRouteResult = result;
                         DrivePath drivePath = driveRouteResult.getPaths().get(0);
                         List<DriveStep> setps = drivePath.getSteps();
-                       List<LatLng> points=new ArrayList<LatLng>();
-                        for(DriveStep step:setps){
-                           for (LatLonPoint po:step.getPolyline()){
-                               points.add(new LatLng(po.getLatitude(),po.getLongitude()));
-                           }
+                        List<LatLng> points = new ArrayList<LatLng>();
+                        for (DriveStep step : setps) {
+                            for (LatLonPoint po : step.getPolyline()) {
+                                points.add(new LatLng(po.getLatitude(), po.getLongitude()));
+                            }
                         }
                         //画轨迹线
                         PolylineOptions line = new PolylineOptions();
@@ -364,10 +368,21 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                         dissmissProgressDialog();
                         tv_traffic_detail.setVisibility(View.VISIBLE);
                         String strDis = drivePath.getDistance() / 1000 + "公里；";//返回驾车距离，单位米。
-                        String strTime = drivePath.getDuration() / 60 + "分钟；";//返回驾车预计时间，单位秒
-                        tv_traffic_detail.setText("距离发货地大约：" + strDis );
+                        //提示距离
+                        if (isShippingEndPoint) {
+                            tv_traffic_detail.setText("距离发货地大约：" + strDis);
+                        } else {
+                            tv_traffic_detail.setText("距离收货地大约：" + strDis);
+                        }
+
+                        double minTime = drivePath.getDuration() / 60;//返回驾车预计时间，单位秒
                         tv_traff_time.setVisibility(View.VISIBLE);
-                        tv_traff_time.setText("大约需要：" + strTime);
+
+                        if (minTime < 60) {
+                            tv_traff_time.setText("大约需要：" + minTime + "分钟");
+                        } else {
+                            tv_traff_time.setText("大约需要："+minTime/60+"小时"+minTime%60+"分钟");
+                        }
 //                        drivingRouteOverlay.zoomToSpan();
                     } else {
                         common.showToast(mActivity, "对不起，没有搜索到相关数据！");
@@ -401,14 +416,14 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
 //                }
 //            }
 //        });
-        ll_switch_track= (LinearLayout)findViewById(R.id.ll_switch_track);
+        ll_switch_track = (LinearLayout) findViewById(R.id.ll_switch_track);
         ll_switch_track.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isTrack){
+                if (isTrack) {
                     //切换成折线图
                     getInfo(SHOW_POLYLINE);
-                }else {
+                } else {
                     //切换成轨迹图
                     getInfo(SHOW_TRACK);
                 }
