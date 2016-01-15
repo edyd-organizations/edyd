@@ -591,6 +591,7 @@ public class ReceivingOrderDetail extends Activity {
     }
     public void checkTrack(View v){//查看轨迹
         Intent intent = new Intent(this, ShowTrackActivity.class);
+//        Intent intent = new Intent(this, ShowTrackActivity3D.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("detailBean",infos);
         intent.putExtras(bundle);

@@ -173,10 +173,6 @@ public class DriverGPSPathActivity extends Activity implements AMapNaviListener,
         });
     }
 
-
-
-
-
     public void startGps(View view) {//开始导航
 
 //        if (!isGPS) {
@@ -422,16 +418,12 @@ public class DriverGPSPathActivity extends Activity implements AMapNaviListener,
             mNaviStart = new NaviLatLng(latitude, longitude);
             mStartPoints.clear();
             mStartPoints.add(mNaviStart);
-//            dissmissGPSProgressDialog();
-//            showGPSProgressDialog();
             calculateDriveRoute();
 
         } else {
-            // Log.e("AmapErr", "Location ERR:" + amapLocation.getAMapException().getErrorCode());
             Common.showToast(this, "定位异常");
             dissmissProgressDialog();
         }
-
     }
 
     @Override
