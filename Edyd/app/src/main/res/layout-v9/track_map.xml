@@ -42,19 +42,77 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <CheckBox
-            android:id="@+id/cb_switchTrack"
+        <!--  <CheckBox
+              android:id="@+id/cb_switchTrack"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentRight="true"
+              android:layout_centerVertical="true"
+              android:layout_marginRight="5dp"
+              android:text="轨迹" />-->
+        <LinearLayout
+            android:id="@+id/ll_switch_track"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="轨迹"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            />
+            android:layout_marginRight="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/changingover" />
+
+            <TextView
+                android:id="@+id/tv_track_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:text="轨迹"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
     </RelativeLayout>
 
-        <com.amap.api.maps2d.MapView
-            android:id="@+id/track_mapview"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+    <com.amap.api.maps2d.MapView
+        android:id="@+id/track_mapview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#88ffffff"
+
+        >
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:id="@+id/tv_traff_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="全程大约：78公里"
+            android:textColor="#5d5d5d"
+            android:layout_marginLeft="15dp"
+            android:visibility="gone"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_marginTop="2dp"
+            android:id="@+id/tv_traff_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="大约需要：：30分钟"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone"
+            android:textColor="#999999"
+            android:textSize="14dp" />
+    </LinearLayout>
 
 </LinearLayout>

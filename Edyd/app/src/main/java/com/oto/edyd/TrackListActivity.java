@@ -100,6 +100,7 @@ public class TrackListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(mActivity, ShowTrackActivity.class);
+//                Intent intent = new Intent(mActivity, ShowTrackActivity3D.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("detailBean", infos.get(i));
                 intent.putExtras(bundle);

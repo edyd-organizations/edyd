@@ -602,6 +602,7 @@ public class ShipperOrderOperateItemDetailActivity extends Activity implements V
 
     public void checkTrack(){//查看轨迹
         Intent intent = new Intent(this, ShowTrackActivity.class);
+//        Intent intent = new Intent(this, ShowTrackActivity3D.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("detailBean",infos);
         intent.putExtras(bundle);

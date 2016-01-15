@@ -10,6 +10,15 @@ public class TrackPointBean {
     private String operTime;
     private String addr;
     private long primaryId;
+    private int controlStatusInt;
+
+    public int getControlStatusInt() {
+        return controlStatusInt;
+    }
+
+    public void setControlStatusInt(int controlStatusInt) {
+        this.controlStatusInt = controlStatusInt;
+    }
 
     public long getPrimaryId() {
         return primaryId;

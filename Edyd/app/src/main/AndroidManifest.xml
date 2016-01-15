@@ -355,6 +355,9 @@
             android:name=".ShowTrackActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ShowTrackActivity3D"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ShipperOrderOperateActivity"
             android:screenOrientation="portrait" />
         <activity

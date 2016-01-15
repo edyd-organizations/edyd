@@ -7,11 +7,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,11 +23,14 @@ import com.amap.api.maps2d.model.LatLngBounds;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.PolylineOptions;
+import com.amap.api.maps2d.overlay.DrivingRouteOverlay;
 import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.geocoder.GeocodeResult;
-import com.amap.api.services.geocoder.GeocodeSearch;
-import com.amap.api.services.geocoder.RegeocodeQuery;
-import com.amap.api.services.geocoder.RegeocodeResult;
+import com.amap.api.services.route.BusRouteResult;
+import com.amap.api.services.route.DrivePath;
+import com.amap.api.services.route.DriveRouteResult;
+import com.amap.api.services.route.DriveStep;
+import com.amap.api.services.route.RouteSearch;
+import com.amap.api.services.route.WalkRouteResult;
 import com.oto.edyd.model.TrackBean;
 import com.oto.edyd.model.TrackLineBean;
 import com.oto.edyd.model.TrackPointBean;
@@ -43,7 +45,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.logging.LogRecord;
+import java.util.List;
 
 /**
  * Created by liubaozhong on 2015/12/1.
@@ -62,8 +64,16 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     private TrackLineBean tlb;
     private ArrayList<LatLng> pos;
     private CusProgressDialog loadingDialog; //页面切换过度
-    private CheckBox cb_switchTrack;
+//    private CheckBox cb_switchTrack;
+    private RouteSearch routeSearch;
 
+    private LatLonPoint startPoint;
+    private LatLonPoint endPoint;
+
+    private DriveRouteResult driveRouteResult;
+    private TextView tv_traffic_detail;
+    private LinearLayout ll_switch_track;//轨迹图和折线图的切换按钮
+    private boolean isTrack=false;//表示现在地图上显示的是否是轨迹
 
     private Handler handler = new Handler() {
         @Override
@@ -72,26 +82,26 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
             aMap.clear();
             switch (msg.what) {
                 case 0x12:
-                    loadingDialog.getLoadingDialog().dismiss();
                     if (tlb.getReceiverLat() > 0 && tlb.getSenderLat() > 0 && tlb.getReceiverLng() > 0 && tlb.getSenderLng() > 0) {
 
-                        //发货人图标
                         LatLng senderPoint = new LatLng(tlb.getSenderLat(), tlb.getSenderLng());
+                        //发货人图标
                         MarkerOptions markerOptions = new MarkerOptions();
                         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.deliveryside));
                         markerOptions.position(senderPoint);
                         markerOptions.title("发货方公司").draggable(true).anchor(0.5f, 1.0f);
                         Marker marker = aMap.addMarker(markerOptions);
-                        marker.showInfoWindow();
+//                        marker.showInfoWindow();
 
-                        //收货人图标
+                        //收货人终点坐标
                         LatLng receiverPoint = new LatLng(tlb.getReceiverLat(), tlb.getReceiverLng());
+                        //收货人图标
                         MarkerOptions marOptions = new MarkerOptions();
-                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.receivingparty));
-                        markerOptions.position(receiverPoint);
-                        markerOptions.title("收货方公司").draggable(true).anchor(0.5f, 1.0f);
+                        marOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.receivingparty));
+                        marOptions.position(receiverPoint);
+                        marOptions.title("收货方公司").draggable(true).anchor(0.5f, 1.0f);
                         Marker receiverMarker = aMap.addMarker(marOptions);
-                        receiverMarker.showInfoWindow();
+//                        receiverMarker.showInfoWindow();
                     }
                     //画轨迹线
                     PolylineOptions line = new PolylineOptions();
@@ -99,6 +109,8 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                     pos = new ArrayList<LatLng>();
                     if (list.size() == 0) {
                         Common.showToast(mActivity, "暂时没有轨迹");
+                        dissmissProgressDialog();
+                        return;
                     }
                     for (int i = 0; i < list.size(); i++) {
                         TrackPointBean point = list.get(i);
@@ -111,17 +123,51 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
 
                     line.addAll(pos);
                     line.color(Color.RED);
-                    line.width(5);
+                    line.width(10);
                     aMap.addPolyline(line);
-
                     onMapLoaded();
+                    if ((Integer) msg.obj == SHOW_TRACK) {
+                        isTrack=true;
+                        tv_track_name.setText("折线");
+                        if (startPoint != null && endPoint != null) {
+                            //汽车未走完的规划路径
+                            calculateDriveRoute(startPoint, endPoint);
+                        }
+                    }else{
+                        isTrack=false;
+                        tv_track_name.setText("轨迹");
+                        dissmissProgressDialog();
+                        tv_traffic_detail.setVisibility(View.GONE);
+                        tv_traff_time.setVisibility(View.GONE);
+                    }
+
                     break;
             }
         }
     };
-    private GeocodeSearch geocoderSearch;
+    private TextView tv_track_name;
+    private TextView tv_traff_time;
 
 
+    // 计算驾车路线
+    private void calculateDriveRoute(LatLonPoint startPoint, LatLonPoint endPoint) {
+        RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(
+                startPoint, endPoint);
+        // 第一个参数表示路径规划的起点和终点，第二个参数表示驾车模式，第三个参数表示途经点，
+        // 第四个参数表示避让区域，第五个参数表示避让道路
+        RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo, RouteSearch.DrivingDefault,
+                null, null, "");
+        routeSearch.calculateDriveRouteAsyn(query);// 异步路径规划驾车模式查询
+    }
+
+    // 计算驾车路线
+//    private void calculateDriveRoute() {
+//        boolean isSuccess = mAMapNavi.calculateDriveRoute(mStartPoints, mEndPoints, null, AMapNavi.DrivingDefault);
+//        if (!isSuccess) {
+//            Toast.makeText(this, "路线计算失败,检查参数情况", Toast.LENGTH_SHORT).show();
+//            dissmissProgressDialog();
+//        }
+//    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,6 +205,15 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
             //如果是最后一个坐标
             if (!"收货完成".equals(list.get(list.size() - 1).getControlStatus())) {
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.car));
+                //添加起点坐标
+                startPoint = new LatLonPoint(point.getLat(), point.getLng());
+                if (point.getControlStatusInt() >= 30) {
+                    //终点是收货地
+                    endPoint = new LatLonPoint(tlb.getReceiverLat(), tlb.getReceiverLng());
+                } else {
+                    //终点是发货地
+                    endPoint = new LatLonPoint(tlb.getSenderLat(), tlb.getSenderLng());
+                }
             } else {
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ending));
             }
@@ -170,29 +225,45 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
         Marker marker = aMap.addMarker(markerOptions);
 
         marker.setObject(point);
-        marker.showInfoWindow();
+//        marker.showInfoWindow();
 
     }
 
 
     private void setUpMap() {
-
         aMap.setMapType(AMap.MAP_TYPE_NORMAL); // 矢量地图模式
         aMap.setOnMarkerClickListener(this);// 设置点击marker事件监听器
 //        aMap.setOnMapLoadedListener(this);// 设置amap加载成功事件监听器
         aMap.setMyLocationEnabled(true);//默认地图可以自动定位
         aMap.setOnInfoWindowClickListener(this);// 设置点击infoWindow事件监听器
         aMap.setInfoWindowAdapter(this);// 设置自定义InfoWindow样式
+    }
+
+    /**
+     * 显示进度框
+     */
+
+    private void showProgressDialog() {
+        if (loadingDialog == null) {
+            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
+        }
+        loadingDialog.getLoadingDialog().show();
 
     }
 
-    private void getInfo(final int isTrack) {
-        loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
-        loadingDialog.getLoadingDialog().show();
+    /**
+     * 隐藏进度框
+     */
+    private void dissmissProgressDialog() {
+        loadingDialog.getLoadingDialog().dismiss();
+    }
+
+    private void getInfo(final int trackType) {
+        showProgressDialog();
 
         long primaryId = bean.getPrimaryId();
         String url;
-        if (isTrack==SHOW_TRACK) {
+        if (trackType == SHOW_TRACK) {
             //轨迹
             url = Constant.ENTRANCE_PREFIX_v1 + "getRealMapLineTest.json?sessionUuid="
                     + sessionUuid + "&primaryId=" + primaryId;
@@ -205,8 +276,11 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
             @Override
             public void onError(Request request, Exception e) {
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
-                loadingDialog.getLoadingDialog().dismiss();
+                dissmissProgressDialog();
+                //请求失败checkbox返回原来的状态
+//                cb_switchTrack.setChecked(!cb_switchTrack.isChecked());
             }
+
             @Override
             public void onResponse(String response) {
 //                Common.printErrLog("轨迹地图" + response);
@@ -216,7 +290,9 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                     jsonObject = new JSONObject(response);
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), "返回信息失败", Toast.LENGTH_SHORT).show();
-                        loadingDialog.getLoadingDialog().dismiss();
+                        dissmissProgressDialog();
+                        //请求失败checkbox返回原来的状态
+//                        cb_switchTrack.setChecked(!cb_switchTrack.isChecked());
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
@@ -224,8 +300,10 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                     String objStr = obj.toString();
                     tlb = Common.readJsonToCommandObject(objStr);
 
+
                     Message message = new Message();
                     message.what = 0x12;
+                    message.obj = (Integer) trackType;
                     handler.sendMessage(message);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -239,21 +317,104 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     }
 
     private void initFields() {
-        Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+
+        tv_track_name = (TextView) findViewById(R.id.tv_track_name);
+        tv_traff_time=(TextView)findViewById(R.id.tv_traff_time);
+        tv_traffic_detail = (TextView) findViewById(R.id.tv_traff_detail);
+        final Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
-        cb_switchTrack = (CheckBox) findViewById(R.id.cb_switchTrack);
-        cb_switchTrack.setOnClickListener(new View.OnClickListener() {
+        routeSearch = new RouteSearch(this);
+        routeSearch.setRouteSearchListener(new RouteSearch.OnRouteSearchListener() {
+            @Override
+            public void onBusRouteSearched(BusRouteResult busRouteResult, int i) {
+
+            }
+
+            @Override
+            public void onDriveRouteSearched(DriveRouteResult result, int rCode) {
+                if (rCode == 0) {
+                    if (result != null && result.getPaths() != null
+                            && result.getPaths().size() > 0) {
+                        driveRouteResult = result;
+                        DrivePath drivePath = driveRouteResult.getPaths().get(0);
+                        List<DriveStep> setps = drivePath.getSteps();
+                       List<LatLng> points=new ArrayList<LatLng>();
+                        for(DriveStep step:setps){
+                           for (LatLonPoint po:step.getPolyline()){
+                               points.add(new LatLng(po.getLatitude(),po.getLongitude()));
+                           }
+                        }
+                        //画轨迹线
+                        PolylineOptions line = new PolylineOptions();
+                        line.addAll(points);
+                        line.color(Color.BLUE);
+                        line.width(10);
+                        line.setDottedLine(true);
+                        aMap.addPolyline(line);
+
+//                        aMap.clear();// 清理地图上的所有覆盖物
+//                        DrivingRouteOverlay drivingRouteOverlay = new DrivingRouteOverlay(
+//                                ShowTrackActivity.this, aMap, drivePath, driveRouteResult.getStartPos(),
+//                                driveRouteResult.getTargetPos());
+
+//                        drivingRouteOverlay.removeFromMap();
+//                        drivingRouteOverlay.addToMap();
+//                        drivingRouteOverlay.setNodeIconVisibility(false);
+
+                        dissmissProgressDialog();
+                        tv_traffic_detail.setVisibility(View.VISIBLE);
+                        String strDis = drivePath.getDistance() / 1000 + "公里；";//返回驾车距离，单位米。
+                        String strTime = drivePath.getDuration() / 60 + "分钟；";//返回驾车预计时间，单位秒
+                        tv_traffic_detail.setText("距离收货地大约：" + strDis );
+                        tv_traff_time.setVisibility(View.VISIBLE);
+                        tv_traff_time.setText("大约需要：" + strTime);
+//                        drivingRouteOverlay.zoomToSpan();
+                    } else {
+                        common.showToast(mActivity, "对不起，没有搜索到相关数据！");
+                    }
+                } else if (rCode == 27) {
+                    common.showToast(mActivity, "搜索失败,请检查网络连接！");
+                } else if (rCode == 32) {
+                    common.showToast(mActivity, "key验证无效！");
+                } else {
+                    common.showToast(mActivity, "未知错误，请稍后重试!错误码为"
+                            + rCode);
+                }
+            }
+
+            @Override
+            public void onWalkRouteSearched(WalkRouteResult walkRouteResult, int i) {
+
+            }
+        });
+
+//        cb_switchTrack = (CheckBox) findViewById(R.id.cb_switchTrack);
+//        cb_switchTrack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (((CheckBox) v).isChecked()) {
+//                    //选中就用轨迹图
+//                    getInfo(SHOW_TRACK);
+//                } else {
+//                    //未选中折现图
+//                    getInfo(SHOW_POLYLINE);
+//                }
+//            }
+//        });
+        ll_switch_track= (LinearLayout)findViewById(R.id.ll_switch_track);
+        ll_switch_track.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
-                    //选中就用轨迹图
-                    getInfo(SHOW_TRACK);
-                } else {
-                    //未选中折现图
+                if(isTrack){
+                    //切换成折线图
                     getInfo(SHOW_POLYLINE);
+                }else {
+                    //切换成轨迹图
+                    getInfo(SHOW_TRACK);
                 }
             }
         });
+
     }
 
     /**
@@ -310,13 +471,6 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
         time.setText(trackPointBean.getOperTime());
         TextView address = (TextView) infoWindow.findViewById(R.id.address);//地址
         address.setText(trackPointBean.getAddr());
-
-//        LatLonPoint latLonPoint = new LatLonPoint(trackPointBean.getLat(), trackPointBean.getLng());
-//        RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 200,
-//                GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
-//        geocoderSearch = new GeocodeSearch(this);
-//        geocoderSearch.setOnGeocodeSearchListener(this);
-//        geocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
         return infoWindow;
     }
 
@@ -383,7 +537,8 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     public void onMapLoaded() {
 
         LatLngBounds.Builder buidler = new LatLngBounds.Builder();
-        if (tlb != null && tlb.getReceiverLat() != 0 && tlb.getSenderLat() != 0 && tlb.getReceiverLng() != 0 && tlb.getSenderLng() != 0) {
+        if (tlb != null && tlb.getReceiverLat() != 0 && tlb.getSenderLat() != 0
+                && tlb.getReceiverLng() != 0 && tlb.getSenderLng() != 0) {
             buidler.include(new LatLng(tlb.getSenderLat(), tlb.getSenderLng()));
             buidler.include(new LatLng(tlb.getReceiverLat(), tlb.getReceiverLng()));
         }
