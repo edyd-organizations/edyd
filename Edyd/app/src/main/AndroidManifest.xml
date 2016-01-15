@@ -493,6 +493,10 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".module.tts.activity.DriverHistoryOrderActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".module.common.activity.VersionInfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".module.common.activity.WebViewActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

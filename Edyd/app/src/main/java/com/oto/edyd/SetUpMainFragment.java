@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.oto.edyd.module.common.activity.VersionInfoActivity;
 import com.oto.edyd.utils.Constant;
 
 import java.util.ArrayList;
@@ -103,6 +104,8 @@ public class SetUpMainFragment extends Fragment implements View.OnClickListener 
                     transaction.commit();
                     break;
                 case 3:
+                    Intent intent = new Intent(getActivity(), VersionInfoActivity.class);
+                    startActivity(intent);
                     break;
             }
         }

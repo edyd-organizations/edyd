@@ -3,14 +3,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_EDEDED">
+    android:background="@color/gray_EEEEEE">
+
     <!--模拟ActionBar-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/user_icon_8">
         <LinearLayout
-            android:id="@+id/enterprise_information_back"
+            android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -28,32 +29,53 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/setup_detail_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/enterprise_info_title"
             android:textColor="@android:color/white"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:text="检测更新"/>
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/enterprise_list"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:src="@mipmap/version_code_logo"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:choiceMode="singleChoice"
-        android:background="@android:color/white">
-    </ListView>
-    <ListView
-        android:id="@+id/enterprise_list_sec"
-        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="当前版本号："/>
+        <TextView
+            android:id="@+id/version_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="1.0.6"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/check_update"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:choiceMode="singleChoice"
-        android:background="@android:color/white">
-    </ListView>
-
-
-
+        android:background="@drawable/bt_yes_register_border"
+        android:layout_gravity="center"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:textSize="16sp"
+        android:text="检测更新"/>
 </LinearLayout>

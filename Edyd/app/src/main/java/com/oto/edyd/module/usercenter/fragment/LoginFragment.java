@@ -259,7 +259,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             public void onError(Request request, Exception e) {
                 //网络异常
                 common.showToast(context, Constant.INTERNET_REQUEST_ABNORMAL);
-                //transitionDialog.getLoadingDialog().dismiss();
+                transitionDialog.getLoadingDialog().dismiss();
             }
 
             @Override
@@ -276,7 +276,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         //用户名和密码错误
                         common.showToast(context, Constant.INVALID_USERNAME_PASSWORD);
-                        //transitionDialog.getLoadingDialog().dismiss();
+                        transitionDialog.getLoadingDialog().dismiss();
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
@@ -288,7 +288,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     if (!common.isSave(map)) {
                         //用户信息保存失败
                         common.showToast(context, Constant.USER_INFO_SAVE_FAIL);
-                        //transitionDialog.getLoadingDialog().dismiss();
+                        transitionDialog.getLoadingDialog().dismiss();
                         return;
                     }
 
@@ -313,7 +313,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             public void onError(Request request, Exception e) {
                 //请求异常
                 common.showToast(context, Constant.INTERNET_REQUEST_ABNORMAL);
-                //transitionDialog.getLoadingDialog().dismiss();
+                transitionDialog.getLoadingDialog().dismiss();
             }
 
             @Override
@@ -326,7 +326,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         //账户类型请求失败
                         common.showToast(context, Constant.ACCOUNT_TYPE_INFO_REQUEST_FAIL);
-                        //transitionDialog.getLoadingDialog().dismiss();
+                        transitionDialog.getLoadingDialog().dismiss();
                         return;
                     }
 
@@ -342,7 +342,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     //保存账户类型信息
                     if (!common.isSave(map)) {
                         common.showToast(context, Constant.ACCOUNT_TYPE_INFO_SAVE_FAIL);
-                        //transitionDialog.getLoadingDialog().dismiss();
+                        transitionDialog.getLoadingDialog().dismiss();
                         return;
                     }
 
@@ -369,7 +369,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             public void onError(Request request, Exception e) {
                 //请求异常
                 common.showToast(context, Constant.INTERNET_REQUEST_ABNORMAL);
-                //transitionDialog.getLoadingDialog().dismiss();
+                transitionDialog.getLoadingDialog().dismiss();
             }
 
             @Override
@@ -382,7 +382,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         //角色类型请求异常
                         common.showToast(context, "角色类型请求异常");
-                        //transitionDialog.getLoadingDialog().dismiss();
+                        transitionDialog.getLoadingDialog().dismiss();
                         return;
                     }
 
@@ -395,7 +395,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     if (!common.isSave(map)) {
                         //角色类型保存失败
                         common.showToast(context, getString(R.string.role_type_info_save_error));
-                        //transitionDialog.getLoadingDialog().dismiss();
+                        transitionDialog.getLoadingDialog().dismiss();
                         return;
                     }
 
@@ -421,7 +421,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             public void onError(Request request, Exception e) {
                 //请求异常
                 common.showToast(context, Constant.INTERNET_REQUEST_ABNORMAL);
-                //transitionDialog.getLoadingDialog().dismiss();
+                transitionDialog.getLoadingDialog().dismiss();
             }
 
             @Override
@@ -437,7 +437,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     //保存账户ID
                     if (!common.isSave(map)) {
                         common.showToast(context, getString(R.string.role_type_info_save_error));
-                        //transitionDialog.getLoadingDialog().dismiss();
+                        transitionDialog.getLoadingDialog().dismiss();
                         return;
                     }
 

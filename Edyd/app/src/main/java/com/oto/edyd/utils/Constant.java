@@ -40,6 +40,7 @@ public class Constant {
    // public final static String CMB_CALLBACK_ADDRESS = "http://www.edyd.cn/callback/updateBillStatus.json";
 
     public final static String EDYD = "http://www.edyd.cn/";
+    public final static String FIR_IM_ANDROID = "http://fir.im/duoyidianAndroid";
     //系统状态码
     public final static String LOGIN_SUCCESS_STATUS = "200";  //请求成功
     public final static String NOT_SETTING_SESSION_ID = "401"; //没有设置会话ID
