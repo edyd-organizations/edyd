@@ -15,11 +15,16 @@ import android.widget.Toast;
 
 import com.oto.edyd.lib.slidingmenu.SlidingMenu;
 import com.oto.edyd.lib.slidingmenu.app.SlidingFragmentActivity;
+import com.oto.edyd.module.common.activity.NoticeActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.ServiceUtil;
 import com.umeng.message.PushAgent;
+import com.umeng.message.UmengMessageHandler;
+import com.umeng.message.UmengNotificationClickHandler;
+import com.umeng.message.entity.UMessage;
 import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UpdateConfig;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +72,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         initListener(); //初始化监听器
         initLeftMenu(); //初始化侧边栏
         initMainIndex(); //初始化主界面
-        initUmengMessage(); //初始化友盟消息推送服务
+        initUmengService(); //初始化友盟消息推送服务
         invokeTimer(); //是否开启定时器
     }
 
@@ -147,11 +152,74 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
      * 初始化友盟消息推送服务
      */
     private void initUmengMessage() {
-        PushAgent mPushAgent = EdydApplication.mPushAgent;
-        mPushAgent.enable();
-        PushAgent.getInstance(MainActivity.this).onAppStart();
-        UmengUpdateAgent.setUpdateOnlyWifi(false);
-        UmengUpdateAgent.update(this);
+//        //推送
+//        PushAgent pushAgent = PushAgent.getInstance(context);
+//        pushAgent.enable();
+//        pushAgent.onAppStart();
+//        //自动更新
+//        UmengUpdateAgent.setUpdateOnlyWifi(false);
+//        UmengUpdateAgent.update(context);
+    }
+
+    /**
+     * 初始化友盟服务
+     */
+    private void initUmengService() {
+        //开启推送服务
+        PushAgent pushAgent = PushAgent.getInstance(context);
+        pushAgent.enable(); //开启推送
+        pushAgent.onAppStart(); //统计应用启动
+
+        //自动更新
+        UmengUpdateAgent.setUpdateOnlyWifi(false); //关闭紧在wifi下更新
+        UmengUpdateAgent.update(context); //开启自动更新
+
+        //自定义通知栏样式
+        UmengMessageHandler messageHandler = new UmengMessageHandler() {
+            @Override
+            public void dealWithCustomMessage(Context context, UMessage uMessage) {
+                super.dealWithCustomMessage(context, uMessage);
+            }
+
+            @Override
+            public void dealWithNotificationMessage(Context context, UMessage uMessage) {
+                common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+                if(common.isLogin()) {
+                    super.dealWithNotificationMessage(context, uMessage);
+                }
+            }
+
+        };
+
+        //自定义通知处理类
+        UmengNotificationClickHandler umengNotificationClickHandler = new UmengNotificationClickHandler() {
+            @Override
+            public void dealWithCustomAction(Context context, UMessage uMessage) {
+                super.dealWithCustomAction(context, uMessage);
+            }
+
+            @Override
+            public void openActivity(Context context, UMessage uMessage) {
+                super.openActivity(context, uMessage);
+                Map<String, String> map = uMessage.extra;
+                String messageType = map.get("messageType");
+                Intent intent;
+                if(messageType.equals(Constant.DRIVER_MESSAGE_TYPE)) { //司机消息
+                    intent = new Intent(context, OrderOperateActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("order",0);
+                    startActivity(intent);
+                } else if(messageType.equals(Constant.ENTERPRISE_MESSAGE_TYPE)) {
+                    intent = new Intent(context, NoticeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+
+            }
+        };
+        pushAgent.setMessageHandler(messageHandler); //自定义消息处理类
+        pushAgent.setNotificationClickHandler(umengNotificationClickHandler); ////自定义通知处理类
+        pushAgent.setMergeNotificaiton(false);  //合并通知消息 true始终只会看到一条消息
     }
 
     @Override

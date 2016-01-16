@@ -123,51 +123,52 @@ public class EdydApplication extends Application {
 //		alarmSender = PendingIntent.getService(getApplicationContext(), 0x20, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 //		AlarmManager am = (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
 
-		//友盟消息推送
-		mPushAgent = PushAgent.getInstance(getApplicationContext());
-		UmengMessageHandler messageHandler = new UmengMessageHandler() {
-			@Override
-			public void dealWithCustomMessage(Context context, UMessage uMessage) {
-				super.dealWithCustomMessage(context, uMessage);
-			}
-
-			@Override
-			public void dealWithNotificationMessage(Context context, UMessage uMessage) {
-				common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-				if(common.isLogin()) {
-					super.dealWithNotificationMessage(context, uMessage);
-				}
-			}
-
-		};
-		UmengNotificationClickHandler umengNotificationClickHandler = new UmengNotificationClickHandler() {
-			@Override
-			public void dealWithCustomAction(Context context, UMessage uMessage) {
-				super.dealWithCustomAction(context, uMessage);
-			}
-
-			@Override
-			public void openActivity(Context context, UMessage uMessage) {
-				super.openActivity(context, uMessage);
-				Map<String, String> map = uMessage.extra;
-				String messageType = map.get("messageType");
-				Intent intent;
-				if(messageType.equals(Constant.DRIVER_MESSAGE_TYPE)) { //司机消息
-					intent = new Intent(context, OrderOperateActivity.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					intent.putExtra("order",0);
-					startActivity(intent);
-				} else if(messageType.equals(Constant.ENTERPRISE_MESSAGE_TYPE)) {
-					intent = new Intent(context, NoticeActivity.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					startActivity(intent);
-				}
-
-			}
-		};
-		mPushAgent.setMessageHandler(messageHandler);
-		mPushAgent.setNotificationClickHandler(umengNotificationClickHandler);
-		mPushAgent.setMergeNotificaiton(false);  //合并通知消息 true始终只会看到一条消息
+//		//友盟消息推送
+//		context = getApplicationContext();
+//		mPushAgent = PushAgent.getInstance(context);
+//		UmengMessageHandler messageHandler = new UmengMessageHandler() {
+//			@Override
+//			public void dealWithCustomMessage(Context context, UMessage uMessage) {
+//				super.dealWithCustomMessage(context, uMessage);
+//			}
+//
+//			@Override
+//			public void dealWithNotificationMessage(Context context, UMessage uMessage) {
+//				common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+//				if(common.isLogin()) {
+//					super.dealWithNotificationMessage(context, uMessage);
+//				}
+//			}
+//
+//		};
+//		UmengNotificationClickHandler umengNotificationClickHandler = new UmengNotificationClickHandler() {
+//			@Override
+//			public void dealWithCustomAction(Context context, UMessage uMessage) {
+//				super.dealWithCustomAction(context, uMessage);
+//			}
+//
+//			@Override
+//			public void openActivity(Context context, UMessage uMessage) {
+//				super.openActivity(context, uMessage);
+//				Map<String, String> map = uMessage.extra;
+//				String messageType = map.get("messageType");
+//				Intent intent;
+//				if(messageType.equals(Constant.DRIVER_MESSAGE_TYPE)) { //司机消息
+//					intent = new Intent(context, OrderOperateActivity.class);
+//					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//					intent.putExtra("order",0);
+//					startActivity(intent);
+//				} else if(messageType.equals(Constant.ENTERPRISE_MESSAGE_TYPE)) {
+//					intent = new Intent(context, NoticeActivity.class);
+//					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//					startActivity(intent);
+//				}
+//
+//			}
+//		};
+//		mPushAgent.setMessageHandler(messageHandler);
+//		mPushAgent.setNotificationClickHandler(umengNotificationClickHandler);
+//		mPushAgent.setMergeNotificaiton(false);  //合并通知消息 true始终只会看到一条消息
 	}
 
 	/**
