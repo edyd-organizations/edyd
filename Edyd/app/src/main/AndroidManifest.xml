@@ -412,10 +412,6 @@
             android:name="com.umeng.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
-        <!--<activity
-            android:name="com.umeng.update.UpdateDialogActivity"
-            android:process=":DownloadingService"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />-->
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
