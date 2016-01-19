@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +17,10 @@ import android.widget.Toast;
 import com.oto.edyd.lib.slidingmenu.SlidingMenu;
 import com.oto.edyd.lib.slidingmenu.app.SlidingFragmentActivity;
 import com.oto.edyd.module.common.activity.NoticeActivity;
+import com.oto.edyd.module.oil.fragment.MainOilFragment;
+import com.oto.edyd.module.tts.fragment.TransportDriverFragment;
+import com.oto.edyd.module.tts.fragment.TransportUndertakeFragment;
+import com.oto.edyd.module.usercenter.activity.LoginActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.ServiceUtil;
@@ -24,9 +29,7 @@ import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 import com.umeng.update.UmengUpdateAgent;
-import com.umeng.update.UpdateConfig;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -43,6 +46,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     private RadioButton market; //商城
     private RadioButton vehicleServer; //车辆服务
     private RadioButton box; //百宝箱
+    private ImageView enterLogin; //登录
 
     //----------变量-------------
     private MainViewHolder mainViewHolder; //用于主界面暂存Fragment
@@ -74,6 +78,11 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         initMainIndex(); //初始化主界面
         initUmengService(); //初始化友盟消息推送服务
         invokeTimer(); //是否开启定时器
+        if(common.isLogin()) {
+            enterLogin.setVisibility(View.GONE);
+        } else {
+            enterLogin.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -85,6 +94,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         market = (RadioButton) findViewById(R.id.main_market);
         vehicleServer = (RadioButton) findViewById(R.id.main_vehicle_server);
         box = (RadioButton) findViewById(R.id.main_box);
+        enterLogin = (ImageView) findViewById(R.id.enter_login);
         fragmentManager = getSupportFragmentManager();
         mainViewHolder = new MainViewHolder();
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
@@ -100,6 +110,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         market.setOnClickListener(this);
         vehicleServer.setOnClickListener(this);
         box.setOnClickListener(this);
+        enterLogin.setOnClickListener(this);
     }
 
     /**
@@ -149,19 +160,6 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     }
 
     /**
-     * 初始化友盟消息推送服务
-     */
-    private void initUmengMessage() {
-//        //推送
-//        PushAgent pushAgent = PushAgent.getInstance(context);
-//        pushAgent.enable();
-//        pushAgent.onAppStart();
-//        //自动更新
-//        UmengUpdateAgent.setUpdateOnlyWifi(false);
-//        UmengUpdateAgent.update(context);
-    }
-
-    /**
      * 初始化友盟服务
      */
     private void initUmengService() {
@@ -188,7 +186,6 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                     super.dealWithNotificationMessage(context, uMessage);
                 }
             }
-
         };
 
         //自定义通知处理类
@@ -229,7 +226,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 switchFooterMenu(1); //切换首页
                 break;
             case R.id.main_market:
-                switchFooterMenu(2); //切换商城
+                switchFooterMenu(2); //切换油品
                 break;
             case R.id.main_vehicle_server:
                 switchFooterMenu(3); //切换运输服务
@@ -237,6 +234,14 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             case R.id.main_box:
                 mainTitle.setText("百宝箱");
                 switchFooterMenu(4); //切换百宝箱
+                break;
+            case R.id.enter_login: //登录入口
+                if(common.isLogin()) {
+                   common.showToast(context, "已经登录");
+                    return;
+                }
+                Intent intent = new Intent(context, LoginActivity.class);
+                startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE); //启动另外一个状态码
                 break;
         }
     }
@@ -246,7 +251,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
      */
     static class MainViewHolder {
         MainIndexFragment indexFragment; //首页
-        MainMarketFragment marketFragment; //商城
+        MainOilFragment oilFragment; //油品
         Fragment transportFragment; //运输服务
         MainBoxFragment boxFragment; //百宝箱
     }
@@ -271,6 +276,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 mainViewHolder.indexFragment = new MainIndexFragment();
             }
             fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.indexFragment).commitAllowingStateLoss();
+            enterLogin.setVisibility(View.GONE);
             home.setChecked(true);
         }
         //注册返回
@@ -284,6 +290,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 mainViewHolder.indexFragment = new MainIndexFragment();
             }
             fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.indexFragment).commitAllowingStateLoss();
+            enterLogin.setVisibility(View.GONE);
             home.setChecked(true);
         }
         //账户类型返回
@@ -361,20 +368,6 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             finish();
         }
     }
-    /**
-     * 退出操作
-     */
-    public void exitOperate() {
-        mainTitle.setText("首页");
-        //判断首页是否已经缓存
-        if(mainViewHolder.indexFragment == null) {
-            //未缓存，创建新对象
-            mainViewHolder.indexFragment = new MainIndexFragment();
-        }
-        fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.indexFragment).commit();
-        home.setChecked(true);
-        stopTimer(); //停止定时
-    }
 
     /**
      * 等待切换
@@ -419,6 +412,22 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     };
 
     /**
+     * 退出操作
+     */
+    public void exitOperate() {
+        mainTitle.setText("首页");
+        //判断首页是否已经缓存
+        if(mainViewHolder.indexFragment == null) {
+            //未缓存，创建新对象
+            mainViewHolder.indexFragment = new MainIndexFragment();
+        }
+        fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.indexFragment).commit();
+        home.setChecked(true);
+        enterLogin.setVisibility(View.VISIBLE);
+        stopTimer(); //停止定时
+    }
+
+    /**
      * 切换底部菜单栏
      * @param index 底部菜单所以
      */
@@ -433,14 +442,18 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 }
                 fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.indexFragment).commitAllowingStateLoss();
                 break;
-            case 2: //商城
-                mainTitle.setText("商城");
-                //判断商城是否已经缓存
-                if(mainViewHolder.marketFragment == null) {
-                    //未缓存，创建新对象
-                    mainViewHolder.marketFragment = new MainMarketFragment();
+            case 2: //油品
+                if (!common.isLogin()) {
+                    common.showToast(context, "用户未登录，请先登录");
+                    return;
                 }
-                fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.marketFragment).commitAllowingStateLoss();
+                mainTitle.setText("油品");
+                //判断首页是否已经缓存
+                if(mainViewHolder.oilFragment == null) {
+                    //未缓存，创建新对象
+                    mainViewHolder.oilFragment = new MainOilFragment();
+                }
+                fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.oilFragment).commitAllowingStateLoss();
                 break;
             case 3: //运输服务
                 mainTitle.setText("运输服务");

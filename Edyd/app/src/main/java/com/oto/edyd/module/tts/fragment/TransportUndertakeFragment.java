@@ -1,4 +1,4 @@
-package com.oto.edyd;
+package com.oto.edyd.module.tts.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,18 +15,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oto.edyd.CarrierHisOrderActivity;
+import com.oto.edyd.PanoramaActivity;
+import com.oto.edyd.R;
+import com.oto.edyd.ReceiveOrderActivity;
+import com.oto.edyd.SelectTransportRole;
+import com.oto.edyd.TrackListActivity;
+import com.oto.edyd.TransportOrderDispatchActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 
 /**
- * Created by yql on 2015/9/21.
+ * 功能：运输服务-承运方主界面
+ * 文件名：com.oto.edyd.TransportDriverFragment.java
+ * 创建时间：2015/9/21
+ * 作者：yql
  */
 public class TransportUndertakeFragment extends Fragment implements View.OnClickListener{
-
-    private View transportUndertakeView;
-    public FragmentManager fragmentManager; //fragment管理器
-
-    private RelativeLayout selectTransportRole; //选择运输服务角色
+    //---------------基本View控件---------------
     public TextView enterpriseName; //用户名
     public TextView transportRole; //角色
     private LinearLayout distributeOrder; //派单
@@ -34,24 +40,57 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
     private LinearLayout panorama; //全景图
     private LinearLayout driverInfo; //司机信息
     private ImageView transportReceiveOrder; //接单
-
+    //---------------变量---------------
+    private Context context; //上下文对象
+    public FragmentManager fragmentManager; //fragment管理器
     private Common fixedCommon;
     private Common common;
+    //private RelativeLayout selectTransportRole; //选择运输服务角色
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //transportServiceView = inflater.inflate(R.layout.transport_service_main, null);
-        transportUndertakeView = inflater.inflate(R.layout.transport_undertake, null);
-        initFields(transportUndertakeView);
+        View view = inflater.inflate(R.layout.transport_undertake, null);
+        init(view);
+        return  view;
+    }
+
+    /**
+     * 初始化数据
+     * @param view
+     */
+    private void init(View view) {
+        initFields(view);
+        initListeners();
         switchTransportRole();
-        selectTransportRole.setOnClickListener(this);
+    }
+
+    /**
+     * 初始化字段
+     */
+    private void initFields(View view) {
+        enterpriseName = (TextView) view.findViewById(R.id.enterprise_name);
+        transportRole = (TextView) view.findViewById(R.id.transport_role);
+        distributeOrder = (LinearLayout) view.findViewById(R.id.ll_distribute_order);
+        trackSearch = (LinearLayout) view.findViewById(R.id.ll_track_search);
+        panorama = (LinearLayout) view.findViewById(R.id.ll_panorama);
+        driverInfo = (LinearLayout) view.findViewById(R.id.ll_driver_info);
+        transportReceiveOrder = (ImageView) view.findViewById(R.id.iv_receive_order);
+        context = getActivity();
+        fragmentManager = getActivity().getSupportFragmentManager();
+        fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
+        common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+    }
+
+    /**
+     * 初始化监听器
+     */
+    private void initListeners() {
+        trackSearch.setOnClickListener(this);
         transportReceiveOrder.setOnClickListener(this);
         distributeOrder.setOnClickListener(this);
         panorama.setOnClickListener(this);
-//        trackSearch.setOnClickListener(this);
         driverInfo.setOnClickListener(this);
-        return  transportUndertakeView;
     }
 
     @Override
@@ -97,27 +136,6 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
                 startActivity(intent);
                 break;
         }
-    }
-
-    /**
-     * 初始化数据
-     */
-    private void initFields(View view) {
-        this.fragmentManager = getActivity().getSupportFragmentManager();
-        selectTransportRole = (RelativeLayout) view.findViewById(R.id.select_transport_role);
-        enterpriseName = (TextView) view.findViewById(R.id.enterprise_name);
-        transportRole = (TextView) view.findViewById(R.id.transport_role);
-        distributeOrder = (LinearLayout) view.findViewById(R.id.ll_distribute_order);
-        //查看轨迹
-        trackSearch = (LinearLayout) view.findViewById(R.id.ll_track_search);
-        trackSearch.setOnClickListener(this);
-
-        panorama = (LinearLayout) view.findViewById(R.id.ll_panorama);
-        driverInfo = (LinearLayout) view.findViewById(R.id.ll_driver_info);
-        transportReceiveOrder = (ImageView) view.findViewById(R.id.iv_receive_order);
-
-        fixedCommon = new Common(getActivity().getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
-        common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
     }
 
     /**

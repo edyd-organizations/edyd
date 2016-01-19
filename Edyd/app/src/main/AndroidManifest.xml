@@ -506,6 +506,8 @@
         <activity
             android:name=".module.common.activity.WebViewActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".module.common.activity.ComTransportActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

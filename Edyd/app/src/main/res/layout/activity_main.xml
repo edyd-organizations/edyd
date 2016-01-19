@@ -28,6 +28,16 @@
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold"/>
+
+        <!--右边菜单-->
+        <ImageView
+            android:id="@+id/enter_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:src="@mipmap/home_login"/>
     </RelativeLayout>
 
     <!--自定义ViewPager-->
@@ -62,12 +72,12 @@
             android:id="@+id/main_market"
             style="@style/MainBottomMenu"
             android:drawableTop="@drawable/bg_bottom_menu_market_main"
-            android:text="@string/market" />
+            android:text="@string/oil" />
         <RadioButton
             android:id="@+id/main_vehicle_server"
             style="@style/MainBottomMenu"
             android:drawableTop="@drawable/bg_bottom_menu_vehicle_server_main"
-            android:text="@string/vehicle_service"/>
+            android:text="@string/insurance"/>
         <RadioButton
             android:id="@+id/main_box"
             style="@style/MainBottomMenu"

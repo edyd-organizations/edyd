@@ -2,323 +2,355 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/gray_EDEDED">
 
-<!--    <ImageView
+    <!--<ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:scaleType="fitXY"
         android:src="@mipmap/slide_01"
         android:adjustViewBounds="true"/>-->
-
-    <!--<com.oto.edyd.lib.imageindicator.ImageIndicatorView-->
-        <!--android:id="@+id/indicate_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="120dp" />-->
-
     <com.oto.edyd.lib.imageindicator.network.NetworkImageIndicatorView
         android:id="@+id/network_indicate_view"
         android:layout_width="match_parent"
         android:layout_height="120dp" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="6dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:gravity="center">
-        <LinearLayout
-            android:id="@+id/order_main"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_weight="1">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:background="@drawable/border_radius"
-                android:src="@mipmap/order_main"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2sp"
-                android:text="@string/order_main"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/collection_main"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_weight="1">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:background="@drawable/border_radius"
-                android:src="@mipmap/collection_main"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2sp"
-                android:text="@string/collection_main"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/position_main"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_weight="1">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:background="@drawable/border_radius"
-                android:src="@mipmap/position_main"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2sp"
-                android:text="@string/position_main"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/weather_main"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_weight="1">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:background="@drawable/border_radius"
-                android:src="@mipmap/weather_main"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2sp"
-                android:text="@string/weather_main"/>
-        </LinearLayout>
-    </LinearLayout>
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@color/gray_EDEDED"
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="5dp">
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:background="@color/orange_FF6600">
             <LinearLayout
-                android:id="@+id/guidepost_main"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
+                android:id="@+id/driver"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/border_filleted_corner"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:layout_marginRight="3dp"
-                android:layout_weight="1">
-
+                android:orientation="vertical">
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="centerInside"
-                    android:src="@mipmap/guidepost_main"/>
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:src="@mipmap/tab_home_normal"/>
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/my_vehicle_order"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/white" />
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:text="我是司机"/>
             </LinearLayout>
-            <LinearLayout
-                android:id="@+id/car_order_main"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
+            <View
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
+                android:background="@color/white"/>
+            <LinearLayout
+                android:id="@+id/undertaker"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:layout_marginLeft="3dp"
-                android:layout_weight="1">
-                <LinearLayout
-                    android:id="@+id/order_today"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:background="@drawable/border_filleted_corner"
-                    android:gravity="center"
-                    android:layout_marginBottom="2dp"
-                    android:layout_weight="1">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scaleType="centerInside"
-                        android:src="@mipmap/car_order_main"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        android:textColor="@android:color/white"
-                        android:text="@string/today_order"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/panorama"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:background="@drawable/border_filleted_corner"
-                    android:gravity="center"
-                    android:layout_marginTop="3dp"
-                    android:layout_weight="1">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scaleType="centerInside"
-                        android:src="@mipmap/wait_for_car"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        android:textColor="@android:color/white"
-                        android:text="@string/panorama"/>
-                </LinearLayout>
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:src="@mipmap/tab_home_normal"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:text="我是承运商"/>
+            </LinearLayout>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/white"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:src="@mipmap/tab_home_normal"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:text="我是货主"/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="6dp"
-            android:layout_weight="1">
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:layout_marginTop="12dp"
+            android:background="@color/white"
+            android:orientation="vertical">
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_marginRight="3dp"
-                android:layout_weight="1">
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
                 <LinearLayout
-                    android:id="@+id/oil_server_main"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
+                    android:id="@+id/oil_card_pay"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/border_filleted_corner_oil_server"
-                    android:gravity="center"
-                    android:layout_weight="1">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/oil_server_main"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="@android:color/white"
-                        android:text="@string/oil_server_main" />
-                </LinearLayout>
-                <LinearLayout
+                    android:layout_weight="1"
                     android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1">
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:scaleType="center"
+                        android:src="@mipmap/home_oil"/>
                     <LinearLayout
-                        android:id="@+id/insurance_main"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_weight="2"
                         android:orientation="vertical"
-                        android:layout_marginRight="4dp"
-                        android:background="@drawable/border_filleted_corner_insurance"
-                        android:gravity="center"
-                        android:layout_weight="1">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:src="@mipmap/insurance_main"/>
+                        android:gravity="left"
+                        android:paddingRight="10dp">
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/insurance_main"
-                            android:textColor="@android:color/white"
-                            android:textSize="14sp"/>
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:gravity="bottom"
+                            android:layout_marginBottom="5dp"
+                            android:text="油卡充值"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:gravity="top"
+                            android:layout_marginTop="5dp"
+                            android:text="全国中石化中石油"/>
                     </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/finance_main"
+                </LinearLayout>
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="match_parent"
+                    android:background="@color/gray_AAAAAA"/>
+                <LinearLayout
+                    android:id="@+id/transport_insurance"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:layout_marginLeft="4dp"
-                        android:gravity="center"
-                        android:background="@drawable/border_filleted_corner_insurance"
-                        android:layout_weight="1">
+                        android:layout_height="wrap_content">
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:src="@mipmap/finance_main"/>
+                            android:layout_alignParentRight="true"
+                            android:src="@mipmap/home_superscript"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center">
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:scaleType="center"
+                                android:src="@mipmap/home_insurance"/>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:orientation="vertical"
+                                android:gravity="left"
+                                android:paddingRight="10dp">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold"
+                                    android:gravity="bottom"
+                                    android:layout_marginBottom="5dp"
+                                    android:text="货运保险"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:textSize="12sp"
+                                    android:gravity="top"
+                                    android:layout_marginTop="5dp"
+                                    android:text="保障你的财产安全"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gray_AAAAAA"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:id="@+id/goods_order"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:scaleType="center"
+                        android:layout_weight="1"
+                        android:src="@mipmap/home_order"/>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        android:gravity="left"
+                        android:paddingRight="10dp">
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/finance_main"
-                            android:textColor="@android:color/white"
-                            android:textSize="14sp"/>
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:gravity="bottom"
+                            android:layout_marginBottom="5dp"
+                            android:text="商品订单"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:gravity="top"
+                            android:layout_marginTop="5dp"
+                            android:text="查看全部订单"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="match_parent"
+                    android:background="@color/gray_AAAAAA"/>
+                <LinearLayout
+                    android:id="@+id/invite_friends"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:scaleType="center"
+                        android:layout_weight="1"
+                        android:src="@mipmap/home_invite_friends"/>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        android:gravity="left"
+                        android:paddingRight="10dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:gravity="bottom"
+                            android:layout_marginBottom="5dp"
+                            android:text="邀请朋友"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:gravity="top"
+                            android:layout_marginTop="5dp"
+                            android:text="大家一起来分享"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-            <RelativeLayout
-                android:id="@+id/discount_main"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@mipmap/discount_main"
-                android:layout_marginLeft="3dp"
-                android:layout_weight="1">
-                <ImageView
-                    android:id="@+id/clock"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/clock_main"
-                    android:layout_centerInParent="true"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/gray_EDEDED"
+            android:gravity="center"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <TextView
-                    android:id="@+id/latest_news"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/latest"
                     android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/red_fe020e"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"/>
+                    android:text="交易平台通过认证平台担保，享受诚信首赔"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:text="@string/super_substantial"
-                    android:textColor="@android:color/white"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"/>
+                    android:textColor="@color/user_icon_8"
+                    android:textSize="14sp"
+                    android:text="客服热线："/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/advertisement"
-                    android:textColor="@android:color/white"
-                    android:layout_below="@id/clock"
-                    android:textSize="12sp"
-                    android:layout_centerInParent="true"/>
-            </RelativeLayout>
+                    android:textColor="@color/user_icon_8"
+                    android:textSize="14sp"
+                    android:text="4008-761-167"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/user_icon_8"
+                    android:textSize="14sp"
+                    android:text="客服QQ："/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/user_icon_8"
+                    android:textSize="14sp"
+                    android:text="4008761167"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
