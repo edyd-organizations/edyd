@@ -65,16 +65,16 @@
         >
         <!-- 高德地图 正式地址-->
         <!-- gd 正式版 key-->
-        <!--   <meta-data
-             android:name="com.amap.api.v2.apikey"
-             android:value="391bb51068ef790c94b3f93fe9852186" />-->
-
-        <!-- lbz gd debug key -->
-        <meta-data
+        <!--  <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />
+            android:value="391bb51068ef790c94b3f93fe9852186" />-->
 
-        <!-- yql gd debug key -->
+       <!-- lbz gd debug key -->
+         <meta-data
+             android:name="com.amap.api.v2.apikey"
+             android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />
+
+         <!-- yql gd debug key -->
         <!--  <meta-data
                android:name="com.amap.api.v2.apikey"
                android:value="b0da2264df3bf64e1b5b9143dff0b427" />-->

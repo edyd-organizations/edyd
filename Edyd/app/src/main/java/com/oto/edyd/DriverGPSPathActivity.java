@@ -61,22 +61,22 @@ public class DriverGPSPathActivity extends Activity implements AMapNaviListener,
     private ArrayList<NaviLatLng> mEndPoints = new ArrayList<NaviLatLng>();
 
     private ProgressDialog mGPSProgressDialog;// GPS过程显示状态
-//    private boolean isGPS;
+    //    private boolean isGPS;
     private long primaryId;//主键
     private CusProgressDialog loadingDialog;
     private Activity mActivity;
     private String sessionUuid;
     private LocationManagerProxy mLocationManger;
-    private Handler handler=new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case GET_END_POI:
                     //起点为空
-                        mLocationManger = LocationManagerProxy.getInstance(mActivity);
-                        //进行一次定位
-                        mLocationManger.requestLocationData(LocationProviderProxy.AMapNetwork, -1, 15, DriverGPSPathActivity.this);
+                    mLocationManger = LocationManagerProxy.getInstance(mActivity);
+                    //进行一次定位
+                    mLocationManger.requestLocationData(LocationProviderProxy.AMapNetwork, -1, 15, DriverGPSPathActivity.this);
 //                        showProgressDialog();// 显示进度框
 
                     break;
@@ -95,9 +95,9 @@ public class DriverGPSPathActivity extends Activity implements AMapNaviListener,
     }
 
     private void initField(Bundle savedInstanceState) {
-        mActivity=this;
+        mActivity = this;
         Intent intent = getIntent();
-        primaryId=intent.getLongExtra("PrimaryId", 1);
+        primaryId = intent.getLongExtra("PrimaryId", 1);
         Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
 
@@ -138,13 +138,14 @@ public class DriverGPSPathActivity extends Activity implements AMapNaviListener,
         showProgressDialog();
 
         String url = Constant.ENTRANCE_PREFIX_v1 + "appQueryNaviPosition.json?sessionUuid="
-                + sessionUuid + "&primaryId="+primaryId;
+                + sessionUuid + "&primaryId=" + primaryId;
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
                 dissmissProgressDialog();
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onResponse(String response) {
                 JSONObject jsonObject;
