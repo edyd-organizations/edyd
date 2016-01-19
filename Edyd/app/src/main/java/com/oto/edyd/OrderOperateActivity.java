@@ -687,8 +687,8 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
                     jsonObject = new JSONObject(response);
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), getString(R.string.pull_info_exception), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+                        return;}
+
                     jsonArray = jsonObject.getJSONArray("rows");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tempJSON = jsonArray.getJSONObject(i);

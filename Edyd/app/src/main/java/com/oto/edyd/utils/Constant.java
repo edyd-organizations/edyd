@@ -38,7 +38,7 @@ public class Constant {
 
     public final static String CMB_CALLBACK_ADDRESS = "http://120.24.236.223/callback/updateBillStatus.json";
     //public final static String CMB_CALLBACK_ADDRESS = "http://www.edyd.cn/callback/updateBillStatus.json";
-
+    
     public final static String EDYD = "http://www.edyd.cn/";
     public final static String FIR_IM_ANDROID = "http://fir.im/duoyidianAndroid";
     //系统状态码

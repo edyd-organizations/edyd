@@ -81,7 +81,7 @@ public class DriverGPSActivity extends Activity implements AMapNaviViewListener{
         viewOptions.setTrafficLayerEnabled(true);//设置[实时交通图层开关按钮]是否显示
 
         mAmapAMapNaviView.setViewOptions(viewOptions);
-        mAmapAMapNaviView.getMap().setTrafficEnabled(true);
+        mAmapAMapNaviView.getMap().setTrafficEnabled(true);//显示交通线
 
     }
     private AMapNaviListener getAMapNaviListener() {
