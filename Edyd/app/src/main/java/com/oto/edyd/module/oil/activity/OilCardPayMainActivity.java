@@ -45,8 +45,8 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
     //---------------------View基本控件---------------------
     private LinearLayout back; //返回
     private EditText etAccount; //金额
-    private EditText etPayPassword; //支付密码
-    private TextView forgetPayPassword; //忘记支付密码
+    //private EditText etPayPassword; //支付密码
+    //private TextView forgetPayPassword; //忘记支付密码
     private TextView payWho; //支付给谁
     private TextView btPay; //支付按钮
 
@@ -59,8 +59,8 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
     private final static String FIX_CoNo = "002968"; //商户号
     //返回码
     private final static int HANDLER_ORDER_NUMBER_REQUEST_EXCEPTION = 0x09; //订单号请求异常返回码
-    private final static int HANDLER_PASSWORD_VERIFY_SUCCESS = 0x10; //密码认证成功
-    private final static int HANDLER_PASSWORD_VERIFY_FAIL = 0x11; //密码认证失败
+    //private final static int HANDLER_PASSWORD_VERIFY_SUCCESS = 0x10; //密码认证成功
+    //private final static int HANDLER_PASSWORD_VERIFY_FAIL = 0x11; //密码认证失败
     private final static int HANDLER_PREPARE_PAY_DATA_SAVE_SUCCESS = 0x12; //预充值数据保存成功返回码
     private final static int HANDLER_CHECK_CODE_BACK = 0x13; //校验码返回成功
     private final static int HANDLER_CONFIRM_ACCOUNT_SUCCESS = 0x14; //验证用户账户存在返回码
@@ -90,8 +90,8 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
     private void initFields() {
         back = (LinearLayout) findViewById(R.id.back);
         etAccount = (EditText) findViewById(R.id.pay_amount);
-        etPayPassword = (EditText) findViewById(R.id.pay_password);
-        forgetPayPassword = (TextView) findViewById(R.id.forget_pay_password);
+        //etPayPassword = (EditText) findViewById(R.id.pay_password);
+        //forgetPayPassword = (TextView) findViewById(R.id.forget_pay_password);
         payWho = (TextView) findViewById(R.id.pay_who);
         btPay = (TextView) findViewById(R.id.pay);
         context = OilCardPayMainActivity.this;
@@ -107,7 +107,7 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
     private void initListener() {
         back.setOnClickListener(this);
         btPay.setOnClickListener(this);
-        forgetPayPassword.setOnClickListener(this);
+        //forgetPayPassword.setOnClickListener(this);
         etAccount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -120,40 +120,36 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
                 String content = s.toString(); //金额
                 if (!TextUtils.isEmpty(content)) { //判断金额是否为空
                     //金额不为空
-                    String password = etPayPassword.getText().toString(); //密码
-                    if (!TextUtils.isEmpty(password)) { //判断密码是否为空
-                        //密码不为空
-                        setPayButtonEnabled();
-                    }
+                    setPayButtonEnabled();
                 } else {
                     //金额为空，设置按钮不可用
                     setPayButtonDisabled();
                 }
             }
         });
-        etPayPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String content = s.toString(); //密码
-                if (!TextUtils.isEmpty(content)) { //判断密码是否为空
-                    //密码不为空
-                    String account = etAccount.getText().toString(); //金额
-                    if (!TextUtils.isEmpty(account)) { //判断金额是否为空
-                        //金额不为空
-                        setPayButtonEnabled();
-                    }
-                } else {
-                    //密码为空，设置按钮不可用
-                    setPayButtonDisabled();
-                }
-            }
-        });
+//        etPayPassword.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                String content = s.toString(); //密码
+//                if (!TextUtils.isEmpty(content)) { //判断密码是否为空
+//                    //密码不为空
+//                    String account = etAccount.getText().toString(); //金额
+//                    if (!TextUtils.isEmpty(account)) { //判断金额是否为空
+//                        //金额不为空
+//                        setPayButtonEnabled();
+//                    }
+//                } else {
+//                    //密码为空，设置按钮不可用
+//                    setPayButtonDisabled();
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -165,10 +161,10 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
             case R.id.pay: //支付
                 confirmAccountIsExist(); //验证账户是否存在
                 break;
-            case R.id.forget_pay_password: //忘记支付密码
-                Intent intent=new Intent(this,OilCarSetPasswordActivity.class);
-                startActivity(intent);
-                break;
+//            case R.id.forget_pay_password: //忘记支付密码
+//                Intent intent=new Intent(this,OilCarSetPasswordActivity.class);
+//                startActivity(intent);
+//                break;
         }
     }
 
@@ -261,69 +257,45 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
     /**
      * 验证支付密码
      */
-    private void verifyPayPassword() {
-        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
-        String accountId = common.getStringByKey("ACCOUNT_ID"); //账户ID
-        String payPassword = etPayPassword.getText().toString(); //支付密码
-        String amount = etAccount.getText().toString(); //金额
-        String password = etPayPassword.getText().toString(); //密码
-        String array[] = amount.split("\\."); //已“.”分割整数和小数部分，进行验证
-
-        if(array.length > 0 &&!TextUtils.isEmpty(array[0])) { //判断是否只输入“.”
-            //数组有值
-            Double dAmount = Double.valueOf(amount);
-            if(dAmount == 0) {
-                //金额不能等于零
-                common.showToast(context, "数值不能为零");
-                return;
-            }
-            String tAmount = formatAmount(amount); //验证金额格式及格式化金额
-            if(tAmount.equals("OVER_LENGTH")) {
-                common.showToast(context, "请保留两位小数");
-                return;
-            } else if(tAmount.equals("ERROR_FORMAT")) {
-                common.showToast(context, "充值金额格式不正确");
-                return;
-            }
-            merchantsBankOrder.setAmount(tAmount); //格式正确，设置值
-        } else {
-            common.showToast(context, "充值金额格式不正确");
-            return;
-        }
-
-        String url = Constant.ENTRANCE_PREFIX + "testPayPassword.json?sessionUuid=" + sessionUuid + "&accountId=" + accountId + "&payPassword=" + payPassword;
-        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
-
-            @Override
-            public void onError(Request request, Exception e) {
-                common.showToast(context, "请求异常");
-            }
-
-            @Override
-            public void onResponse(String response) {
-                JSONObject jsonObject;
-                JSONArray jsonArray;
-                try {
-                    jsonObject = new JSONObject(response);
-                    String status = jsonObject.getString("status"); //返回状态
-                    if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) { //判断是否成功返回
-                        common.showToast(context, "验证失败");
-                    }
-                    jsonArray = jsonObject.getJSONArray("rows");
-                    boolean flag = jsonArray.getBoolean(0); //认证成功返回true， false不成功
-                    Message message = Message.obtain();
-                    if(flag) {
-                        message.what = HANDLER_PASSWORD_VERIFY_SUCCESS; //支付密码认证成功
-                    } else {
-                        message.what = HANDLER_PASSWORD_VERIFY_FAIL; //支付密码认证失败
-                    }
-                    handler.sendMessage(message);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+//    private void verifyPayPassword() {
+//        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+//        String accountId = common.getStringByKey("ACCOUNT_ID"); //账户ID
+//        //String payPassword = etPayPassword.getText().toString(); //支付密码
+//
+//
+//        String url = Constant.ENTRANCE_PREFIX + "testPayPassword.json?sessionUuid=" + sessionUuid + "&accountId=" + accountId + "&payPassword=";
+//        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+//
+//            @Override
+//            public void onError(Request request, Exception e) {
+//                common.showToast(context, "请求异常");
+//            }
+//
+//            @Override
+//            public void onResponse(String response) {
+//                JSONObject jsonObject;
+//                JSONArray jsonArray;
+//                try {
+//                    jsonObject = new JSONObject(response);
+//                    String status = jsonObject.getString("status"); //返回状态
+//                    if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) { //判断是否成功返回
+//                        common.showToast(context, "验证失败");
+//                    }
+//                    jsonArray = jsonObject.getJSONArray("rows");
+//                    boolean flag = jsonArray.getBoolean(0); //认证成功返回true， false不成功
+//                    Message message = Message.obtain();
+//                    if(flag) {
+//                        message.what = HANDLER_PASSWORD_VERIFY_SUCCESS; //支付密码认证成功
+//                    } else {
+//                        message.what = HANDLER_PASSWORD_VERIFY_FAIL; //支付密码认证失败
+//                    }
+//                    handler.sendMessage(message);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//    }
 
     /**
      * 请求校验码
@@ -428,12 +400,12 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
                     common.showToast(context, "订单号请求异常");
                     finish();
                     break;
-                case HANDLER_PASSWORD_VERIFY_SUCCESS: //密码认证成功
-                    confirmPayDialog(); //弹出确认框
-                    break;
-                case HANDLER_PASSWORD_VERIFY_FAIL: //密码认证失败
-                    common.showToast(context, "密码不正确");
-                    break;
+//                case HANDLER_PASSWORD_VERIFY_SUCCESS: //密码认证成功
+//                    confirmPayDialog(); //弹出确认框
+//                    break;
+//                case HANDLER_PASSWORD_VERIFY_FAIL: //密码认证失败
+//                    common.showToast(context, "密码不正确");
+//                    break;
                 case HANDLER_CHECK_CODE_BACK: //校验码返回成功
                     postOrder(); //提交订单
                     break;
@@ -445,7 +417,8 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
                     startActivityForResult(intent, BACK_CODE);
                     break;
                 case HANDLER_CONFIRM_ACCOUNT_SUCCESS: //验证用户账户存在返回码
-                    verifyPayPassword(); //验证支付密码
+                    //verifyPayPassword(); //验证支付密码
+                    confirmPayDialog();
                     break;
             }
         }
@@ -518,7 +491,32 @@ public class OilCardPayMainActivity extends Activity implements View.OnClickList
      * 确认支付对话框
      */
     private void confirmPayDialog() {
+        String amount = etAccount.getText().toString(); //金额
+        String array[] = amount.split("\\."); //已“.”分割整数和小数部分，进行验证
+
+        if(array.length > 0 &&!TextUtils.isEmpty(array[0])) { //判断是否只输入“.”
+            //数组有值
+            Double dAmount = Double.valueOf(amount);
+            if(dAmount == 0) {
+                //金额不能等于零
+                common.showToast(context, "数值不能为零");
+                return;
+            }
+            String tAmount = formatAmount(amount); //验证金额格式及格式化金额
+            if(tAmount.equals("OVER_LENGTH")) {
+                common.showToast(context, "请保留两位小数");
+                return;
+            } else if(tAmount.equals("ERROR_FORMAT")) {
+                common.showToast(context, "充值金额格式不正确");
+                return;
+            }
+            merchantsBankOrder.setAmount(tAmount); //格式正确，设置值
+        } else {
+            common.showToast(context, "充值金额格式不正确");
+            return;
+        }
         String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
+
         new AlertDialog.Builder(OilCardPayMainActivity.this).setTitle("支付")
                 .setMessage("确定支付对象为" + enterpriseName + "账户")
                 .setPositiveButton("是", new DialogInterface.OnClickListener() {

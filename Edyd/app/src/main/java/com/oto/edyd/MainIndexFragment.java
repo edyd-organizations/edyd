@@ -284,14 +284,6 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
 //                intent = new Intent(getActivity(), OilServiceActivity.class);
 //                startActivity(intent);
 //                break;
-//            case R.id.insurance_main: //保险服务
-//                intent = new Intent(getActivity(), InsuranceActivity.class);
-//                startActivity(intent);
-//                break;
-//            case R.id.finance_main: //保险服务
-//                intent = new Intent(getActivity(), FinancialActivity.class);
-//                startActivity(intent);
-//                break;
 //            case R.id.guidepost_main: //我的车辆订单
 ////                intent = new Intent(getActivity(), OrderOperateActivity.class);
 ////                startActivity(intent);

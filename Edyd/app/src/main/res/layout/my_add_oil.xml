@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray_EDEDED">
     <!--模拟ActionBar-->
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,119 +37,126 @@
             android:textStyle="bold"/>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="10dp">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="油卡账户余额："
-                android:textColor="@color/gray_5d5d5d"
-                android:textSize="16sp" />
-            <TextView
-                android:id="@+id/oil_card_account_balance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/gray_5d5d5d"
-                android:textSize="16sp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/gray_5d5d5d"
-                android:textSize="16sp"
-                android:text="元"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="油卡总数："
-                android:textColor="@color/gray_5d5d5d"
-                android:textSize="16sp" />
-            <TextView
-                android:id="@+id/oil_card_total_number"
-                android:layout_width="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/gray_5d5d5d"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/gray_5d5d5d"
-                android:textSize="16sp"
-                android:text="张"/>
-        </LinearLayout>
-    </RelativeLayout>
-
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="5dp"
-        android:background="@color/gray_DDDDDD"/>
+        android:layout_height="1px"
+        android:background="@color/gray_999999"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_marginTop="12dp"
         android:orientation="vertical">
-        <ListView
-            android:id="@+id/card_number_list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="8"
-            android:choiceMode="singleChoice"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:scrollbars="none">
-        </ListView>
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="bottom"
-            android:layout_margin="10dp">
-            <TextView
-                android:id="@+id/oil_card_apply"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="left">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="油卡账户余额："
+                    android:textColor="@color/gray_5d5d5d"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/oil_card_account_balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_5d5d5d"
+                    android:textSize="15sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_5d5d5d"
+                    android:textSize="15sp"
+                    android:text="元"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="油卡申请"
-                android:layout_gravity="bottom"
-                android:gravity="center"
-                android:background="@drawable/border_corner_blue"
-                android:textColor="@color/white"
-                android:layout_marginLeft="5dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"/>
-            <TextView
-                android:id="@+id/oil_card_account_distribute"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:gravity="right">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="油卡总数："
+                    android:textColor="@color/gray_5d5d5d"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/oil_card_total_number"
+                    android:layout_width="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="@color/gray_5d5d5d"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_5d5d5d"
+                    android:textSize="15sp"
+                    android:text="张"/>
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_DDDDDD"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ListView
+                android:id="@+id/card_number_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="8"
+                android:choiceMode="singleChoice"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:scrollbars="none">
+            </ListView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="金额分配"
-                android:layout_gravity="bottom"
-                android:background="@drawable/border_corner_login_enable"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:layout_marginLeft="5dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"/>
+                android:orientation="horizontal"
+                android:gravity="bottom"
+                android:layout_margin="10dp">
+                <TextView
+                    android:id="@+id/oil_card_apply"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="油卡申请"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:background="@drawable/border_fill_oil"
+                    android:textColor="@color/user_icon_8"
+                    android:layout_marginLeft="5dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"/>
+                <TextView
+                    android:id="@+id/oil_card_account_distribute"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="金额分配"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/border_fill_oil"
+                    android:gravity="center"
+                    android:textColor="@color/user_icon_8"
+                    android:layout_marginLeft="5dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

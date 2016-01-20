@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_DDDDDD">
+    android:background="@color/gray_EDEDED">
 
     <!--模拟ActionBar-->
     <RelativeLayout
@@ -42,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:layout_marginTop="12dp"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,15 +59,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/micro_text_light"
+                    android:textSize="15sp"
+                    android:textColor="@color/gray_5d5d5d"
                     android:text="卡号："/>
                 <TextView
                     android:id="@+id/card_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/micro_text_light" />
+                    android:textSize="15sp"
+                    android:textColor="@color/gray_5d5d5d"/>
             </LinearLayout>
         </LinearLayout>
         <View
@@ -88,14 +89,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/micro_text_light"
+                    android:textSize="15sp"
+                    android:textColor="@color/gray_5d5d5d"
                     android:text="车牌号："/>
                 <TextView
                     android:id="@+id/car_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:textColor="@color/micro_text_light" />
             </LinearLayout>
         </LinearLayout>
@@ -118,20 +119,20 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/micro_text_light"
+                    android:textSize="15sp"
+                    android:textColor="@color/gray_5d5d5d"
                     android:text="备付金余额：￥"/>
                 <TextView
                     android:id="@+id/spare_money"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/micro_text_light" />
+                    android:textSize="15sp"
+                    android:textColor="@color/gray_5d5d5d" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/micro_text_light"
+                    android:textSize="15sp"
+                    android:textColor="@color/gray_5d5d5d"
                     android:text="元"/>
             </LinearLayout>
         </LinearLayout>
@@ -154,20 +155,20 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/micro_text_light"
+                    android:textSize="15sp"
+                    android:textColor="@color/gray_5d5d5d"
                     android:text="卡余额：￥"/>
                 <TextView
                     android:id="@+id/balance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/micro_text_light" />
+                    android:textSize="15sp"
+                    android:textColor="@color/gray_5d5d5d" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/micro_text_light"
+                    android:textSize="15sp"
+                    android:textColor="@color/gray_5d5d5d"
                     android:text="元"/>
             </LinearLayout>
         </LinearLayout>
@@ -190,15 +191,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/micro_text_light"
+                    android:textSize="15sp"
+                    android:textColor="@color/gray_5d5d5d"
                     android:text="油卡绑定时间："/>
                 <TextView
                     android:id="@+id/oil_bind_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/micro_text_light" />
+                    android:textSize="15sp"
+                    android:textColor="@color/gray_5d5d5d" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

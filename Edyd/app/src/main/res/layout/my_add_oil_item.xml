@@ -28,7 +28,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="left"
-                        android:textColor="@color/bright_foreground_light_disabled"
+                        android:textColor="@color/gray_5d5d5d"
                         android:textSize="15sp" />
                     <TextView
                         android:id="@+id/card_number"
@@ -39,7 +39,7 @@
                         android:textSize="15sp"
                         android:layout_gravity="right"
                         android:gravity="right"
-                        android:textColor="@color/bright_foreground_light_disabled" />
+                        android:textColor="@color/gray_5d5d5d" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -52,7 +52,7 @@
                         android:layout_marginTop="5dp"
                         android:textSize="15sp"
                         android:layout_weight="1"
-                        android:textColor="@color/bright_foreground_light_disabled"
+                        android:textColor="@color/gray_5d5d5d"
                         android:layout_gravity="left"
                         android:text="备付金余额"/>
                     <LinearLayout
@@ -65,19 +65,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
-                            android:textColor="@color/user_icon_8"
+                            android:textColor="@color/red_FC4B50"
                             android:text="￥"/>
                         <TextView
                             android:id="@+id/spare_money"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
-                            android:textColor="@color/user_icon_8" />
+                            android:textColor="@color/red_FC4B50" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
-                            android:textColor="@color/user_icon_8"
+                            android:textColor="@color/red_FC4B50"
                             android:text="元"/>
                     </LinearLayout>
                 </LinearLayout>
@@ -92,7 +92,7 @@
                         android:layout_marginTop="5dp"
                         android:textSize="15sp"
                         android:layout_weight="1"
-                        android:textColor="@color/bright_foreground_light_disabled"
+                        android:textColor="@color/gray_5d5d5d"
                         android:layout_gravity="left"
                         android:text="卡余额"/>
                     <LinearLayout
@@ -105,19 +105,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
-                            android:textColor="@color/user_icon_8"
+                            android:textColor="@color/red_FC4B50"
                             android:text="￥"/>
                         <TextView
                             android:id="@+id/balance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
-                            android:textColor="@color/user_icon_8" />
+                            android:textColor="@color/red_FC4B50" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
-                            android:textColor="@color/user_icon_8"
+                            android:textColor="@color/red_FC4B50"
                             android:text="元"/>
                     </LinearLayout>
                 </LinearLayout>

@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray_EDEDED">
 
     <!--模拟ActionBar-->
     <RelativeLayout
@@ -40,7 +41,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none">
+        android:layout_marginTop="12dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,7 +49,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:padding="10dp"
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -66,6 +67,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="车牌号"/>
                         <TextView
                             android:layout_width="wrap_content"
@@ -90,44 +92,105 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="10dp"
                     android:background="@color/gray_DDDDDD"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
                     android:layout_marginTop="10dp">
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="horizontal"
                         android:layout_weight="2"
+                        android:layout_gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/gray_5d5d5d"
+                            android:text="使用人"/>
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/user"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:background="@drawable/edittext_border"
+                        android:layout_weight="1"
+                        android:maxLength="7"
                         android:textSize="14sp"
-                        android:text="是否需要密码"/>
+                        android:padding="3dp"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/gray_DDDDDD"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="2"
+                        android:layout_gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/gray_5d5d5d"
+                            android:text="是否需要密码"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#ffff4444"
+                            android:text="*"/>
+                    </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_weight="1"
-                        android:layout_gravity="center">
+                        android:gravity="center">
 
                         <RadioGroup
                             android:id="@+id/is_need_password"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:layout_weight="1"
-                            android:layout_gravity="center">
+                            android:layout_weight="3"
+                            android:layout_gravity="right">
                             <RadioButton
                                 android:id="@+id/need_password"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:textColor="@color/gray_5d5d5d"
                                 android:text="是"/>
                             <RadioButton
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:textColor="@color/gray_5d5d5d"
                                 android:text="否"/>
                         </RadioGroup>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textSize="10sp"
+                            android:layout_gravity="center"
+                            android:textColor="@color/gray_5d5d5d"
+                            android:text="注：油卡加油时使用"/>
                     </LinearLayout>
                 </LinearLayout>
                 <View
@@ -151,6 +214,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="密码设置"/>
                         <TextView
                             android:id="@+id/tx_password_flag"
@@ -166,6 +230,9 @@
                         android:padding="3dp"
                         android:layout_gravity="center"
                         android:inputType="numberPassword"
+                        android:hint="4-6位整数"
+                        android:textColorHint="@color/gray_C6C6C6"
+                        android:textSize="14sp"
                         android:singleLine="true"
                         android:maxLength="6"
                         android:background="@drawable/edittext_border"
@@ -187,6 +254,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:textSize="14sp"
+                        android:textColor="@color/gray_5d5d5d"
                         android:text="短信提醒"/>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -199,20 +267,29 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:layout_gravity="center">
                             <RadioButton
                                 android:id="@+id/need_message"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:textColor="@color/gray_5d5d5d"
                                 android:text="是"/>
                             <RadioButton
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:textColor="@color/gray_5d5d5d"
                                 android:text="否"/>
                         </RadioGroup>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="10sp"
+                            android:layout_gravity="center"
+                            android:textColor="@color/gray_5d5d5d" />
                     </LinearLayout>
                 </LinearLayout>
                 <View
@@ -236,7 +313,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
-                            android:text="手机号码"/>
+                            android:textColor="@color/gray_5d5d5d"
+                            android:text="联系方式"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -277,18 +355,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="油品限定"/>
                     </LinearLayout>
-                    <EditText
+                    <Spinner
                         android:id="@+id/limit_oil"
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
-                        android:padding="3dp"
                         android:layout_gravity="center"
-                        android:singleLine="true"
                         android:textSize="14sp"
-                        android:maxLength="20"
-                        android:background="@drawable/edittext_border"
+                        android:entries="@array/oil_limit"
                         android:layout_weight="1"/>
                 </LinearLayout>
                 <View
@@ -312,19 +388,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
-                            android:text="限每次加油量"/>
+                            android:textColor="@color/gray_5d5d5d"
+                            android:text="油卡供应商"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#ffff4444"
+                            android:text="*"/>
                     </LinearLayout>
-                    <EditText
-                        android:id="@+id/limit_add_oil_amount"
+                    <Spinner
+                        android:id="@+id/oil_supplier"
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
-                        android:padding="3dp"
                         android:layout_gravity="center"
-                        android:singleLine="true"
-                        android:numeric="decimal"
                         android:textSize="14sp"
-                        android:maxLength="10"
-                        android:background="@drawable/edittext_border"
+                        android:entries="@array/oil_supplier"
                         android:layout_weight="1"/>
                 </LinearLayout>
                 <View
@@ -348,6 +426,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="限日加油金额（元）"/>
                     </LinearLayout>
                     <EditText
@@ -364,16 +443,16 @@
                         android:layout_weight="1"/>
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/gray_DDDDDD"/>
                 <LinearLayout
                     android:id="@+id/company_department"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@color/gray_DDDDDD"/>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -390,6 +469,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="14sp"
+                                android:textColor="@color/gray_5d5d5d"
                                 android:text="公司名称"/>
                         </LinearLayout>
                         <EditText
@@ -404,6 +484,7 @@
                             android:background="@drawable/edittext_border"
                             android:layout_weight="1"/>
                     </LinearLayout>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -425,6 +506,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="14sp"
+                                android:textColor="@color/gray_5d5d5d"
                                 android:text="部门名称"/>
                             <TextView
                                 android:layout_width="wrap_content"
@@ -445,6 +527,50 @@
                             android:editable="false"
                             android:layout_weight="1"/>
                     </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/gray_DDDDDD"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="2"
+                        android:layout_gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/gray_5d5d5d"
+                            android:text="寄存地址"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#ffff4444"
+                            android:text="*"/>
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/consign_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="left"
+                        android:inputType="textMultiLine"
+                        android:minLines="4"
+                        android:maxLines="5"
+                        android:textSize="14sp"
+                        android:background="@drawable/edittext_border"
+                        android:scrollbars="none"/>
                 </LinearLayout>
 
                 <TextView

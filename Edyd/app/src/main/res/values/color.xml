@@ -152,6 +152,7 @@
     <color name="dark_grey">#B8B8B8</color>
 
     <!-- 红色 -->
+    <color name="red_FC4B50">#FC4B50</color>
     <color name="red_FF0000">#FF0000</color>
     <color name="red_CC0000">#CC0000</color>
     <color name="red_fe020e">#fe020e</color>

@@ -1,4 +1,4 @@
-package com.oto.edyd;
+package com.oto.edyd.module.oil.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,7 +9,6 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.BounceInterpolator;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
@@ -17,7 +16,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.oto.edyd.model.OilAmountDistribute;
+import com.oto.edyd.OilCardAddDetailActivity;
+import com.oto.edyd.OilCardAmountDistributeActivity;
+import com.oto.edyd.OilCardApplicationActivity;
+import com.oto.edyd.R;
 import com.oto.edyd.model.OilCardInfo;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -33,57 +35,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by yql on 2015/11/2.
+ * 功能：我的加油卡
+ * 文件名：com.oto.edyd.module.oil.activity.OilFillCardActivity.java
+ * 创建时间：2015/11/02
+ * 作者：yql
  */
-public class AddOilActivity extends Activity implements View.OnClickListener {
-
+public class OilFillCardActivity extends Activity implements View.OnClickListener {
+    //------------基本View控件--------------
     private LinearLayout back; //返回
     private TextView accountBalance; //账户余额
     private TextView totalNumber; //总卡数
     private ListView cardNumberList; //卡数列表
     private TextView apply; //申请
     private TextView accountDistribute; //金额分配
-
     private TextView tOilCardApply; //油卡申请
     private TextView tAmountDistribute; //金额分配
-
+    //------------变量--------------
     private List<OilCardInfo> addOilCards = new ArrayList<OilCardInfo>(); //我的加油卡数量
-
-    private Common common;
+    private Common common; //偏好文件LOGIN_PREFERENCES_FILE对象
+    private Context context; //上下文对象
     private CusProgressDialog cusProgressDialog;
-
     private double totalAmount;
+    private static final int HANDLER_REQUEST_AMOUNT_CODE = 0x10; //请求金额返回码
+    private static final int HANDLER_REQUEST_FILL_CARD_CODE = 0x11; //请求油卡列表
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_add_oil);
-        initFields();
-
-//        requestAddOilCardList(); //请求订单数据
-        requestAmount(); //请求金额
-
-        back.setOnClickListener(this);
-        tOilCardApply.setOnClickListener(this);
-        tAmountDistribute.setOnClickListener(this);
-        cardNumberList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                OilCardInfo oilCardInfo = addOilCards.get(position);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("oil_card_info", oilCardInfo);
-                Intent intent = new Intent(getApplicationContext(), OilCardAddDetailActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
+        init();
     }
 
     /**
      * 初始化数据
      */
+    private void init() {
+        initFields(); //初始化字段
+        initListener(); //初始化监听器
+        requestAmount(); //请求金额
+    }
+
+    /**
+     * 初始化字段
+     */
     private void initFields() {
+        context = OilFillCardActivity.this;
         back = (LinearLayout) findViewById(R.id.back);
         accountBalance = (TextView) findViewById(R.id.oil_card_account_balance);
         totalNumber = (TextView) findViewById(R.id.oil_card_total_number);
@@ -93,6 +89,26 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
         tOilCardApply = (TextView) findViewById(R.id.oil_card_apply);
         tAmountDistribute = (TextView) findViewById(R.id.oil_card_account_distribute);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+    }
+
+    /**
+     * 初始化监听器
+     */
+    private void initListener() {
+        back.setOnClickListener(this);
+        tOilCardApply.setOnClickListener(this);
+        tAmountDistribute.setOnClickListener(this);
+        cardNumberList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                OilCardInfo oilCardInfo = addOilCards.get(position);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("oil_card_info", oilCardInfo);
+                Intent intent = new Intent(context, OilCardAddDetailActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
     }
 
     /**
@@ -107,70 +123,51 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.oil_card_apply: //油卡申请
-                intent = new Intent(getApplicationContext(), OilCardApplicationActivity.class); //油卡金额分配
+                intent = new Intent(context, OilCardApplicationActivity.class); //油卡金额分配
                 startActivity(intent);
                 break;
             case R.id.oil_card_account_distribute: //金额分配
-                intent = new Intent(getApplicationContext(), OilCardAmountDistributeActivity.class); //油卡金额分配
+                intent = new Intent(context, OilCardAmountDistributeActivity.class); //油卡金额分配
                 startActivity(intent);
                 break;
 
         }
     }
 
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 0x11:
-                    requestAddOilCardList();
-                    break;
-                case 0x12: //油卡金额数据返回执行
-                    accountBalance.setText(String.valueOf(totalAmount));
-                    totalNumber.setText(String.valueOf(addOilCards.size()));
-                    cardNumberList.setAdapter(new AddOilAdapter(getApplicationContext()));
-                    cusProgressDialog.getLoadingDialog().dismiss();
-                    break;
-            }
-        }
-    };
-
     /**
      * 请求总金额
      */
     private void requestAmount() {
-
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
         String orgCode = common.getStringByKey(Constant.ORG_CODE);
-
         String url = Constant.ENTRANCE_PREFIX + "iqueryOilShengByEnterpriseInfo.json?sessionUuid=" +sessionUuid+ "&enterpriseId=" + enterpriseId +
                 "&OrgCode=" + orgCode;
 
         OkHttpClientManager.getAsyn(url, new AddOilCardResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
-
+                common.showToast(context, "我的油卡金额请求异常");
             }
 
             @Override
             public void onResponse(String response) {
-                JSONObject addOilJSON;
-                JSONArray addOilArray;
+                JSONObject jsonObject;
+                JSONArray jsonArray;
                 try {
-                    addOilJSON = new JSONObject(response);
-                    String status = addOilJSON.getString("status");
+                    jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
                     if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         //变更列表数据获取失败
                         Toast.makeText(getApplicationContext(), "我的油卡金额异常", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    addOilArray = addOilJSON.getJSONArray("rows");
-                    if(addOilArray.length() > 0) {
-                        totalAmount = addOilArray.getDouble(0);
+                    jsonArray = jsonObject.getJSONArray("rows");
+                    if(jsonArray.length() > 0) {
+                        totalAmount = jsonArray.getDouble(0);
                     }
                     Message message = new Message();
-                    message.what = 0x11;
+                    message.what = HANDLER_REQUEST_AMOUNT_CODE;
                     handler.sendMessage(message);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -227,7 +224,7 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
                     }
 
                     Message message = new Message();
-                    message.what = 0x12;
+                    message.what = HANDLER_REQUEST_FILL_CARD_CODE;
                     handler.sendMessage(message);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -237,15 +234,32 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
     }
 
     /**
+     * 线程通讯
+     */
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case HANDLER_REQUEST_AMOUNT_CODE: //油卡金额返回成功
+                    requestAddOilCardList(); //请求油卡列表
+                    break;
+                case HANDLER_REQUEST_FILL_CARD_CODE: //油卡列表数据返回成功
+                    accountBalance.setText(String.valueOf(totalAmount));
+                    totalNumber.setText(String.valueOf(addOilCards.size()));
+                    cardNumberList.setAdapter(new AddOilAdapter(context));
+                    cusProgressDialog.getLoadingDialog().dismiss();
+                    break;
+            }
+        }
+    };
+
+    /**
      * 自定义适配器
      */
     private class AddOilAdapter extends BaseAdapter {
-
-        private Context context;
         private LayoutInflater inflater;
 
         private AddOilAdapter(Context context) {
-            this.context = context;
             inflater = LayoutInflater.from(context);
         }
 
@@ -303,11 +317,11 @@ public class AddOilActivity extends Activity implements View.OnClickListener {
     }
 
 
-    public abstract class AddOilCardResultCallback<T> extends OkHttpClientManager.ResultCallback<T>{
+    private abstract class AddOilCardResultCallback<T> extends OkHttpClientManager.ResultCallback<T>{
         @Override
         public void onBefore() {
             //请求之前操作
-            cusProgressDialog = new CusProgressDialog(AddOilActivity.this, "正在拼命加载数据...");
+            cusProgressDialog = new CusProgressDialog(OilFillCardActivity.this, "正在拼命加载数据...");
             cusProgressDialog.getLoadingDialog().show();
         }
 

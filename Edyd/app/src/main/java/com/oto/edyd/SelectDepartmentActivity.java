@@ -176,6 +176,7 @@ public class SelectDepartmentActivity extends Activity implements View.OnClickLi
                     for(int i = 0; i < departmentArray.length(); i++) {
                         SelectDepartment selectDepartment = new SelectDepartment();
                         temp = departmentArray.getJSONObject(i);
+                        selectDepartment.setOrgId(temp.getString("id"));
                         selectDepartment.setOrgCode(temp.getString("orgCode"));
                         selectDepartment.setOrgType(temp.getString("orgType"));
                         selectDepartment.setTenantId(temp.getString("tenantId"));

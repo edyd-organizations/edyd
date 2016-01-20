@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_DDDDDD">
+    android:background="@color/gray_EDEDED">
 
     <!--模拟ActionBar-->
     <RelativeLayout
@@ -47,7 +47,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:text="充值金额"
             android:textColor="@color/gray_5d5d5d"/>
         <EditText
@@ -67,15 +67,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:text="元"
             android:textColor="@color/gray_5d5d5d"/>
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray_DDDDDD"/>
-    <LinearLayout
+
+<!--    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -110,13 +107,13 @@
             android:textSize="12sp"
             android:textColor="@color/orange_FF6600"
             android:text="忘记支付密码"/>
-    </LinearLayout>
+    </LinearLayout>-->
 
     <TextView
         android:id="@+id/pay_who"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:textSize="14sp"
         android:textColor="@color/orange_FF6600"/>
@@ -125,10 +122,10 @@
         android:id="@+id/pay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:text="充值"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="登录到网上银行充值"
         android:textSize="16sp"
         android:textColor="@color/white"
         android:gravity="center"

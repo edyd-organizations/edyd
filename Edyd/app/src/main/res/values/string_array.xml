@@ -85,6 +85,16 @@
         <item>日加油金额</item>
         <item>每次加油量</item>
     </string-array>
+    <string-array name="oil_limit">
+        <item>默认不限</item>
+        <item>92#汽油</item>
+        <item>95#汽油</item>
+        <item>98#汽油</item>
+        <item>柴油</item>
+    </string-array>
+    <string-array name="oil_supplier">
+        <item>中石油</item>
+    </string-array>
 
     <string-array name="province">
         <item>北京</item>

@@ -16,7 +16,7 @@ import com.oto.edyd.utils.Constant;
 
 /**
  * 功能：公共Activity
- * 文件名：com.oto.edyd.ComTransportActivity.java
+ * 文件名：com.oto.edyd.module.common.activity.ComTransportActivity.java
  * 创建时间：2016/1/18
  * 作者：yql
  */
