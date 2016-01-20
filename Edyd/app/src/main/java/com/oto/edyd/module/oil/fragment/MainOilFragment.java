@@ -13,11 +13,11 @@ import android.widget.LinearLayout;
 
 import com.oto.edyd.DistributionDetailedSearchActivity;
 import com.oto.edyd.OilCardAmountDistributeActivity;
-import com.oto.edyd.OilCardApplicationActivity;
 import com.oto.edyd.OilCardChangeActivity;
 import com.oto.edyd.R;
 import com.oto.edyd.SelectCardActivity;
 import com.oto.edyd.lib.imageindicator.network.NetworkImageIndicatorView;
+import com.oto.edyd.module.oil.activity.OilCardApplyActivity;
 import com.oto.edyd.module.oil.activity.OilCardPayMainActivity;
 import com.oto.edyd.module.oil.activity.OilFillCardActivity;
 import com.oto.edyd.utils.Common;
@@ -106,7 +106,7 @@ public class MainOilFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.ll_oil_card_apply: //油卡申请
-                intent = new Intent(context, OilCardApplicationActivity.class); //油卡申请
+                intent = new Intent(context, OilCardApplyActivity.class); //油卡申请
                 startActivity(intent);
                 break;
             case R.id.ll_oil_card_change: //油卡变更

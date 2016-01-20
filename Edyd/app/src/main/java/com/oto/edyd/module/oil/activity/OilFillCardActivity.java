@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.oto.edyd.OilCardAddDetailActivity;
 import com.oto.edyd.OilCardAmountDistributeActivity;
-import com.oto.edyd.OilCardApplicationActivity;
 import com.oto.edyd.R;
 import com.oto.edyd.model.OilCardInfo;
 import com.oto.edyd.utils.Common;
@@ -123,7 +122,7 @@ public class OilFillCardActivity extends Activity implements View.OnClickListene
                 finish();
                 break;
             case R.id.oil_card_apply: //油卡申请
-                intent = new Intent(context, OilCardApplicationActivity.class); //油卡金额分配
+                intent = new Intent(context, OilCardApplyActivity.class); //油卡金额分配
                 startActivity(intent);
                 break;
             case R.id.oil_card_account_distribute: //金额分配

@@ -47,7 +47,6 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
 
     private LinearLayout back; //返回
     private EditText inputCarNumber; //车牌号
-    //    private Button search; //搜索
     private TextView amount; //总金额
     private double amountString;
     //    private TextView averageDistribute; //等额预分配
@@ -123,7 +122,6 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
 
             }
         });
-//        search = (Button) findViewById(R.id.search);
         amount = (TextView) findViewById(R.id.amount);
         listDistributeUser = (ListView) findViewById(R.id.list_distribute_user);
         //获得总金额数据

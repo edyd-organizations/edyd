@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.oto.edyd.model.DistributionBean;
 import com.oto.edyd.model.OilDistributeDetailTime;
+import com.oto.edyd.module.oil.activity.OilCardApplyActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -211,7 +212,7 @@ public class OilDistributeDetailActivity extends Activity implements View.OnClic
                 finish();
                 break;
             case R.id.oil_card_apply: //油卡申请
-                intent = new Intent(getApplicationContext(), OilCardApplicationActivity.class); //油卡金额分配
+                intent = new Intent(getApplicationContext(), OilCardApplyActivity.class); //油卡金额分配
                 startActivity(intent);
                 break;
             case R.id.oil_card_account_distribute: //金额分配

@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_DDDDDD">
+    android:background="@color/gray_EDEDED">
 
     <!--模拟ActionBar-->
     <RelativeLayout
@@ -48,9 +48,11 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:focusable="true"
-
             android:focusableInTouchMode="true"
-            android:layout_margin="5dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp">
             <EditText
                 android:id="@+id/input_number_or_card"
                 android:layout_width="match_parent"
@@ -63,8 +65,7 @@
                 android:textSize="14sp"
                 android:drawablePadding="5dp"
                 android:padding="5dp"
-                android:background="@color/white"/>
-
+                android:background="@drawable/border_corner_white"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,7 +76,6 @@
                     android:id="@+id/list_distribute_user_seek"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scrollbars="none"
                     android:descendantFocusability="beforeDescendants">
                 </ListView>
         </LinearLayout>

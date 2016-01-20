@@ -5,120 +5,126 @@
     android:background="@color/white"
     android:focusable="false"
     android:orientation="vertical"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingTop="6dp"
-    android:paddingBottom="6dp"
-  >
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="5dp">
 
     <RelativeLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/order_item_text_line"
-        >
-
-
+        android:layout_marginTop="5dp">
         <TextView
             android:id="@+id/car_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="闽D3240" />
-
+            android:textSize="15sp"
+            android:textColor="@color/gray_5d5d5d"/>
         <TextView
             android:id="@+id/card_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="100325256546552" />
+            android:textSize="15sp"
+            android:textColor="@color/gray_5d5d5d"/>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="分配日期" />
-
+            android:text="分配日期"
+            android:textSize="15sp"
+            android:textColor="@color/gray_5d5d5d"/>
         <TextView
             android:id="@+id/time_band"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="2015-11-11" />
+            android:textSize="15sp"
+            android:textColor="@color/gray_5d5d5d"/>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="备付金余额" />
+            android:text="备付金余额"
+            android:textSize="15sp"
+            android:textColor="@color/gray_5d5d5d"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
             android:orientation="horizontal">
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="￥"
-                android:textColor="@color/user_icon_8" />
-
+                android:textSize="15sp"
+                android:textColor="@color/red_FC4B50" />
             <TextView
                 android:id="@+id/tv_provisions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1222.84"
-                android:textColor="@color/user_icon_8" />
-
+                android:textSize="15sp"
+                android:textColor="@color/red_FC4B50" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元"
-                android:textColor="@color/user_icon_8" />
+                android:textSize="15sp"
+                android:textColor="@color/red_FC4B50"
+                android:text="元"/>
         </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="@color/gray_5d5d5d"
             android:text="卡余额" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="￥"
-                android:textColor="@color/user_icon_8" />
+                android:textSize="15sp"
+                android:textColor="@color/red_FC4B50" />
 
             <TextView
                 android:id="@+id/balance_mon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1222.11"
-                android:textColor="@color/user_icon_8" />
+                android:textSize="15sp"
+                android:textColor="@color/red_FC4B50" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="元"
-                android:textColor="@color/user_icon_8" />
+                android:textSize="15sp"
+                android:textColor="@color/red_FC4B50" />
         </LinearLayout>
     </RelativeLayout>
 

@@ -152,11 +152,12 @@
     <color name="dark_grey">#B8B8B8</color>
 
     <!-- 红色 -->
+    <color name="red_FC6161">#FC6161</color>
     <color name="red_FC4B50">#FC4B50</color>
-    <color name="red_FF0000">#FF0000</color>
-    <color name="red_CC0000">#CC0000</color>
-    <color name="red_fe020e">#fe020e</color>
     <color name="red_FE007F">#FE007F</color> <!-- 玫红 -->
+    <color name="red_FF0000">#FF0000</color>
+    <color name="red_fe020e">#fe020e</color>
+    <color name="red_CC0000">#CC0000</color>
 
     <!--灰色-->
     <color name="gray_e4e4e4">#EEEEEE</color>
@@ -175,7 +176,9 @@
     <color name="holo_blue_bright">#26ddfd</color>
     <color name="blue_c3f9e4">#c3f9e4</color>
     <color name="blue_6699FF">#6699FF</color>
+    <color name="blue_62869D">#62869D</color>
     <color name="blue_106ab8">#106ab8</color>
+
 
     <!--白色-->
     <color name="white_f3f3f3">#f3f3f3</color>

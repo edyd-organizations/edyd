@@ -264,7 +264,7 @@
             android:name=".WaitBuild"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".OilCardApplicationActivity"
+            android:name=".module.oil.activity.OilCardApplyActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".OilCardAmountDistributeActivity"
