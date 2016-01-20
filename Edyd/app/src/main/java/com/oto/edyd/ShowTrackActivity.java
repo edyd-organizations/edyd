@@ -112,21 +112,21 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                     if (list.size() == 0) {
                         Common.showToast(mActivity, "暂时没有轨迹");
                         dissmissProgressDialog();
-                        return;
-                    }
-                    for (int i = 0; i < list.size(); i++) {
-                        TrackPointBean point = list.get(i);
-                        LatLng latLng = new LatLng(point.getLat(), point.getLng());
-                        pos.add(latLng);
-                        if (!TextUtils.isEmpty(point.getAddr())) {
-                            addMarker(point, i, list);//添加所有的位置
+                    } else {
+                        for (int i = 0; i < list.size(); i++) {
+                            TrackPointBean point = list.get(i);
+                            LatLng latLng = new LatLng(point.getLat(), point.getLng());
+                            pos.add(latLng);
+                            if (!TextUtils.isEmpty(point.getAddr())) {
+                                addMarker(point, i, list);//添加所有的位置
+                            }
                         }
-                    }
+                        line.addAll(pos);
+                        line.color(Color.RED);
+                        line.width(10);
+                        aMap.addPolyline(line);
 
-                    line.addAll(pos);
-                    line.color(Color.RED);
-                    line.width(10);
-                    aMap.addPolyline(line);
+                    }
                     onMapLoaded();
                     if ((Integer) msg.obj == SHOW_TRACK) {
                         isTrack = true;
@@ -134,6 +134,14 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                         if (startPoint != null && endPoint != null) {
                             //汽车未走完的规划路径
                             calculateDriveRoute(startPoint, endPoint);
+                        } else {
+                            //有一个等于空
+                            if (isShippingEndPoint) {
+                                Common.showToast(mActivity, "发货方终点为空");
+                            } else {
+                                Common.showToast(mActivity, "收货方终点为空");
+                            }
+
                         }
                     } else {
                         isTrack = false;
@@ -211,11 +219,15 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                 startPoint = new LatLonPoint(point.getLat(), point.getLng());
                 if (point.getControlStatusInt() >= 30) {
                     //终点是收货地
-                    endPoint = new LatLonPoint(tlb.getReceiverLat(), tlb.getReceiverLng());
+                    if (tlb.getReceiverLat() > 0 && tlb.getReceiverLng() > 0) {
+                        endPoint = new LatLonPoint(tlb.getReceiverLat(), tlb.getReceiverLng());
+                    }
                     isShippingEndPoint = false;
                 } else {
                     //终点是发货地
-                    endPoint = new LatLonPoint(tlb.getSenderLat(), tlb.getSenderLng());
+                    if (tlb.getSenderLat() > 0 && tlb.getSenderLng() > 0) {
+                        endPoint = new LatLonPoint(tlb.getSenderLat(), tlb.getSenderLng());
+                    }
                     isShippingEndPoint = true;
                 }
             } else {
@@ -381,7 +393,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                         if (minTime < 60) {
                             tv_traff_time.setText("大约需要：" + minTime + "分钟");
                         } else {
-                            tv_traff_time.setText("大约需要："+minTime/60+"小时"+minTime%60+"分钟");
+                            tv_traff_time.setText("大约需要：" + (int) minTime / 60 + "小时" + minTime % 60 + "分钟");
                         }
 //                        drivingRouteOverlay.zoomToSpan();
                     } else {
@@ -561,9 +573,9 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
             for (LatLng po : pos) {
                 buidler.include(po);
             }
-//            buidler.include()
             LatLngBounds bounds = buidler.build();
             aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
         }
+
     }
 }

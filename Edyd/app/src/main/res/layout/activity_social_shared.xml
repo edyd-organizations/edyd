@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
+    android:background="@color/gray_EEEEEE"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -109,7 +110,9 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_centerInParent="true"
-                    android:background="@mipmap/umeng_socialize_wechat" />
+                    android:background="@drawable/shared_icon_background"
+                    android:src="@mipmap/umeng_socialize_wechat"
+                    />
             </RelativeLayout>
 
             <RelativeLayout
@@ -122,7 +125,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_centerInParent="true"
-                    android:background="@mipmap/umeng_socialize_wxcircle" />
+                    android:src="@mipmap/umeng_socialize_wxcircle"
+                    android:background="@drawable/shared_icon_background" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -135,7 +139,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_centerInParent="true"
-                    android:background="@mipmap/umeng_socialize_qq_on" />
+                    android:src="@mipmap/umeng_socialize_qq_on"
+                    android:background="@drawable/shared_icon_background" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -148,7 +153,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_centerInParent="true"
-                    android:background="@mipmap/umeng_socialize_qzone_on" />
+                    android:background="@drawable/shared_icon_background"
+                    android:src="@mipmap/umeng_socialize_qzone_on" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -161,7 +167,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_centerInParent="true"
-                    android:background="@mipmap/umeng_socialize_sina_on" />
+                    android:background="@drawable/shared_icon_background"
+                    android:src="@mipmap/umeng_socialize_sina_on" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
