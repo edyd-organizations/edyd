@@ -1,4 +1,4 @@
-package com.oto.edyd;
+package com.oto.edyd.module.tts.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.oto.edyd.R;
+import com.oto.edyd.ShipperHisOrderDetailActivity;
 import com.oto.edyd.model.ShipperHisOrderBean;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -39,9 +41,11 @@ import java.util.ArrayList;
  * 发货方历史订单列表
  */
 public class ShipperHistoryOrderActivity extends Activity {
+    //--------------基本view控件------------------
     private ListView lv_his_order;
-    private Common common;
+    private SwipeRefreshLayout swipe_container;//刷新用到的控件
     private CusProgressDialog loadingDialog; //页面切换过度
+    //----------------变量----------------------
     private Context mActivity;
     private static final int firstLoad = 0;//第一次加载
     private static final int refreshLoad = 1;//刷新加载
@@ -50,9 +54,8 @@ public class ShipperHistoryOrderActivity extends Activity {
     private int page = 1;//默认加载的页数
     private int rows = 20;//默认加载的条数
     private HisOrderAdapter adapter;
-    private SwipeRefreshLayout swipe_container;//刷新用到的控件
     private Gson gson;
-
+    private Common common;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
