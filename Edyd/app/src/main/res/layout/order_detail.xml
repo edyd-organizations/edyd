@@ -428,7 +428,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:src="@mipmap/starting_point"/>
+                                android:src="@mipmap/receive_order_qi"/>
                             <TextView
                                 android:id="@+id/receive_order_start_address"
                                 android:layout_width="wrap_content"
@@ -449,7 +449,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:src="@mipmap/finishing_point"/>
+                                android:src="@mipmap/recerve_order_zhong"/>
                             <TextView
                                 android:id="@+id/receive_order_end_address"
                                 android:layout_width="wrap_content"
@@ -478,7 +478,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:src="@mipmap/consignor"/>
+                                    android:src="@mipmap/order_fa"/>
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -521,7 +521,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
-                                        android:src="@mipmap/cargo_receiver"/>
+                                        android:src="@mipmap/order_shou"/>
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"

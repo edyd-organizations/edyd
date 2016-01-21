@@ -1,4 +1,4 @@
-package com.oto.edyd;
+package com.oto.edyd.module.tts.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oto.edyd.R;
 import com.oto.edyd.model.OrderBean;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -30,18 +31,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2015/11/25.
+ *承运方接单
+ * Created by lbz on 2015/11/25.
  */
 public class ReceiveOrderActivity extends Activity {
 
-    private ListView lv_order;
-    private Context mActivity;
-    private List<OrderBean> orderlist;
-    private String sessionUuid;
+    //--------------基本view控件------------------
+    private ListView lv_order;//订单列表
+    //----------------变量----------------------
     private Common common;
     private OrderAdapter adapter;
     private int page = 1;
     private int rows = 20;
+    private String sessionUuid;
+    private Context mActivity;//上下文
+    private List<OrderBean> orderlist;//订单数据容器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +53,6 @@ public class ReceiveOrderActivity extends Activity {
         setContentView(R.layout.activity_receive_order);
         initFields();//初始化字段
         initView();
-
     }
 
     private void initFields() {
@@ -206,9 +209,11 @@ public class ReceiveOrderActivity extends Activity {
             TextView orderNumView = (TextView) itemView.findViewById(R.id.orderNumView);
             orderNumView.setText(order.getOrderNum());
             //起点 终点。
-            TextView from_to = (TextView) itemView.findViewById(R.id.from_to);
-            from_to.setText(order.getSenderProvince() + order.getSenderCity() + "--------"
-                    + order.getReceiverProvince() + order.getReceiverCity());
+            TextView tv_recerve_from = (TextView) itemView.findViewById(R.id.tv_recerve_from);
+            tv_recerve_from.setText(order.getSenderProvince() + order.getSenderCity());
+
+            TextView tv_recerve_to = (TextView) itemView.findViewById(R.id.tv_recerve_to);
+            tv_recerve_to.setText(order.getReceiverProvince() + order.getReceiverCity());
             //发货人详细地址
             TextView tv_addr_detail = (TextView) itemView.findViewById(R.id.tv_addr_detail);
             tv_addr_detail.setText(order.getSenderAddr());
@@ -228,7 +233,7 @@ public class ReceiveOrderActivity extends Activity {
             TextView receiverContactTelView = (TextView) itemView.findViewById(R.id.receiverContactTelView);
             receiverContactTelView.setText(order.getReceiverContactTel());
             //接单按钮
-            Button btn_receiveorder = (Button) itemView.findViewById(R.id.btn_receiveorder);
+            TextView btn_receiveorder = (TextView) itemView.findViewById(R.id.btn_receiveorder);
             btn_receiveorder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

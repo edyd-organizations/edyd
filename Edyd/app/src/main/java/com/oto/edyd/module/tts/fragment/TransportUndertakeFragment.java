@@ -11,14 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.CarrierHisOrderActivity;
 import com.oto.edyd.PanoramaActivity;
 import com.oto.edyd.R;
-import com.oto.edyd.ReceiveOrderActivity;
+import com.oto.edyd.module.tts.activity.ReceiveOrderActivity;
 import com.oto.edyd.SelectTransportRole;
 import com.oto.edyd.TrackListActivity;
 import com.oto.edyd.TransportOrderDispatchActivity;

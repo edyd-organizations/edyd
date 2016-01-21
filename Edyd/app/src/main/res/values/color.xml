@@ -168,6 +168,7 @@
     <color name="gray_999999">#999999</color>
     <color name="gray_818181">#818181</color>
     <color name="gray_5d5d5d">#5d5d5d</color>
+    <color name="gray_f5f5f5">#f5f5f5</color>
 
 
     <!-- 蓝色 -->
@@ -175,6 +176,7 @@
     <color name="blue_c3f9e4">#c3f9e4</color>
     <color name="blue_6699FF">#6699FF</color>
     <color name="blue_106ab8">#106ab8</color>
+    <color name="blue_62869d">#62869d</color>
 
     <!--白色-->
     <color name="white_f3f3f3">#f3f3f3</color>

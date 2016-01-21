@@ -99,7 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@mipmap/finishing_point" />
+                        android:src="@mipmap/recerve_order_zhong" />
 
                     <TextView
                         android:id="@+id/tv_receiverAddr"
@@ -135,7 +135,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:src="@mipmap/cargo_receiver" />
+                            android:src="@mipmap/order_shou" />
 
                         <TextView
                             android:layout_width="wrap_content"

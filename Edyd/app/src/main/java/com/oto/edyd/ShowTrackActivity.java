@@ -89,7 +89,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                         LatLng senderPoint = new LatLng(tlb.getSenderLat(), tlb.getSenderLng());
                         //发货人图标
                         MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.deliveryside));
+                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.icon_fa));
                         markerOptions.position(senderPoint);
                         markerOptions.title("发货方公司").draggable(true).anchor(0.5f, 1.0f);
                         Marker marker = aMap.addMarker(markerOptions);
@@ -99,7 +99,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                         LatLng receiverPoint = new LatLng(tlb.getReceiverLat(), tlb.getReceiverLng());
                         //收货人图标
                         MarkerOptions marOptions = new MarkerOptions();
-                        marOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.receivingparty));
+                        marOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.icon_shou));
                         marOptions.position(receiverPoint);
                         marOptions.title("收货方公司").draggable(true).anchor(0.5f, 1.0f);
                         Marker receiverMarker = aMap.addMarker(marOptions);
@@ -210,11 +210,11 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
         MarkerOptions markerOptions = new MarkerOptions();
         if (index == 0) {
             //如果是第一个坐标
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.getup));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.icon_qi));
         } else if (index == (list.size() - 1)) {
             //如果是最后一个坐标
             if (!"收货完成".equals(list.get(list.size() - 1).getControlStatus())) {
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.car));
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.icon_car));
                 //添加起点坐标
                 startPoint = new LatLonPoint(point.getLat(), point.getLng());
                 if (point.getControlStatusInt() >= 30) {
@@ -231,10 +231,10 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                     isShippingEndPoint = true;
                 }
             } else {
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ending));
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.icon_zhong));
             }
         } else {
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.abit));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.icon_no));
         }
         markerOptions.position(new LatLng(point.getLat(), point.getLng()));
         markerOptions.title("车辆信息").draggable(true).anchor(0.5f, 1.0f);
@@ -561,7 +561,8 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     }
 
 
-    public void onMapLoaded() {
+    public void
+    onMapLoaded() {
 
         LatLngBounds.Builder buidler = new LatLngBounds.Builder();
         if (tlb != null && tlb.getReceiverLat() != 0 && tlb.getSenderLat() != 0
