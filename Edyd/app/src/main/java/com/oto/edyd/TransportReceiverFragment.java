@@ -94,7 +94,7 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
                 break;
             case  R.id.ll_view_track://查看轨迹
                 intent = new Intent(getActivity(), TrackListActivity.class);
-                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+                String aspectType = 1+"";
                 intent.putExtra("aspectType", aspectType);
                 startActivity(intent);
                 break;

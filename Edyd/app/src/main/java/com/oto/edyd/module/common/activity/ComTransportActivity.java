@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.oto.edyd.R;
+import com.oto.edyd.TransportShipperFragment;
 import com.oto.edyd.module.tts.fragment.TransportDriverFragment;
 import com.oto.edyd.module.tts.fragment.TransportUndertakeFragment;
 import com.oto.edyd.utils.Constant;
@@ -76,6 +77,9 @@ public class ComTransportActivity extends FragmentActivity implements View.OnCli
                 break;
             case Constant.UNDERTAKER_ROLE_ID: //承运方
                 setUpFragmentManager.beginTransaction().replace(R.id.common_frame, new TransportUndertakeFragment()).commit();
+                break;
+            case Constant.SHIPPER_ROLE_ID: //发货方
+                setUpFragmentManager.beginTransaction().replace(R.id.common_frame, new TransportShipperFragment()).commit();
                 break;
         }
     }
