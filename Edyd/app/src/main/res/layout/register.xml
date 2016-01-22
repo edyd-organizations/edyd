@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@color/gray_EDEDED">
 
     <!--模拟ActionBar-->
     <RelativeLayout
@@ -40,145 +40,207 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginBottom="15dp"
-        android:orientation="vertical">
-
-        <!-- 用户名 -->
-        <EditText
-            android:id="@+id/register_user_alias"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:hint="请输入用户名"
-            android:textColorHint="#CCCCCC"
-            android:drawablePadding="10dp"
-            android:textSize="16sp"
-            android:maxLength="16"
-            android:background="@null"
-            android:drawableLeft="@drawable/register_user_alias_left_icon" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/gray_DDDDDD"/>
-
-        <!-- 密码 -->
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_marginTop="12dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/register_user_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:hint="字母和数字组合，不少于六位"
-                    android:textColorHint="#CCCCCC"
-                    android:drawablePadding="10dp"
-                    android:maxLength="18"
-                    android:textSize="16sp"
-                    android:inputType="textPassword"
-                    android:background="@null"
-                    android:drawableLeft="@drawable/register_password_left_icon" />
-                <ImageView
-                    android:id="@+id/visible_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/cipher_text"
-                    android:layout_marginRight="10dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerInParent="true"/>
-            </RelativeLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/gray_DDDDDD"/>
-
-        <!-- 输入手机号和获取验证码 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp">
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:orientation="vertical"
+            android:background="@color/white">
+            <!-- 用户名 -->
             <EditText
-                android:id="@+id/register_phone_number"
+                android:id="@+id/register_user_alias"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/p_input_phone_number"
+                android:layout_marginLeft="10dp"
+                android:hint="请输入用户名"
+                android:textColorHint="#CCCCCC"
                 android:drawablePadding="10dp"
                 android:textSize="16sp"
-                android:numeric="integer"
-                android:drawableLeft="@drawable/register_cell_number_left_icon"
-                android:maxLength="11"
-                android:textColorHint="#CCCCCC"
+                android:maxLength="16"
                 android:background="@null"
-                android:layout_weight="1"/>
-            <Button
-                android:id="@+id/verification_code"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:textSize="12sp"
-                android:layout_weight="2"
-                android:padding="2dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/border_corner_login"
-                android:textColor="@android:color/white"
-                android:enabled="false"
-                android:text="@string/confirm_code_text" />
+                android:drawableLeft="@drawable/register_user_alias_left_icon" />
         </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="5dp"
             android:background="@color/gray_DDDDDD"/>
 
-        <!-- 验证码 -->
-        <EditText
-            android:id="@+id/register_verification_code"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:hint="@string/p_input_confirm_code"
-            android:drawablePadding="10dp"
-            android:layout_marginTop="10dp"
-            android:textColorHint="#CCCCCC"
-            android:textSize="16sp"
-            android:numeric="integer"
-            android:maxLength="4"
-            android:background="@null"
-            android:drawableLeft="@drawable/register_confirm_code_left_icon" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:orientation="vertical">
+            <!-- 密码 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/register_user_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:hint="6-20位字符，包含数字、字母和特殊符号"
+                        android:textColorHint="#CCCCCC"
+                        android:drawablePadding="10dp"
+                        android:maxLength="18"
+                        android:textSize="16sp"
+                        android:inputType="textPassword"
+                        android:background="@null"
+                        android:drawableLeft="@drawable/register_password_left_icon" />
+<!--                    <ImageView
+                        android:id="@+id/visible_password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/cipher_text"
+                        android:layout_marginRight="10dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"/>-->
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="10dp"
+            android:background="@color/gray_DDDDDD"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:orientation="vertical"
+            android:background="@color/white">
+            <!-- 用户名 -->
+            <EditText
+                android:id="@+id/confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:hint="请再次输入密码"
+                android:textColorHint="#CCCCCC"
+                android:drawablePadding="10dp"
+                android:textSize="16sp"
+                android:maxLength="16"
+                android:background="@null"
+                android:inputType="textPassword"
+                android:drawableLeft="@drawable/register_password_left_icon" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
             android:background="@color/gray_DDDDDD"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:orientation="vertical">
+            <!-- 输入手机号和获取验证码 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/register_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/p_input_phone_number"
+                    android:layout_marginLeft="10dp"
+                    android:drawablePadding="10dp"
+                    android:textSize="16sp"
+                    android:numeric="integer"
+                    android:drawableLeft="@drawable/register_cell_number_left_icon"
+                    android:maxLength="11"
+                    android:textColorHint="#CCCCCC"
+                    android:background="@null"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_DDDDDD"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <!-- 验证码 -->
+                <EditText
+                    android:id="@+id/register_verification_code"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:hint="@string/p_input_confirm_code"
+                    android:drawablePadding="10dp"
+                    android:textColorHint="#CCCCCC"
+                    android:textSize="16sp"
+                    android:numeric="integer"
+                    android:maxLength="4"
+                    android:background="@null"
+                    android:drawableLeft="@drawable/register_confirm_code_left_icon" />
+                <Button
+                    android:id="@+id/verification_code"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:padding="2dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/border_corner_login"
+                    android:textColor="@android:color/white"
+                    android:enabled="false"
+                    android:text="@string/confirm_code_text" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
         <!-- 提示信息 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
-            <RelativeLayout
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="13dp">
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="13dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/user_icon_8"
-                    android:text="*短信运营商的限制：同一个号码12小时发送不能超过5条，24小时不超过10条"/>
-            </RelativeLayout>
+                android:textColor="@color/user_icon_8"
+                android:text="*同一个号码12小时发送不能超过5条，24小时不超过10条"/>
         </LinearLayout>
 
         <!-- 同意协议 -->
@@ -188,7 +250,7 @@
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="12dp">
             <ImageView
                 android:id="@+id/cb_agree_protocol"
                 android:layout_width="wrap_content"
@@ -210,7 +272,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             android:gravity="center"
             android:enabled="false"
             android:background="@drawable/border_corner_login"
@@ -226,7 +288,7 @@
             android:textColor="@color/user_icon_8"
             android:background="@drawable/bt_yes_register_border"
             android:gravity="center"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="12dp"
             android:text="@string/already_account"/>
     </LinearLayout>
 

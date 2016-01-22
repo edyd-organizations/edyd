@@ -117,14 +117,22 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
         Intent intent;
         switch (v.getId()) {
             case R.id.driver: //我是司机
+                if(!common.isLogin()) {
+                    common.showToast(context, "未登录，请先登录");
+                    return;
+                }
                 intent = new Intent(context, ComTransportActivity.class);
                 intent.putExtra(Constant.TRANSPORT_ROLE, Constant.DRIVER_ROLE_ID); //司机标志
                 intent.putExtra("transport_title", "司机");
                 startActivity(intent);
                 break;
             case R.id.undertaker: //我是承运方
+                if(!common.isLogin()) {
+                    common.showToast(context, "未登录，请先登录");
+                    return;
+                }
                 String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
-                if(enterpriseId.equals("0")) {
+                if(enterpriseId !=null && enterpriseId.equals("0")) {
                     common.showToast(context, "个人角色无权限访问");
                     return;
                 }
@@ -134,6 +142,10 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.oil_card_pay: //油卡充值
+                if(!common.isLogin()) {
+                    common.showToast(context, "未登录，请先登录");
+                    return;
+                }
                 intent = new Intent(context, OilCardPayMainActivity.class);
                 startActivity(intent);
                 break;
