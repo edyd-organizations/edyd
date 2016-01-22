@@ -58,9 +58,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private Button btObtainVerificationCode; //获取验证码
     private EditText etRegisterUserAlias; //注册用户别名
     private EditText etRegisterPassword; //注册密码
+    private EditText confirmPassword; //用户注册
     private Button btRegister; //注册按钮
     private Button btAlreadyRegister; //已经注册
-    private ImageView visiblePassword; //密码是否可见
+    //private ImageView visiblePassword; //密码是否可见
     private VerificationCodeProgressAsyncTask asyncTask; //异步消息对象
     private boolean asyncIsOver = true; //异步线程是否结束
     private CusProgressDialog transitionDialog; //过度对话框
@@ -110,8 +111,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         etRegisterUserAlias = (EditText) view.findViewById(R.id.register_user_alias);
         etRegisterVerificationCode = (EditText) view.findViewById(R.id.register_verification_code);
         etRegisterPassword = (EditText) view.findViewById(R.id.register_user_password);
+        confirmPassword = (EditText) view.findViewById(R.id.confirm_password);
         btRegister = (Button) view.findViewById(R.id.bt_register);
-        visiblePassword = (ImageView) view.findViewById(R.id.visible_password);
+        //visiblePassword = (ImageView) view.findViewById(R.id.visible_password);
         btAlreadyRegister = (Button) view.findViewById(R.id.bt_already_register);
         eFragmentManager = getActivity().getSupportFragmentManager();
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
@@ -127,7 +129,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         btObtainVerificationCode.setOnClickListener(this);
         btRegister.setOnClickListener(this);
         btAlreadyRegister.setOnClickListener(this);
-        visiblePassword.setOnClickListener(this);
+        //visiblePassword.setOnClickListener(this);
 
         //手机号码输入框注册监听器
         etRegisterPhoneNumber.addTextChangedListener(new TextWatcher() {
@@ -285,19 +287,19 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.bt_already_register: //返回登录页面
                 eFragmentManager.popBackStack();
-                break;
-            case R.id.visible_password:
-                int isVisible = etRegisterPassword.getInputType();
-                if(isVisible == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) { //当前密码显示
-                    etRegisterPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); //设置隐藏
-                    etRegisterPassword.setSelection(etRegisterPassword.length()); //设置光标位置
-                    visiblePassword.setImageResource(R.mipmap.cipher_text);
-                } else { //当前密码隐藏
-                    etRegisterPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); //设置显示
-                    etRegisterPassword.setSelection(etRegisterPassword.length());
-                    visiblePassword.setImageResource(R.mipmap.plain_text);
-                }
-                break;
+                break;            case R.id.visible_password:
+//                int isVisible = etRegisterPassword.getInputType();
+//                if(isVisible == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) { //当前密码显示
+//                    etRegisterPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); //设置隐藏
+//                    etRegisterPassword.setSelection(etRegisterPassword.length()); //设置光标位置
+//                    visiblePassword.setImageResource(R.mipmap.cipher_text);
+//                } else { //当前密码隐藏
+//                    etRegisterPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); //设置显示
+//                    etRegisterPassword.setSelection(etRegisterPassword.length());
+//                    visiblePassword.setImageResource(R.mipmap.plain_text);
+//                }
+//                break;
+//
             default:
                 break;
         }
@@ -415,6 +417,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         String mobilePhone = etRegisterPhoneNumber.getText().toString(); //手机号码
         String verificationCode = etRegisterVerificationCode.getText().toString(); //验证码
         String password = etRegisterPassword.getText().toString(); //密码
+        String txConfirmPassword = confirmPassword.getText().toString(); //确认密码
 
         //匹配密码是否符合要求
         Pattern pt = Pattern.compile(Constant.MATCH_REGISTER_PASSWORD);
@@ -423,6 +426,13 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
             common.showToast(context, "密码必须为6位字母加数字");
             return;
         }
+
+        //密码和确认密码验证
+        if(!password.equals(txConfirmPassword)) {
+            common.showToast(context, "两次密码输入不一致");
+            return;
+        }
+
         //判断网络是否可用
         if(!isNetworkAvailable(context)){
             common.showToast(context, "网络不可用");
