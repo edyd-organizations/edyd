@@ -643,6 +643,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
+                    android:visibility="gone"
                     android:layout_alignParentRight="true" />
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -691,8 +692,8 @@
                             android:orientation="horizontal"
                             android:gravity="left">
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
                                 android:layout_gravity="center"
                                 android:src="@mipmap/receive_order_qi"/>
                             <TextView
@@ -712,8 +713,8 @@
                             android:orientation="horizontal"
                             android:gravity="left">
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
                                 android:layout_gravity="center"
                                 android:src="@mipmap/recerve_order_zhong"/>
                             <TextView
@@ -741,8 +742,8 @@
                                 android:layout_gravity="center_horizontal"
                                 android:orientation="horizontal">
                                 <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
                                     android:layout_gravity="center"
                                     android:src="@mipmap/order_fa"/>
                                 <TextView
@@ -784,8 +785,8 @@
                                     android:orientation="horizontal"
                                     android:layout_gravity="center_horizontal">
                                     <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
                                         android:layout_gravity="center"
                                         android:src="@mipmap/order_shou"/>
                                     <TextView

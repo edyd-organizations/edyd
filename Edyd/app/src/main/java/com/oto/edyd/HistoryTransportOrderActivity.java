@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 司机历史订单
  * Created by yql on 2015/9/18.
  */
 public class HistoryTransportOrderActivity extends Activity implements View.OnClickListener, AbsListView.OnScrollListener {
@@ -251,7 +252,7 @@ public class HistoryTransportOrderActivity extends Activity implements View.OnCl
 //                    receiveOrder.setText("收货完成");
 //                    break;
                 case 99: //收货完成
-                    orderStatus.setImageResource(R.mipmap.finished_receive);
+                    orderStatus.setImageResource(R.mipmap.finished_receive2);
                     break;
             }
 
@@ -459,27 +460,27 @@ public class HistoryTransportOrderActivity extends Activity implements View.OnCl
                     TextView textView = (TextView) view.findViewById(R.id.receive_order); //订单操作
                     switch (controlStatus) {
                         case 17: //下一个状态
-                            imageView.setImageResource(R.mipmap.tts_loading_way); //装货在途icon
+                            imageView.setImageResource(R.mipmap.tts_loading_way2); //装货在途icon
                             textView.setText("到达装货");
                             orderStatusList.set(position, 20);
                             break;
                         case 20:
-                            imageView.setImageResource(R.mipmap.tts_arrived_load); //到达装货icon
+                            imageView.setImageResource(R.mipmap.tts_arrived_load2); //到达装货icon
                             textView.setText("装货完成");
                             orderStatusList.set(position, 30);
                             break;
                         case 30:
-                            imageView.setImageResource(R.mipmap.tts_completion_load); //装货完成icon
+                            imageView.setImageResource(R.mipmap.finished_receive2); //装货完成icon
                             textView.setText("送货在途");
                             orderStatusList.set(position, 40);
                             break;
                         case 40:
-                            imageView.setImageResource(R.mipmap.tts_delivery_way); //送货在途icon
+                            imageView.setImageResource(R.mipmap.tts_delivery_way2); //送货在途icon
                             textView.setText("到达收货");
                             orderStatusList.set(position, 50);
                             break;
                         case 50: //送货在途
-                            imageView.setImageResource(R.mipmap.tts_arrived_receive); //到达收货icon
+                            imageView.setImageResource(R.mipmap.tts_arrived_receive2); //到达收货icon
                             textView.setText("收货完成");
                             orderStatusList.set(position, 60);
                             break;

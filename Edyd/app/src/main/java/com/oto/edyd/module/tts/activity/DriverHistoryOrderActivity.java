@@ -315,7 +315,7 @@ public class DriverHistoryOrderActivity extends Activity implements View.OnClick
             viewHolder.tPhoneNumber.setText(driverOrderBean.getsMobilePhoneNumber());
             viewHolder.consignee.setText(driverOrderBean.getReceiver());
             viewHolder.consigneePhoneNumber.setText(driverOrderBean.getrMobilePhoneNumber());
-            viewHolder.orderStatus.setImageResource(R.mipmap.finished_receive); //收货完成
+            viewHolder.orderStatus.setImageResource(R.mipmap.finished_receive2); //收货完成
             return convertView;
         }
     }

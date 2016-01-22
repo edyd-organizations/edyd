@@ -199,12 +199,6 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
         String aspectType =Constant.SHIPPER_ROLE_ID+"";
         String orgCode = common.getStringByKey(Constant.ORG_CODE); //组织ID
         String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID); //企业ID
-        //判断，企业id不能为0；
-        if("0".equals(enterpriseId)){
-            Common.showToast(context,"企业id不能为0.");
-            return;
-        }
-
         String url;
         if(searchText == null || searchText.equals("")) {
             url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderList.json?sessionUuid=" + sessionUuid + "&aspectType=" +

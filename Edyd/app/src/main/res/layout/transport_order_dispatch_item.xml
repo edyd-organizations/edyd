@@ -56,7 +56,7 @@
                 android:paddingRight="25dp"
                 android:textColor="@color/white"
                 android:background="@drawable/border_corner_blue"
-                android:text="调度"/>
+                android:text="派单"/>
         </RelativeLayout>
 
         <LinearLayout
