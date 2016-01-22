@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,7 +50,7 @@ import java.util.List;
  * 创建时间：2016/1/11
  * 作者：yql
  */
-public class DriverExecutingOrderActivity extends Activity implements View.OnClickListener, AbsListView.OnScrollListener  {
+public class DriverExecutingOrderActivity extends Activity implements View.OnClickListener, AbsListView.OnScrollListener {
     //--------基本View控件---------
     private LinearLayout back; //返回
     private ListView receiveOrderList; //接单
@@ -93,7 +94,7 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
     private void initFields() {
         back = (LinearLayout) findViewById(R.id.receive_order_back);
         receiveOrderList = (ListView) findViewById(R.id.receive_order_list);
-        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_container);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         context = DriverExecutingOrderActivity.this;
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
     }
@@ -138,11 +139,11 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         int lastIndex = executingOrderListAdapter.getCount(); //数据集最后一项的索引
-        if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE  && visibleLastIndex ==lastIndex){
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && visibleLastIndex == lastIndex) {
             //如果是自动加载,可以在这里放置异步加载数据的代码
-            if(loadFlag) {
+            if (loadFlag) {
                 loadFlag = false;
-                if(lastIndex % ROWS == 0) {
+                if (lastIndex % ROWS == 0) {
                     page = lastIndex / ROWS + 1;
                     requestExecutingOrderData(page, ROWS, Constant.THIRD_LOAD);
                 }
@@ -151,11 +152,10 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
     }
 
     /**
-     *
      * @param view
      * @param firstVisibleItem 当前能看见的第一个列表项ID（从0开始）
      * @param visibleItemCount 当前能看见的列表项个数（小半个也算）
-     * @param totalItemCount 列表项共数
+     * @param totalItemCount   列表项共数
      */
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -164,13 +164,14 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
 
     /**
      * 请求待执行订单
+     *
      * @param page
      * @param rows
      * @param requestSequence
      */
     private void requestExecutingOrderData(int page, int rows, int requestSequence) {
         String sessionUUID = common.getStringByKey(Constant.SESSION_UUID);
-        String url = Constant.ENTRANCE_PREFIX_v1 + "appQueryOrderListByFlag.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows+"&flag="+Constant.EXECUTING_STATUS;
+        String url = Constant.ENTRANCE_PREFIX_v1 + "appQueryOrderListByFlag.json?sessionUuid=" + sessionUUID + "&page=" + page + "&rows=" + rows + "&flag=" + Constant.EXECUTING_STATUS;
         OkHttpClientManager.getAsyn(url, new ExecutingOrderCallback<String>(requestSequence) {
             @Override
             public void onError(Request request, Exception e) {
@@ -191,7 +192,7 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
                     jsonArray = jsonObject.getJSONArray("rows");
                     loadFlag = true;
                     //判断是否上拉加载数据，如果不是都要清除数据源，重新加载数据
-                    if(this.requestSequence != 3) {
+                    if (this.requestSequence != 3) {
                         driverExecutingOrderBeanList.clear();
                         if (jsonArray.length() == 0) {
                             common.showToast(context, "暂无数据");
@@ -251,8 +252,9 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
 
     /**
      * 更新待执行订单
-     * @param controlId 订单ID
-     * @param orderStatus  订单状态
+     *
+     * @param controlId   订单ID
+     * @param orderStatus 订单状态
      */
     private void updateExecutingOrder(final String controlId, final String orderStatus) {
         String sessionUUID = common.getStringByKey(Constant.SESSION_UUID);
@@ -274,7 +276,7 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
                         common.showToast(context, "待执行订单更新失败");
                         return;
                     }
-                    tOrderStatus =  orderStatus;
+                    tOrderStatus = orderStatus;
                     switch (Integer.valueOf(tOrderStatus)) {
                         case 17: //下一个状态
                             tOrderStatus = "20";
@@ -328,7 +330,7 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
                 case HANDLER_UPDATE_ORDER_CODE: //订单更新成功返回
                     int dataSize = driverExecutingOrderBeanList.size();
                     //控制页数
-                    if(page > 1 && dataSize % 10 ==1) {
+                    if (page > 1 && dataSize % 10 == 1) {
                         page = page - 1;
                         requestExecutingOrderData(page, ROWS, Constant.SECOND_LOAD);
                     } else {
@@ -368,7 +370,8 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
 
-            if(convertView == null) {
+            if (convertView == null) {
+
                 convertView = inflater.inflate(R.layout.executing_order_item, null);
                 viewHolder = new ViewHolder();
                 viewHolder.orderNumber = (TextView) convertView.findViewById(R.id.order_number);
@@ -385,7 +388,7 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
                 viewHolder.orderStatus = (ImageView) convertView.findViewById(R.id.order_status); //订单状态
                 viewHolder.navigation = (TextView) convertView.findViewById(R.id.receive_order_navigation);//导航
                 convertView.setTag(viewHolder);
-            }else {
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
@@ -403,32 +406,33 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
                 case 20: //已接单
                     viewHolder.orderStatus.setImageResource(R.mipmap.tts_loading_way);
                     viewHolder.receiveOrder.setText("到达装货");
-                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
+//                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
                     break;
                 case 30: //	到达装货
                     viewHolder.orderStatus.setImageResource(R.mipmap.tts_arrived_load);
                     viewHolder.receiveOrder.setText("装货完成");
-                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
+//                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
                     break;
                 case 40: //装货完成
                     viewHolder.orderStatus.setImageResource(R.mipmap.tts_completion_load);
                     viewHolder.receiveOrder.setText("送货在途");
-                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
+//                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
                     break;
                 case 50: //送货在途
                     viewHolder.orderStatus.setImageResource(R.mipmap.tts_delivery_way);
                     viewHolder.receiveOrder.setText("到达收货");
-                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
+//                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
                     break;
                 case 60: //到达收货
                     viewHolder.orderStatus.setImageResource(R.mipmap.tts_arrived_receive);
                     viewHolder.receiveOrder.setText("收货完成");
-                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
+//                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
                     break;
                 case 99: //收货完成
                     viewHolder.orderStatus.setImageResource(R.mipmap.finished_receive); //收货完成
                     viewHolder.receiveOrder.setText("完成订单");
-                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login);
+//                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login);
+                    viewHolder.receiveOrder.setTextColor(Color.GRAY);
                     viewHolder.receiveOrder.setEnabled(false);
                     break;
             }
@@ -464,22 +468,23 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
         private int position;
         private View view; //当前订单view对象
 
-        public CusOnClickListener(int position, View view){
+        public CusOnClickListener(int position, View view) {
             //this.driverExecutingOrderBean = driverExecutingOrderBean;
             this.position = position;
             this.view = view;
         }
+
         @Override
         public void onClick(View v) {
             DriverExecutingOrderBean driverExecutingOrderBean = driverExecutingOrderBeanList.get(position);
             switch (v.getId()) {
                 case R.id.receive_order:
-                    if((((TextView)v).getText().toString().equals("完成订单"))) {
+                    if ((((TextView) v).getText().toString().equals("完成订单"))) {
                         Toast.makeText(getApplicationContext(), "订单已完成，不能操作", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     new AlertDialog.Builder(context).setTitle("接单")
-                            .setMessage("确认"+((TextView)v).getText().toString()+"吗？")
+                            .setMessage("确认" + ((TextView) v).getText().toString() + "吗？")
                             .setPositiveButton("是", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -496,9 +501,9 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
                     break;
                 case R.id.dialog_one:
                     final String content = driverExecutingOrderBean.getsMobilePhoneNumber();
-                    if(content != null && (!content.equals(""))) {
+                    if (content != null && (!content.equals(""))) {
                         new AlertDialog.Builder(context).setTitle("拨打电话")
-                                .setMessage("确认拨打"+content+"吗?")
+                                .setMessage("确认拨打" + content + "吗?")
                                 .setPositiveButton("是", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -522,9 +527,9 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
                     break;
                 case R.id.consignee_dial:
                     final String consignee = driverExecutingOrderBean.getrMobilePhoneNumber();
-                    if(consignee != null && (!consignee.equals(""))) {
+                    if (consignee != null && (!consignee.equals(""))) {
                         new AlertDialog.Builder(context).setTitle("拨打电话")
-                                .setMessage("确认拨打"+consignee.toString()+"吗?")
+                                .setMessage("确认拨打" + consignee.toString() + "吗?")
                                 .setPositiveButton("是", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -550,8 +555,8 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
                     Intent intent = new Intent(context, DriverGPSPathActivity.class);
                     if (driverExecutingOrderBean.getOrderStatus() == 20) {
                         //装货在途,导航到装货地
-                        intent.putExtra("PrimaryId",driverExecutingOrderBean.getSenderPrimaryId());
-                    }else{
+                        intent.putExtra("PrimaryId", driverExecutingOrderBean.getSenderPrimaryId());
+                    } else {
                         //导航到卸货地
                         intent.putExtra("PrimaryId", driverExecutingOrderBean.getReceiverPrimaryId());
                     }
@@ -560,16 +565,18 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
             }
         }
     }
-    private abstract class ExecutingOrderCallback<T> extends OkHttpClientManager.ResultCallback<T>{
+
+    private abstract class ExecutingOrderCallback<T> extends OkHttpClientManager.ResultCallback<T> {
         public int requestSequence; //访问次序
 
         public ExecutingOrderCallback(int requestSequence) {
             this.requestSequence = requestSequence;
         }
+
         @Override
         public void onBefore() {
             //请求之前操作
-            if(requestSequence == 1) {
+            if (requestSequence == 1) {
                 dialog = new CusProgressDialog(context);
                 dialog.showDialog();
             }
@@ -578,11 +585,12 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
         @Override
         public void onAfter() {
             //请求之后要做的操作
-            if(requestSequence == 1) {
+            if (requestSequence == 1) {
                 dialog.dismissDialog();
             }
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 0x15) {
