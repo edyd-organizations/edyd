@@ -130,7 +130,7 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
                     return;
                 }
                 intent = new Intent(getActivity(), TrackListActivity.class);
-                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+                String aspectType = 3+"";
                 intent.putExtra("aspectType", aspectType);
                 startActivity(intent);
                 break;

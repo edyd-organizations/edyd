@@ -85,7 +85,7 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), TrackListActivity.class);
-                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+                String aspectType = 2+"";
                 intent.putExtra("aspectType", aspectType);
                 startActivity(intent);
             }

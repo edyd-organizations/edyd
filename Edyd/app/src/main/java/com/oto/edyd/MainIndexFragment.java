@@ -155,7 +155,9 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener 
                     common.showToast(context, "个人角色无权限访问");
                     return;
                 }
-                intent=new Intent(context,ShipperOrderOperateActivity.class);
+                intent = new Intent(context, ComTransportActivity.class);
+                intent.putExtra(Constant.TRANSPORT_ROLE, Constant.SHIPPER_ROLE_ID); //发货标志
+                intent.putExtra("transport_title", "发货方");
                 startActivity(intent);
                 break;
             case R.id.oil_card_pay: //油卡充值
