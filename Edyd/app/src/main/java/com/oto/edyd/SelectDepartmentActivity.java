@@ -44,7 +44,7 @@ public class SelectDepartmentActivity extends Activity implements View.OnClickLi
     private ListView departmentList; //部门列表
     private Common common;
     private CusProgressDialog selectDepartmentDialog; //过度
-    private TextView tvSearch; //搜索
+    //private TextView tvSearch; //搜索
     private EditText inputDepartment; //部门
     private List<SelectDepartment> departmentNameList = new ArrayList<SelectDepartment>();
     private DepartmentAdapter departmentAdapter;
@@ -57,7 +57,7 @@ public class SelectDepartmentActivity extends Activity implements View.OnClickLi
 
         requestDepartmentListData(null);
         back.setOnClickListener(this);
-        tvSearch.setOnClickListener(this);
+        //tvSearch.setOnClickListener(this);
         inputDepartment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -100,7 +100,7 @@ public class SelectDepartmentActivity extends Activity implements View.OnClickLi
         back = (LinearLayout) findViewById(R.id.back);
         departmentList = (ListView) findViewById(R.id.department_list);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-        tvSearch = (TextView) findViewById(R.id.search);
+        //tvSearch = (TextView) findViewById(R.id.search);
         inputDepartment = (EditText) findViewById(R.id.type_car_number_or_card);
     }
 
@@ -110,10 +110,10 @@ public class SelectDepartmentActivity extends Activity implements View.OnClickLi
             case R.id.back: //返回
                 finish();
                 break;
-            case R.id.search: //搜索
-                String department = inputDepartment.getText().toString();
-                requestDepartmentListData(department);
-                break;
+//            case R.id.search: //搜索
+//                String department = inputDepartment.getText().toString();
+//                requestDepartmentListData(department);
+//                break;
         }
     }
 

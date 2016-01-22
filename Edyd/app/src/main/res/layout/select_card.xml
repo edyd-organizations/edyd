@@ -48,30 +48,23 @@
             android:orientation="horizontal"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:layout_margin="5dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp">
             <EditText
                 android:id="@+id/blur_content"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:hint="请输入卡号或者车牌号"
+                android:hint="请输入车牌号或卡号"
                 android:singleLine="true"
                 android:drawableLeft="@mipmap/search"
                 android:textColorHint="#CCCCCC"
                 android:textSize="14sp"
                 android:drawablePadding="5dp"
                 android:padding="5dp"
-                android:background="@color/white"/>
-            <Button
-                android:id="@+id/search"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="4"
-                android:text="查找"
-                android:textSize="15sp"
-                android:textColor="@color/white"
-                android:layout_marginLeft="2dp"
-                android:background="@drawable/border_corner_login_enable"/>
+                android:background="@drawable/border_corner_white"/>
         </LinearLayout>
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_container"
