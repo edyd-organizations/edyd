@@ -21,7 +21,8 @@
                 android:id="@+id/car_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/background_dark"
+                android:textSize="15sp"
+                android:textColor="@color/gray_5d5d5d"
                 android:layout_gravity="left"/>
             <TextView
                 android:id="@+id/card_number"
@@ -29,7 +30,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_gravity="left"
-                android:textColor="@color/dim_foreground_dark"/>
+                android:textSize="15sp"
+                android:textColor="@color/gray_5d5d5d"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -57,14 +59,20 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="￥"/>
                         <TextView
                             android:id="@+id/balance"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/gray_5d5d5d"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/gray_5d5d5d"
                             android:text="元"/>
                     </LinearLayout>
                     <TextView
@@ -72,6 +80,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/user_icon_8"
+                        android:textSize="15sp"
                         android:layout_marginTop="5dp"
                         android:text="完成"
                         android:layout_gravity="right"/>

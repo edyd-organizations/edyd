@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray_EDEDED">
 
     <!--模拟ActionBar-->
     <RelativeLayout
@@ -48,36 +49,29 @@
             android:orientation="horizontal"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:layout_margin="5dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp">
             <EditText
                 android:id="@+id/type_car_number_or_card"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:hint="请输入部门名称"
+                android:hint="请输入车牌号或卡号"
                 android:singleLine="true"
                 android:drawableLeft="@mipmap/search"
                 android:textColorHint="#CCCCCC"
                 android:textSize="14sp"
                 android:drawablePadding="5dp"
                 android:padding="5dp"
-                android:background="@color/white"/>
-            <Button
-                android:id="@+id/search"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="4"
-                android:text="查找"
-                android:textSize="15sp"
-                android:textColor="@color/white"
-                android:layout_marginLeft="2dp"
-                android:background="@drawable/border_corner_login_enable"/>
+                android:background="@drawable/border_corner_white"/>
         </LinearLayout>
 
         <ListView
             android:id="@+id/department_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:choiceMode="singleChoice"
             android:background="@color/white">
 

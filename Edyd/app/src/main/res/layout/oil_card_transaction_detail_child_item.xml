@@ -28,6 +28,7 @@
                     android:layout_height="wrap_content"
                     android:text="油品："
                     android:textColor="@color/gray_5d5d5d"
+                    android:textSize="14sp"
                     android:layout_gravity="left"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -35,12 +36,14 @@
                     android:layout_marginTop="5dp"
                     android:layout_gravity="left"
                     android:textColor="@color/gray_5d5d5d"
+                    android:textSize="14sp"
                     android:text="单价："/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="加油量："
                     android:textColor="@color/gray_5d5d5d"
+                    android:textSize="14sp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="left"/>
                 <TextView
@@ -48,6 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:textColor="@color/gray_5d5d5d"
+                    android:textSize="14sp"
                     android:layout_gravity="left"
                     android:text="卡余额："/>
             </LinearLayout>
@@ -62,6 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/gray_5d5d5d"
+                    android:textSize="14sp"
                     android:layout_gravity="right"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -71,6 +76,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:textSize="14sp"
                         android:textColor="@color/gray_5d5d5d"
                         android:text="￥" />
                     <TextView
@@ -78,6 +84,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/gray_5d5d5d"
+                        android:textSize="14sp"
                         android:layout_marginTop="5dp" />
                 </LinearLayout>
                 <LinearLayout
@@ -89,11 +96,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/gray_5d5d5d"
+                        android:textSize="14sp"
                         android:layout_marginTop="5dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:textSize="14sp"
                         android:textColor="@color/gray_5d5d5d"
                         android:text="L" />
                 </LinearLayout>
@@ -105,6 +114,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:textSize="14sp"
                         android:textColor="@color/user_icon_8"
                         android:text="￥" />
                     <TextView
@@ -112,11 +122,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:textSize="14sp"
                         android:textColor="@color/user_icon_8" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:textSize="14sp"
                         android:textColor="@color/user_icon_8"
                         android:text="元" />
                 </LinearLayout>
@@ -130,12 +142,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="地点："
+                android:textSize="14sp"
                 android:textColor="@color/gray_5d5d5d"
                 android:layout_gravity="left"/>
             <TextView
                 android:id="@+id/address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="14sp"
                 android:textColor="@color/gray_5d5d5d"
                 android:layout_gravity="left"/>
         </LinearLayout>

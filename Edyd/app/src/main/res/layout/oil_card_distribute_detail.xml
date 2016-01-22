@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray_EDEDED">
 
     <!--模拟ActionBar-->
     <RelativeLayout
@@ -40,94 +41,116 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray_DDDDDD"
-        android:orientation="vertical">
-
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_marginTop="12dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp"
             android:gravity="left"
-            android:background="@color/white">
+            android:background="@color/blue_62869D">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:text="卡号：" />
                 <TextView
                     android:id="@+id/card_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="6332356132345534"
-                    android:layout_marginLeft="3dp"/>
+                    android:textSize="16sp"
+                    android:textColor="@color/white"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="3dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
                     android:text="车牌号：" />
                 <TextView
                     android:id="@+id/car_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="闽F435442" />
+                    android:textSize="16sp"
+                    android:textColor="@color/white" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="3dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
                     android:text="备付金余额：" />
                 <TextView
                     android:id="@+id/tv_provisions"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"/>
                 <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
                 android:text="元" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="3dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
                     android:text="卡余额：" />
                 <TextView
                     android:id="@+id/balance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1000" />
+                    android:textSize="16sp"
+                    android:textColor="@color/white" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
                     android:text="元" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="3dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
                     android:text="最后加油时间：" />
                 <TextView
                     android:id="@+id/last_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2015-11-3" />
+                    android:textSize="16sp"
+                    android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -172,8 +195,8 @@
                     android:text="油卡申请"
                     android:layout_gravity="bottom"
                     android:gravity="center"
-                    android:background="@drawable/border_corner_blue"
-                    android:textColor="@color/white"
+                    android:background="@drawable/border_fill_oil"
+                    android:textColor="@color/user_icon_8"
                     android:layout_marginLeft="5dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"/>
@@ -184,9 +207,9 @@
                     android:layout_weight="1"
                     android:text="金额分配"
                     android:layout_gravity="bottom"
-                    android:background="@drawable/border_corner_login_enable"
+                    android:background="@drawable/border_fill_oil"
                     android:gravity="center"
-                    android:textColor="@color/white"
+                    android:textColor="@color/user_icon_8"
                     android:layout_marginLeft="5dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"/>

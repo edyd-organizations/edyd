@@ -42,7 +42,7 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
 
     private LinearLayout back; //返回
     private EditText blurContent; //模糊文本
-    private TextView search; //搜索
+    //private TextView search; //搜索
     private ListView cardListView; //卡列表
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -63,7 +63,7 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
 
         requestAddOilCardList(1, 10, "", 0);
         back.setOnClickListener(this);
-        search.setOnClickListener(this);
+        //search.setOnClickListener(this);
         cardListView.setOnScrollListener(this);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             /**
@@ -114,7 +114,7 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
     private void initFields() {
         back = (LinearLayout) findViewById(R.id.back);
         blurContent = (EditText) findViewById(R.id.blur_content);
-        search = (TextView) findViewById(R.id.search);
+        //search = (TextView) findViewById(R.id.search);
         cardListView = (ListView) findViewById(R.id.card_list);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         selectCardAdapter = new SelectCardAdapter(getApplicationContext());
