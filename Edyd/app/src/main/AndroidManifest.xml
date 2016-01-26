@@ -399,6 +399,16 @@
             android:name="com.umeng.update.net.DownloadingService"
             android:process=":DownloadingService" />
 
+        <!-- 分享内容编辑页 -->
+        <activity
+            android:name="com.umeng.socialize.view.ShareActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:theme="@style/Theme.UMDialog"
+            android:windowSoftInputMode="stateVisible|adjustResize" >
+        </activity>
+
         <!-- Update Activitys Start -->
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
@@ -431,7 +441,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ReceivingOrderDetail"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ReceiveTransitOrderActivity"
             android:screenOrientation="portrait" />

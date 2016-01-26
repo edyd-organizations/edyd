@@ -150,6 +150,10 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener 
                 startActivity(intent);
                 break;
             case R.id.ll_cargo_owner: //我是发货方
+                if(!common.isLogin()) {
+                    common.showToast(context, "未登录，请先登录");
+                    return;
+                }
                 String enterId = common.getStringByKey(Constant.ENTERPRISE_ID);
                 if ("0".equals(enterId)) {
                     common.showToast(context, "个人角色无权限访问");
