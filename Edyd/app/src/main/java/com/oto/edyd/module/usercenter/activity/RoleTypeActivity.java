@@ -9,12 +9,12 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.oto.edyd.R;
 import com.oto.edyd.utils.Common;
@@ -33,31 +33,32 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 功能：选择账户类型
- * 文件名：com.oto.edyd.module.usercenter.activity.AccountTypeActivity.java
- * 创建时间：2016/1/26
+ * 功能：选择角色类型
+ * 文件名：com.oto.edyd.module.usercenter.activity.RoleTypeActivity.java
+ * 创建时间：2016/1/27
  * 作者：yql
  */
-public class AccountTypeActivity extends Activity implements View.OnClickListener {
+public class RoleTypeActivity extends Activity implements View.OnClickListener {
     //--------------基本View控件--------------
     private LinearLayout back; //返回
-    private ListView accountTypeList; //ListView
+    private ListView roleTypeList; //ListView
     private CusProgressDialog transitionDialog; //过度Dialog
     private TextView title; //标题
     private View bottomLine; //listView底线
     //--------------变量--------------
     private Context context; //上下文对象
     private Common common; //偏好文件LOGIN_PREFERENCES_FILE
-    private Common fixedCommon; //偏好文件FIXED_FILE
-    private AccountTypeAdapter adapter; //适配器
-    private List<AccountTypeInfoBean> accountTypeInfoBeanList = new ArrayList<AccountTypeInfoBean>(); //账户类型list
-    private final static int HANDLER_ACCOUNT_TYPE_CODE = 0x10; //账户类型返回码
+    private List<RoleTypeBean> roleTypeBeanList = new ArrayList<RoleTypeBean>();
+    private String enterpriseID; //企业ID
+    private String enterpriseName; //企业名称
+    private RoleTypeAdapter adapter; //适配器
+    private int curPosition; //点击item项位置
+    private final static int HANDLER_ROLE_TYPE_CODE = 0x10; //账户类型返回码
     private final static int HANDLER_UPDATE_ROLE_CODE = 0x11; //角色类型返回码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.common_list);
         init();
     }
@@ -68,21 +69,23 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
     private void init() {
         initFields();
         initListener();
-        title.setText("选择账户类型");
-        requestAccountTypeList();
+        title.setText("选择角色类型");
+        Intent intent = getIntent();
+        enterpriseID = intent.getStringExtra("enterprise_id");
+        enterpriseName = intent.getStringExtra("account_type");
+        requestRoleTypeList();
     }
 
     /**
      * 初始化字段
      */
     private void initFields() {
-        context = AccountTypeActivity.this;
+        context = RoleTypeActivity.this;
         back = (LinearLayout) findViewById(R.id.back);
-        accountTypeList = (ListView) findViewById(R.id.common_list);
+        roleTypeList = (ListView) findViewById(R.id.common_list);
         title = (TextView) findViewById(R.id.common_list_title);
         bottomLine = findViewById(R.id.common_bottom_line);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-        fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
     }
 
     /**
@@ -90,57 +93,26 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
      */
     private void initListener() {
         back.setOnClickListener(this);
-        accountTypeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        roleTypeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent;
-                AccountTypeInfoBean accountTypeInfo = accountTypeInfoBeanList.get(position);
-                String txEnterpriseId = accountTypeInfo.getEnterpriseId();
-                String txEnterpriseName = accountTypeInfo.getEnterpriseName();
-
-                if (position == 0) {
-                    intent = new Intent();
-                    intent.putExtra("account_type", txEnterpriseName);
-                    intent.putExtra("enterpriseId", txEnterpriseId);
-
-                    Map<Object, Object> map = new HashMap<Object, Object>();
-                    map.put(Constant.ENTERPRISE_ID, Integer.valueOf(txEnterpriseId));
-                    map.put(Constant.ENTERPRISE_NAME, txEnterpriseName);
-                    map.put(Constant.ORG_CODE, String.valueOf(""));
-                    map.put(Constant.ROLE_NAME, "");
-                    map.put("role_id", Constant.PERSON);
-                    if(!common.isSave(map)) {
-                        common.showToast(context, "企业ID更新失败");
-                    }
-                    map.clear();
-                    map.put(Constant.TRANSPORT_ROLE, Constant.DRIVER_ROLE_ID);
-                    if(!fixedCommon.isSave(map)) {
-                        common.showToast(context, "司机角色保存失败");
-                    }
-                    setResult(Constant.ACCOUNT_TYPE_RESULT_CODE, intent);
-                    updateRole(txEnterpriseId);
-                } else{
-                    intent = new Intent(AccountTypeActivity.this, RoleTypeActivity.class);
-                    intent.putExtra("account_type", txEnterpriseName);
-                    intent.putExtra("enterprise_id", txEnterpriseId);
-                    startActivityForResult(intent, 0x15);
-                }
+                curPosition = position;
+                updateRole(enterpriseID);
             }
         });
     }
 
     /**
-     * 请求账户类型数据
+     * 请求角色列表
      */
-    private void requestAccountTypeList() {
-        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID); //获取当前sessionUUID
-        String url = Constant.ENTRANCE_PREFIX_v1 + "appGetRelatedEnterpriseList.json?sessionUuid="+sessionUuid; //账户类型访问地址
-        OkHttpClientManager.getAsyn(url, new AccountTypeResultCallback<String>() {
+    private void requestRoleTypeList() {
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
 
+        String url = Constant.ENTRANCE_PREFIX + "inquireRoleOflogin.json?sessionUuid=" + sessionUuid + "&enterpriseId=" + enterpriseID;
+        OkHttpClientManager.getAsyn(url, new RoleTypeResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
-                common.showToast(context, "账户类型请求异常");
-                transitionDialog.dismissDialog();
+                common.showToast(context, "角色列表请求异常");
             }
 
             @Override
@@ -152,9 +124,7 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
                     jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
                     if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        //用户名和密码错误
-                        common.showToast(context, "账户类型请求失败");
-                        transitionDialog.dismissDialog();
+                        Toast.makeText(RoleTypeActivity.this, "角色类型获取异常", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
@@ -164,18 +134,18 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
                     }
                     for (int i = 0; i < jsonArray.length(); i++) {
                         item = jsonArray.getJSONObject(i);
-                        AccountTypeInfoBean accountTypeInfo = new AccountTypeInfoBean();
-                        accountTypeInfo.setEnterpriseId(item.getString("enterpriseId"));
-                        accountTypeInfo.setEnterpriseName(item.getString("enterpriseName"));
-                        accountTypeInfoBeanList.add(accountTypeInfo);
+                        RoleTypeBean roleTypeBean = new RoleTypeBean();
+                        roleTypeBean.setOrgCode(item.getString("orgCode"));
+                        roleTypeBean.setRoleName(item.getString("roleName"));
+                        roleTypeBeanList.add(roleTypeBean);
                     }
+
                     Message message = Message.obtain();
-                    message.what = HANDLER_ACCOUNT_TYPE_CODE;
+                    message.what = HANDLER_ROLE_TYPE_CODE;
                     handler.sendMessage(message);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         });
     }
@@ -187,7 +157,7 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
     private void updateRole(String enterpriseId) {
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         String accountUrl = Constant.ENTRANCE_PREFIX + "Compare.json?sessionUuid="+sessionUuid+"&enterpriseId=" + enterpriseId;
-        OkHttpClientManager.getAsyn(accountUrl, new AccountTypeResultCallback<String>() {
+        OkHttpClientManager.getAsyn(accountUrl, new RoleTypeResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
                 common.showToast(context, "更新角色异常");
@@ -228,21 +198,25 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
         });
     }
 
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case HANDLER_ACCOUNT_TYPE_CODE://账户类型返回成功
-                    adapter = new AccountTypeAdapter(context);
-                    accountTypeList.setAdapter(adapter);
-                    bottomLine.setVisibility(View.VISIBLE);
-                    break;
-                case HANDLER_UPDATE_ROLE_CODE: //角色类型返回成功
-                    finish();
-                    break;
-            }
+    /**
+     * 更新角色信息
+     */
+    private void updateRoleInfo() {
+        RoleTypeBean roleTypeBean = roleTypeBeanList.get(curPosition);
+        Map<Object, Object> map = new HashMap<Object, Object>();
+        map.put(Constant.ORG_CODE, roleTypeBean.getOrgCode());
+        map.put(Constant.ROLE_NAME, roleTypeBean.getRoleName());
+        map.put(Constant.ENTERPRISE_ID, enterpriseID);
+        map.put(Constant.ENTERPRISE_NAME, enterpriseName);
+        if (!common.isSave(map)) {
+            //角色信息保存失败
+            common.showToast(context, "角色更新信息保存失败");
+            return;
         }
-    };
+        Intent intent = new Intent();
+        setResult(0x30, intent);
+        finish();
+    }
 
     @Override
     public void onClick(View v) {
@@ -253,22 +227,37 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
         }
     }
 
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case HANDLER_ROLE_TYPE_CODE: //角色列表请求返回成功
+                    adapter = new RoleTypeAdapter(context);
+                    roleTypeList.setAdapter(adapter);
+                    bottomLine.setVisibility(View.VISIBLE);
+                    break;
+                case HANDLER_UPDATE_ROLE_CODE: //更新角色返回成功
+                    updateRoleInfo();
+                    break;
+            }
+        }
+    };
 
-    private class AccountTypeAdapter extends BaseAdapter {
+    private class RoleTypeAdapter extends BaseAdapter {
         private LayoutInflater inflater;
 
-        public AccountTypeAdapter(Context context) {
+        public RoleTypeAdapter(Context context) {
             this.inflater = LayoutInflater.from(context);
         }
 
         @Override
         public int getCount() {
-            return accountTypeInfoBeanList.size();
+            return roleTypeBeanList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return accountTypeInfoBeanList.get(position);
+            return roleTypeBeanList.get(position);
         }
 
         @Override
@@ -279,59 +268,49 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = inflater.inflate(R.layout.common_list_item, null);
-            AccountTypeInfoBean accountTypeInfo = accountTypeInfoBeanList.get(position);
+            RoleTypeBean roleType = roleTypeBeanList.get(position);
             TextView textView = (TextView) view.findViewById(R.id.common_list_text);
-            textView.setText(accountTypeInfo.getEnterpriseName());
+            textView.setText(roleType.getRoleName());
             return view;
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (resultCode) {
-            case 0x30: //已选角色，直接退出
-                Intent intent = new Intent();
-                setResult(Constant.ACCOUNT_TYPE_RESULT_CODE, intent);
-                finish();
-                break;
-        }
-    }
-
-    private abstract class AccountTypeResultCallback<T> extends OkHttpClientManager.ResultCallback<T>{
-
+    private abstract class RoleTypeResultCallback<T> extends OkHttpClientManager.ResultCallback<T>{
         @Override
         public void onBefore() {
-            transitionDialog = new CusProgressDialog(context, "正在加载...");
+            //请求之前操作
+            transitionDialog = new CusProgressDialog(RoleTypeActivity.this, "正在加载...");
             transitionDialog.showDialog();
         }
 
         @Override
         public void onAfter() {
+            //请求之后要做的操作
             transitionDialog.dismissDialog();
         }
     }
 
     /**
-     * 企业实体
+     * 角色列表实体类
      */
-    private class AccountTypeInfoBean {
-        private String enterpriseId;
-        private String enterpriseName;
+    private class RoleTypeBean {
+        private String orgCode; //组织代码
+        private String roleName; //组织管理员
 
-        public String getEnterpriseId() {
-            return enterpriseId;
+        public String getOrgCode() {
+            return orgCode;
         }
 
-        public void setEnterpriseId(String enterpriseId) {
-            this.enterpriseId = enterpriseId;
+        public void setOrgCode(String orgCode) {
+            this.orgCode = orgCode;
         }
 
-        public String getEnterpriseName() {
-            return enterpriseName;
+        public String getRoleName() {
+            return roleName;
         }
 
-        public void setEnterpriseName(String enterpriseName) {
-            this.enterpriseName = enterpriseName;
+        public void setRoleName(String roleName) {
+            this.roleName = roleName;
         }
     }
 }

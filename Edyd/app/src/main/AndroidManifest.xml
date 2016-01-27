@@ -71,14 +71,14 @@
             android:value="391bb51068ef790c94b3f93fe9852186" />-->
 
        <!-- lbz gd debug key -->
-       <meta-data
+       <!--<meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />
+            android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />-->
 
          <!-- yql gd debug key -->
-        <!--  <meta-data
+          <meta-data
                android:name="com.amap.api.v2.apikey"
-               android:value="b0da2264df3bf64e1b5b9143dff0b427" />-->
+               android:value="b0da2264df3bf64e1b5b9143dff0b427" />
 
 
         <!-- 聚合数据 -->
@@ -231,7 +231,7 @@
             android:name=".WeatherActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AccountTypeActivity"
+            android:name=".module.usercenter.activity.AccountTypeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.usercenter.activity.AccountInformationActivity"
@@ -292,7 +292,7 @@
             android:name=".SelectDepartmentActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RoleTypeActivity"
+            android:name=".module.usercenter.activity.RoleTypeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".DistributionDetailedSearchActivity"

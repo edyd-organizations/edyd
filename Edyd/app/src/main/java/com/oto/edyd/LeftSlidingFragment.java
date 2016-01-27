@@ -15,11 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.oto.edyd.module.common.activity.NoticeActivity;
-import com.oto.edyd.module.usercenter.activity.AccountInformationActivity;
-import com.oto.edyd.module.usercenter.activity.LoginActivity;
+import com.oto.edyd.module.usercenter.activity.*;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -206,7 +204,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                 intent.putExtra("wait_title", "我的钱包");
                 startActivity(intent);
             } else if(menuDes.equals("账户类型")){
-                intent = new Intent(context, AccountTypeActivity.class);
+                intent = new Intent(context, com.oto.edyd.module.usercenter.activity.AccountTypeActivity.class);
                 startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
             } else if(menuDes.equals("公告通知")){
                 //intent = new Intent(getActivity().getApplicationContext(), WaitBuild.class);

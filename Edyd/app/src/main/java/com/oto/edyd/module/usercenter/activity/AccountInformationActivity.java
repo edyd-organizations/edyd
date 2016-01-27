@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import com.oto.edyd.AccountEnterpriseInformation;
 import com.oto.edyd.AccountInformationFragment;
 import com.oto.edyd.R;
+import com.oto.edyd.module.usercenter.fragment.PersonalInfoFragment;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 
@@ -47,7 +48,7 @@ public class AccountInformationActivity extends FragmentActivity{
      */
     private void switchAccountTypeInfo() {
         Common common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-        String roleId = common.getStringByKey(getString(R.string.role_id));
+        String roleId = common.getStringByKey("role_id");
         if(roleId.equals("")){
             common.showToast(AccountInformationActivity.this, "角色切换错误");
             return;
