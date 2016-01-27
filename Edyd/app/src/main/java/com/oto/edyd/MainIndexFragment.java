@@ -32,17 +32,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import retrofit.http.HEAD;
+
 /**
  * 功能：首页
  * 文件名：com.oto.edyd.MainIndexFragment.java
  * 创建时间：2016/1/18
  * 作者：yql
  */
-public class MainIndexFragment extends Fragment implements View.OnClickListener{
+public class MainIndexFragment extends Fragment implements View.OnClickListener {
     //-------------基本View控件---------------
     private LinearLayout driver; //我是司机
     private LinearLayout undertaker; //我是承运方
-    //private LineaLayout temp; //我是货主
+    private LinearLayout ll_cargo_owner;//我是货主
     private LinearLayout oilCardPay; //油卡充值
     private LinearLayout transportInsurance; //货运保险
     private LinearLayout goodsOrder; //商品订单
@@ -54,8 +56,9 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
     private boolean isAutoPlay = true; //是否自动播放图片
     private Common commonFixed;
     private Common common;
-    private List<String> urlList= new ArrayList<String>(); //幻灯片集合
+    private List<String> urlList = new ArrayList<String>(); //幻灯片集合
     private final static int HANDLER_NETWORK_PICTURE_REQUEST_SUCCESS = 0x10; //网络图片请求成功
+
 
     @Nullable
     @Override
@@ -67,6 +70,7 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
 
     /**
      * 初始化数据
+     *
      * @param view 当前view对象
      */
     private void init(View view) {
@@ -74,7 +78,7 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
         initListener(); //初始化监听器
         requestAdvertiseList(); //请求网络幻灯片图片
         String firstLaunch = commonFixed.getStringByKey("FIRST_LAUNCH");
-        if(!TextUtils.isEmpty(firstLaunch)) {
+        if (!TextUtils.isEmpty(firstLaunch)) {
             playSlides(0); //播放幻灯片
         }
     }
@@ -87,10 +91,11 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
         driver = (LinearLayout) view.findViewById(R.id.driver);
         undertaker = (LinearLayout) view.findViewById(R.id.undertaker);
         oilCardPay = (LinearLayout) view.findViewById(R.id.oil_card_pay);
+        ll_cargo_owner = (LinearLayout) view.findViewById(R.id.ll_cargo_owner);
         transportInsurance = (LinearLayout) view.findViewById(R.id.transport_insurance);
         goodsOrder = (LinearLayout) view.findViewById(R.id.goods_order);
         inviteFriends = (LinearLayout) view.findViewById(R.id.invite_friends);
-        imageIndicatorView = (NetworkImageIndicatorView)view.findViewById(R.id.network_indicate_view); //图片轮播
+        imageIndicatorView = (NetworkImageIndicatorView) view.findViewById(R.id.network_indicate_view); //图片轮播
         common = new Common(context.getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         commonFixed = new Common(context.getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
     }
@@ -101,6 +106,7 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
     private void initListener() {
         driver.setOnClickListener(this);
         undertaker.setOnClickListener(this);
+        ll_cargo_owner.setOnClickListener(this);
         oilCardPay.setOnClickListener(this);
         transportInsurance.setOnClickListener(this);
         goodsOrder.setOnClickListener(this);
@@ -127,13 +133,30 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
                     return;
                 }
                 String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+
                 if(enterpriseId !=null && enterpriseId.equals("0")) {
+
                     common.showToast(context, "个人角色无权限访问");
                     return;
                 }
                 intent = new Intent(context, ComTransportActivity.class);
                 intent.putExtra(Constant.TRANSPORT_ROLE, Constant.UNDERTAKER_ROLE_ID); //承运方标志
                 intent.putExtra("transport_title", "承运方");
+                startActivity(intent);
+                break;
+            case R.id.ll_cargo_owner: //我是发货方
+                if(!common.isLogin()) {
+                    common.showToast(context, "未登录，请先登录");
+                    return;
+                }
+                String enterId = common.getStringByKey(Constant.ENTERPRISE_ID);
+                if ("0".equals(enterId)) {
+                    common.showToast(context, "个人角色无权限访问");
+                    return;
+                }
+                intent = new Intent(context, ComTransportActivity.class);
+                intent.putExtra(Constant.TRANSPORT_ROLE, Constant.SHIPPER_ROLE_ID); //发货标志
+                intent.putExtra("transport_title", "发货方");
                 startActivity(intent);
                 break;
             case R.id.oil_card_pay: //油卡充值
@@ -164,7 +187,8 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
 
             @Override
-            public void onError(Request request, Exception e) {}
+            public void onError(Request request, Exception e) {
+            }
 
             @Override
             public void onResponse(String response) {
@@ -208,7 +232,7 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
      */
     private void playSlides(int type) {
         List<String> networkList;
-        if(type == 0) {
+        if (type == 0) {
             String networkStr = commonFixed.getStringByKey("SLIDE_URL");
             String arrayUrl[] = networkStr.split(";");
             networkList = java.util.Arrays.asList(arrayUrl);
@@ -220,7 +244,7 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
         urlList.clear();
         imageIndicatorView.show();
         //是否启动自动轮播
-        if(isAutoPlay){
+        if (isAutoPlay) {
             autoPlay();
         }
     }
@@ -247,11 +271,11 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
                     String networkStr = (String) msg.obj;
                     Map<Object, Object> map = new HashMap<Object, Object>();
                     map.put("SLIDE_URL", networkStr);
-                    if(!commonFixed.isSave(map)) {
+                    if (!commonFixed.isSave(map)) {
                         commonFixed.showToast(getActivity(), "幻灯片地址保存异常");
                     }
                     String firstLaunch = commonFixed.getStringByKey("FIRST_LAUNCH");
-                    if(TextUtils.isEmpty(firstLaunch)) {
+                    if (TextUtils.isEmpty(firstLaunch)) {
                         playSlides(1); //播放幻灯片
                     }
                     break;

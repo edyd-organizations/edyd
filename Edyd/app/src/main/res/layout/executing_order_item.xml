@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -12,252 +13,289 @@
             android:id="@+id/order_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true" />
+
+        <LinearLayout
+            android:id="@+id/ll_num"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/tv_order_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/order_number" />
+
+            <TextView
+                android:id="@+id/order_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/tv_order_number"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/order_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="40dp"
+                android:textColor="@color/gray_999999" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/tv_dashline_orange"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_below="@id/ll_num"
+            android:background="@drawable/dash_line_orange"
+            android:layerType="software" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_below="@id/tv_dashline_orange"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/tv_order_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/order_number"/>
-                <TextView
-                    android:id="@+id/order_number"
-                    android:layout_toRightOf="@+id/tv_order_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
-                    android:textColor="@color/black" />
-                <TextView
-                    android:id="@+id/order_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:textColor="@color/gray_999999"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="40dp" />
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
+
                 <LinearLayout
                     android:id="@+id/l_start_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="left">
+                    android:gravity="left"
+                    android:orientation="horizontal">
+
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center"
-                        android:src="@mipmap/starting_point"/>
+                        android:src="@mipmap/receive_order_qi" />
+
                     <TextView
                         android:id="@+id/receive_order_start_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="7dp"
-                        android:textSize="15sp"
-                        android:textColor="@android:color/background_dark" />
+                        android:textColor="@android:color/background_dark"
+                        android:textSize="15sp" />
                 </LinearLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_below="@id/l_start_address"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/l_start_address">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:orientation="horizontal"
-                        android:gravity="left">
+                        android:gravity="left"
+                        android:orientation="horizontal">
+
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_gravity="center"
-                            android:src="@mipmap/finishing_point"/>
+                            android:src="@mipmap/recerve_order_zhong" />
+
                         <TextView
                             android:id="@+id/receive_order_end_address"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:textSize="15sp"
-                            android:layout_weight="4"
                             android:layout_marginLeft="7dp"
-                            android:textColor="@android:color/background_dark" />
+                            android:layout_weight="4"
+                            android:textColor="@android:color/background_dark"
+                            android:textSize="15sp" />
+
                         <TextView
                             android:id="@+id/receive_order_navigation"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_corner_blue"
                             android:gravity="center"
-                            android:textColor="@color/white"
-                            android:paddingTop="2dp"
                             android:paddingBottom="2dp"
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"
-                            android:layout_marginLeft="5dp"
-                            android:textSize="13sp"
-                            android:background="@drawable/border_corner_blue"
-                            android:text="导航"/>
+                            android:paddingTop="2dp"
+                            android:text="导航"
+                            android:textColor="@color/white"
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                 </RelativeLayout>
             </RelativeLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:orientation="horizontal">
+
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_gravity="center"
-                            android:src="@mipmap/consignor"/>
+                            android:src="@mipmap/order_fa" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            android:textSize="14sp"
+                            android:text="发货人"
                             android:textColor="@color/black"
-                            android:text="发货人"/>
+                            android:textSize="14sp" />
+
                         <TextView
                             android:id="@+id/shipper_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
                             android:layout_marginLeft="8dp"
-                            android:textColor="@color/black"/>
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
                         <TextView
                             android:id="@+id/phone_number_one"
                             android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"/>
+                            android:textColor="@color/black" />
                     </LinearLayout>
+
                     <TextView
                         android:id="@+id/dialog_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:gravity="center"
-                        android:textColor="@color/white"
                         android:layout_weight="1"
-                        android:paddingTop="2dp"
+                        android:background="@drawable/border_corner_blue"
+                        android:gravity="center"
                         android:paddingBottom="2dp"
                         android:paddingLeft="6dp"
                         android:paddingRight="6dp"
-                        android:textSize="13sp"
-                        android:background="@drawable/border_corner_blue"
-                        android:text="拨打电话"/>
+                        android:paddingTop="2dp"
+                        android:text="拨打电话"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
                 </RelativeLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:orientation="vertical">
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_gravity="center_horizontal">
+                            android:layout_gravity="center_horizontal"
+                            android:orientation="horizontal">
+
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
                                 android:layout_gravity="center"
-                                android:src="@mipmap/cargo_receiver"/>
+                                android:src="@mipmap/order_shou" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
-                                android:textSize="14sp"
+                                android:text="收货人"
                                 android:textColor="@color/black"
-                                android:text="收货人"/>
+                                android:textSize="14sp" />
+
                             <TextView
                                 android:id="@+id/consignee"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
-                                android:textColor="@color/black"/>
+                                android:textColor="@color/black" />
+
                             <TextView
                                 android:id="@+id/consignee_phone_number"
                                 android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
                                 android:layout_weight="1"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/black"/>
+                                android:textColor="@color/black" />
                         </LinearLayout>
+
                         <TextView
                             android:id="@+id/consignee_dial"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_corner_blue"
                             android:gravity="center"
-                            android:textColor="@color/white"
-                            android:paddingTop="2dp"
                             android:paddingBottom="2dp"
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp"
-                            android:layout_weight="1"
-                            android:layout_marginLeft="5dp"
-                            android:textSize="13sp"
-                            android:background="@drawable/border_corner_blue"
-                            android:text="拨打电话"/>
+                            android:paddingTop="2dp"
+                            android:text="拨打电话"
+                            android:textColor="@color/white"
+                            android:textSize="13sp" />
                     </RelativeLayout>
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="5dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/receive_order"
-                        android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:textColor="@color/white"
-                        android:padding="5dp"
-                        android:background="@drawable/border_corner_order"
-                        android:textSize="16sp"
-                        android:gravity="center"
-                        android:layout_weight="1"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/dash_line_gray"
+        android:layerType="software" />
+
+    <TextView
+        android:id="@+id/receive_order"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@color/gray_f5f5f5"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="接单"
+        android:textColor="@color/user_icon_8" />
 
 </LinearLayout>

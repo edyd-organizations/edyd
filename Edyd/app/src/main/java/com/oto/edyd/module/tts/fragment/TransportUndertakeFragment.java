@@ -11,14 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.CarrierHisOrderActivity;
 import com.oto.edyd.PanoramaActivity;
 import com.oto.edyd.R;
-import com.oto.edyd.ReceiveOrderActivity;
+import com.oto.edyd.module.tts.activity.ReceiveOrderActivity;
 import com.oto.edyd.SelectTransportRole;
 import com.oto.edyd.TrackListActivity;
 import com.oto.edyd.TransportOrderDispatchActivity;
@@ -70,7 +69,7 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
      */
     private void initFields(View view) {
         enterpriseName = (TextView) view.findViewById(R.id.enterprise_name);
-        transportRole = (TextView) view.findViewById(R.id.transport_role);
+//        transportRole = (TextView) view.findViewById(R.id.transport_role);
         distributeOrder = (LinearLayout) view.findViewById(R.id.ll_distribute_order);
         trackSearch = (LinearLayout) view.findViewById(R.id.ll_track_search);
         panorama = (LinearLayout) view.findViewById(R.id.ll_panorama);
@@ -131,7 +130,7 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
                     return;
                 }
                 intent = new Intent(getActivity(), TrackListActivity.class);
-                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+                String aspectType = 3+"";
                 intent.putExtra("aspectType", aspectType);
                 startActivity(intent);
                 break;
@@ -147,20 +146,20 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
         String txTransportRole = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
         if(txTransportRole!=null && !txTransportRole.equals("")) {
             int transportRoleId = Integer.valueOf(txTransportRole);
-            switch (transportRoleId) {
-                case Constant.DRIVER_ROLE_ID: //司机
-                    transportRole.setText("司机");
-                    break;
-                case Constant.SHIPPER_ROLE_ID: //发货方
-                    transportRole.setText("发货方");
-                    break;
-                case Constant.RECEIVER_ROLE_ID: //收货方
-                    transportRole.setText("收货方");
-                    break;
-                case Constant.UNDERTAKER_ROLE_ID: //承运方
-                    transportRole.setText("承运方");
-                    break;
-            }
+//            switch (transportRoleId) {
+//                case Constant.DRIVER_ROLE_ID: //司机
+//                    transportRole.setText("司机");
+//                    break;
+//                case Constant.SHIPPER_ROLE_ID: //发货方
+//                    transportRole.setText("发货方");
+//                    break;
+//                case Constant.RECEIVER_ROLE_ID: //收货方
+//                    transportRole.setText("收货方");
+//                    break;
+//                case Constant.UNDERTAKER_ROLE_ID: //承运方
+//                    transportRole.setText("承运方");
+//                    break;
+//            }
         }
     }
 }

@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oto.edyd.module.tts.activity.ShipperHistoryOrderActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 
@@ -84,7 +85,7 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), TrackListActivity.class);
-                String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+                String aspectType = 2+"";
                 intent.putExtra("aspectType", aspectType);
                 startActivity(intent);
             }
@@ -108,20 +109,20 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
         String txTransportRole = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
         if (txTransportRole != null && !txTransportRole.equals("")) {
             int transportRoleId = Integer.valueOf(txTransportRole);
-            switch (transportRoleId) {
-                case Constant.DRIVER_ROLE_ID: //司机
-                    transportRole.setText("司机");
-                    break;
-                case Constant.SHIPPER_ROLE_ID: //发货方
-                    transportRole.setText("发货方");
-                    break;
-                case Constant.RECEIVER_ROLE_ID: //收货方
-                    transportRole.setText("收货方");
-                    break;
-                case Constant.UNDERTAKER_ROLE_ID: //承运方
-                    transportRole.setText("承运方");
-                    break;
-            }
+//            switch (transportRoleId) {
+//                case Constant.DRIVER_ROLE_ID: //司机
+//                    transportRole.setText("司机");
+//                    break;
+//                case Constant.SHIPPER_ROLE_ID: //发货方
+//                    transportRole.setText("发货方");
+//                    break;
+//                case Constant.RECEIVER_ROLE_ID: //收货方
+//                    transportRole.setText("收货方");
+//                    break;
+//                case Constant.UNDERTAKER_ROLE_ID: //承运方
+//                    transportRole.setText("承运方");
+//                    break;
+//            }
         }
     }
 

@@ -195,10 +195,10 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
      */
     private void requestShipperOrderOperateData (final String searchText) {
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID); //用户唯一标示
-        String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE); //运输服务角色ID
+        //String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE); //运输服务角色ID
+        String aspectType =Constant.SHIPPER_ROLE_ID+"";
         String orgCode = common.getStringByKey(Constant.ORG_CODE); //组织ID
         String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID); //企业ID
-
         String url;
         if(searchText == null || searchText.equals("")) {
             url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderList.json?sessionUuid=" + sessionUuid + "&aspectType=" +
@@ -373,6 +373,7 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
                 viewHolder.orderDistance = (TextView) convertView.findViewById(R.id.distance_load_goods);
                 viewHolder.orderStatus = (ImageView) convertView.findViewById(R.id.order_status);
                 viewHolder.startAndEndAddress = (TextView) convertView.findViewById(R.id.start_and_end_address);
+                viewHolder.end_city_address=(TextView) convertView.findViewById(R.id.end_city_address);
                 viewHolder.endAddress = (TextView) convertView.findViewById(R.id.end_address);
                 viewHolder.receiver = (TextView) convertView.findViewById(R.id.receiver);
                 viewHolder.phoneNunber = (TextView) convertView.findViewById(R.id.consignee_phone_number);
@@ -391,25 +392,26 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
                 case 17: //未接单
                     break;
                 case 20: //已接单
-                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_loading_way);
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_loading_way2);
                     break;
                 case 30: //	到达装货
-                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_arrived_load);
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_arrived_load2);
                     break;
                 case 40: //装货完成
-                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_completion_load);
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_zhuanghuo_finish2);
                     break;
                 case 50: //送货在途
-                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_delivery_way);
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_delivery_way2);
                     break;
                 case 60: //到达收货
-                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_arrived_receive);
+                    viewHolder.orderStatus.setImageResource(R.mipmap.tts_arrived_receive2);
                     break;
                 case 99: //收货完成
-                    viewHolder.orderStatus.setImageResource(R.mipmap.finished_receive); //收货完成
+                    viewHolder.orderStatus.setImageResource(R.mipmap.finished_receive2); //收货完成
                     break;
             }
-            viewHolder.startAndEndAddress.setText(orderdetail.getStartAddrProviceAndCity() + "——" + orderdetail.getStopAddrProviceAndCity());
+            viewHolder.startAndEndAddress.setText(orderdetail.getStartAddrProviceAndCity());
+            viewHolder.end_city_address.setText( orderdetail.getStopAddrProviceAndCity());
             viewHolder.endAddress.setText(orderdetail.getDetailedAddress());
             viewHolder.receiver.setText(orderdetail.getContacrName());
             viewHolder.phoneNunber.setText(orderdetail.getContactTel());
@@ -425,6 +427,7 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
         TextView orderDistance; //距离装货地
         ImageView orderStatus; //订单状态
         TextView startAndEndAddress; //其实和结束地址
+        TextView end_city_address;//结束城市
         TextView endAddress; //结束地址
         TextView receiver; //收货人
         TextView phoneNunber; //收货人联系电话

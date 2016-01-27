@@ -82,6 +82,7 @@ public class ShipperOrderOperateItemDetailActivity extends Activity implements V
     private TextView distance; //距离装货地
     private ImageView orderStatus; //接单状态
     private TextView startAndEndAddress; //起始结束地址
+    private TextView end_city_address; //起始结束地址
     private TextView endAddress; //结束地址
     private TextView viewTrack; //查看轨迹
     private TextView consignee; //收货人
@@ -162,6 +163,7 @@ public class ShipperOrderOperateItemDetailActivity extends Activity implements V
         distance = (TextView) findViewById(R.id.distance_load_goods);
         orderStatus = (ImageView) findViewById(R.id.order_status);
         startAndEndAddress = (TextView) findViewById(R.id.start_and_end_address);
+        end_city_address = (TextView) findViewById(R.id.end_city_address);
         endAddress = (TextView) findViewById(R.id.end_address);
         viewTrack = (TextView) findViewById(R.id.view_track);
         consignee = (TextView) findViewById(R.id.receiver);
@@ -557,7 +559,8 @@ public class ShipperOrderOperateItemDetailActivity extends Activity implements V
 
         orderNumber.setText(orderDetail.getControlNum());
         distance.setText(String.valueOf(orderdetail.getDistance()));
-        startAndEndAddress.setText(orderdetail.getStartAddrProviceAndCity() + "——" + orderdetail.getStopAddrProviceAndCity());
+        startAndEndAddress.setText(orderdetail.getStartAddrProviceAndCity());
+        end_city_address.setText(orderdetail.getStopAddrProviceAndCity());
         endAddress.setText(orderdetail.getDetailedAddress());
         consignee.setText(orderdetail.getContacrName());
         consigneePhoneNumber.setText(orderdetail.getContactTel());

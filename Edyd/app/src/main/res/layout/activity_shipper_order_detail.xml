@@ -71,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:background="@mipmap/execute_green" />
+                        android:background="@mipmap/green_circle3" />
 
                     <TextView
                         android:id="@+id/execute_first_line"
@@ -79,7 +79,7 @@
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/execute_first_point"
-                        android:background="@color/green_55e6ac" />
+                        android:background="@color/green_line_pro" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -127,7 +127,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
-                        android:background="@color/green_55e6ac" />
+                        android:background="@color/green_line_pro" />
 
                     <ImageView
                         android:id="@+id/execute_second_point"
@@ -135,7 +135,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:background="@mipmap/execute_green" />
+                        android:background="@mipmap/green_circle3" />
 
                     <TextView
                         android:id="@+id/execute_third_line"
@@ -143,7 +143,7 @@
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/execute_second_point"
-                        android:background="@color/green_55e6ac" />
+                        android:background="@color/green_line_pro" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -191,7 +191,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
-                        android:background="@color/green_55e6ac" />
+                        android:background="@color/green_line_pro" />
 
                     <ImageView
                         android:id="@+id/execute_third_point"
@@ -199,7 +199,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:background="@mipmap/execute_green" />
+                        android:background="@mipmap/green_circle3" />
 
                     <TextView
                         android:id="@+id/execute_five_line"
@@ -207,7 +207,7 @@
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/execute_third_point"
-                        android:background="@color/green_55e6ac" />
+                        android:background="@color/green_line_pro" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -255,7 +255,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
-                        android:background="@color/green_55e6ac" />
+                        android:background="@color/green_line_pro" />
 
                     <ImageView
                         android:id="@+id/execute_four_point"
@@ -263,7 +263,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:background="@mipmap/execute_green" />
+                        android:background="@mipmap/green_circle3" />
 
                     <TextView
                         android:id="@+id/execute_seven_line"
@@ -271,7 +271,7 @@
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/execute_four_point"
-                        android:background="@color/green_55e6ac" />
+                        android:background="@color/green_line_pro" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -319,7 +319,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
-                        android:background="@color/green_55e6ac" />
+                        android:background="@color/green_line_pro" />
 
                     <ImageView
                         android:id="@+id/execute_five_point"
@@ -327,7 +327,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:background="@mipmap/execute_green" />
+                        android:background="@mipmap/green_circle3" />
 
                     <TextView
                         android:id="@+id/execute_nine_line"
@@ -335,7 +335,7 @@
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/execute_five_point"
-                        android:background="@color/green_55e6ac" />
+                        android:background="@color/green_line_pro" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -383,7 +383,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
                         android:layout_centerVertical="true"
-                        android:background="@color/green_55e6ac" />
+                        android:background="@color/green_line_pro" />
 
                     <ImageView
                         android:id="@+id/execute_six_point"
@@ -391,7 +391,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:background="@mipmap/line_car" />
+                        android:background="@mipmap/car_green" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -407,7 +407,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:text="10-10"
-                            android:textColor="@color/user_icon_8"
+                            android:textColor="@color/green_line_pro"
                             android:textSize="10sp" />
 
                         <TextView
@@ -415,7 +415,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="20:46"
-                            android:textColor="@color/user_icon_8"
+                            android:textColor="@color/green_line_pro"
                             android:textSize="12sp" />
 
                         <TextView
@@ -424,7 +424,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:text="收货完成"
-                            android:textColor="@color/user_icon_8" />
+                            android:textColor="@color/green_line_pro" />
                     </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
@@ -444,6 +444,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
+                    android:visibility="gone"
                     android:src="@mipmap/finished_receive" />
 
                 <LinearLayout
@@ -517,10 +518,10 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
                                 android:layout_gravity="center"
-                                android:src="@mipmap/finishingpoint" />
+                                android:src="@mipmap/recerve_order_zhong" />
 
                             <TextView
                                 android:id="@+id/tv_addr_detail"
@@ -564,10 +565,10 @@
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
                                     android:layout_gravity="center"
-                                    android:src="@mipmap/cargo_receiver" />
+                                    android:src="@mipmap/order_shou" />
 
                                 <TextView
                                     android:layout_width="wrap_content"

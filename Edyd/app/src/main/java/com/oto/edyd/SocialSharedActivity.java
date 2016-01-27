@@ -44,6 +44,20 @@ public class SocialSharedActivity extends Activity implements View.OnClickListen
     private UMSocialService mController = UMServiceFactory.getUMSocialService(Constant.DESCRIPTOR);
     private Activity mActivity;
     private SHARE_MEDIA mPlatform = SHARE_MEDIA.SINA;
+    private SocializeListeners.SnsPostListener snsListener =new SocializeListeners.SnsPostListener() {
+        @Override
+        public void onStart() {
+        }
+        @Override
+        public void onComplete(SHARE_MEDIA platform, int eCode, SocializeEntity entity) {
+//            String showText = platform.toString();
+            if (eCode == StatusCode.ST_CODE_SUCCESSED) {
+                Common.showToast(mActivity,"分享成功");
+            } else {
+//                showText += "分享失败["+eCode+"]";
+            }
+        }
+    };
 
 
     @Override
@@ -75,7 +89,6 @@ public class SocialSharedActivity extends Activity implements View.OnClickListen
         sinaContent.setAppWebSite("多一点智能物流科技有限公司");
         mController.setShareMedia(sinaContent);
 
-
         QZoneShareContent qZone=new QZoneShareContent();
         qZone.setShareContent("厦门多一点智能物流科技有限公司");
         qZone.setShareImage(urlImage);
@@ -83,7 +96,6 @@ public class SocialSharedActivity extends Activity implements View.OnClickListen
         qZone.setTargetUrl(appUploadUrl);
         qZone.setAppWebSite("多一点智能物流科技有限公司");
         mController.setShareMedia(qZone);
-
 
 //        mController.setShareContent("厦门多一点智能物流科技有限公司");
 
@@ -197,6 +209,12 @@ public class SocialSharedActivity extends Activity implements View.OnClickListen
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mController.getConfig().cleanListeners();
+    }
+
+    @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
@@ -223,42 +241,7 @@ public class SocialSharedActivity extends Activity implements View.OnClickListen
         }
     }
 
-    /**
-     * 直接分享，底层分享接口。如果分享的平台是新浪、腾讯微博、豆瓣、人人，则直接分享，无任何界面弹出； 其它平台分别启动客户端分享</br>
-     */
-    private void directShare() {
-        mController.directShare(mActivity, mPlatform, new SocializeListeners.SnsPostListener() {
-
-            @Override
-            public void onStart() {
-
-            }
-            @Override
-            public void onComplete(SHARE_MEDIA platform, int eCode, SocializeEntity entity) {
-                String showText = "分享成功";
-                if (eCode != StatusCode.ST_CODE_SUCCESSED) {
-                    showText = "分享失败 [" + eCode + "]";
-                }
-                Toast.makeText(mActivity, showText, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     private void performShare(SHARE_MEDIA platform) {
-        mController.postShare(mActivity, platform, new SocializeListeners.SnsPostListener() {
-            @Override
-            public void onStart() {
-            }
-            @Override
-            public void onComplete(SHARE_MEDIA platform, int eCode, SocializeEntity entity) {
-                String showText = platform.toString();
-                if (eCode == StatusCode.ST_CODE_SUCCESSED) {
-                    showText += "平台分享成功";
-                } else {
-                    showText += "平台分享失败";
-                }
-                Common.showToast(mActivity,showText);
-            }
-        });
+        mController.postShare(mActivity, platform, snsListener);
     }
 }

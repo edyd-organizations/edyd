@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_DDDDDD">
+   >
 
     <!--模拟ActionBar-->
     <RelativeLayout
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="接单"
+            android:text="调度"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold"/>
@@ -43,7 +43,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@color/gray_EEEEEE"
-        android:dividerHeight="4dp">
+        android:dividerHeight="6dp"
+        >
 
     </ListView>
 </LinearLayout>

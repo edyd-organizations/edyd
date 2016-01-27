@@ -45,6 +45,8 @@
             android:id="@+id/receive_order_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:divider="@color/gray_EEEEEE"
+            android:dividerHeight="6dp"
             android:scrollbars="none"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

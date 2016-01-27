@@ -10,51 +10,67 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:src="@mipmap/finished_receive" />
+
+            android:src="@mipmap/finished_receive2" />
+        <RelativeLayout
+            android:id="@+id/ll_num"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/tv_order_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/order_number" />
+
+            <TextView
+                android:id="@+id/tv_controlNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/tv_order_number"
+                android:text="1234567890"
+                android:textColor="@color/gray_5d5d5d" />
+
+            <TextView
+                android:id="@+id/tv_controlDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="40dp"
+                android:visibility="gone"
+                android:text="2015-11-11"
+                android:textColor="@color/gray_818181" />
+        </RelativeLayout>
+        <View
+            android:id="@+id/tv_dashline_orange"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_below="@id/ll_num"
+            android:background="@drawable/dash_line_orange"
+            android:layerType="software" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="8dp"
+            android:layout_below="@id/tv_dashline_orange"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/tv_order_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/order_number" />
-
-                <TextView
-                    android:id="@+id/tv_controlNum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/tv_order_number"
-                    android:text="1234567890"
-                    android:textColor="@color/gray_5d5d5d" />
-
-                <TextView
-                    android:id="@+id/tv_controlDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="40dp"
-                    android:text="2015-11-11"
-                    android:textColor="@color/gray_818181" />
-            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -96,10 +112,10 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center"
-                        android:src="@mipmap/finishing_point" />
+                        android:src="@mipmap/recerve_order_zhong" />
 
                     <TextView
                         android:id="@+id/tv_receiverAddr"
@@ -132,10 +148,10 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_gravity="center"
-                            android:src="@mipmap/cargo_receiver" />
+                            android:src="@mipmap/order_shou" />
 
                         <TextView
                             android:layout_width="wrap_content"

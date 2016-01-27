@@ -92,7 +92,8 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener,AM
 
     private void requestport() {
         addInfo = new ArrayList<CarInfo>();
-        String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+//        String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        String aspectType=2+"";
         location=Constant.ENTRANCE_PREFIX_v1 +"appViewTruckPanorama.json?"+"&sessionUuid="+sessionUuid+"&aspectType="+aspectType;//得到调度车辆的所有位置信息
           //location="http://www.edyd.cn/api/v1.0/" +"viewTruckPanorama.json?"+"&sessionUuid="+"879425d835d34ac183dddddf831ecdc7";//得到调度车辆的所有位置信息
         OkHttpClientManager.getAsyn(location, new OkHttpClientManager.ResultCallback<String>() {
