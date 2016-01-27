@@ -4,7 +4,31 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
+        <TextView
+            android:id="@+id/common_list_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:textColor="@color/gray_5d5d5d"
+            android:textSize="16dp"
+            android:text="sdfdfdsfdf"/>
+        <ImageView
+            android:id="@+id/common_list_arrow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@mipmap/right_arrow"/>
+    </LinearLayout>
+
+<!--    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -14,15 +38,18 @@
             android:id="@+id/common_list_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="@color/gray_5d5d5d"
             android:layout_marginLeft="10dp"
             android:textSize="16sp"
-            android:layout_alignParentLeft="true" />
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" />
         <ImageView
             android:id="@+id/common_list_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"/>
-    </RelativeLayout>
+            android:layout_marginRight="20dp"
+            android:src="@mipmap/right_arrow"/>
+    </RelativeLayout>-->
 </LinearLayout>

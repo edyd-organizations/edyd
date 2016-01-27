@@ -11,11 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.lib.imageindicator.AutoPlayManager;
@@ -24,7 +20,6 @@ import com.oto.edyd.module.common.activity.ComTransportActivity;
 import com.oto.edyd.module.oil.activity.OilCardPayMainActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
-import com.oto.edyd.utils.NetWork;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 
@@ -235,8 +230,8 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener{
      */
     private void autoPlay() {
         AutoPlayManager autoBrocastManager =  new AutoPlayManager(imageIndicatorView);
-        autoBrocastManager.setBroadcastEnable(true);
-        autoBrocastManager.setBroadCastTimes(5);//loop times
+        //autoBrocastManager.setBroadcastEnable(true);
+        //autoBrocastManager.setBroadCastTimes(-1);//loop times
         autoBrocastManager.setBroadcastTimeIntevel(5 * 1000, 10 * 1000);//set first play time and interval
         autoBrocastManager.loop();
     }

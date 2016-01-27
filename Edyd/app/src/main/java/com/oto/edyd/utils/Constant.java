@@ -126,7 +126,7 @@ public class Constant {
     public final static String INVALID_USERNAME_PASSWORD = "用户名和密码错误";
     public final static String NOT_NULL_USERNAME = "用户名不能为空";
     public final static String NOT_NULL_PASSWORD = "密码不能为空";
-    public final static String USER_INFO_SAVE_FAIL = "用户信息保存失败";
+    public final static String USER_INFO_SAVE_FAIL = "登录信息保存失败";
     public final static String ACCOUNT_TYPE_INFO_REQUEST_FAIL = "账户类型信息请求失败";
     public final static String ACCOUNT_TYPE_INFO_SAVE_FAIL = "账户类型信息保存失败";
     public final static String CONFIRM_USER_INFO_FAIL = "验证用户信息失败";

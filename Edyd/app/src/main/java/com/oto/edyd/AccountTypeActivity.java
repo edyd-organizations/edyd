@@ -9,15 +9,12 @@ import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.oto.edyd.model.AccountAndRole;
-import com.oto.edyd.model.Role;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
@@ -30,7 +27,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.ContentHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -90,7 +86,7 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
      * 初始化数据
      */
     private void initFields() {
-        accountTypeBack = (LinearLayout) findViewById(R.id.account_type_back);
+        accountTypeBack = (LinearLayout) findViewById(R.id.back);
         accountTypeList = (ListView) findViewById(R.id.common_list);
         commonListTitle = (TextView) findViewById(R.id.common_list_title);
         idResources = new int[]{R.id.account_type_id, R.id.account_type_text, R.id.common_list_arrow};
@@ -102,7 +98,7 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.account_type_back: //退出按钮
+            case R.id.back: //退出按钮
                 finish();
                 break;
         }
@@ -132,6 +128,7 @@ public class AccountTypeActivity extends Activity implements View.OnClickListene
                 map.put(Constant.ENTERPRISE_NAME, textEnterpriseName);
                 map.put(Constant.ORG_CODE, String.valueOf(""));
                 map.put(Constant.ROLE_NAME, "");
+                map.put("role_id", 3);
                 if(!common.isSave(map)) {
                     Toast.makeText(AccountTypeActivity.this, "企业ID更新失败", Toast.LENGTH_SHORT).show();
                 }

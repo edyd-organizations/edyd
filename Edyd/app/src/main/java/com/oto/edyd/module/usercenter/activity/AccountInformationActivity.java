@@ -25,7 +25,6 @@ public class AccountInformationActivity extends FragmentActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_frame);
         init(); //初始化数据
-        switchAccountTypeInfo(); //切换角色
     }
 
     /**
@@ -33,6 +32,7 @@ public class AccountInformationActivity extends FragmentActivity{
      */
     private void init() {
         initFields();
+        switchAccountTypeInfo(); //切换角色
     }
 
     /**

@@ -91,7 +91,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:hint="6-20位字符，包含数字、字母和特殊符号"
+                        android:hint="6-20位数字、字母或特殊符号"
                         android:textColorHint="#CCCCCC"
                         android:drawablePadding="10dp"
                         android:maxLength="18"
@@ -99,14 +99,14 @@
                         android:inputType="textPassword"
                         android:background="@null"
                         android:drawableLeft="@drawable/register_password_left_icon" />
-<!--                    <ImageView
+                    <ImageView
                         android:id="@+id/visible_password"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@mipmap/cipher_text"
                         android:layout_marginRight="10dp"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"/>-->
+                        android:layout_centerInParent="true"/>
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
