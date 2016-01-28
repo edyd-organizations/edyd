@@ -155,7 +155,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
-                Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "获取预分配金额异常", Toast.LENGTH_SHORT).show();
             }
 
             //            {"status":"200","flag":"SUCCESS","message":"操作成功",
