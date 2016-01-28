@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="left_sliding_list_string">
-        <item>我的钱包</item>
+        <!--<item>我的钱包</item>-->
         <item>账户类型</item>
         <item>公告通知</item>
         <item>社交分享</item>

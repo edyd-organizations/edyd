@@ -281,7 +281,7 @@ public class ImageIndicatorView extends RelativeLayout {
 		this.totelCount = viewList.size();
 		final LayoutParams params = (LayoutParams) indicateLayout.getLayoutParams();
 		if (INDICATE_USERGUIDE_STYLE == this.indicatorStyle) {// 操作指引
-			params.bottomMargin = 45;
+			params.bottomMargin = 30;
 		}
 		this.indicateLayout.setLayoutParams(params);
 		// 初始化指示器
