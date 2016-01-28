@@ -30,6 +30,7 @@ import com.oto.edyd.utils.NetWork;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.oto.edyd.utils.ServiceUtil;
 import com.squareup.okhttp.Request;
+import com.umeng.message.UmengRegistrar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,7 +62,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private EditText confirmPassword; //用户注册
     private Button btRegister; //注册按钮
     private Button btAlreadyRegister; //已经注册
-    //private ImageView visiblePassword; //密码是否可见
+    private ImageView visiblePassword; //密码是否可见
     private VerificationCodeProgressAsyncTask asyncTask; //异步消息对象
     private boolean asyncIsOver = true; //异步线程是否结束
     private CusProgressDialog transitionDialog; //过度对话框
@@ -71,10 +72,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 
     private static final int MOBILE_PHONE_LENGTH  = 11; //手机号码长度
     //private static final int VERIFICATION_CODE_LENGTH = 4; //验证码长度
-    private static final int MOBILE_PHONE_ALREADY_REGISTER = 0x10; //账号已注册
     private static final int MOBILE_PHONE_WITHOUT_REGISTER = 0x11; //账号未注册
     //private static final int USER_ALREADY_EXIST = 504; //用户已存在
-    private static final int USER_REGISTER_EXCEPTION = 0x13; //注册异常
+    //private static final int USER_REGISTER_EXCEPTION = 0x13; //注册异常
     private static final int USER_REGISTER_SUCCESS = 0x14; //用户注册成功
     private static final int USER_REGISTER_SUB_COMPANY_SUCCESS = 0x15; //用户注册子公司成功返回码
     private static final int HANDLER_ACCOUNT_TYPE_SUCCESS_STATUS_CODE = 0x16; //账户类型返回码
@@ -83,6 +83,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private static final int INVALID_VERIFICATION_CODE = 0x19; //无效验证码
     private static final int VERIFICATION_AUTHENTICATE_SUCCESS = 0x20; //验证码认证成功
     private static final int HANDLER_DRIVER_ROLE = 0x21; //司机返回码
+    private static final int HANDLER_DEVICE_TOKEN_CODE = 0x22; //用户友盟设备ID请求成功返回码
 
     @Nullable
     @Override
@@ -113,7 +114,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         etRegisterPassword = (EditText) view.findViewById(R.id.register_user_password);
         confirmPassword = (EditText) view.findViewById(R.id.confirm_password);
         btRegister = (Button) view.findViewById(R.id.bt_register);
-        //visiblePassword = (ImageView) view.findViewById(R.id.visible_password);
+        visiblePassword = (ImageView) view.findViewById(R.id.visible_password);
         btAlreadyRegister = (Button) view.findViewById(R.id.bt_already_register);
         eFragmentManager = getActivity().getSupportFragmentManager();
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
@@ -129,7 +130,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         btObtainVerificationCode.setOnClickListener(this);
         btRegister.setOnClickListener(this);
         btAlreadyRegister.setOnClickListener(this);
-        //visiblePassword.setOnClickListener(this);
+        visiblePassword.setOnClickListener(this);
 
         //手机号码输入框注册监听器
         etRegisterPhoneNumber.addTextChangedListener(new TextWatcher() {
@@ -287,19 +288,20 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.bt_already_register: //返回登录页面
                 eFragmentManager.popBackStack();
-                break;            case R.id.visible_password:
-//                int isVisible = etRegisterPassword.getInputType();
-//                if(isVisible == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) { //当前密码显示
-//                    etRegisterPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); //设置隐藏
-//                    etRegisterPassword.setSelection(etRegisterPassword.length()); //设置光标位置
-//                    visiblePassword.setImageResource(R.mipmap.cipher_text);
-//                } else { //当前密码隐藏
-//                    etRegisterPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); //设置显示
-//                    etRegisterPassword.setSelection(etRegisterPassword.length());
-//                    visiblePassword.setImageResource(R.mipmap.plain_text);
-//                }
-//                break;
-//
+                break;
+            case R.id.visible_password:
+                int isVisible = etRegisterPassword.getInputType();
+                if(isVisible == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) { //当前密码显示
+                    etRegisterPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); //设置隐藏
+                    etRegisterPassword.setSelection(etRegisterPassword.length()); //设置光标位置
+                    visiblePassword.setImageResource(R.mipmap.cipher_text);
+                } else { //当前密码隐藏
+                    etRegisterPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); //设置显示
+                    etRegisterPassword.setSelection(etRegisterPassword.length());
+                    visiblePassword.setImageResource(R.mipmap.plain_text);
+                }
+                break;
+
             default:
                 break;
         }
@@ -384,8 +386,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                     jsonArray = jsonObject.getJSONArray("rows");
                     Message message = Message.obtain();
                     if (jsonArray.length() > 0) { //判断该账号是否存在数据
-                        //有数据代表账号已注册
-                        message.what = MOBILE_PHONE_ALREADY_REGISTER;
+                        //有数据代表账号已注册，不能获取验证码
+                        common.showToast(context, "账号已注册");
+                        return;
                     } else {
                         //无数据代表账号未注册
                         message.what = MOBILE_PHONE_WITHOUT_REGISTER;
@@ -448,43 +451,23 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            String enterpriseId;
-            String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+            String sessionUuid;
             switch (msg.what) {
-                case MOBILE_PHONE_ALREADY_REGISTER: //账号已注册，不能获取验证码
-                    common.showToast(context, getString(R.string.account_have_been_register));
-                    break;
                 case MOBILE_PHONE_WITHOUT_REGISTER: //账号未注册，请求获取验证码
                     requestVerificationCode(); //请求验证码
                     break;
+                case VERIFICATION_AUTHENTICATE_SUCCESS: //验证码认证成功
+                    register();
+                    break;
                 case USER_REGISTER_SUCCESS: //用户注册成功
-                    registerSubCompany(); //注册子公司
+                    sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+                    uploadDeviceToken(sessionUuid);
                     break;
-                case USER_REGISTER_SUB_COMPANY_SUCCESS: //用户注册公司成功返回码
-                    requestAccountTypeInfo(sessionUuid); //请求账户类型
-                    break;
-                case HANDLER_ACCOUNT_TYPE_SUCCESS_STATUS_CODE: //账户类型成功返回码
-                    enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID); //企业ID
-                    requestRoleType(sessionUuid, enterpriseId);
-                    break;
-                case HANDLER_ROLE_TYPE_SUCCESS_CODE: //角色成功返回码
-                    requestAccountId(sessionUuid);
-                    break;
-                case HANDLER_ACCOUNT_TYPE_SUCCESS_CODE: //账户ID成功返回
-                    //initTransportServiceRoleType();
-                    isDriver(sessionUuid);
-                    break;
-                case HANDLER_DRIVER_ROLE: //是否有司机
-                    initTransportServiceRoleType();
+                case HANDLER_DEVICE_TOKEN_CODE: //设备ID上传成功返回码
+                    isTurnLocationService();
                     break;
                 case INVALID_VERIFICATION_CODE: //无效验证码
                     common.showToast(context, "无效验证码");
-                    break;
-                case USER_REGISTER_EXCEPTION: //注册异常
-                    common.showToast(context, "注册异常");
-                    break;
-                case VERIFICATION_AUTHENTICATE_SUCCESS: //验证码认证成功
-                    register();
                     break;
                 default:
             }
@@ -499,18 +482,20 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         String alias = etRegisterUserAlias.getText().toString(); //别名
         String password = etRegisterPassword.getText().toString(); //密码
 
-        String url = Constant.ENTRANCE_PREFIX + "register.json?mobile=" + mobilePhone + "&password=" + password + "&verificationCode=000000" + "&fullName=" + alias + "&appKey=null";
+        String url = Constant.ENTRANCE_PREFIX_v1 + "appPostRegister.json?mobile=" + mobilePhone + "&password=" + password + "&fullName=" + alias + "&appKey=null";
         OkHttpClientManager.getAsyn(url, new RegisterResultCallback<String>(1) {
             @Override
             public void onError(Request request, Exception e) {
                 //注册异常
                 common.showToast(context, "注册异常");
+                transitionDialog.dismissDialog();
             }
 
             @Override
             public void onResponse(String response) {
                 JSONObject jsonObject;
                 JSONArray jsonArray;
+                JSONObject item;
 
                 try {
                     jsonObject = new JSONObject(response);
@@ -523,19 +508,33 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                         return;
                     }
                     if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) { //用户注册异常
-                        message.what = USER_REGISTER_EXCEPTION;
-                        handler.sendMessage(message);
+                        common.showToast(context, "注册异常");
                         return;
                     }
-                    String sessionUuid = jsonArray.getJSONObject(0).getString("sessionUuid"); //用户唯一标示
-                    String userName = etRegisterPhoneNumber.getText().toString(); //手机号码
+                    jsonArray = jsonObject.getJSONArray("rows");
+                    item = jsonArray.getJSONObject(0);
+                    String sessionUuid = item.getString("sessionUuid"); //SessionUuid
+                    String mpNumber = etRegisterPhoneNumber.getText().toString(); //用户名（手机号码）
+                    String enterpriseId = item.getString("enterpriseId"); //企业ID
+                    String enterpriseName = item.getString("enterpriseName"); //企业名称
+                    String accountId = item.getString("accountId"); //账户ID
+                    String roleId = item.getString("roleId"); //角色ID
+                    String tenantId = item.getString("tenantId"); //租户ID
+                    String typeCode = item.getString("typeCode"); //0-司机角色
+
                     Map<Object, Object> map = new HashMap<Object, Object>();
+                    map.put(Constant.USER_NAME, mpNumber);
                     map.put(Constant.SESSION_UUID, sessionUuid);
-                    map.put(Constant.USER_NAME, userName);
+                    map.put(Constant.ENTERPRISE_ID, enterpriseId);
+                    map.put(Constant.ENTERPRISE_NAME, enterpriseName);
+                    map.put(Constant.TENANT_ID, tenantId);
+                    map.put("role_id", roleId);
+                    map.put("ACCOUNT_ID", accountId);
+                    map.put(Constant.TYPE_CODE, typeCode);
                     if (!common.isSave(map)) { //判断用户信息是否保存成功
                         //用户信息保存失败
-                        common.showToast(context, Constant.USER_INFO_SAVE_FAIL);
-                        transitionDialog.getLoadingDialog().dismiss();
+                        common.showToast(context, "注册信息保存失败");
+                        transitionDialog.dismissDialog();
                         return;
                     }
                     message.what = USER_REGISTER_SUCCESS;
@@ -548,197 +547,18 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     }
 
     /**
-     * 注册子公司
-     */
-    private void registerSubCompany() {
-        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
-        String url = Constant.ENTRANCE_PREFIX + "addVirtualCom.json?sessionUuid=" + sessionUuid;
-        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
-            @Override
-            public void onError(Request request, Exception e) {
-                common.showToast(context, "注册公司异常");
-            }
-
-            @Override
-            public void onResponse(String response) {
-                JSONObject jsonObject;
-                try {
-                    jsonObject = new JSONObject(response);
-                    String status = jsonObject.getString("status");
-                    Message message = Message.obtain();
-                    if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) { //判断用户注册是否异常
-                        //用户注册异常
-                        common.showToast(context, "用户注册异常");
-                        return;
-                    }
-                    message.what = USER_REGISTER_SUB_COMPANY_SUCCESS;
-                    handler.sendMessage(message);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**
-     * 请求账户类型信息
+     * 上传设备ID号
      * @param sessionUuid 用户唯一标示
      */
-    private void requestAccountTypeInfo(String sessionUuid) {
-        String url = Constant.ENTRANCE_PREFIX + "SubmitEnter.json?sessionUuid=" + sessionUuid + "&enterprisesId=" + Constant.ENTERPRISE_TYPE_PERSONAL;
-        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
-            @Override
-            public void onError(Request request, Exception e) {
-                //请求异常
-                common.showToast(context, Constant.INTERNET_REQUEST_ABNORMAL);
-                transitionDialog.getLoadingDialog().dismiss();
-            }
-
-            @Override
-            public void onResponse(String response) {
-                JSONObject jsonObject;
-                JSONArray jsonArray;
-                try {
-                    jsonObject = new JSONObject(response);
-                    String status = jsonObject.getString("status");
-                    if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        //账户类型请求失败
-                        common.showToast(context, Constant.ACCOUNT_TYPE_INFO_REQUEST_FAIL);
-                        transitionDialog.getLoadingDialog().dismiss();
-                        return;
-                    }
-
-                    jsonArray = jsonObject.getJSONArray("rows");
-                    JSONObject jsonRows = jsonArray.getJSONObject(0);
-                    int enterpriseId = jsonRows.getInt("enterpriseId");
-                    int tenantId = jsonRows.getInt("tenantId");
-                    String enterpriseName = jsonRows.getString("enterpriseName");
-                    Map<Object, Object> map = new HashMap<Object, Object>();
-                    map.put(Constant.ENTERPRISE_ID, enterpriseId);
-                    map.put(Constant.ENTERPRISE_NAME, enterpriseName);
-                    map.put(Constant.TENANT_ID, tenantId);
-                    //保存账户类型信息
-                    if (!common.isSave(map)) {
-                        common.showToast(context, Constant.ACCOUNT_TYPE_INFO_SAVE_FAIL);
-                        transitionDialog.getLoadingDialog().dismiss();
-                        return;
-                    }
-
-                    Message message = Message.obtain();
-                    message.what = HANDLER_ACCOUNT_TYPE_SUCCESS_STATUS_CODE;
-                    handler.sendMessage(message);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**
-     * 请求角色类型
-     * @param sessionUuid 用户唯一标示
-     * @param enterpriseId 企业ID
-     */
-    private void requestRoleType(String sessionUuid, String enterpriseId) {
-        String url = Constant.ENTRANCE_PREFIX + "Compare.json?sessionUuid=" + sessionUuid + "&enterpriseId=" + enterpriseId;
-
-        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
-            @Override
-            public void onError(Request request, Exception e) {
-                //请求异常
-                common.showToast(context, Constant.INTERNET_REQUEST_ABNORMAL);
-                transitionDialog.getLoadingDialog().dismiss();
-            }
-
-            @Override
-            public void onResponse(String response) {
-                JSONObject jsonObject;
-                JSONArray jsonArray;
-                try {
-                    jsonObject = new JSONObject(response);
-                    String status = jsonObject.getString("status");
-                    if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        //角色类型请求异常
-                        common.showToast(context, "角色类型请求异常");
-                        transitionDialog.getLoadingDialog().dismiss();
-                        return;
-                    }
-
-                    jsonArray = jsonObject.getJSONArray("rows");
-                    JSONObject rowsJson = jsonArray.getJSONObject(0);
-                    int roleID = rowsJson.getInt("role");
-                    Map<Object, Object> map = new HashMap<Object, Object>();
-                    map.put("role_id", roleID);
-                    //保存角色类型信息
-                    if (!common.isSave(map)) {
-                        //角色类型保存失败
-                        common.showToast(context, getString(R.string.role_type_info_save_error));
-                        transitionDialog.getLoadingDialog().dismiss();
-                        return;
-                    }
-
-                    Message message = Message.obtain();
-                    message.what = HANDLER_ROLE_TYPE_SUCCESS_CODE;
-                    handler.sendMessage(message);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**
-     * 请求账户ID
-     * @param sessionUuid
-     */
-    private void requestAccountId(String sessionUuid) {
-        String accountIDUrl = Constant.ENTRANCE_PREFIX + "getAccountIdBySessionUuid.json?sessionUuid=" + sessionUuid;
-
-        OkHttpClientManager.getAsyn(accountIDUrl, new OkHttpClientManager.ResultCallback<String>() {
-            @Override
-            public void onError(Request request, Exception e) {
-                //请求异常
-                common.showToast(context, Constant.INTERNET_REQUEST_ABNORMAL);
-                transitionDialog.getLoadingDialog().dismiss();
-            }
-
-            @Override
-            public void onResponse(String response) {
-                JSONObject jsonObject;
-                JSONArray jsonArray;
-                try {
-                    jsonObject = new JSONObject(response);
-                    jsonArray = jsonObject.getJSONArray("rows");
-                    int accountID = jsonArray.getInt(0);
-                    Map<Object, Object> map = new HashMap<Object, Object>();
-                    map.put("ACCOUNT_ID", accountID);
-                    //保存账户ID
-                    if (!common.isSave(map)) {
-                        common.showToast(context, getString(R.string.role_type_info_save_error));
-                        transitionDialog.getLoadingDialog().dismiss();
-                        return;
-                    }
-
-                    Message message = Message.obtain();
-                    message.what = HANDLER_ACCOUNT_TYPE_SUCCESS_CODE;
-                    handler.sendMessage(message);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**
-     * 判断是否为司机
-     */
-    private void isDriver(String sessionUuid) {
-        String url = Constant.ENTRANCE_PREFIX_v1 + "getUserType.json?sessionUuid=" + sessionUuid;
-        OkHttpClientManager.getAsyn(url, new RegisterResultCallback<String>(2) {
+    private void uploadDeviceToken(String sessionUuid) {
+        String deviceToken = UmengRegistrar.getRegistrationId(context);
+        String url = Constant.ENTRANCE_PREFIX_v1 + "insertOrUpdatePhoneToken.json?sessionUuid=" + sessionUuid + "&deviceToken=" + deviceToken + "&phoneType=" + Constant.DEVICE_TYPE;
+        OkHttpClientManager.getAsyn(url,new RegisterResultCallback<String>(2) {
 
             @Override
             public void onError(Request request, Exception e) {
-                common.showToast(context, "司机代码获取异常");
+                common.showToast(context, "设备ID获取异常");
+                transitionDialog.dismissDialog();
             }
 
             @Override
@@ -749,21 +569,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                     jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
                     if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        common.showToast(context, "司机代码获取失败");
-                    }
-                    Map<Object, Object> map = new HashMap<Object, Object>();
-                    jsonArray = jsonObject.getJSONArray("rows");
-                    if(jsonArray.length() > 0 ) {
-                        map.put(Constant.TYPE_CODE, "0");
-                        ServiceUtil.invokeTimerPOIService(context);
-                    } else {
-                        map.put(Constant.TYPE_CODE, "");
-                    }
-                    if(!common.isSave(map)) {
-                        common.showToast(context, "用户类型报错失败");
+                        common.showToast(context, "设备ID上传失败");
+                        transitionDialog.dismissDialog();
+                        return;
                     }
                     Message message = Message.obtain();
-                    message.what = HANDLER_DRIVER_ROLE;
+                    message.what = HANDLER_DEVICE_TOKEN_CODE;
                     handler.sendMessage(message);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -773,10 +584,22 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     }
 
     /**
+     * 开启订单跟踪定位服务
+     */
+    private void isTurnLocationService() {
+        String typeCode = common.getStringByKey(Constant.TYPE_CODE);
+        //开启订单跟踪定位服务
+        if(typeCode.equals("0")) {
+            //0-代表司机角色，开启定位服务
+            ServiceUtil.invokeTimerPOIService(context);
+        }
+        initTransportServiceRoleType();
+    }
+
+    /**
      * 初始化运输服务角色
      */
     private void initTransportServiceRoleType() {
-
         Common userCommon = new Common(context.getSharedPreferences(Constant.USER_INFO_FILE, Context.MODE_PRIVATE));
         if (!userCommon.isClearAccount()) {
             Toast.makeText(getActivity(), "清除偏好用户信息失败！", Toast.LENGTH_SHORT);
@@ -815,7 +638,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
             //请求之前操作
             if(requestSequence == START_ACCESS) {
                 //首次访问
-                transitionDialog = new CusProgressDialog(context, "正在登录...");
+                transitionDialog = new CusProgressDialog(context, "正在注册...");
                 transitionDialog.getLoadingDialog().show();
             }
         }

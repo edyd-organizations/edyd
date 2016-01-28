@@ -459,7 +459,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.oilFragment).commitAllowingStateLoss();
                 break;
             case 3: //运输服务
-                mainTitle.setText("运输服务");
+                mainTitle.setText("保险");
                 if (!common.isLogin()) {
                     Toast.makeText(context, "用户未登录，请先登录", Toast.LENGTH_LONG).show();
 //                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);

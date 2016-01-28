@@ -4,8 +4,7 @@ import java.lang.ref.WeakReference;
 
 import android.os.Handler;
 import android.os.Message;
-
-import com.oto.edyd.lib.imageindicator.ImageIndicatorView;
+import android.util.Log;
 
 /**
  * Auto BrocastManager for ImageIndicatorView
@@ -18,7 +17,7 @@ public class AutoPlayManager {
 	/**
 	 * 自动播放标志位，默认播放
 	 */
-	private boolean broadcastEnable = false;
+	private boolean broadcastEnable = true;
 	/**
 	 * 自动播放启动默认时间
 	 */
@@ -117,14 +116,13 @@ public class AutoPlayManager {
 	 */
 	public void loop() {
 		if (broadcastEnable) {
-			broadcastHandler.sendEmptyMessageDelayed(0, this.startMils);
+			broadcastHandler.sendEmptyMessageDelayed(5000, this.startMils);
 		}
 	}
 
 	protected void handleMessage(Message msg) {
 		if (broadcastEnable) {
-			if (System.currentTimeMillis()
-					- mImageIndicatorView.getRefreshTime() < 2 * 1000) {// 最近一次划动间隔小于2s
+			if (System.currentTimeMillis() - mImageIndicatorView.getRefreshTime() < 2 * 1000) {// 最近一次划动间隔小于2s
 				return;
 			}
 			if ((broadcastTimes != DEFAULT_TIMES)
@@ -133,18 +131,13 @@ public class AutoPlayManager {
 			}
 
 			if (direction == RIGHT) {// roll right
-				if (mImageIndicatorView.getCurrentIndex() < mImageIndicatorView
-						.getTotalCount()) {
-					if (mImageIndicatorView.getCurrentIndex() == mImageIndicatorView
-							.getTotalCount() - 1) {
+				//Log.e("AUTO_PLAY", String.valueOf(mImageIndicatorView.getCurrentIndex()));
+				if (mImageIndicatorView.getCurrentIndex() < mImageIndicatorView.getTotalCount()) {
+					if (mImageIndicatorView.getCurrentIndex() == mImageIndicatorView.getTotalCount() - 1) {
 						timesCount++;// 循环次数次数加1
 						direction = LEFT;
 					} else {
-						mImageIndicatorView
-								.getViewPager()
-								.setCurrentItem(
-										mImageIndicatorView.getCurrentIndex() + 1,
-										true);
+						mImageIndicatorView.getViewPager().setCurrentItem(mImageIndicatorView.getCurrentIndex() + 1, true);
 					}
 				}
 			} else {// roll left
@@ -152,11 +145,7 @@ public class AutoPlayManager {
 					if (mImageIndicatorView.getCurrentIndex() == 0) {
 						direction = RIGHT;
 					} else {
-						mImageIndicatorView
-								.getViewPager()
-								.setCurrentItem(
-										mImageIndicatorView.getCurrentIndex() - 1,
-										true);
+						mImageIndicatorView.getViewPager().setCurrentItem(mImageIndicatorView.getCurrentIndex() - 1, true);
 					}
 				}
 			}
@@ -178,7 +167,7 @@ public class AutoPlayManager {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			AutoPlayManager autoBrocastManager = autoBrocastManagerRef.get();
-
+			//Log.e("AUTO_PLAY", "START LOOP");
 			if (autoBrocastManager != null) {
 				autoBrocastManager.handleMessage(msg);
 			}

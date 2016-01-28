@@ -350,7 +350,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/user_icon_8"
                     android:textSize="14sp"
-                    android:text="4008761167"/>
+                    android:text="4008-761-167"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
