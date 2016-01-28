@@ -18,6 +18,26 @@
         <item name="android:paddingTop">2dp</item>
     </style>
 
+    <style name="shipperBottomMenu">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">90dp</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:background">@drawable/bg_shipper_switch</item>
+        <item name="android:button">@null</item>
+  <!-- <item name="android:textColor">@drawable/bg_receiver_shipper_switch_textcolor</item>-->
+     <item name="android:textColor">@color/user_icon_8</item>
+    </style>
+
+    <style name="receiverBottomMenu">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">90dp</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:background">@drawable/bg_receiver_switch</item>
+        <item name="android:button">@null</item>
+        <!-- <item name="android:textColor">@drawable/bg_receiver_shipper_switch_textcolor</item>-->
+        <item name="android:textColor">@color/user_icon_8</item>
+    </style>
+
     <!--
         自定义loading dialog
         android:windowFrame Dialog的windowFrame框为无

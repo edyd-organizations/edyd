@@ -426,6 +426,7 @@
         <activity
             android:name=".Chooseprovince"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ChooseCity"
             android:screenOrientation="portrait" />
@@ -510,6 +511,9 @@
             android:screenOrientation="portrait" />
         <activity android:name=".module.common.activity.ComTransportActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.tts.activity.ConsignorActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

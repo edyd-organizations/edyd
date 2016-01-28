@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.oto.edyd.R;
 import com.oto.edyd.TransportShipperFragment;
+import com.oto.edyd.module.tts.activity.ConsignorActivity;
 import com.oto.edyd.module.tts.fragment.TransportDriverFragment;
 import com.oto.edyd.module.tts.fragment.TransportUndertakeFragment;
 import com.oto.edyd.utils.Constant;
@@ -26,11 +27,14 @@ public class ComTransportActivity extends FragmentActivity implements View.OnCli
     private LinearLayout back; //返回
     private TextView title; //标题
 
+
     //-------------变量-----------------------
     private FragmentManager setUpFragmentManager;
+    private ComTransportActivity mActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        mActivity = this;
         requestWindowFeature(Window.FEATURE_NO_TITLE); //无标题
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_transport);
@@ -68,6 +72,7 @@ public class ComTransportActivity extends FragmentActivity implements View.OnCli
 
     /**
      * 切换运输角色
+     *
      * @param transportRole
      */
     private void switchTransportRole(int transportRole) {
@@ -78,8 +83,9 @@ public class ComTransportActivity extends FragmentActivity implements View.OnCli
             case Constant.UNDERTAKER_ROLE_ID: //承运方
                 setUpFragmentManager.beginTransaction().replace(R.id.common_frame, new TransportUndertakeFragment()).commit();
                 break;
-            case Constant.SHIPPER_ROLE_ID: //发货方
-                setUpFragmentManager.beginTransaction().replace(R.id.common_frame, new TransportShipperFragment()).commit();
+            case Constant.SHIPPER_ROLE_ID: //货主
+//                setUpFragmentManager.beginTransaction().replace(R.id.common_frame, new TransportShipperFragment()).commit();
+
                 break;
         }
     }
