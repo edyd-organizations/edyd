@@ -437,29 +437,28 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         //transaction.setCustomAnimations(transaction.TRANSIT_FRAGMENT_OPEN, transaction.TRANSIT_FRAGMENT_FADE);
         switch (index) {
             case 1: //首页
-                mainTitle.setText("首页");
                 //判断首页是否已经缓存
                 if(mainViewHolder.indexFragment == null) {
                     //未缓存，创建新对象
                     mainViewHolder.indexFragment = new MainIndexFragment();
                 }
                 transaction.replace(R.id.main_contain, mainViewHolder.indexFragment).commitAllowingStateLoss();
+                mainTitle.setText("首页");
                 break;
             case 2: //油品
                 if (!common.isLogin()) {
                     common.showToast(context, "用户未登录，请先登录");
                     return;
                 }
-                mainTitle.setText("油品");
                 //判断首页是否已经缓存
                 if(mainViewHolder.oilFragment == null) {
                     //未缓存，创建新对象
                     mainViewHolder.oilFragment = new MainOilFragment();
                 }
                 transaction.replace(R.id.main_contain, mainViewHolder.oilFragment).commitAllowingStateLoss();
+                mainTitle.setText("油品");
                 break;
             case 3: //运输服务
-                mainTitle.setText("保险");
                 if (!common.isLogin()) {
                     Toast.makeText(context, "用户未登录，请先登录", Toast.LENGTH_LONG).show();
 //                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -480,15 +479,16 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                     mainViewHolder.waitingBuildFragment = new WaitingBuildFragment();
                 }
                 transaction.replace(R.id.main_contain, mainViewHolder.waitingBuildFragment).commitAllowingStateLoss();
+                mainTitle.setText("保险");
                 break;
             case 4: //百宝箱
-                mainTitle.setText("百宝箱");
                 //判断百宝箱是否已经缓存
                 if(mainViewHolder.boxFragment == null) {
                     //未缓存，创建新对象
                     mainViewHolder.boxFragment = new MainBoxFragment();
                 }
                 transaction.replace(R.id.main_contain, mainViewHolder.boxFragment).commitAllowingStateLoss();
+                mainTitle.setText("百宝箱");
                 break;
         }
     }
