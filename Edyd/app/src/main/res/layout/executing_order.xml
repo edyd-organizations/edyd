@@ -51,8 +51,8 @@
             android:layout_margin="10dp"
             android:gravity="left">
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@mipmap/receive_order_qi"
                 android:layout_gravity="left"/>
             <TextView
@@ -73,8 +73,8 @@
             android:layout_marginRight="10dp"
             android:gravity="left">
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="left"
                 android:src="@mipmap/recerve_order_zhong"/>
             <TextView

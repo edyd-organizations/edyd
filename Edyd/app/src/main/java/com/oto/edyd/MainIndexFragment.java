@@ -18,6 +18,7 @@ import com.oto.edyd.lib.imageindicator.AutoPlayManager;
 import com.oto.edyd.lib.imageindicator.network.NetworkImageIndicatorView;
 import com.oto.edyd.module.common.activity.ComTransportActivity;
 import com.oto.edyd.module.oil.activity.OilCardPayMainActivity;
+import com.oto.edyd.module.tts.activity.ConsignorActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.OkHttpClientManager;
@@ -118,7 +119,7 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener 
         Intent intent;
         switch (v.getId()) {
             case R.id.driver: //我是司机
-                if(!common.isLogin()) {
+                if (!common.isLogin()) {
                     common.showToast(context, "未登录，请先登录");
                     return;
                 }
@@ -128,13 +129,13 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener 
                 startActivity(intent);
                 break;
             case R.id.undertaker: //我是承运方
-                if(!common.isLogin()) {
+                if (!common.isLogin()) {
                     common.showToast(context, "未登录，请先登录");
                     return;
                 }
                 String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
 
-                if(enterpriseId !=null && enterpriseId.equals("0")) {
+                if (enterpriseId != null && enterpriseId.equals("0")) {
 
                     common.showToast(context, "个人角色无权限访问");
                     return;
@@ -144,8 +145,8 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener 
                 intent.putExtra("transport_title", "承运方");
                 startActivity(intent);
                 break;
-            case R.id.ll_cargo_owner: //我是发货方
-                if(!common.isLogin()) {
+            case R.id.ll_cargo_owner: //我是货主
+                if (!common.isLogin()) {
                     common.showToast(context, "未登录，请先登录");
                     return;
                 }
@@ -154,13 +155,16 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener 
                     common.showToast(context, "个人角色无权限访问");
                     return;
                 }
-                intent = new Intent(context, ComTransportActivity.class);
-                intent.putExtra(Constant.TRANSPORT_ROLE, Constant.SHIPPER_ROLE_ID); //发货标志
-                intent.putExtra("transport_title", "发货方");
-                startActivity(intent);
+                Intent ownerIntent = new Intent(context, ConsignorActivity.class);
+                startActivity(ownerIntent);
+
+//                intent = new Intent(context, ComTransportActivity.class);
+//                intent.putExtra(Constant.TRANSPORT_ROLE, Constant.SHIPPER_ROLE_ID); //发货标志
+//                intent.putExtra("transport_title", "发货方");
+//                startActivity(intent);
                 break;
             case R.id.oil_card_pay: //油卡充值
-                if(!common.isLogin()) {
+                if (!common.isLogin()) {
                     common.showToast(context, "未登录，请先登录");
                     return;
                 }
@@ -168,13 +172,16 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener 
                 startActivity(intent);
                 break;
             case R.id.transport_insurance: //货运保险
+                Common.showToast(context,"正在建设中。。");
 
                 break;
             case R.id.goods_order: //商品订单
-
+                Common.showToast(context,"正在建设中。。");
                 break;
             case R.id.invite_friends: //邀请朋友
-
+                intent = new Intent(context, SocialSharedActivity.class);
+                intent.putExtra("wait_title", "社交分享");
+                startActivity(intent);
                 break;
         }
     }

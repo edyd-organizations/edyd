@@ -17,6 +17,7 @@ import com.oto.edyd.lib.slidingmenu.app.SlidingFragmentActivity;
 import com.oto.edyd.module.common.activity.NoticeActivity;
 import com.oto.edyd.module.common.fragment.WaitingBuildFragment;
 import com.oto.edyd.module.oil.fragment.MainOilFragment;
+import com.oto.edyd.module.tts.fragment.TransportDriverFragment;
 import com.oto.edyd.module.usercenter.activity.LoginActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -75,7 +76,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         initMainIndex(); //初始化主界面
         initUmengService(); //初始化友盟消息推送服务
         invokeTimer(); //是否开启定时器
-        if(common.isLogin()) {
+        if (common.isLogin()) {
             enterLogin.setVisibility(View.GONE);
         } else {
             enterLogin.setVisibility(View.VISIBLE);
@@ -96,7 +97,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         mainViewHolder = new MainViewHolder();
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
-        context= MainActivity.this;
+        context = MainActivity.this;
     }
 
     /**
@@ -140,8 +141,10 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 //        Fragment rightMenuFragment = new MenuRightFragment();
 //        getSupportFragmentManager().beginTransaction().replace(R.id.id_right_menu_frame, rightMenuFragment).commit();
     }
+
     /**
      * 显示左侧菜单
+     *
      * @param view
      */
     public void showLeftMenu(View view) {
@@ -182,7 +185,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             @Override
             public void dealWithNotificationMessage(Context context, UMessage uMessage) {
                 common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-                if(common.isLogin()) {
+                if (common.isLogin()) {
                     super.dealWithNotificationMessage(context, uMessage);
                 }
             }
@@ -201,12 +204,12 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 Map<String, String> map = uMessage.extra;
                 String messageType = map.get("messageType");
                 Intent intent;
-                if(messageType.equals(Constant.DRIVER_MESSAGE_TYPE)) { //司机消息
+                if (messageType.equals(Constant.DRIVER_MESSAGE_TYPE)) { //司机消息
                     intent = new Intent(context, OrderOperateActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("order",0);
+                    intent.putExtra("order", 0);
                     startActivity(intent);
-                } else if(messageType.equals(Constant.ENTERPRISE_MESSAGE_TYPE)) {
+                } else if (messageType.equals(Constant.ENTERPRISE_MESSAGE_TYPE)) {
                     intent = new Intent(context, NoticeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
@@ -235,8 +238,8 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 switchFooterMenu(4); //切换百宝箱
                 break;
             case R.id.enter_login: //登录入口
-                if(common.isLogin()) {
-                   common.showToast(context, "已经登录");
+                if (common.isLogin()) {
+                    common.showToast(context, "已经登录");
                     return;
                 }
                 Intent intent = new Intent(context, LoginActivity.class);
@@ -257,6 +260,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
     /**
      * 用于接收Activity返回数据
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -270,7 +274,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             leftMenuFragment.adapterData(userName);
             //返回首页
             //判断首页是否已经缓存
-            if(mainViewHolder.indexFragment == null) {
+            if (mainViewHolder.indexFragment == null) {
                 //未缓存，创建新对象
                 mainViewHolder.indexFragment = new MainIndexFragment();
             }
@@ -284,7 +288,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             leftMenuFragment.adapterData(userName);
             //返回首页
             //判断首页是否已经缓存
-            if(mainViewHolder.indexFragment == null) {
+            if (mainViewHolder.indexFragment == null) {
                 //未缓存，创建新对象
                 mainViewHolder.indexFragment = new MainIndexFragment();
             }
@@ -339,6 +343,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
     /**
      * 按键监听
+     *
      * @param keyCode
      * @param event
      * @return
@@ -347,7 +352,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             //判断侧滑菜单是否显示
-            if(!slidingMenu.isMenuShowing()) {
+            if (!slidingMenu.isMenuShowing()) {
                 //侧滑菜单不显示
                 inTwoSecondsDBClickExit();
             }
@@ -424,7 +429,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     public void exitOperate() {
         mainTitle.setText("首页");
         //判断首页是否已经缓存
-        if(mainViewHolder.indexFragment == null) {
+        if (mainViewHolder.indexFragment == null) {
             //未缓存，创建新对象
             mainViewHolder.indexFragment = new MainIndexFragment();
         }
@@ -436,6 +441,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
     /**
      * 切换底部菜单栏
+     *
      * @param index 底部菜单所以
      */
     private void switchFooterMenu(int index) {
@@ -445,7 +451,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
         switch (index) {
             case 1: //首页
                 //判断首页是否已经缓存
-                if(mainViewHolder.indexFragment == null) {
+                if (mainViewHolder.indexFragment == null) {
                     //未缓存，创建新对象
                     mainViewHolder.indexFragment = new MainIndexFragment();
                 }
@@ -458,7 +464,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                     return;
                 }
                 //判断首页是否已经缓存
-                if(mainViewHolder.oilFragment == null) {
+                if (mainViewHolder.oilFragment == null) {
                     //未缓存，创建新对象
                     mainViewHolder.oilFragment = new MainOilFragment();
                 }
@@ -490,7 +496,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 break;
             case 4: //百宝箱
                 //判断百宝箱是否已经缓存
-                if(mainViewHolder.boxFragment == null) {
+                if (mainViewHolder.boxFragment == null) {
                     //未缓存，创建新对象
                     mainViewHolder.boxFragment = new MainBoxFragment();
                 }
@@ -502,6 +508,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 
     /**
      * 切换运输角色
+     *
      * @param transportRoleId
      */
 //    private void switchTransportRole(int transportRoleId) {
@@ -526,7 +533,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
      */
     private void invokeTimer() {
         String typeCode = common.getStringByKey(Constant.TYPE_CODE); //用户代码
-        if(typeCode!=null && !typeCode.equals("")) {
+        if (typeCode != null && !typeCode.equals("")) {
             ServiceUtil.invokeTimerPOIService(context);
         }
     }
