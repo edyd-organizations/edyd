@@ -499,16 +499,17 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 
                 try {
                     jsonObject = new JSONObject(response);
-                    jsonArray = jsonObject.getJSONArray("rows");
                     String status = jsonObject.getString("status");
                     Message message = Message.obtain();
                     if (status.equals(Constant.USER_ALREADY_EXIST)) { //验证用户是否注册
                         //用户已注册
-                        common.showToast(context, getString(R.string.account_have_been_register));
+                        common.showToast(context, "帐号已注册");
+                        transitionDialog.dismissDialog();
                         return;
                     }
                     if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) { //用户注册异常
                         common.showToast(context, "注册异常");
+                        transitionDialog.dismissDialog();
                         return;
                     }
                     jsonArray = jsonObject.getJSONArray("rows");
@@ -639,7 +640,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
             if(requestSequence == START_ACCESS) {
                 //首次访问
                 transitionDialog = new CusProgressDialog(context, "正在注册...");
-                transitionDialog.getLoadingDialog().show();
+                transitionDialog.showDialog();
             }
         }
 
@@ -648,7 +649,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
             //请求之后要做的操作
             if(requestSequence == END_ACCESS) {
                 //末次访问
-                transitionDialog.getLoadingDialog().dismiss();
+                transitionDialog.dismissDialog();
             }
         }
     }

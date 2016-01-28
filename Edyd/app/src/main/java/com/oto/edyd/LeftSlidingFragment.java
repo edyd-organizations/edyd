@@ -276,7 +276,7 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
         slidingBottomLine.setVisibility(View.VISIBLE);
         accountType.setText("个人");
         textResources = context.getResources().getStringArray(R.array.left_sliding_list_string);
-        imageResources = new int[]{R.mipmap.my_purse, R.mipmap.select_user_type, R.mipmap.notice,
+        imageResources = new int[]{ R.mipmap.select_user_type, R.mipmap.notice,
                 R.mipmap.share, R.mipmap.setting};
         updateDataSource();
         simpleAdapter.notifyDataSetChanged();

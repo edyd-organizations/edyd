@@ -154,7 +154,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     private void initMainIndex() {
         mainViewHolder.indexFragment = new MainIndexFragment();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         //transaction.setCustomAnimations(transaction.TRANSIT_FRAGMENT_OPEN, transaction.TRANSIT_FRAGMENT_FADE); //添加Fragment切换动画
         transaction.replace(R.id.main_contain, mainViewHolder.indexFragment).commit();
     }
@@ -232,7 +232,6 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 switchFooterMenu(3); //切换保险
                 break;
             case R.id.main_box:
-                mainTitle.setText("百宝箱");
                 switchFooterMenu(4); //切换百宝箱
                 break;
             case R.id.enter_login: //登录入口
@@ -411,6 +410,14 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 //        }
 //    };
 
+
+    /**
+     * 设置切换状态
+     */
+//    private void backStatus() {
+//        isFragmentStatOk = true;
+//    }
+
     /**
      * 退出操作
      */
@@ -433,7 +440,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
      */
     private void switchFooterMenu(int index) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         //transaction.setCustomAnimations(transaction.TRANSIT_FRAGMENT_OPEN, transaction.TRANSIT_FRAGMENT_FADE);
         switch (index) {
             case 1: //首页
@@ -530,4 +537,12 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     public void stopTimer() {
         ServiceUtil.cancelAlarmManager(context);
     }
+
+//    @Override
+//    public boolean dispatchKeyEvent(KeyEvent event) {
+//        if(!isFragmentStatOk){
+//            return true;
+//        }
+//        return super.dispatchKeyEvent(event);
+//    }
 }
