@@ -94,7 +94,8 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
         //判断是否登录，加载不同的菜单资源
         if(common.isLogin()) {
             textResources = context.getResources().getStringArray(R.array.left_sliding_list_string);
-            imageResources = new int[]{R.mipmap.my_purse, R.mipmap.select_user_type, R.mipmap.notice,
+            //R.mipmap.my_purse,
+            imageResources = new int[]{ R.mipmap.select_user_type, R.mipmap.notice,
                     R.mipmap.share, R.mipmap.setting};
         } else {
             textResources = context.getResources().getStringArray(R.array.no_login_left_sliding_list_string);

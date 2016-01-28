@@ -3,10 +3,8 @@ package com.oto.edyd;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,9 +15,9 @@ import android.widget.Toast;
 import com.oto.edyd.lib.slidingmenu.SlidingMenu;
 import com.oto.edyd.lib.slidingmenu.app.SlidingFragmentActivity;
 import com.oto.edyd.module.common.activity.NoticeActivity;
+import com.oto.edyd.module.common.fragment.WaitingBuildFragment;
 import com.oto.edyd.module.oil.fragment.MainOilFragment;
 import com.oto.edyd.module.tts.fragment.TransportDriverFragment;
-import com.oto.edyd.module.tts.fragment.TransportUndertakeFragment;
 import com.oto.edyd.module.usercenter.activity.LoginActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -158,7 +156,10 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
      */
     private void initMainIndex() {
         mainViewHolder.indexFragment = new MainIndexFragment();
-        fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.indexFragment).commit();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        //transaction.setCustomAnimations(transaction.TRANSIT_FRAGMENT_OPEN, transaction.TRANSIT_FRAGMENT_FADE); //添加Fragment切换动画
+        transaction.replace(R.id.main_contain, mainViewHolder.indexFragment).commit();
     }
 
     /**
@@ -231,7 +232,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 switchFooterMenu(2); //切换油品
                 break;
             case R.id.main_vehicle_server:
-                switchFooterMenu(3); //切换运输服务
+                switchFooterMenu(3); //切换保险
                 break;
             case R.id.main_box:
                 mainTitle.setText("百宝箱");
@@ -254,7 +255,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     static class MainViewHolder {
         MainIndexFragment indexFragment; //首页
         MainOilFragment oilFragment; //油品
-        Fragment transportFragment; //运输服务
+        WaitingBuildFragment waitingBuildFragment; //保险
         MainBoxFragment boxFragment; //百宝箱
     }
 
@@ -305,39 +306,39 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
             leftMenuFragment.roleType.setText(roleName);
 
             //判断MainActivity状态栏是否切换在运输服务，如果是则要更新公司角色
-            if (vehicleServer.isChecked()) {
-                //判断是否为个人账户
-                if (enterpriseId == 0) {
-                    //个人，切换司机角色
-                    mainViewHolder.transportFragment = new TransportDriverFragment();
-                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
-                }
-                new Thread(new WaitSwitchThread()).start();
-            }
+//            if(vehicleServer.isChecked()) {
+//                //判断是否为个人账户
+//                if(enterpriseId ==0) {
+//                    //个人，切换司机角色
+//                    mainViewHolder.transportFragment = new TransportDriverFragment();
+//                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
+//                }
+//                new Thread(new WaitSwitchThread()).start();
+//            }
         }
 
         //运输服务角色选择返回更新
-        if (resultCode == Constant.TRANSPORT_ROLE_CODE) {
-            int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
-            switch (transportRoleId) {
-                case Constant.DRIVER_ROLE_ID: //司机
-                    mainViewHolder.transportFragment = new TransportDriverFragment();
-                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
-                    break;
-                case Constant.SHIPPER_ROLE_ID: //发货方
-                    mainViewHolder.transportFragment = new TransportShipperFragment();
-                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
-                    break;
-                case Constant.RECEIVER_ROLE_ID: //收货方
-                    mainViewHolder.transportFragment = new TransportReceiverFragment();
-                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
-                    break;
-                case Constant.UNDERTAKER_ROLE_ID: //承运方
-                    mainViewHolder.transportFragment = new TransportUndertakeFragment();
-                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
-                    break;
-            }
-        }
+//        if (resultCode == Constant.TRANSPORT_ROLE_CODE) {
+//            int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE));
+//            switch (transportRoleId) {
+//                case Constant.DRIVER_ROLE_ID: //司机
+//                    mainViewHolder.transportFragment = new TransportDriverFragment();
+//                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
+//                    break;
+//                case Constant.SHIPPER_ROLE_ID: //发货方
+//                    mainViewHolder.transportFragment = new TransportShipperFragment();
+//                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
+//                    break;
+//                case Constant.RECEIVER_ROLE_ID: //收货方
+//                    mainViewHolder.transportFragment = new TransportReceiverFragment();
+//                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
+//                    break;
+//                case Constant.UNDERTAKER_ROLE_ID: //承运方
+//                    mainViewHolder.transportFragment = new TransportUndertakeFragment();
+//                    fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
+//                    break;
+//            }
+//        }
     }
 
 
@@ -376,42 +377,44 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     /**
      * 等待切换
      */
-    private class WaitSwitchThread implements Runnable {
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(HANDLER_SWITCH_DURATION);
-                Message message = new Message();
-                message.what = HANDLER_ACCOUNT_TYPE_CODE;
-                handler.sendMessage(message);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    private class WaitSwitchThread implements Runnable {
+//        @Override
+//        public void run() {
+//            try {
+//                Thread.sleep(HANDLER_SWITCH_DURATION);
+//                Message message = new Message();
+//                message.what = HANDLER_ACCOUNT_TYPE_CODE;
+//                handler.sendMessage(message);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
 
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
-            switch (msg.what) {
-                case HANDLER_ACCOUNT_TYPE_CODE:
-                    Class transportClass = mainViewHolder.transportFragment.getClass();
-                    String className = transportClass.getSimpleName();
-                    if (className.equals("TransportDriverFragment")) {
-                        ((TransportDriverFragment) mainViewHolder.transportFragment).enterpriseName.setText(enterpriseName);
-                    } else if (className.equals("TransportShipperFragment")) {
-                        ((TransportShipperFragment) mainViewHolder.transportFragment).enterpriseName.setText(enterpriseName);
-                    } else if (className.equals("TransportReceiverFragment")) {
-                        ((TransportReceiverFragment) mainViewHolder.transportFragment).enterpriseName.setText(enterpriseName);
-                    } else if (className.equals("TransportUndertakeFragment")) {
-                        ((TransportUndertakeFragment) mainViewHolder.transportFragment).enterpriseName.setText(enterpriseName);
-                    }
-                    break;
-            }
-        }
-    };
+//    Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
+//            switch (msg.what) {
+//                case HANDLER_ACCOUNT_TYPE_CODE:
+//                    Class transportClass = mainViewHolder.transportFragment.getClass();
+//                    String className = transportClass.getSimpleName();
+//                    if(className.equals("TransportDriverFragment")) {
+//                        ((TransportDriverFragment)mainViewHolder.transportFragment).enterpriseName.setText(enterpriseName);
+//                    } else if(className.equals("TransportShipperFragment")) {
+//                        ((TransportShipperFragment)mainViewHolder.transportFragment).enterpriseName.setText(enterpriseName);
+//                    }
+//                    else if(className.equals("TransportReceiverFragment")) {
+//                        ((TransportReceiverFragment)mainViewHolder.transportFragment).enterpriseName.setText(enterpriseName);
+//                    }
+//                    else if(className.equals("TransportUndertakeFragment")) {
+//                        ((TransportUndertakeFragment)mainViewHolder.transportFragment).enterpriseName.setText(enterpriseName);
+//                    }
+//                    break;
+//            }
+//        }
+//    };
 
     /**
      * 退出操作
@@ -435,6 +438,9 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
      * @param index 底部菜单所以
      */
     private void switchFooterMenu(int index) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        //transaction.setCustomAnimations(transaction.TRANSIT_FRAGMENT_OPEN, transaction.TRANSIT_FRAGMENT_FADE);
         switch (index) {
             case 1: //首页
                 mainTitle.setText("首页");
@@ -443,7 +449,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                     //未缓存，创建新对象
                     mainViewHolder.indexFragment = new MainIndexFragment();
                 }
-                fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.indexFragment).commitAllowingStateLoss();
+                transaction.replace(R.id.main_contain, mainViewHolder.indexFragment).commitAllowingStateLoss();
                 break;
             case 2: //油品
                 if (!common.isLogin()) {
@@ -456,7 +462,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                     //未缓存，创建新对象
                     mainViewHolder.oilFragment = new MainOilFragment();
                 }
-                fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.oilFragment).commitAllowingStateLoss();
+                transaction.replace(R.id.main_contain, mainViewHolder.oilFragment).commitAllowingStateLoss();
                 break;
             case 3: //运输服务
                 mainTitle.setText("保险");
@@ -466,17 +472,20 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
 //                    startActivityForResult(intent, 0x03);
                     return;
                 }
-                int enterpriseId = Integer.valueOf(common.getStringByKey(Constant.ENTERPRISE_ID)); //企业ID
-                int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE)); //运输角色
-                //判断是否为个人
-                if (enterpriseId == 0) {
-                    //个人只显示司机
-                    mainViewHolder.transportFragment = new TransportDriverFragment();
-                } else {
-                    switchTransportRole(transportRoleId);
+//                int enterpriseId = Integer.valueOf(common.getStringByKey(Constant.ENTERPRISE_ID)); //企业ID
+//                int transportRoleId = Integer.valueOf(fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE)); //运输角色
+//                //判断是否为个人
+//                if(enterpriseId == 0) {
+//                    //个人只显示司机
+//                    mainViewHolder.transportFragment = new TransportDriverFragment();
+//                } else {
+//                    switchTransportRole(transportRoleId);
+//                }
+                if(mainViewHolder.waitingBuildFragment == null) {
+                    //未缓存，创建新对象
+                    mainViewHolder.waitingBuildFragment = new WaitingBuildFragment();
                 }
-
-                fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.transportFragment).commitAllowingStateLoss();
+                transaction.replace(R.id.main_contain, mainViewHolder.waitingBuildFragment).commitAllowingStateLoss();
                 break;
             case 4: //百宝箱
                 mainTitle.setText("百宝箱");
@@ -485,7 +494,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                     //未缓存，创建新对象
                     mainViewHolder.boxFragment = new MainBoxFragment();
                 }
-                fragmentManager.beginTransaction().replace(R.id.main_contain, mainViewHolder.boxFragment).commitAllowingStateLoss();
+                transaction.replace(R.id.main_contain, mainViewHolder.boxFragment).commitAllowingStateLoss();
                 break;
         }
     }
@@ -495,22 +504,22 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
      *
      * @param transportRoleId
      */
-    private void switchTransportRole(int transportRoleId) {
-        switch (transportRoleId) {
-            case 0: //司机
-                mainViewHolder.transportFragment = new TransportDriverFragment();
-                break;
-            case 1: //收货方
-                mainViewHolder.transportFragment = new TransportReceiverFragment();
-                break;
-            case 2: //发货方
-                mainViewHolder.transportFragment = new TransportShipperFragment();
-                break;
-            case 3: //承运方
-                mainViewHolder.transportFragment = new TransportUndertakeFragment();
-                break;
-        }
-    }
+//    private void switchTransportRole(int transportRoleId) {
+//        switch (transportRoleId) {
+//            case 0: //司机
+//                mainViewHolder.transportFragment = new TransportDriverFragment();
+//                break;
+//            case 1: //收货方
+//                mainViewHolder.transportFragment = new TransportReceiverFragment();
+//                break;
+//            case 2: //发货方
+//                mainViewHolder.transportFragment = new TransportShipperFragment();
+//                break;
+//            case 3: //承运方
+//                mainViewHolder.transportFragment = new TransportUndertakeFragment();
+//                break;
+//        }
+//    }
 
     /**
      * 是否开启定时器

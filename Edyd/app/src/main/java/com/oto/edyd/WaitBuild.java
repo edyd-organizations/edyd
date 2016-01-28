@@ -19,7 +19,6 @@ public class WaitBuild extends Activity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wait_build);
         initFields();
-
         String title = getIntent().getStringExtra("wait_title");
         waitBuildTitle.setText(title);
         back.setOnClickListener(this);
