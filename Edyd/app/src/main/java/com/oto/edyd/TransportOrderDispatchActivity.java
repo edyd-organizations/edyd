@@ -118,7 +118,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                 case 1: //首次加载
                     transportOrderAdapter = new TransportOrderAdapter(TransportOrderDispatchActivity.this);
                     transportOrderList.setAdapter(transportOrderAdapter);
-                    loadingDialog.dismissDialog();
+                    dissmissProgressDialog();
                     break;
                 case 2: //下拉刷新
                     transportOrderAdapter.notifyDataSetChanged(); //通知ListView更新
@@ -140,14 +140,13 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         String url = Constant.ENTRANCE_PREFIX + "getScheduleList.json?sessionUuid=" + sessionUuid +"&page=" + 1 + "&rows=" + rows;
         if(loadType == 1) {
-            loadingDialog = new CusProgressDialog(TransportOrderDispatchActivity.this, "正在拼命加载...");
-            loadingDialog.getLoadingDialog().show();
+            showProgressDialog();
         }
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>(){
             @Override
             public void onError(Request request, Exception e) {
-                Toast.makeText(getApplicationContext(), "获取调度信息异常", Toast.LENGTH_SHORT).show();
-                loadingDialog.dismissDialog();
+                Toast.makeText(getApplicationContext(), "获取调度信息异常，请检查网络", Toast.LENGTH_SHORT).show();
+                dissmissProgressDialog();
             }
 
             @Override
@@ -158,11 +157,14 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                     jsonObject = new JSONObject(response);
                     if(!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), "获取调度信息失败", Toast.LENGTH_SHORT).show();
+                        dissmissProgressDialog();
                         return;
                     }
                     rowJson = jsonObject.getJSONArray("rows");
                     if(rowJson.length() == 0) {
                         Toast.makeText(TransportOrderDispatchActivity.this, "暂无数据", Toast.LENGTH_SHORT).show();
+                        dissmissProgressDialog();
+                        return;
                     }
                     JSONObject jsonObjectItem = new JSONObject();
                     String startAndEndAddr = "";
@@ -185,6 +187,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                         transportDispatch.setTotalNumber(jsonObjectItem.getString("totalNum"));
                         transportDispatch.setTotalWeight(jsonObjectItem.getString("totalWeight"));
                         transportDispatch.setTotalVolume(jsonObjectItem.getString("totalVolume"));
+                        transportDispatch.setGoodsName(jsonObjectItem.getString("goodsName"));
                         transportDispatchList.add(transportDispatch);
                     }
 
@@ -205,6 +208,24 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
         });
     }
 
+    /**
+     * 显示进度框
+     */
+
+    private void showProgressDialog() {
+        if (loadingDialog == null) {
+            loadingDialog = new CusProgressDialog(TransportOrderDispatchActivity.this, "正在获取数据...");
+        }
+        loadingDialog.getLoadingDialog().show();
+
+    }
+
+    /**
+     * 隐藏进度框
+     */
+    private void dissmissProgressDialog() {
+        loadingDialog.getLoadingDialog().dismiss();
+    }
     /**
      * 上拉加载
      * @param page
@@ -248,6 +269,8 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                         transportDispatch.setTotalNumber(jsonObjectItem.getString("totalNum"));
                         transportDispatch.setTotalWeight(jsonObjectItem.getString("totalWeight"));
                         transportDispatch.setTotalVolume(jsonObjectItem.getString("totalVolume"));
+                        transportDispatch.setGoodsName(jsonObjectItem.getString("goodsName"));
+
                         transportDispatchList.add(transportDispatch);
                     }
 

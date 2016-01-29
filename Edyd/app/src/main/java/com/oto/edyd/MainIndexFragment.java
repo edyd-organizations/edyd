@@ -180,7 +180,7 @@ public class MainIndexFragment extends Fragment implements View.OnClickListener 
                 break;
             case R.id.invite_friends: //邀请朋友
                 intent = new Intent(context, SocialSharedActivity.class);
-                intent.putExtra("wait_title", "社交分享");
+                intent.putExtra("wait_title", "邀请朋友");
                 startActivity(intent);
                 break;
         }

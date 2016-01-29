@@ -116,6 +116,7 @@ public class TransportUndertakeFragment extends Fragment implements View.OnClick
                     return;
                 }
                 intent = new Intent(getActivity(), PanoramaActivity.class);
+                intent.putExtra("aspectType",Constant.UNDERTAKER_ROLE_ID);
                 startActivity(intent);
                 break;
             case R.id.ll_driver_info: //历史订单
