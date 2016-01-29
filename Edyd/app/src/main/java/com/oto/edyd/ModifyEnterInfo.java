@@ -46,7 +46,7 @@ public class ModifyEnterInfo extends Fragment implements View.OnClickListener {
     private EditText etOldPassword; //旧密码
     private EditText etNewPassword; //新密码
     private EditText etConfirmPassword; //确认密码
-    private Button btSave; //保存
+    private TextView btSave; //保存
 
     private int position;
     private UpdateEnterprise updateEnterprise;
@@ -74,7 +74,6 @@ public class ModifyEnterInfo extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                     }
 
                     @Override
@@ -107,7 +106,7 @@ public class ModifyEnterInfo extends Fragment implements View.OnClickListener {
             etOldPassword = (EditText) view.findViewById(R.id.et_old_password);
             etNewPassword = (EditText) view.findViewById(R.id.et_new_password);
             etConfirmPassword = (EditText) view.findViewById(R.id.et_confirm_password);
-            btSave = (Button) view.findViewById(R.id.personal_info_save);
+            btSave = (TextView) view.findViewById(R.id.personal_info_save);
         }
     }
 
