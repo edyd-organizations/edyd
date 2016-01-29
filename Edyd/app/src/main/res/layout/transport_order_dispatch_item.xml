@@ -28,6 +28,7 @@
                 android:id="@+id/order_flow_water_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
                 android:textColor="@color/gray_5d5d5d"
                 android:textSize="16sp" />
         </LinearLayout>

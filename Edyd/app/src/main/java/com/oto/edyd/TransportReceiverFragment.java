@@ -90,6 +90,7 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
                     return;
                 }
                 intent=new Intent(getActivity(),PanoramaActivity.class);
+                intent.putExtra("aspectType",Constant.RECEIVER_ROLE_ID);
                 startActivity(intent);
                 break;
             case  R.id.ll_view_track://查看轨迹

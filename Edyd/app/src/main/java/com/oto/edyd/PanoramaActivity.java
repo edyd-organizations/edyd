@@ -2,6 +2,7 @@ package com.oto.edyd;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -56,12 +57,16 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
     List<CarInfo> addInfo;
     private Common fixedCommon;
     private LocationManagerProxy mAMapLocationManager;
+    private int aspectType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE); //不显示程序标题栏
         setContentView(R.layout.activity_panorama);
+        Intent intent = getIntent();
+        aspectType=intent.getIntExtra("aspectType",4);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         mapView = (MapView) findViewById(R.id.map);
@@ -99,7 +104,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
     private void requestport() {
         addInfo = new ArrayList<CarInfo>();
 //        String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
-        String aspectType = 2 + "";
+
         location = Constant.ENTRANCE_PREFIX_v1 + "appViewTruckPanorama.json?" + "&sessionUuid=" + sessionUuid + "&aspectType=" + aspectType;//得到调度车辆的所有位置信息
         //location="http://www.edyd.cn/api/v1.0/" +"viewTruckPanorama.json?"+"&sessionUuid="+"879425d835d34ac183dddddf831ecdc7";//得到调度车辆的所有位置信息
         OkHttpClientManager.getAsyn(location, new OkHttpClientManager.ResultCallback<String>() {

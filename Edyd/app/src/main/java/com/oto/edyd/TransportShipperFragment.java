@@ -146,6 +146,7 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
                     return;
                 }
                 intent=new Intent(getActivity(),PanoramaActivity.class);
+                intent.putExtra("aspectType",Constant.SHIPPER_ROLE_ID);
                 startActivity(intent);
                 break;
         }
