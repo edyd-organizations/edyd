@@ -15,6 +15,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -278,11 +279,13 @@ public class TrackListActivity extends Activity {
             TextView tv_trucknum = (TextView) v.findViewById(R.id.tv_trucknum);
             TextView tv_reservenum = (TextView) v.findViewById(R.id.tv_reservenum);
             TextView tv_orderdate = (TextView) v.findViewById(R.id.tv_orderdate);
+            ImageView iv_track_status=(ImageView)v.findViewById(R.id.iv_track_status);
             TrackBean bean = infos.get(i);
             tv_controlnum.setText(bean.getControlNum());
             tv_trucknum.setText(bean.getTruckNum());
             tv_reservenum.setText(bean.getReserveNum());
             tv_orderdate.setText(bean.getOrderDate());
+
             return v;
         }
     }

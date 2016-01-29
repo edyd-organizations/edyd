@@ -1,92 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="3dp">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="7dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/order_number"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:textSize="16sp"
-                android:text="订单流水号："/>
+                android:src="@mipmap/order_number" />
+
             <TextView
                 android:id="@+id/order_flow_water_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/gray_5d5d5d" />
+                android:textColor="@color/gray_5d5d5d"
+                android:textSize="16sp" />
         </LinearLayout>
+
+        <View
+            android:id="@+id/tv_dashline"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_below="@id/ll_num"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/dash_line_orange"
+            android:layerType="software" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp">
+
             <TextView
                 android:id="@+id/tv_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="四川省成都市--福建省泉州市"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/tv_distribute_order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:paddingTop="5dp"
+                android:background="@drawable/border_corner_blue"
                 android:paddingBottom="5dp"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
+                android:paddingTop="5dp"
+                android:text="派单"
                 android:textColor="@color/white"
-                android:background="@drawable/border_corner_blue"
-                android:text="派单"/>
+                android:textSize="16sp" />
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="7dp">
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal">
+
             <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/ic_time" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_time"/>
+                android:layout_marginLeft="3dp"
+                android:text="接单时间" />
+
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2015-11-24"
                 android:layout_marginLeft="10dp"
+                android:text="2015-11-24"
                 android:textSize="15sp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="7dp">
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/order_fa" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:text="发货方名称："/>
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="3dp"
+                android:text="发货方名称："
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/tv_shipper"
                 android:layout_width="wrap_content"
@@ -94,5 +126,34 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/icon_goods_orange" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="3dp"
+                android:text="货物名称："
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_good_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>
