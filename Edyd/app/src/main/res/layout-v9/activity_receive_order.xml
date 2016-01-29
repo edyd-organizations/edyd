@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="调度"
+            android:text="接单"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold"/>

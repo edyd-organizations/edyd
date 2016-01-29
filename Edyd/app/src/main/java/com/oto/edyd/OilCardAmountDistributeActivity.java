@@ -41,8 +41,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by lbz
  * 金额分配模块
+ * Created by lbz
  */
 public class OilCardAmountDistributeActivity extends Activity implements View.OnClickListener {
 
@@ -260,7 +260,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
     }
 
     private void submitResult() {
-        if (!isNoAmount()) {
+        if (!isAmount()) {
             Toast.makeText(mActivity, "提交失败，您未填写分配金额", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -295,10 +295,14 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         });
     }
 
-    private boolean isNoAmount() {
+    /**
+     * 是否分配？
+     * @return
+     */
+    private boolean isAmount() {
         boolean is = false;
         for (OilAmountDistribute oad : oilAmountDistributeList) {
-            if (TextUtils.isEmpty(oad.getAmount())) {
+            if (!TextUtils.isEmpty(oad.getAmount())) {
                 is = true;
             }
         }

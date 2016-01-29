@@ -138,8 +138,10 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                             //有一个等于空
                             if (isShippingEndPoint) {
                                 Common.showToast(mActivity, "发货方终点为空");
+                                dissmissProgressDialog();
                             } else {
                                 Common.showToast(mActivity, "收货方终点为空");
+                                dissmissProgressDialog();
                             }
 
                         }

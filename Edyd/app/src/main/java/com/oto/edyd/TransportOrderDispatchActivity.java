@@ -146,7 +146,8 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>(){
             @Override
             public void onError(Request request, Exception e) {
-
+                Toast.makeText(getApplicationContext(), "获取调度信息异常", Toast.LENGTH_SHORT).show();
+                loadingDialog.dismissDialog();
             }
 
             @Override
@@ -156,7 +157,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                 try {
                     jsonObject = new JSONObject(response);
                     if(!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        Toast.makeText(getApplicationContext(), "运单查询异常", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "获取调度信息失败", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     rowJson = jsonObject.getJSONArray("rows");
@@ -305,6 +306,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                 viewHolder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
                 viewHolder.tvShipper = (TextView) convertView.findViewById(R.id.tv_shipper);
                 viewHolder.tvOrderDistribute = (TextView) convertView.findViewById(R.id.tv_distribute_order);
+                viewHolder.tv_good_name = (TextView) convertView.findViewById(R.id.tv_good_name);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -316,7 +318,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
             viewHolder.tvTime.setText(transportDispatch.getPlaceOrderDate());
             viewHolder.tvShipper.setText(transportDispatch.getShipperName());
             viewHolder.tvOrderDistribute.setOnClickListener(new CusTranOrderDisOnClickListener(transportDispatch.getPrimaryId(), position));
-
+            viewHolder.tv_good_name.setText(transportDispatch.getGoodsName());
             return convertView;
         }
     }
@@ -327,6 +329,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
         TextView tvTime; //下单时间
         TextView tvShipper; //发货方
         TextView tvOrderDistribute; //派单
+        TextView tv_good_name;//货物名称
     }
 
     /**

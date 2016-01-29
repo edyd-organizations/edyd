@@ -31,13 +31,13 @@ public class Constant {
 
     //网络地址
     public final static String ENTRANCE_PREFIX = "http://120.24.236.223/api/v1.0/"; //接口前缀地址
-    //public final static String ENTRANCE_PREFIX = "http://www.edyd.cn/api/v1.0/"; //接口前缀地址
+//    public final static String ENTRANCE_PREFIX = "http://www.edyd.cn/api/v1.0/"; //接口前缀地址
 
     public final static String ENTRANCE_PREFIX_v1 = "http://120.24.236.223/api/v1.1/"; //接口前缀地址
-    //public final static String ENTRANCE_PREFIX_v1 = "http://www.edyd.cn/api/v1.1/"; //接口前缀地址
+//    public final static String ENTRANCE_PREFIX_v1 = "http://www.edyd.cn/api/v1.1/"; //接口前缀地址
 
     public final static String CMB_CALLBACK_ADDRESS = "http://120.24.236.223/callback/updateBillStatus.json";
-    //public final static String CMB_CALLBACK_ADDRESS = "http://www.edyd.cn/callback/updateBillStatus.json";
+//    public final static String CMB_CALLBACK_ADDRESS = "http://www.edyd.cn/callback/updateBillStatus.json";
     
     public final static String EDYD = "http://www.edyd.cn/";
     public final static String FIR_IM_ANDROID = "http://fir.im/duoyidianAndroid";
