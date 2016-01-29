@@ -231,7 +231,8 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
     private void requestData(final String serachParames) {
         Common fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
-        aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        //aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        aspectType = "1";
         orgCode = common.getStringByKey(Constant.ORG_CODE);
         enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
         String sessionUUID = getSessionUUID();

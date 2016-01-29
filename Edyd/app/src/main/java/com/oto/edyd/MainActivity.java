@@ -3,6 +3,7 @@ package com.oto.edyd;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
@@ -28,6 +29,7 @@ import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 import com.umeng.update.UmengUpdateAgent;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -157,8 +159,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
     private void initMainIndex() {
         mainViewHolder.indexFragment = new MainIndexFragment();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        //transaction.setCustomAnimations(transaction.TRANSIT_FRAGMENT_OPEN, transaction.TRANSIT_FRAGMENT_FADE); //添加Fragment切换动画
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.replace(R.id.main_contain, mainViewHolder.indexFragment).commit();
     }
 
@@ -446,14 +447,21 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
      */
     private void switchFooterMenu(int index) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        //transaction.setCustomAnimations(transaction.TRANSIT_FRAGMENT_OPEN, transaction.TRANSIT_FRAGMENT_FADE);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        List<Fragment> fragments;
         switch (index) {
             case 1: //首页
                 //判断首页是否已经缓存
                 if (mainViewHolder.indexFragment == null) {
                     //未缓存，创建新对象
                     mainViewHolder.indexFragment = new MainIndexFragment();
+                }
+                //处理用户切换底部菜单过快抛异常
+                fragments = fragmentManager.getFragments();
+                for(Fragment fragment : fragments){
+                    if(fragment instanceof MainIndexFragment) {
+                        return;
+                    }
                 }
                 transaction.replace(R.id.main_contain, mainViewHolder.indexFragment).commitAllowingStateLoss();
                 mainTitle.setText("首页");
@@ -467,6 +475,12 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 if (mainViewHolder.oilFragment == null) {
                     //未缓存，创建新对象
                     mainViewHolder.oilFragment = new MainOilFragment();
+                }
+                fragments = fragmentManager.getFragments();
+                for(Fragment fragment : fragments){
+                    if(fragment instanceof MainOilFragment) {
+                        return;
+                    }
                 }
                 transaction.replace(R.id.main_contain, mainViewHolder.oilFragment).commitAllowingStateLoss();
                 mainTitle.setText("油品");
@@ -491,6 +505,12 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                     //未缓存，创建新对象
                     mainViewHolder.waitingBuildFragment = new WaitingBuildFragment();
                 }
+                fragments = fragmentManager.getFragments();
+                for(Fragment fragment : fragments){
+                    if(fragment instanceof WaitingBuildFragment) {
+                        return;
+                    }
+                }
                 transaction.replace(R.id.main_contain, mainViewHolder.waitingBuildFragment).commitAllowingStateLoss();
                 mainTitle.setText("保险");
                 break;
@@ -499,6 +519,12 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 if (mainViewHolder.boxFragment == null) {
                     //未缓存，创建新对象
                     mainViewHolder.boxFragment = new MainBoxFragment();
+                }
+                fragments = fragmentManager.getFragments();
+                for(Fragment fragment : fragments){
+                    if(fragment instanceof MainBoxFragment) {
+                        return;
+                    }
                 }
                 transaction.replace(R.id.main_contain, mainViewHolder.boxFragment).commitAllowingStateLoss();
                 mainTitle.setText("百宝箱");

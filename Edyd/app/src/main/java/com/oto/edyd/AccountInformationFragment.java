@@ -54,6 +54,7 @@ public class AccountInformationFragment extends Fragment implements View.OnClick
     private Common common; //操作偏好设置
     private UpdatePerson updatePerson;
     private int confirmStatus;
+    private String personTitle[];
 
 
     @Nullable
@@ -72,6 +73,7 @@ public class AccountInformationFragment extends Fragment implements View.OnClick
                 updatePerson.setContent(curContent.getText().toString());
                 ModifyPersonInfo modifyPersonInfo = ModifyPersonInfo.newInstance(updatePerson, "first");
                 FragmentTransaction transaction = accountInformationFragmentManager.beginTransaction();
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 switch (position) {
                     case 0:
                         Toast.makeText(getActivity(), "手机号码不能修改", Toast.LENGTH_SHORT).show();
@@ -137,8 +139,8 @@ public class AccountInformationFragment extends Fragment implements View.OnClick
         personalInformationBack = (LinearLayout)view.findViewById(R.id.personal_information_back);
         personList = (ListView)view.findViewById(R.id.personal_list);
         personListSec = (ListView)view.findViewById(R.id.personal_list_sec);
-
         accountInformationFragmentManager = getActivity().getSupportFragmentManager();
+        personTitle = getResources().getStringArray(R.array.personal_info_title);
     }
 
     Handler handler = new Handler() {
@@ -150,7 +152,6 @@ public class AccountInformationFragment extends Fragment implements View.OnClick
                     Bundle bundle = msg.getData();
                     updatePerson = (UpdatePerson)bundle.get("updatePerson");
                     String personContent[] = new String[] {updatePerson.getPhoneNumber(), updatePerson.getNikeName(), updatePerson.getSex(), updatePerson.getBirthday(), updatePerson.getConfirmStatus()};
-                    String personTitle[] = getResources().getStringArray(R.array.personal_info_title);
                     int resourcesID[] = new int[] {R.id.enterprise_info_title, R.id.enterprise_info_content};
 
                     for(int i = 0; i < personContent.length; i++) {

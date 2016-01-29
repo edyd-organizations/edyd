@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,21 +15,19 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.oto.edyd.model.UpdateEnterprise;
 import com.oto.edyd.model.UpdatePerson;
-import com.oto.edyd.module.usercenter.activity.AccountInformationActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,6 +36,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by yql on 2015/9/14.
@@ -54,10 +56,12 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
     private EditText etOldPassword; //旧密码
     private EditText etNewPassword; //新密码
     private EditText etConfirmPassword; //确认密码
-    private Button btSave; //保存
+    private TextView btSave; //保存
+    private Common common;
 
     private int position;
     private UpdatePerson updatePerson;
+    private final static int HANDLER_SAVE_PASSWORD_CODE = 0x10; //修改密码返回成功
 
     @Nullable
     @Override
@@ -132,7 +136,8 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
             etOldPassword = (EditText) view.findViewById(R.id.et_old_password);
             etNewPassword = (EditText) view.findViewById(R.id.et_new_password);
             etConfirmPassword = (EditText) view.findViewById(R.id.et_confirm_password);
-            btSave = (Button) view.findViewById(R.id.personal_info_save);
+            btSave = (TextView) view.findViewById(R.id.personal_info_save);
+            common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         }
     }
 
@@ -174,7 +179,6 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
         String url = "";
         int gender = 0;
         String textContent = enterInfoItem.getText().toString();
-        Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         String sex = updatePerson.getSex();
         if(sex.equals(Constant.UNKNOWN_SEX)) {
@@ -239,6 +243,11 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
 
         if(oldPassword != null && oldPassword.equals("")){
             Toast.makeText(getActivity(), "旧密码不能为空", Toast.LENGTH_SHORT).show();
+            String sOldPassword = common.getStringByKey(Constant.PASSWORD);
+            if (oldPassword.equals(sOldPassword)) {
+                Toast.makeText(getActivity(), "旧密码输入错误", Toast.LENGTH_SHORT).show();
+                return;
+            }
             return;
         }
         if(newPassword != null && newPassword.equals("")){
@@ -254,7 +263,7 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
             return;
         }
 
-        Common common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
         String url = Constant.ENTRANCE_PREFIX + "updatePassword.json?newPassword="+newPassword+"&oldPassword="+oldPassword+"&sessionUuid=" + sessionUuid;
         OkHttpClientManager.getAsyn(url, new UpdatePasswordResultCallback<String>() {
@@ -264,19 +273,37 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
             }
             @Override
             public void onResponse(String response) {
+                JSONObject jsonObject;
+                JSONArray jsonArray;
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
+                    jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
                     if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        Toast.makeText(getActivity(), "保存失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "修改失败", Toast.LENGTH_SHORT).show();
+                    } else {
+                        jsonArray = jsonObject.getJSONArray("rows");
+                        String sessionUUid = jsonArray.getJSONObject(0).getString("sessionUuid");
+                        Map<Object, Object> map = new HashMap<Object, Object>();
+                        map.put(Constant.SESSION_UUID, sessionUUid);
+                        if(!common.isSave(map)) {
+                            Toast.makeText(getActivity(), "用户表示更新失败", Toast.LENGTH_SHORT).show();
+                        }
+                        Message message = Message.obtain();
+                        message.what = HANDLER_SAVE_PASSWORD_CODE;
+                        handler.sendMessage(message);
                     }
-                    Toast.makeText(getActivity(), "保存成功", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
 
+    /**
+     * 检查旧密码
+     */
+    private void checkOldPassword() {
+        String oldPassword = etOldPassword.getText().toString();
     }
 
     public abstract class UpdatePasswordResultCallback<T> extends OkHttpClientManager.ResultCallback<T>{
@@ -293,6 +320,19 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
             //loadingDialog.getLoadingDialog().dismiss();
         }
     }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case HANDLER_SAVE_PASSWORD_CODE: //修改密码成功返回
+                    Toast.makeText(getActivity(), "修改成功", Toast.LENGTH_SHORT).show();
+                    accountEnterFragmentManager.popBackStack();
+                    break;
+            }
+        }
+    };
+
     private void alertDatePicker() {
         //用来获取日期和时间的
         String dataStr = enterInfoItem.getText().toString();
