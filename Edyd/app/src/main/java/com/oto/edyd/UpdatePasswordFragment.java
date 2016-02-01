@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oto.edyd.module.usercenter.activity.AccountInformationActivity;
@@ -33,7 +34,7 @@ public class UpdatePasswordFragment extends Fragment implements View.OnClickList
     private EditText etOldPassword; //旧密码
     private EditText etNewPassword; //新密码
     private EditText etConfirmPassword; //确认密码
-    private Button btSave; //保存
+    private TextView btSave; //保存
     private FragmentManager AccountFragmentManager; //LoginActivity布局管理器
     private CusProgressDialog updatePasswordDialog; //过度画面
 
@@ -54,7 +55,7 @@ public class UpdatePasswordFragment extends Fragment implements View.OnClickList
         etOldPassword = (EditText) view.findViewById(R.id.et_old_password);
         etNewPassword = (EditText) view.findViewById(R.id.et_new_password);
         etConfirmPassword = (EditText) view.findViewById(R.id.et_confirm_password);
-        btSave = (Button) view.findViewById(R.id.personal_info_save);
+        btSave = (TextView) view.findViewById(R.id.personal_info_save);
         AccountFragmentManager = getActivity().getSupportFragmentManager();
     }
 

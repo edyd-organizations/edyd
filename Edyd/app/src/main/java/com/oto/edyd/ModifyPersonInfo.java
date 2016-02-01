@@ -238,18 +238,20 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
 
     private void updatePassword(){
         String oldPassword = etOldPassword.getText().toString();
-        String newPassword = etNewPassword.getText().toString();
+        final String newPassword = etNewPassword.getText().toString();
         String confirmPassword = etConfirmPassword.getText().toString();
 
         if(oldPassword != null && oldPassword.equals("")){
             Toast.makeText(getActivity(), "旧密码不能为空", Toast.LENGTH_SHORT).show();
-            String sOldPassword = common.getStringByKey(Constant.PASSWORD);
-            if (oldPassword.equals(sOldPassword)) {
-                Toast.makeText(getActivity(), "旧密码输入错误", Toast.LENGTH_SHORT).show();
-                return;
-            }
             return;
         }
+
+        String sOldPassword = common.getStringByKey(Constant.PASSWORD);
+        if (oldPassword.equals(sOldPassword)) {
+            Toast.makeText(getActivity(), "旧密码输入错误", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if(newPassword != null && newPassword.equals("")){
             Toast.makeText(getActivity(), "新密码不能为空", Toast.LENGTH_SHORT).show();
             return;
@@ -285,6 +287,7 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
                         String sessionUUid = jsonArray.getJSONObject(0).getString("sessionUuid");
                         Map<Object, Object> map = new HashMap<Object, Object>();
                         map.put(Constant.SESSION_UUID, sessionUUid);
+                        map.put(Constant.PASSWORD, newPassword);
                         if(!common.isSave(map)) {
                             Toast.makeText(getActivity(), "用户表示更新失败", Toast.LENGTH_SHORT).show();
                         }

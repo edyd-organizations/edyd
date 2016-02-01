@@ -79,13 +79,14 @@ public class AccountInformationFragment extends Fragment implements View.OnClick
                         Toast.makeText(getActivity(), "手机号码不能修改", Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
-                        if (confirmStatus == 2) {
-                            Toast.makeText(getActivity(), "用户已认证不能修改", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        transaction.replace(R.id.common_frame, modifyPersonInfo);
-                        transaction.addToBackStack(null);
-                        transaction.commit();
+//                        if (confirmStatus == 2) {
+//                            Toast.makeText(getActivity(), "用户已认证不能修改", Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }
+//                        transaction.replace(R.id.common_frame, modifyPersonInfo);
+//                        transaction.addToBackStack(null);
+//                        transaction.commit();
+                        Toast.makeText(getActivity(), "用户名不能修改", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
                         ModifySex modifySex = ModifySex.newInstance(updatePerson);
