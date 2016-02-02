@@ -58,6 +58,7 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
     private EditText etConfirmPassword; //确认密码
     private TextView btSave; //保存
     private Common common;
+    private Common userInfoCommon;
 
     private int position;
     private UpdatePerson updatePerson;
@@ -138,6 +139,7 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
             etConfirmPassword = (EditText) view.findViewById(R.id.et_confirm_password);
             btSave = (TextView) view.findViewById(R.id.personal_info_save);
             common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+            userInfoCommon = new Common(getActivity().getSharedPreferences(Constant.USER_INFO_FILE, Context.MODE_PRIVATE));
         }
     }
 
@@ -245,13 +247,11 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity(), "旧密码不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-
         String sOldPassword = common.getStringByKey(Constant.PASSWORD);
-        if (oldPassword.equals(sOldPassword)) {
+        if (!oldPassword.equals(sOldPassword)) {
             Toast.makeText(getActivity(), "旧密码输入错误", Toast.LENGTH_SHORT).show();
             return;
         }
-
         if(newPassword != null && newPassword.equals("")){
             Toast.makeText(getActivity(), "新密码不能为空", Toast.LENGTH_SHORT).show();
             return;
@@ -287,9 +287,13 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
                         String sessionUUid = jsonArray.getJSONObject(0).getString("sessionUuid");
                         Map<Object, Object> map = new HashMap<Object, Object>();
                         map.put(Constant.SESSION_UUID, sessionUUid);
-                        map.put(Constant.PASSWORD, newPassword);
                         if(!common.isSave(map)) {
                             Toast.makeText(getActivity(), "用户表示更新失败", Toast.LENGTH_SHORT).show();
+                        }
+                        map.clear();
+                        map.put(Constant.PASSWORD, newPassword);
+                        if(!userInfoCommon.isSave(map)) {
+                            Toast.makeText(getActivity(), "密码更新失败", Toast.LENGTH_SHORT).show();
                         }
                         Message message = Message.obtain();
                         message.what = HANDLER_SAVE_PASSWORD_CODE;

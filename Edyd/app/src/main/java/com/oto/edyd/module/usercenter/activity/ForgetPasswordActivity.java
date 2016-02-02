@@ -408,6 +408,7 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
                     break;
                 case HANDLER_MODIFY_PASSWORD_SUCCESS: //修改密码成功
                     common.showToast(context, "修改成功");
+                    finish();
                     break;
                 case HANDLER_INVALID_VERIFY_CODE: //无效验证码
                     common.showToast(context, "无效验证码");

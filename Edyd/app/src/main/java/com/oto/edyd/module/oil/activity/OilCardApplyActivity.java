@@ -598,13 +598,12 @@ public class OilCardApplyActivity extends Activity implements View.OnClickListen
         String enterpriseID = common.getStringByKey(Constant.ENTERPRISE_ID);
         String enterpriseName = common.getStringByKey(Constant.ENTERPRISE_NAME);
         String url = Constant.ENTRANCE_PREFIX + "insertOilCard.json?carId="+txCarId + "&oilHolder=" + txUser +"&sessionUuid="+sessionUuid+"&setPwd="+String.valueOf(is_need_password)+"&pwd="+txPassword+
-                "&setMessage="+is_sms+"&mobile="+mobilePhone +"&oilNum="+txLimitOil+"&oilType=" + txOilSupplier +"&everyDayOil="+everyDailyAmount+
-                "&accountType=0" + "&recAddress=" + txConsignAddress;
+                "&setMessage="+is_sms+"&mobile="+mobilePhone +"&oilNum="+txLimitOil+"&oilType=" + txOilSupplier +"&everyDayOil="+everyDailyAmount+ "&recAddress=" + txConsignAddress;
         if(enterpriseID.equals("0")) {
-            url = url + "&realAccountId="+accountID + "&accountMobile="+userName +"&enterpriseId=" + enterpriseID;
+            url = url + "&realAccountId="+accountID + "&accountMobile="+userName +"&enterpriseId=" + enterpriseID + "&accountType=0";
         } else {
             url = url + "&tenantId="+selectDepartment.getTenantId() + "&orgId="+selectDepartment.getOrgId()+ "&orgCode="+selectDepartment.getOrgCode()+
-                    "&orgName=" + selectDepartment.getText() +"&enterpriseId=" + enterpriseID + "&enterpriseName=" + enterpriseName;
+                    "&orgName=" + selectDepartment.getText() +"&enterpriseId=" + enterpriseID + "&enterpriseName=" + enterpriseName + "&accountType=1";
         }
 
         OkHttpClientManager.getAsyn(url, new ApplyResultCallback<String>() {

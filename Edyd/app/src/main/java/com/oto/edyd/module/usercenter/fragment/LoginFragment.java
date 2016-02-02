@@ -382,6 +382,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         Map<Object, Object> map = new HashMap<Object, Object>();
         map.put(Constant.USER_NAME, userName);
         map.put(Constant.PASSWORD, password);
+        if (!common.isSave(map)) {
+            common.showToast(context, "保存偏好用户信息失败");
+        }
         if (isChecked) {
             if (!userInfoCommon.isSave(map)) {
                 common.showToast(context, "保存偏好用户信息失败");
