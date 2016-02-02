@@ -203,7 +203,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
         markerOptions.title("车辆信息").draggable(true).anchor(0.5f, 0.5f);
         Marker marker = aMap.addMarker(markerOptions);
         marker.setObject(carInfo);
-        marker.showInfoWindow();
+//        marker.showInfoWindow();
 
     }
 
@@ -232,6 +232,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
 
     /**
      * 监听amap地图加载成功事件回调
+     * -*
      */
     @Override
     public void onMapLoaded() {
@@ -254,7 +255,6 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
         }
         aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latlngBounds, 10));
     }
-
 
     private LatLngBounds.Builder addlay(LatLngBounds.Builder latLngBounds, LatLng latLng) {
         return latLngBounds.include(latLng);
@@ -391,8 +391,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
      /*   if (rCode == 0) {
             String formatAddress = result.getRegeocodeAddress().getFormatAddress();
             address.setText("地       址："+formatAddress);
-        }
-*/
+        }*/
     }
 
     /**

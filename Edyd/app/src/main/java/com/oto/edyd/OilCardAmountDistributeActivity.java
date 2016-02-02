@@ -244,6 +244,10 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
                 finish();
                 break;
             case R.id.submit: //提交
+                if (!isAmount()) {
+                    Toast.makeText(mActivity, "您未填写分配金额", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
                 builder.setTitle("提交");
                 builder.setMessage("你确定要提交吗？");
@@ -260,10 +264,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
     }
 
     private void submitResult() {
-        if (!isAmount()) {
-            Toast.makeText(mActivity, "提交失败，您未填写分配金额", Toast.LENGTH_SHORT).show();
-            return;
-        }
+
         Map<String, String> params = new HashMap<String, String>();
         params.put("sessionUuid", sessionUuid);
         sendDataList = new ArrayList<OilDataBean>();

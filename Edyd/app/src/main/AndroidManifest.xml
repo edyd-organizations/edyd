@@ -66,22 +66,22 @@
         <!-- 高德地图 正式地址-->
         <!-- gd 正式版 key-->
 
-        <meta-data
+        <!--  <meta-data
               android:name="com.amap.api.v2.apikey"
-              android:value="391bb51068ef790c94b3f93fe9852186" />
+              android:value="391bb51068ef790c94b3f93fe9852186" />-->
 
-         <!-- lbz gd debug key -->
-        <!--   <meta-data
-             android:name="com.amap.api.v2.apikey"
-             android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />-->
+        <!-- lbz gd debug key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="db59c0eec8694ae5bce3c2d3f07ff6d5" />
 
-          <!-- yql gd debug key -->
+        <!-- yql gd debug key -->
         <!--  <meta-data
              android:name="com.amap.api.v2.apikey"
              android:value="b0da2264df3bf64e1b5b9143dff0b427" />-->
 
 
-      <!-- 聚合数据 -->
+        <!-- 聚合数据 -->
         <meta-data
             android:name="com.thinkland.juheapi.openid"
             android:value="JH5ba55e75578ecf0b44c6d8a4de432b52" />
@@ -406,14 +406,12 @@
             android:launchMode="singleTask"
             android:noHistory="true"
             android:theme="@style/Theme.UMDialog"
-            android:windowSoftInputMode="stateVisible|adjustResize" >
-        </activity>
+            android:windowSoftInputMode="stateVisible|adjustResize"></activity>
 
         <!-- Update Activitys Start -->
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-        </activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -442,7 +440,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ReceivingOrderDetail"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ReceiveTransitOrderActivity"
             android:screenOrientation="portrait" />
@@ -509,8 +507,9 @@
         <activity
             android:name=".module.common.activity.WebViewActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".module.common.activity.ComTransportActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.common.activity.ComTransportActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".module.tts.activity.ConsignorActivity"
             android:screenOrientation="portrait" />

@@ -82,7 +82,7 @@ public class SocialSharedActivity extends Activity implements View.OnClickListen
         String appUploadUrl = "http://fir.im/duoyidianAndroid?utm_source=fir&utm_medium=qr";
 
         SinaShareContent sinaContent = new SinaShareContent();
-        sinaContent.setShareContent("厦门多一点智能物流科技有限公司");
+        sinaContent.setShareContent("厦门多一点智能物流科技有限公司."+appUploadUrl);
         sinaContent.setShareImage(urlImage);
         sinaContent.setTitle("多一点");
         sinaContent.setTargetUrl(appUploadUrl);
