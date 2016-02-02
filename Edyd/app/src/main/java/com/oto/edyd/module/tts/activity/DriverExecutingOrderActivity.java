@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -163,7 +164,7 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
     }
 
     /**
-     * 请求待执行订单
+     * 执行中的订单
      *
      * @param page
      * @param rows
@@ -406,26 +407,36 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
                 case 20: //已接单
                     viewHolder.orderStatus.setImageResource(R.mipmap.tts_loading_way);
                     viewHolder.receiveOrder.setText("到达装货");
+                    viewHolder.receiveOrder.setTextColor(ContextCompat.getColor(context, R.color.user_icon_8));
+                    viewHolder.receiveOrder.setEnabled(true);
 //                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
                     break;
                 case 30: //	到达装货
                     viewHolder.orderStatus.setImageResource(R.mipmap.tts_arrived_load);
                     viewHolder.receiveOrder.setText("装货完成");
+                    viewHolder.receiveOrder.setTextColor(ContextCompat.getColor(context, R.color.user_icon_8));
+                    viewHolder.receiveOrder.setEnabled(true);
 //                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
                     break;
                 case 40: //装货完成
                     viewHolder.orderStatus.setImageResource(R.mipmap.tts_completion_load);
                     viewHolder.receiveOrder.setText("送货在途");
+                    viewHolder.receiveOrder.setTextColor(ContextCompat.getColor(context, R.color.user_icon_8));
+                    viewHolder.receiveOrder.setEnabled(true);
 //                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
                     break;
                 case 50: //送货在途
                     viewHolder.orderStatus.setImageResource(R.mipmap.tts_delivery_way);
                     viewHolder.receiveOrder.setText("到达收货");
+                    viewHolder.receiveOrder.setTextColor(ContextCompat.getColor(context, R.color.user_icon_8));
+                    viewHolder.receiveOrder.setEnabled(true);
 //                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
                     break;
                 case 60: //到达收货
                     viewHolder.orderStatus.setImageResource(R.mipmap.tts_arrived_receive);
                     viewHolder.receiveOrder.setText("收货完成");
+                    viewHolder.receiveOrder.setTextColor(ContextCompat.getColor(context, R.color.user_icon_8));
+                    viewHolder.receiveOrder.setEnabled(true);
 //                    viewHolder.receiveOrder.setBackgroundResource(R.drawable.border_corner_login_enable);
                     break;
                 case 99: //收货完成
