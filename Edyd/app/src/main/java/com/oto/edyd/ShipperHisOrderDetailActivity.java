@@ -211,7 +211,7 @@ public class ShipperHisOrderDetailActivity extends Activity {
             OrderPerTime orderPerTime = new OrderPerTime();
             JSONObject timeObj = timejarr.getJSONObject(i);
             orderPerTime.setDate(timeObj.getInt("month") + "-" + timeObj.getInt("day"));
-            orderPerTime.setHour(timeObj.getInt("hours") + "-" + timeObj.getInt("minutes"));
+            orderPerTime.setHour(timeObj.getInt("hours") + ":" + timeObj.getInt("minutes"));
             timeList.add(orderPerTime);
         }
         orderDetail.setOrderPerTimeList(timeList);

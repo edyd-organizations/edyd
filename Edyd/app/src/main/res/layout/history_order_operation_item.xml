@@ -69,8 +69,8 @@
 
                 <ImageView
                     android:id="@+id/order_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:src="@mipmap/finished_receive2" />

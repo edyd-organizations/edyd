@@ -222,31 +222,31 @@ public class ReceivingOrderDetail extends Activity {
             case 1: //未接单
                 break;
             case 2: //接单
-                executeFirstPoint.setImageResource(R.mipmap.line_car); //第一个点设置为车辆图标
+                executeFirstPoint.setImageResource(R.mipmap.car_green); //第一个点设置为车辆图标
                 for(int i = 0; i < 1; i++) {
                     if(i == 0) {
                         executeFirstTime.setText(orderPerTimeList.get(i).getHour());
                         executeFirstDate.setText(orderPerTimeList.get(i).getDate());
                         //设置颜色...
                         tvFirstTime.setTextColor(getResources().getColor(R.color.gray_5d5d5d));
-                        executeFirstTime.setTextColor(getResources().getColor(R.color.user_icon_8));
-                        executeFirstDate.setTextColor(getResources().getColor(R.color.user_icon_8));
+                        executeFirstTime.setTextColor(getResources().getColor(R.color.green_line_pro));
+                        executeFirstDate.setTextColor(getResources().getColor(R.color.green_line_pro));
                     }
                 }
                 break;
             case 3: //到达装货
-                executeFirstPoint.setImageResource(R.mipmap.execute_green);
-                executeFirstLine.setBackgroundResource(R.color.green_55e6ac);
-                executeSecondLine.setBackgroundResource(R.color.green_55e6ac);
-                executeSecondPoint.setImageResource(R.mipmap.line_car);
+                executeFirstPoint.setImageResource(R.mipmap.green_circle3);
+                executeFirstLine.setBackgroundResource(R.color.green_line_pro);
+                executeSecondLine.setBackgroundResource(R.color.green_line_pro);
+                executeSecondPoint.setImageResource(R.mipmap.car_green);
                 for(int i = 0; i < 2; i++) {
                     if(i == 0) {
                         executeSecondTime.setText(orderPerTimeList.get(i).getHour());
                         executeSecondDate.setText(orderPerTimeList.get(i).getDate());
                         //设置颜色...
-                        tvSecondTime.setTextColor(getResources().getColor(R.color.user_icon_8));
-                        executeSecondTime.setTextColor(getResources().getColor(R.color.user_icon_8));
-                        executeSecondDate.setTextColor(getResources().getColor(R.color.user_icon_8));
+                        tvSecondTime.setTextColor(getResources().getColor(R.color.green_line_pro));
+                        executeSecondTime.setTextColor(getResources().getColor(R.color.green_line_pro));
+                        executeSecondDate.setTextColor(getResources().getColor(R.color.green_line_pro));
 
                         tvFirstTime.setTextColor(getResources().getColor(R.color.gray_5d5d5d));
                         executeFirstTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
@@ -258,21 +258,21 @@ public class ReceivingOrderDetail extends Activity {
                 }
                 break;
             case 4: //装货完成
-                executeFirstPoint.setImageResource(R.mipmap.execute_green);
-                executeFirstLine.setBackgroundResource(R.color.green_55e6ac);
-                executeSecondLine.setBackgroundResource(R.color.green_55e6ac);
-                executeSecondPoint.setImageResource(R.mipmap.execute_green);
-                executeThirdLine.setBackgroundResource(R.color.green_55e6ac);
-                executeFourLine.setBackgroundResource(R.color.green_55e6ac);
-                executeThirdPoint.setImageResource(R.mipmap.line_car);
+                executeFirstPoint.setImageResource(R.mipmap.green_circle3);
+                executeFirstLine.setBackgroundResource(R.color.green_line_pro);
+                executeSecondLine.setBackgroundResource(R.color.green_line_pro);
+                executeSecondPoint.setImageResource(R.mipmap.green_circle3);
+                executeThirdLine.setBackgroundResource(R.color.green_line_pro);
+                executeFourLine.setBackgroundResource(R.color.green_line_pro);
+                executeThirdPoint.setImageResource(R.mipmap.car_green);
                 for(int i = 0; i < 3; i++) {
                     if(i == 0) {
                         executeThirdTime.setText(orderPerTimeList.get(i).getHour());
                         executeThirdDate.setText(orderPerTimeList.get(i).getDate());
                         //设置颜色...
-                        tvThirdTime.setTextColor(getResources().getColor(R.color.user_icon_8));
-                        executeThirdTime.setTextColor(getResources().getColor(R.color.user_icon_8));
-                        executeThirdDate.setTextColor(getResources().getColor(R.color.user_icon_8));
+                        tvThirdTime.setTextColor(getResources().getColor(R.color.green_line_pro));
+                        executeThirdTime.setTextColor(getResources().getColor(R.color.green_line_pro));
+                        executeThirdDate.setTextColor(getResources().getColor(R.color.green_line_pro));
 
                         tvSecondTime.setTextColor(getResources().getColor(R.color.gray_5d5d5d));
                         executeSecondTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
@@ -287,27 +287,27 @@ public class ReceivingOrderDetail extends Activity {
                 }
                 break;
             case 5: //送货在途
-                executeFirstPoint.setImageResource(R.mipmap.execute_green);
-                executeFirstLine.setBackgroundResource(R.color.green_55e6ac);
-                executeSecondLine.setBackgroundResource(R.color.green_55e6ac);
+                executeFirstPoint.setImageResource(R.mipmap.green_circle3);
+                executeFirstLine.setBackgroundResource(R.color.green_line_pro);
+                executeSecondLine.setBackgroundResource(R.color.green_line_pro);
 
-                executeSecondPoint.setImageResource(R.mipmap.execute_green);
-                executeThirdLine.setBackgroundResource(R.color.green_55e6ac);
-                executeFourLine.setBackgroundResource(R.color.green_55e6ac);
+                executeSecondPoint.setImageResource(R.mipmap.green_circle3);
+                executeThirdLine.setBackgroundResource(R.color.green_line_pro);
+                executeFourLine.setBackgroundResource(R.color.green_line_pro);
 
-                executeThirdPoint.setImageResource(R.mipmap.execute_green);
-                executeFiveLine.setBackgroundResource(R.color.green_55e6ac);
-                executeSixLine.setBackgroundResource(R.color.green_55e6ac);
+                executeThirdPoint.setImageResource(R.mipmap.green_circle3);
+                executeFiveLine.setBackgroundResource(R.color.green_line_pro);
+                executeSixLine.setBackgroundResource(R.color.green_line_pro);
 
-                executeFourPoint.setImageResource(R.mipmap.line_car);
+                executeFourPoint.setImageResource(R.mipmap.car_green);
                 for(int i = 0; i < 4; i++) {
                     if(i == 0) {
                         executeFourTime.setText(orderPerTimeList.get(i).getHour());
                         executeFourDate.setText(orderPerTimeList.get(i).getDate());
                         //设置颜色...
-                        tvFourTime.setTextColor(getResources().getColor(R.color.user_icon_8));
-                        executeFourTime.setTextColor(getResources().getColor(R.color.user_icon_8));
-                        executeFourDate.setTextColor(getResources().getColor(R.color.user_icon_8));
+                        tvFourTime.setTextColor(getResources().getColor(R.color.green_line_pro));
+                        executeFourTime.setTextColor(getResources().getColor(R.color.green_line_pro));
+                        executeFourDate.setTextColor(getResources().getColor(R.color.green_line_pro));
 
                         tvThirdTime.setTextColor(getResources().getColor(R.color.gray_5d5d5d));
                         executeThirdTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
@@ -325,31 +325,31 @@ public class ReceivingOrderDetail extends Activity {
                 }
                 break;
             case 6: //到达收货
-                executeFirstPoint.setImageResource(R.mipmap.execute_green);
-                executeFirstLine.setBackgroundResource(R.color.green_55e6ac);
-                executeSecondLine.setBackgroundResource(R.color.green_55e6ac);
+                executeFirstPoint.setImageResource(R.mipmap.green_circle3);
+                executeFirstLine.setBackgroundResource(R.color.green_line_pro);
+                executeSecondLine.setBackgroundResource(R.color.green_line_pro);
 
-                executeSecondPoint.setImageResource(R.mipmap.execute_green);
-                executeThirdLine.setBackgroundResource(R.color.green_55e6ac);
-                executeFourLine.setBackgroundResource(R.color.green_55e6ac);
+                executeSecondPoint.setImageResource(R.mipmap.green_circle3);
+                executeThirdLine.setBackgroundResource(R.color.green_line_pro);
+                executeFourLine.setBackgroundResource(R.color.green_line_pro);
 
-                executeThirdPoint.setImageResource(R.mipmap.execute_green);
-                executeFiveLine.setBackgroundResource(R.color.green_55e6ac);
-                executeSixLine.setBackgroundResource(R.color.green_55e6ac);
+                executeThirdPoint.setImageResource(R.mipmap.green_circle3);
+                executeFiveLine.setBackgroundResource(R.color.green_line_pro);
+                executeSixLine.setBackgroundResource(R.color.green_line_pro);
 
-                executeFourPoint.setImageResource(R.mipmap.execute_green);
-                executeSevenLine.setBackgroundResource(R.color.green_55e6ac);
-                executeEightLine.setBackgroundResource(R.color.green_55e6ac);
+                executeFourPoint.setImageResource(R.mipmap.green_circle3);
+                executeSevenLine.setBackgroundResource(R.color.green_line_pro);
+                executeEightLine.setBackgroundResource(R.color.green_line_pro);
 
-                executeFivePoint.setImageResource(R.mipmap.line_car);
+                executeFivePoint.setImageResource(R.mipmap.car_green);
                 for(int i = 0; i < 5; i++) {
                     if(i == 0) {
                         executeFiveTime.setText(orderPerTimeList.get(i).getHour());
                         executeFiveDate.setText(orderPerTimeList.get(i).getDate());
                         //设置颜色...
-                        tvFiveTime.setTextColor(getResources().getColor(R.color.user_icon_8));
-                        executeFiveTime.setTextColor(getResources().getColor(R.color.user_icon_8));
-                        executeFiveDate.setTextColor(getResources().getColor(R.color.user_icon_8));
+                        tvFiveTime.setTextColor(getResources().getColor(R.color.green_line_pro));
+                        executeFiveTime.setTextColor(getResources().getColor(R.color.green_line_pro));
+                        executeFiveDate.setTextColor(getResources().getColor(R.color.green_line_pro));
 
                         tvFourTime.setTextColor(getResources().getColor(R.color.gray_5d5d5d));
                         executeFourTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
@@ -370,35 +370,35 @@ public class ReceivingOrderDetail extends Activity {
                 }
                 break;
             case 7: //收货完成
-                executeFirstPoint.setImageResource(R.mipmap.execute_green);
-                executeFirstLine.setBackgroundResource(R.color.green_55e6ac);
-                executeSecondLine.setBackgroundResource(R.color.green_55e6ac);
+                executeFirstPoint.setImageResource(R.mipmap.green_circle3);
+                executeFirstLine.setBackgroundResource(R.color.green_line_pro);
+                executeSecondLine.setBackgroundResource(R.color.green_line_pro);
 
-                executeSecondPoint.setImageResource(R.mipmap.execute_green);
-                executeThirdLine.setBackgroundResource(R.color.green_55e6ac);
-                executeFourLine.setBackgroundResource(R.color.green_55e6ac);
+                executeSecondPoint.setImageResource(R.mipmap.green_circle3);
+                executeThirdLine.setBackgroundResource(R.color.green_line_pro);
+                executeFourLine.setBackgroundResource(R.color.green_line_pro);
 
-                executeThirdPoint.setImageResource(R.mipmap.execute_green);
-                executeFiveLine.setBackgroundResource(R.color.green_55e6ac);
-                executeSixLine.setBackgroundResource(R.color.green_55e6ac);
+                executeThirdPoint.setImageResource(R.mipmap.green_circle3);
+                executeFiveLine.setBackgroundResource(R.color.green_line_pro);
+                executeSixLine.setBackgroundResource(R.color.green_line_pro);
 
-                executeFourPoint.setImageResource(R.mipmap.execute_green);
-                executeSevenLine.setBackgroundResource(R.color.green_55e6ac);
-                executeEightLine.setBackgroundResource(R.color.green_55e6ac);
+                executeFourPoint.setImageResource(R.mipmap.green_circle3);
+                executeSevenLine.setBackgroundResource(R.color.green_line_pro);
+                executeEightLine.setBackgroundResource(R.color.green_line_pro);
 
-                executeFivePoint.setImageResource(R.mipmap.execute_green);
-                executeNineLine.setBackgroundResource(R.color.green_55e6ac);
-                executeTenLine.setBackgroundResource(R.color.green_55e6ac);
+                executeFivePoint.setImageResource(R.mipmap.green_circle3);
+                executeNineLine.setBackgroundResource(R.color.green_line_pro);
+                executeTenLine.setBackgroundResource(R.color.green_line_pro);
 
-                executeSixPoint.setImageResource(R.mipmap.line_car);
+                executeSixPoint.setImageResource(R.mipmap.car_green);
                 for(int i = 0; i < 6; i++) {
                     if(i == 0) {
                         executeSixTime.setText(orderPerTimeList.get(i).getHour());
                         executeSixDate.setText(orderPerTimeList.get(i).getDate());
                         //设置颜色...
-                        tvSixTime.setTextColor(getResources().getColor(R.color.user_icon_8));
-                        executeSixTime.setTextColor(getResources().getColor(R.color.user_icon_8));
-                        executeSixDate.setTextColor(getResources().getColor(R.color.user_icon_8));
+                        tvSixTime.setTextColor(getResources().getColor(R.color.green_line_pro));
+                        executeSixTime.setTextColor(getResources().getColor(R.color.green_line_pro));
+                        executeSixDate.setTextColor(getResources().getColor(R.color.green_line_pro));
                         tvFiveTime.setTextColor(getResources().getColor(R.color.gray_5d5d5d));
                         executeFiveTime.setTextColor(getResources().getColor(R.color.dim_foreground_dark));
                         executeFiveDate.setTextColor(getResources().getColor(R.color.dim_foreground_dark));

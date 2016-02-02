@@ -372,22 +372,22 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
             orderStatus = (ImageView) convertView.findViewById(R.id.order_status); //订单状态
             switch (orderdetail.getOrderStatus()) {
                 case 20: //已接单
-                    orderStatus.setImageResource(R.mipmap.tts_loading_way);
+                    orderStatus.setImageResource(R.mipmap.tts_loading_way2);
                     break;
                 case 30: //	到达装货
-                    orderStatus.setImageResource(R.mipmap.tts_arrived_load);
+                    orderStatus.setImageResource(R.mipmap.tts_arrived_load2);
                     break;
                 case 40: //装货完成
-                    orderStatus.setImageResource(R.mipmap.tts_completion_load);
+                    orderStatus.setImageResource(R.mipmap.tts_zhuanghuo_finish2);
                     break;
                 case 50: //送货在途
-                    orderStatus.setImageResource(R.mipmap.tts_delivery_way);
+                    orderStatus.setImageResource(R.mipmap.tts_delivery_way2);
                     break;
                 case 60: //到达收货
-                    orderStatus.setImageResource(R.mipmap.tts_arrived_receive);
+                    orderStatus.setImageResource(R.mipmap.tts_arrived_receive2);
                     break;
                 case 99: //收货完成
-                    orderStatus.setImageResource(R.mipmap.finished_receive);
+                    orderStatus.setImageResource(R.mipmap.finished_receive2);
                     break;
             }
             double distance = orderdetail.getDistance();

@@ -11,6 +11,19 @@ public class TrackBean implements Serializable{
     private String truckNum;
     private String reserveNum;
     private String orderDate;
+    private int controlStatus;
+
+    public TrackBean() {
+
+    }
+
+    public int getControlStatus() {
+        return controlStatus;
+    }
+
+    public void setControlStatus(int controlStatus) {
+        this.controlStatus = controlStatus;
+    }
 
     public String getReserveNum() {
         return reserveNum;

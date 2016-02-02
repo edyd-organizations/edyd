@@ -164,6 +164,7 @@ public class TrackListActivity extends Activity {
             loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
             loadingDialog.getLoadingDialog().show();
         }
+        //v1.1/appTraceAllOrder.json?sessionUuid=68455ead6e094b0584a25c8d5a83069f&aspectType=3
         String url = Constant.ENTRANCE_PREFIX_v1 + "appTraceAllOrder.json?sessionUuid="
                 + sessionUuid + "&controlNum=" + controlNum + "&page=" + page + "&rows=" + rows
                 + "&aspectType=" + aspectType;
@@ -173,7 +174,7 @@ public class TrackListActivity extends Activity {
             public void onError(Request request, Exception e) {
                 loadingDialog.getLoadingDialog().dismiss();
                 swipe_container.setRefreshing(false);
-                Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "获取信息异常", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -211,6 +212,7 @@ public class TrackListActivity extends Activity {
             bean.setTruckNum(obj.getString("truckNum"));
             bean.setReserveNum(obj.getString("reserveNum"));
             bean.setOrderDate(obj.getString("orderDate"));
+            bean.setControlStatus(obj.getInt("controlStatus"));
             tempList.add(bean);
         }
 
@@ -279,13 +281,44 @@ public class TrackListActivity extends Activity {
             TextView tv_trucknum = (TextView) v.findViewById(R.id.tv_trucknum);
             TextView tv_reservenum = (TextView) v.findViewById(R.id.tv_reservenum);
             TextView tv_orderdate = (TextView) v.findViewById(R.id.tv_orderdate);
-            ImageView iv_track_status=(ImageView)v.findViewById(R.id.iv_track_status);
+            ImageView iv_track_status = (ImageView) v.findViewById(R.id.iv_track_status);
             TrackBean bean = infos.get(i);
             tv_controlnum.setText(bean.getControlNum());
             tv_trucknum.setText(bean.getTruckNum());
             tv_reservenum.setText(bean.getReserveNum());
             tv_orderdate.setText(bean.getOrderDate());
-
+            //设置状态背景
+            int controlStatus = bean.getControlStatus();
+            switch (controlStatus) {
+                case 0:
+//                    "状态异常";
+                    Common.showToast(mActivity, "状态异常");
+                    break;
+                case 20:
+//                    "装货在途";
+                    iv_track_status.setImageResource(R.mipmap.tts_loading_way2); //装货在途icon
+                    break;
+                case 30:
+//                    "到达装货";
+                    iv_track_status.setImageResource(R.mipmap.tts_arrived_load2); //到达装货icon
+                    break;
+                case 40:
+//                    "装货完成";
+                    iv_track_status.setImageResource(R.mipmap.tts_zhuanghuo_finish2); //装货完成icon
+                    break;
+                case 50:
+//                    "送货在途";
+                    iv_track_status.setImageResource(R.mipmap.tts_delivery_way2); //送货在途icon
+                    break;
+                case 60:
+//                    "到达收货";
+                    iv_track_status.setImageResource(R.mipmap.tts_arrived_receive2); //到达收货icon
+                    break;
+                case 99:
+//                    "收货完成";
+                    iv_track_status.setImageResource(R.mipmap.finished_receive2);
+                    break;
+            }
             return v;
         }
     }

@@ -9,49 +9,68 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/order_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="15dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/finished_receive2"
             android:layout_alignParentRight="true"/>
+
+        <RelativeLayout
+            android:id="@+id/ll_num"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            >
+            <ImageView
+                android:id="@+id/tv_order_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/order_number"/>
+            <TextView
+                android:id="@+id/orderNumView"
+                android:layout_toRightOf="@+id/tv_order_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:text="1234567890"
+                android:textColor="@color/gray_5d5d5d" />
+            <TextView
+                android:id="@+id/tv_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:visibility="gone"
+                android:layout_marginRight="40dp"
+                android:textColor="@color/gray_818181"
+                android:text="2015-11-11"/>
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/tv_dashline_orange"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_below="@id/ll_num"
+            android:background="@drawable/dash_line_orange"
+            android:layerType="software" />
+
         <LinearLayout
+            android:layout_below="@id/tv_dashline_orange"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="8dp">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/tv_order_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/order_number"/>
-                <TextView
-                    android:id="@+id/orderNumView"
-                    android:layout_toRightOf="@+id/tv_order_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
-                    android:text="1234567890"
-                    android:textColor="@color/gray_5d5d5d" />
-                <TextView
-                    android:id="@+id/tv_distance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="40dp"
-                    android:textColor="@color/gray_818181"
-                    android:text="2015-11-11"/>
-            </RelativeLayout>
+            android:layout_marginTop="5dp">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -59,12 +78,13 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/gray_818181"
                     android:text="福建厦门"/>
+
                 <TextView
-                    android:layout_width="15dp"
+                    android:layout_width="30dp"
                     android:id="@+id/line"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/from_to"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:background="@color/gray_818181"
                     />
                 <TextView
@@ -79,7 +99,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="10dp">
                 <LinearLayout
                     android:id="@+id/l_start_address"
                     android:layout_width="match_parent"
@@ -120,7 +140,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_gravity="center"
-                            android:src="@mipmap/recerve_order_zhong"/>
+                            android:src="@mipmap/order_fa"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

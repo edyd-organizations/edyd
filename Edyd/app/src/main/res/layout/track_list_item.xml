@@ -16,7 +16,6 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="27dp"
             android:layout_alignParentRight="true"
-            android:visibility="gone"
             />
 
         <LinearLayout
