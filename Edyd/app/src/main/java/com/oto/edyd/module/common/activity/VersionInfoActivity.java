@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.oto.edyd.R;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 
@@ -39,11 +40,16 @@ public class VersionInfoActivity extends Activity implements View.OnClickListene
     private LinearLayout back; //返回
     private TextView versionName; //版本名
     private TextView checkUpdate; //检测更新
+    private TextView updateInfo; //更新信息
 
     //-------------变量----------------
     private Common common; //共享文件对象LOGIN_PREFERENCES_FILE
     private Context context; //上下文对象
     private final static int HANDLER_REMOTE_VERSION_CODE = 0x10; //远程版本号返回码
+    private final static int HANDLER_CHECK_VERSION_CODE = 0x11; //远程版本号返回码
+    private final static int DEVICE_TYPE = 1; //1代表获取Android更新信息
+    private VersionInfo versionInfo; //版本信息
+    private CusProgressDialog transitionDialog; //过渡
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +65,7 @@ public class VersionInfoActivity extends Activity implements View.OnClickListene
         initFields(); //初始化字段
         initListener(); //初始化监听器
         versionName.setText(getVersionName());
+        getRemoteVersionName(1);
     }
 
     /**
@@ -68,6 +75,7 @@ public class VersionInfoActivity extends Activity implements View.OnClickListene
         back = (LinearLayout) findViewById(R.id.back);
         versionName = (TextView) findViewById(R.id.version_name);
         checkUpdate = (TextView) findViewById(R.id.check_update);
+        updateInfo = (TextView) findViewById(R.id.update_content);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, MODE_PRIVATE));
         context= VersionInfoActivity.this;
     }
@@ -87,7 +95,7 @@ public class VersionInfoActivity extends Activity implements View.OnClickListene
                 finish();
                 break;
             case R.id.check_update: //检查更新
-                getRemoteVersionName();
+                getRemoteVersionName(2);
                 break;
         }
 
@@ -95,11 +103,12 @@ public class VersionInfoActivity extends Activity implements View.OnClickListene
 
     /**
      * 获取远程版本号
+     * @param requestSequence 请求次序
      */
-    private void getRemoteVersionName() {
+    private void getRemoteVersionName(int requestSequence) {
         //type=1代表Android端版本号
-        String url = Constant.ENTRANCE_PREFIX_v1 + "inqueryAppVersion.json?type=" + 1;
-        OkHttpClientManager.getAsyn(url, new VersionInfoResultCallback<String>() {
+        String url = Constant.ENTRANCE_PREFIX_v1 + "inqueryAppVersion.json?type=" + DEVICE_TYPE;
+        OkHttpClientManager.getAsyn(url, new VersionInfoResultCallback<String>(requestSequence) {
 
             @Override
             public void onError(Request request, Exception e) {
@@ -117,16 +126,22 @@ public class VersionInfoActivity extends Activity implements View.OnClickListene
                     if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         common.showToast(context, "远程版本号失败");
                     }
-                    Map<Object, Object> map = new HashMap<Object, Object>();
                     jsonArray = jsonObject.getJSONArray("rows");
                     if(jsonArray.length() == 0) {
                         common.showToast(context, "无版本信息");
                         return;
                     }
                     item = jsonArray.getJSONObject(0);
+                    versionInfo = new VersionInfo();
+                    versionInfo.setUpdateVersion(item.getString("updateVersion"));
+                    versionInfo.setUpdateTime(item.getString("updateDate"));
+                    versionInfo.setUpdateContent(formatUpdateContent(item.getString("updateContent")));
                     Message message = Message.obtain();
-                    message.what = HANDLER_REMOTE_VERSION_CODE;
-                    message.obj = item.getString("updateVersion"); //远程版本号
+                    if(this.requestSequence == 1) {
+                        message.what = HANDLER_REMOTE_VERSION_CODE;
+                    }  else {
+                        message.what = HANDLER_CHECK_VERSION_CODE;
+                    }
                     handler.sendMessage(message);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -141,14 +156,34 @@ public class VersionInfoActivity extends Activity implements View.OnClickListene
      */
     abstract class VersionInfoResultCallback<T> extends OkHttpClientManager.ResultCallback<T> {
 
+        public int requestSequence; //请求次序
+        private final static int START_ACCESS = 1; //首次访问
+        //private final static int END_ACCESS = 2; //末次访问
+
+        /**
+         * @param requestSequence 网络请求次序
+         */
+        public VersionInfoResultCallback(int requestSequence) {
+            this. requestSequence = requestSequence;
+        }
+
         @Override
         public void onBefore() {
             //请求之前操作
+            if(requestSequence == START_ACCESS) {
+                //首次访问
+                transitionDialog = new CusProgressDialog(context, "正在登录...");
+                transitionDialog.showDialog();
+            }
         }
 
         @Override
         public void onAfter() {
             //请求之后要做的操作
+            if(requestSequence == START_ACCESS) {
+                //末次访问
+                transitionDialog.dismissDialog();
+            }
         }
     }
 
@@ -160,8 +195,10 @@ public class VersionInfoActivity extends Activity implements View.OnClickListene
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case HANDLER_REMOTE_VERSION_CODE: //远程版本号返回成功
-                    String versionName = (String) msg.obj;
-                    isNeedUpdate(versionName);
+                    updateInfo.setText(versionInfo.getUpdateContent());
+                    break;
+                case HANDLER_CHECK_VERSION_CODE: //检查版本号
+                    isNeedUpdate(versionInfo.getUpdateVersion());
                     break;
             }
         }
@@ -209,6 +246,54 @@ public class VersionInfoActivity extends Activity implements View.OnClickListene
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return "";
+        }
+    }
+
+    /**
+     * 格式化数据
+     * @param content
+     * @return
+     */
+    private String formatUpdateContent(String content) {
+        String fContent = "";
+        if(content != null && !content.equals("")) {
+            String cArray[] = content.split(" ");
+            for(int i = 0; i < cArray.length; i++) {
+                fContent += cArray[i] + "\n";
+            }
+        } else {
+            fContent = "提示：暂无版本更新信息";
+        }
+        return fContent;
+    }
+
+    private class VersionInfo {
+        private String updateVersion; //版本号
+        private String updateTime; //更新时间
+        private String updateContent; //更新内容
+
+        public String getUpdateVersion() {
+            return updateVersion;
+        }
+
+        public void setUpdateVersion(String updateVersion) {
+            this.updateVersion = updateVersion;
+        }
+
+        public String getUpdateTime() {
+            return updateTime;
+        }
+
+        public void setUpdateTime(String updateTime) {
+            this.updateTime = updateTime;
+        }
+
+        public String getUpdateContent() {
+            return updateContent;
+        }
+
+        public void setUpdateContent(String updateContent) {
+            this.updateContent = updateContent;
         }
     }
 }

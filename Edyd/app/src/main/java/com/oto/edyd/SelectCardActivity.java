@@ -191,9 +191,16 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
             String orgCode = common.getStringByKey(Constant.ORG_CODE);
             String url = "";
 
-            url = Constant.ENTRANCE_PREFIX_v1 + "inqueryOilCardDetailByCarIdOrCardIdApp.json?sessionUuid=" + sessionUuid +
-                    "&enterpriseId=" + enterpriseId + "&orgCode=" + orgCode + "&page=" +
-                    page + "&rows=" + rows + "&serachText=" + searchText;
+            if(orgCode!=null && orgCode.equals("")) {
+                url = Constant.ENTRANCE_PREFIX_v1 + "inqueryOilCardDetailByCarIdOrCardIdApp.json?sessionUuid=" + sessionUuid +
+                        "&enterpriseId=" + enterpriseId + "&page=" +
+                        page + "&rows=" + rows + "&serachText=" + searchText;
+            } else {
+                url = Constant.ENTRANCE_PREFIX_v1 + "inqueryOilCardDetailByCarIdOrCardIdApp.json?sessionUuid=" + sessionUuid +
+                        "&enterpriseId=" + enterpriseId + "&orgCode=" + orgCode + "&page=" +
+                        page + "&rows=" + rows + "&serachText=" + searchText;
+            }
+
 
             OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
                 @Override

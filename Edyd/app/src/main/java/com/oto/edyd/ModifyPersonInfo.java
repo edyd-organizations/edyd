@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by yql on 2015/9/14.
@@ -59,6 +62,9 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
     private TextView btSave; //保存
     private Common common;
     private Common userInfoCommon;
+    private ImageView visiblePassword; //密码是否可见
+    private ImageView visiblePasswordTwo; //密码是否可见
+    private ImageView visiblePasswordThree; //密码是否可见
 
     private int position;
     private UpdatePerson updatePerson;
@@ -127,6 +133,8 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
 
     private void initFields(View view, String order) {
         accountEnterFragmentManager = getActivity().getSupportFragmentManager();
+        common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        userInfoCommon = new Common(getActivity().getSharedPreferences(Constant.USER_INFO_FILE, Context.MODE_PRIVATE));
         if(order.equals("first")) {
             modifyEnterInfoBack = (LinearLayout) view.findViewById(R.id.modify_enter_info_back);
             modifyEnterInfoTitle = (TextView) view.findViewById(R.id.tv_enter_info_title);
@@ -138,8 +146,13 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
             etNewPassword = (EditText) view.findViewById(R.id.et_new_password);
             etConfirmPassword = (EditText) view.findViewById(R.id.et_confirm_password);
             btSave = (TextView) view.findViewById(R.id.personal_info_save);
-            common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-            userInfoCommon = new Common(getActivity().getSharedPreferences(Constant.USER_INFO_FILE, Context.MODE_PRIVATE));
+            visiblePassword = (ImageView) view.findViewById(R.id.visible_password);
+            visiblePasswordTwo = (ImageView) view.findViewById(R.id.visible_password_two);
+            visiblePasswordThree = (ImageView) view.findViewById(R.id.visible_password_three);
+            visiblePassword.setOnClickListener(this);
+            visiblePasswordTwo.setOnClickListener(this);
+            visiblePasswordThree.setOnClickListener(this);
+
         }
     }
 
@@ -154,6 +167,7 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        int isVisible;
         switch (v.getId()) {
             case R.id.modify_enter_info_back:
                 accountEnterFragmentManager.popBackStack();
@@ -170,6 +184,42 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
             case  R.id.enter_info_item: //日期
                 //用来获取日期和时间的
                 alertDatePicker();
+                break;
+            case R.id.visible_password:
+                isVisible = etOldPassword.getInputType();
+                if(isVisible == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) { //当前密码显示
+                    etOldPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); //设置隐藏
+                    etOldPassword.setSelection(etOldPassword.length()); //设置光标位置
+                    visiblePassword.setImageResource(R.mipmap.cipher_text);
+                } else { //当前密码隐藏
+                    etOldPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); //设置显示
+                    etOldPassword.setSelection(etOldPassword.length());
+                    visiblePassword.setImageResource(R.mipmap.plain_text);
+                }
+                break;
+            case R.id.visible_password_two:
+                isVisible = etNewPassword.getInputType();
+                if(isVisible == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) { //当前密码显示
+                    etNewPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); //设置隐藏
+                    etNewPassword.setSelection(etNewPassword.length()); //设置光标位置
+                    visiblePasswordTwo.setImageResource(R.mipmap.cipher_text);
+                } else { //当前密码隐藏
+                    etNewPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); //设置显示
+                    etNewPassword.setSelection(etNewPassword.length());
+                    visiblePasswordTwo.setImageResource(R.mipmap.plain_text);
+                }
+                break;
+            case R.id.visible_password_three:
+                isVisible = etConfirmPassword.getInputType();
+                if(isVisible == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) { //当前密码显示
+                    etConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); //设置隐藏
+                    etConfirmPassword.setSelection(etConfirmPassword.length()); //设置光标位置
+                    visiblePasswordThree.setImageResource(R.mipmap.cipher_text);
+                } else { //当前密码隐藏
+                    etConfirmPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); //设置显示
+                    etConfirmPassword.setSelection(etConfirmPassword.length());
+                    visiblePasswordThree.setImageResource(R.mipmap.plain_text);
+                }
                 break;
         }
     }
@@ -262,6 +312,13 @@ public class ModifyPersonInfo extends Fragment implements View.OnClickListener {
         }
         if(!newPassword.equals(confirmPassword)) {
             Toast.makeText(getActivity(), "密码输入不一致", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //匹配密码是否符合要求
+        Pattern pt = Pattern.compile(Constant.MATCH_REGISTER_PASSWORD);
+        Matcher matcher = pt.matcher(newPassword);
+        if(!matcher.matches()){
+            common.showToast(getActivity(), "密码必须为6位字母加数字");
             return;
         }
 

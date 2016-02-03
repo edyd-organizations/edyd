@@ -63,6 +63,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private Button btRegister; //注册按钮
     private Button btAlreadyRegister; //已经注册
     private ImageView visiblePassword; //密码是否可见
+    private ImageView visiblePasswordTwo; //确认密码是否可见
     private VerificationCodeProgressAsyncTask asyncTask; //异步消息对象
     private boolean asyncIsOver = true; //异步线程是否结束
     private CusProgressDialog transitionDialog; //过度对话框
@@ -71,18 +72,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private Common fixedCommon;
 
     private static final int MOBILE_PHONE_LENGTH  = 11; //手机号码长度
-    //private static final int VERIFICATION_CODE_LENGTH = 4; //验证码长度
     private static final int MOBILE_PHONE_WITHOUT_REGISTER = 0x11; //账号未注册
-    //private static final int USER_ALREADY_EXIST = 504; //用户已存在
-    //private static final int USER_REGISTER_EXCEPTION = 0x13; //注册异常
     private static final int USER_REGISTER_SUCCESS = 0x14; //用户注册成功
-    private static final int USER_REGISTER_SUB_COMPANY_SUCCESS = 0x15; //用户注册子公司成功返回码
-    private static final int HANDLER_ACCOUNT_TYPE_SUCCESS_STATUS_CODE = 0x16; //账户类型返回码
-    private static final int HANDLER_ROLE_TYPE_SUCCESS_CODE = 0x17; //角色类型请求成功返回码
-    private static final int HANDLER_ACCOUNT_TYPE_SUCCESS_CODE = 0x18; //账户ID请求成功返回码
     private static final int INVALID_VERIFICATION_CODE = 0x19; //无效验证码
     private static final int VERIFICATION_AUTHENTICATE_SUCCESS = 0x20; //验证码认证成功
-    private static final int HANDLER_DRIVER_ROLE = 0x21; //司机返回码
     private static final int HANDLER_DEVICE_TOKEN_CODE = 0x22; //用户友盟设备ID请求成功返回码
 
     @Nullable
@@ -115,6 +108,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         confirmPassword = (EditText) view.findViewById(R.id.confirm_password);
         btRegister = (Button) view.findViewById(R.id.bt_register);
         visiblePassword = (ImageView) view.findViewById(R.id.visible_password);
+        visiblePasswordTwo = (ImageView) view.findViewById(R.id.visible_password_two);
         btAlreadyRegister = (Button) view.findViewById(R.id.bt_already_register);
         eFragmentManager = getActivity().getSupportFragmentManager();
         common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
@@ -131,6 +125,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         btRegister.setOnClickListener(this);
         btAlreadyRegister.setOnClickListener(this);
         visiblePassword.setOnClickListener(this);
+        visiblePasswordTwo.setOnClickListener(this);
 
         //手机号码输入框注册监听器
         etRegisterPhoneNumber.addTextChangedListener(new TextWatcher() {
@@ -276,6 +271,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     
     @Override
     public void onClick(View v) {
+        int isVisible;
         switch(v.getId()) {
             case R.id.register_back: //注册返回
                 eFragmentManager.popBackStack(); //LoginActivity的FragmentManager管理器中弹出RegisterFragment
@@ -290,7 +286,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                 eFragmentManager.popBackStack();
                 break;
             case R.id.visible_password:
-                int isVisible = etRegisterPassword.getInputType();
+                isVisible = etRegisterPassword.getInputType();
                 if(isVisible == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) { //当前密码显示
                     etRegisterPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); //设置隐藏
                     etRegisterPassword.setSelection(etRegisterPassword.length()); //设置光标位置
@@ -299,6 +295,18 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                     etRegisterPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); //设置显示
                     etRegisterPassword.setSelection(etRegisterPassword.length());
                     visiblePassword.setImageResource(R.mipmap.plain_text);
+                }
+                break;
+            case R.id.visible_password_two:
+                isVisible = confirmPassword.getInputType();
+                if(isVisible == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) { //当前密码显示
+                    confirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); //设置隐藏
+                    confirmPassword.setSelection(confirmPassword.length()); //设置光标位置
+                    visiblePasswordTwo.setImageResource(R.mipmap.cipher_text);
+                } else { //当前密码隐藏
+                    confirmPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); //设置显示
+                    confirmPassword.setSelection(confirmPassword.length());
+                    visiblePasswordTwo.setImageResource(R.mipmap.plain_text);
                 }
                 break;
 

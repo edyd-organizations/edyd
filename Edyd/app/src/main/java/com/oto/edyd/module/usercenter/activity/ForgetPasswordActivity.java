@@ -7,11 +7,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.oto.edyd.R;
@@ -47,6 +49,7 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
     private EditText etVerificationCode; //验证码
     private EditText etRegisterUserPassword; //密码
     private Button btModifyButton; //完成按钮
+    private ImageView visiblePassword; //密码是否可见
 
     // --------------线程通讯对象---------------------
     //异步线程
@@ -94,6 +97,7 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
         etVerificationCode = (EditText) findViewById(R.id.verification_code);
         etRegisterUserPassword = (EditText) findViewById(R.id.register_user_password);
         btModifyButton = (Button) findViewById(R.id.modify_password);
+        visiblePassword = (ImageView) findViewById(R.id.visible_password);
         context = ForgetPasswordActivity.this;
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
     }
@@ -105,6 +109,7 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
         back.setOnClickListener(this);
         obtainVerificationCode.setOnClickListener(this);
         btModifyButton.setOnClickListener(this);
+        visiblePassword.setOnClickListener(this);
 
         //手机号码输入框注册监听器
         etMobilePhoneNumber.addTextChangedListener(new TextWatcher() {
@@ -212,6 +217,18 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
                 break;
             case R.id.modify_password: //修改密码
                 authenticateVerificationIsSuccess(); //认证验证码
+                break;
+            case R.id.visible_password:
+                int isVisible = etRegisterUserPassword.getInputType();
+                if(isVisible == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) { //当前密码显示
+                    etRegisterUserPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); //设置隐藏
+                    etRegisterUserPassword.setSelection(etRegisterUserPassword.length()); //设置光标位置
+                    visiblePassword.setImageResource(R.mipmap.cipher_text);
+                } else { //当前密码隐藏
+                    etRegisterUserPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); //设置显示
+                    etRegisterUserPassword.setSelection(etRegisterUserPassword.length());
+                    visiblePassword.setImageResource(R.mipmap.plain_text);
+                }
                 break;
         }
     }
