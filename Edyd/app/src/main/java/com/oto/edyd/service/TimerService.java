@@ -101,14 +101,20 @@ public class TimerService extends Service implements LocationSource, AMapLocatio
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
         location = amapLocation;
-
+        int errorCode = location.getAMapException().getErrorCode();
         if (mListener != null && amapLocation != null) {
-            if (amapLocation != null && amapLocation.getAMapException().getErrorCode() == 0) {
+            if (amapLocation != null && errorCode == 0) {
                 //getTimerOrder();
                 sendLocationInfo(amapLocation);
                 deactivate();
             } else {
                 Log.e("AmapErr","Location ERR:" + amapLocation.getAMapException().getErrorCode());
+                if(errorCode == 33) {
+                    Common.showToastlong(context, "应用无定位权限，请开启");
+                }
+//            else{
+//                Common.showToastlong(context, "定位出现异常");
+//            }
             }
         }
     }

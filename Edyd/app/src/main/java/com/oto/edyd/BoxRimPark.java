@@ -6,10 +6,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
@@ -68,12 +64,17 @@ public class BoxRimPark extends Activity  implements PoiSearch.OnPoiSearchListen
 
         @Override
         public void onLocationChanged(AMapLocation location) {
-            if (location != null && location.getAMapException().getErrorCode() == 0) {
+            int errorCode = location.getAMapException().getErrorCode();
+            if (location != null && errorCode == 0) {
                 mIsGetGPS = true;
                 startSearchQuery(location);
 
             } else {
-                Common.showToastlong(mActivity, "定位出现异常");
+                if(errorCode == 33) {
+                    Common.showToastlong(mActivity, "应用无定位权限，请开启");
+                } else{
+                    Common.showToastlong(mActivity, "定位出现异常");
+                }
                 dissmissProgressDialog();
             }
         }

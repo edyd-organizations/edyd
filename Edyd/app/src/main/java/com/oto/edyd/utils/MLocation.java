@@ -50,11 +50,18 @@ public class MLocation  implements LocationSource, AMapLocationListener {
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
         location = amapLocation;
-        if (amapLocation != null && amapLocation.getAMapException().getErrorCode() == 0) {
+        int errorCode = location.getAMapException().getErrorCode();
+        if (amapLocation != null && errorCode == 0) {
             sendEndStatusLocationInfo(amapLocation);
             deactivate();
         } else {
             Log.e("AmapErr", "Location ERR:" + amapLocation.getAMapException().getErrorCode());
+            if(errorCode == 33) {
+                Common.showToastlong(context, "应用无定位权限，请开启");
+            }
+//            else{
+//                Common.showToastlong(context, "定位出现异常");
+//            }
         }
     }
 

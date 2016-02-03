@@ -176,15 +176,21 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
         mLocationManger.requestLocationData(LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener() {
                     @Override
                     public void onLocationChanged(AMapLocation location) {
+                        int errorCode = location.getAMapException().getErrorCode();
                         dissmissProgressDialog();
-                        if (location != null && location.getAMapException().getErrorCode() == 0) {
+                        if (location != null && errorCode == 0) {
                             NaviLatLng point = new NaviLatLng(location.getLatitude(), location.getLongitude());
                             mGPSMarker.setPosition(new LatLng(point.getLatitude(), point.getLongitude()));
                             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                             mAmap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
                         } else {
-                            Common.showToastlong(mActivity, "定位出现异常");
-                            dissmissProgressDialog();
+                            if(errorCode == 33) {
+                                Common.showToastlong(mActivity, "应用无定位权限，请开启");
+                                dissmissProgressDialog();
+                            } else{
+                                Common.showToastlong(mActivity, "定位出现异常");
+                                dissmissProgressDialog();
+                            }
                         }
                     }
 
