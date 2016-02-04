@@ -234,18 +234,28 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
                         common.showToast(context, "暂无数据");
                         return;
                     }
+                    int oStatus;
                     for (int i = 0; i < jsonArray.length(); i++) {
                         item = jsonArray.getJSONObject(i);
                         Orderdetail orderdetail = new Orderdetail();
                         orderdetail.setPrimaryId(item.getLong("primaryId"));
                         orderdetail.setOrderNum(item.getString("controlNum")); //订单号
-                        orderdetail.setDistance(item.getDouble("distance")); //距离
+                        //orderdetail.setDistance(item.getString("distance")); //距离
                         orderdetail.setStartAddrProviceAndCity(item.getString("senderAddrProviceAndCity"));
                         orderdetail.setStopAddrProviceAndCity(item.getString("receiverAddrProviceAndCity"));
                         orderdetail.setDetailedAddress(item.getString("receiverAddr"));
                         orderdetail.setContacrName(item.getString("receiverName")); //收货人名字
                         orderdetail.setContactTel(item.getString("receiverContactTel")); //收货人联系方式
-                        orderdetail.setOrderStatus(item.getInt("orderStatus")); //订单状态
+                        oStatus = item.getInt("orderStatus");
+                        orderdetail.setOrderStatus(oStatus); //订单状态
+                        //判断距离装货地还是收货地
+                        if(oStatus <= 30) {
+                            orderdetail.setDistance("距离装货地" + item.getDouble("distance")); //距离装货地
+                        } else if(oStatus > 30 && oStatus <= 60) {
+                            orderdetail.setDistance("距离收货地" + item.getDouble("distance")); //距离收货地
+                        } else {
+                            orderdetail.setDistance("已到收货地"); //过了收货地
+                        }
                         orderdetailList.add(orderdetail);
                     }
 
@@ -307,18 +317,27 @@ public class ShipperOrderOperateActivity extends Activity implements View.OnClic
                     }
                     loadFlag = true;
                     jsonArray = jsonObject.getJSONArray("rows");
+                    int oStatus = 0;
                     for (int i = 0; i < jsonArray.length(); i++) {
                         item = jsonArray.getJSONObject(i);
                         Orderdetail orderdetail = new Orderdetail();
                         orderdetail.setPrimaryId(item.getLong("primaryId"));
                         orderdetail.setOrderNum(item.getString("controlNum")); //订单号
-                        orderdetail.setDistance(item.getDouble("distance")); //距离
                         orderdetail.setStartAddrProviceAndCity(item.getString("senderAddrProviceAndCity"));
                         orderdetail.setStopAddrProviceAndCity(item.getString("receiverAddrProviceAndCity"));
                         orderdetail.setDetailedAddress(item.getString("receiverAddr"));
                         orderdetail.setContacrName(item.getString("receiverName")); //收货人名字
                         orderdetail.setContactTel(item.getString("receiverContactTel")); //收货人联系方式
-                        orderdetail.setOrderStatus(item.getInt("orderStatus")); //订单状态
+                        oStatus = item.getInt("orderStatus");
+                        orderdetail.setOrderStatus(oStatus); //订单状态
+                        //判断距离装货地还是收货地
+                        if(oStatus <= 30) {
+                            orderdetail.setDistance("距离装货地" + item.getDouble("distance")); //距离装货地
+                        } else if(oStatus > 30 && oStatus <= 60) {
+                            orderdetail.setDistance("距离收货地" + item.getDouble("distance")); //距离收货地
+                        } else {
+                            orderdetail.setDistance("已到收货地"); //过了收货地
+                        }
                         orderdetailList.add(orderdetail);
                     }
 

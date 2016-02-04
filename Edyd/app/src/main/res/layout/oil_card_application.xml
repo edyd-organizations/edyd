@@ -439,7 +439,7 @@
                         android:padding="3dp"
                         android:layout_gravity="center"
                         android:singleLine="true"
-                        android:numeric="decimal"
+                        android:inputType="number"
                         android:textSize="14sp"
                         android:maxLength="10"
                         android:background="@drawable/edittext_border"

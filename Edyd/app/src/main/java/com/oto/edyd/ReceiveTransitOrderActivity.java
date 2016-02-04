@@ -184,7 +184,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tempJSON = jsonArray.getJSONObject(i);
                         Orderdetail orderdetail=new Orderdetail();
-                        orderdetail.setDistance(tempJSON.getDouble("distance"));
+                        orderdetail.setDistance(tempJSON.getString("distance"));
                         orderdetail.setControlNum(tempJSON.getString("controlNum"));//调度单
                         orderdetail.setOrderStatus(tempJSON.getInt("orderStatus"));
                         orderdetail.setStartAddrProviceAndCity(tempJSON.getString("senderAddrProviceAndCity"));//发货人省份
@@ -270,7 +270,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tempJSON = jsonArray.getJSONObject(i);
                         Orderdetail orderdetail=new Orderdetail();
-                        orderdetail.setDistance(tempJSON.getDouble("distance"));//距离
+                        orderdetail.setDistance(tempJSON.getString("distance"));//距离
                         orderdetail.setControlNum(tempJSON.getString("controlNum"));//调度单
                         orderdetail.setOrderStatus(tempJSON.getInt("orderStatus"));
                         orderdetail.setStartAddrProviceAndCity(tempJSON.getString("senderAddrProviceAndCity"));//发货人省份
@@ -390,13 +390,13 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                     orderStatus.setImageResource(R.mipmap.finished_receive2);
                     break;
             }
-            double distance = orderdetail.getDistance();
-            if (distance==0){
-                tvDistance.setVisibility(View.INVISIBLE);
-            }else{
-                tvDistance.setText("距离装货地"+orderdetail.getDistance()+"米");
-                tvDistance.setTextColor(Color.RED);
-            }
+//            double distance = orderdetail.getDistance();
+//            if (distance==0){
+//                tvDistance.setVisibility(View.INVISIBLE);
+//            }else{
+//                tvDistance.setText("距离装货地"+orderdetail.getDistance()+"米");
+//                tvDistance.setTextColor(Color.RED);
+//            }
             orderNumber.setText(orderdetail.getControlNum());
             startProvince.setText(orderdetail.getStartAddrProviceAndCity());
             stopProvince.setText(orderdetail.getStopAddrProviceAndCity());

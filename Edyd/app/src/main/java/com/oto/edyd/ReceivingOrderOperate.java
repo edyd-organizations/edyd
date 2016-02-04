@@ -184,7 +184,7 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tempJSON = jsonArray.getJSONObject(i);
                         Orderdetail orderdetail=new Orderdetail();
-                        orderdetail.setDistance(tempJSON.getInt("distance"));//距离
+                        orderdetail.setDistance(tempJSON.getString("distance"));//距离
                         orderdetail.setControlNum(tempJSON.getString("controlNum"));//调度单
                         orderdetail.setOrderStatus(tempJSON.getInt("orderStatus"));
                         orderdetail.setStartAddrProviceAndCity(tempJSON.getString("senderAddrProviceAndCity"));//发货人省份
@@ -265,7 +265,7 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tempJSON = jsonArray.getJSONObject(i);
                         Orderdetail orderdetail=new Orderdetail();
-                        orderdetail.setDistance(tempJSON.getInt("distance"));//距离
+                        orderdetail.setDistance(tempJSON.getString("distance"));//距离
                         orderdetail.setControlNum(tempJSON.getString("controlNum"));//调度单
                         orderdetail.setOrderStatus(tempJSON.getInt("orderStatus"));
                         orderdetail.setStartAddrProviceAndCity(tempJSON.getString("senderAddrProviceAndCity"));//发货人省份

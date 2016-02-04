@@ -33,7 +33,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@+id/iv_order_number"
-                android:text="DD201511181001"
                 android:textColor="@color/gray_5d5d5d" />
         </LinearLayout>
 
@@ -81,7 +80,6 @@
                         android:id="@+id/start_and_end_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1111111"
                         android:textColor="@color/gray_818181"
                         android:textSize="16sp" />
 
@@ -95,7 +93,6 @@
                         android:id="@+id/end_city_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1111111"
                         android:textColor="@color/gray_818181"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -116,25 +113,25 @@
                         android:layout_gravity="center"
                         android:src="@mipmap/icon_dw" />
 
-                    <TextView
+                    <!--<TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="12dp"
-                        android:text="距离装货地"
                         android:textColor="@color/red_fe020e"
-                        android:textSize="14sp" />
+                        android:textSize="14sp" />-->
 
                     <TextView
                         android:id="@+id/distance_load_goods"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
                         android:textColor="@color/red_fe020e"
                         android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="米"
+                        android:text= "公里"
                         android:textColor="@color/red_fe020e"
                         android:textSize="14sp" />
                 </LinearLayout>

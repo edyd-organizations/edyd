@@ -261,7 +261,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     String status = jsonObject.getString("status"); //获取返回状态
                     if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         //用户名和密码错误
-                        common.showToast(context, "用户名和密码错误");
+                        common.showToast(context, "用户名或密码错误");
                         transitionDialog.dismissDialog();
                         return;
                     }
