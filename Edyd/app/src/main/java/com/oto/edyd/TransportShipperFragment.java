@@ -3,12 +3,15 @@ package com.oto.edyd;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,6 +20,15 @@ import android.widget.Toast;
 import com.oto.edyd.module.tts.activity.ShipperHistoryOrderActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.CusProgressDialog;
+import com.oto.edyd.utils.OkHttpClientManager;
+import com.oto.edyd.widget.BadgeView;
+import com.squareup.okhttp.Request;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 /**
  * 功能：运输服务发货方主界面
@@ -37,7 +49,27 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
     private Common fixedCommon;
     private LinearLayout ll_history_orders;
     private LinearLayout ll_view_track;
+    private ImageView iv_shipper_onway;
+    private CusProgressDialog loadingDialog;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            dissmissProgressDialog();
+            BadgeView badgeView = new BadgeView(getActivity(), iv_shipper_onway);
 
+            int onwayNum = msg.what;
+//            int onwayNum = 100;
+
+            if (onwayNum > 99) {
+                badgeView.setText("99+");
+            } else {
+                badgeView.setText(onwayNum+"");
+            }
+            badgeView.show();
+
+        }
+    };
 
     @Nullable
     @Override
@@ -49,6 +81,7 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
 
     /**
      * 初始化数据
+     *
      * @param view
      */
     private void init(View view) {
@@ -76,20 +109,93 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
         ll_history_orders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getActivity(),ShipperHistoryOrderActivity.class);
+                Intent intent = new Intent(getActivity(), ShipperHistoryOrderActivity.class);
                 startActivity(intent);
             }
         });
-        ll_view_track=(LinearLayout) view.findViewById(R.id.ll_view_track);
+        ll_view_track = (LinearLayout) view.findViewById(R.id.ll_view_track);
         ll_view_track.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), TrackListActivity.class);
-                String aspectType = 2+"";
+                String aspectType = 2 + "";
                 intent.putExtra("aspectType", aspectType);
                 startActivity(intent);
             }
         });
+
+        //显示在图订单的条数
+        iv_shipper_onway = (ImageView) view.findViewById(R.id.iv_shipper_onway);
+        requestNum();
+
+    }
+
+    /**
+     * 显示在图订单的条数
+     */
+    private void requestNum() {
+
+        String aspectType = Constant.SHIPPER_ROLE_ID + "";
+        String orgCode = common.getStringByKey(Constant.ORG_CODE);
+        String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
+        String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
+
+//  /v1.1/appSenderAndReceiverOrderCount.json?sessionUuid=&aspectType=1&enterpriseId=53&orgCode=1
+        String url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderCount.json?sessionUuid=" + sessionUuid +
+                "&aspectType=" + aspectType + "&enterpriseId=" + enterpriseId + "&orgCode=" + orgCode;
+
+        //第一次进来显示loading
+        showProgressDialog();
+        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+            @Override
+            public void onError(Request request, Exception e) {
+                dissmissProgressDialog();
+                Toast.makeText(getActivity(), "获取信息异常", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(String response) {
+                JSONObject jsonObject;
+                JSONArray jsonArray;
+                try {
+                    jsonObject = new JSONObject(response);
+                    if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
+                        Toast.makeText(getActivity(), "返回信息失败", Toast.LENGTH_SHORT).show();
+                        dissmissProgressDialog();
+                        return;
+                    }
+                    jsonArray = jsonObject.getJSONArray("rows");
+                    int onwayNum = jsonArray.getInt(0);
+
+                    Message msg = Message.obtain();
+                    msg.what = onwayNum;
+                    handler.sendMessage(msg);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 显示进度框
+     */
+
+    private void showProgressDialog() {
+        if (loadingDialog == null) {
+            loadingDialog = new CusProgressDialog(getActivity(), "正在获取数据...");
+        }
+        loadingDialog.getLoadingDialog().show();
+
+    }
+
+    /**
+     * 隐藏进度框
+     */
+    private void dissmissProgressDialog() {
+        loadingDialog.getLoadingDialog().dismiss();
     }
 
     /**
@@ -138,15 +244,15 @@ public class TransportShipperFragment extends Fragment implements View.OnClickLi
                 intent = new Intent(content, ShipperOrderOperateActivity.class);
                 startActivity(intent);
                 break;
-            case  R.id.ll_panorama://全景图
+            case R.id.ll_panorama://全景图
                 String menterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
-                int enterpriseId = Integer.parseInt(menterpriseId );
-                if (enterpriseId==0){
+                int enterpriseId = Integer.parseInt(menterpriseId);
+                if (enterpriseId == 0) {
                     Toast.makeText(getActivity(), "您没有权限查看", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                intent=new Intent(getActivity(),PanoramaActivity.class);
-                intent.putExtra("aspectType",Constant.SHIPPER_ROLE_ID);
+                intent = new Intent(getActivity(), PanoramaActivity.class);
+                intent.putExtra("aspectType", Constant.SHIPPER_ROLE_ID);
                 startActivity(intent);
                 break;
         }

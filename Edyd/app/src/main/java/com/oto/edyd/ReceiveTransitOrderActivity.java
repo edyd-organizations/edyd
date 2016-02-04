@@ -36,6 +36,7 @@ import java.util.List;
 
 /**
  * 收货方在途订单
+ * 作者：zfh lbz
  */
 public class ReceiveTransitOrderActivity extends Activity implements View.OnClickListener, AbsListView.OnScrollListener{
     private LinearLayout historyTransportOrderBack; //返回
@@ -392,10 +393,9 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
             }
             double distance = orderdetail.getDistance();
             if (distance==0){
-                tvDistance.setVisibility(View.INVISIBLE);
+                tvDistance.setText("已经到达装货地");
             }else{
                 tvDistance.setText("距离装货地"+orderdetail.getDistance()+"公里");
-                tvDistance.setTextColor(Color.RED);
             }
             orderNumber.setText(orderdetail.getControlNum());
             startProvince.setText(orderdetail.getStartAddrProviceAndCity());
