@@ -15,6 +15,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -74,7 +75,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         setContentView(R.layout.oil_card_amount_distribute);
         mActivity = this;
         initFields();
-
+        //设置item点击监听。
         listDistributeUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -88,6 +89,22 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
                 listDistributeUser.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
             }
         });
+        //列表设置滚动点击监听。
+        listDistributeUser.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (SCROLL_STATE_TOUCH_SCROLL == scrollState) {
+                    View currentFocus = getCurrentFocus();
+                    if (currentFocus != null) {
+                        currentFocus.clearFocus();
+                    }
+                }
+            }
+
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            }
+        });
+
     }
 
 
@@ -298,6 +315,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
 
     /**
      * 是否分配？
+     *
      * @return
      */
     private boolean isAmount() {
@@ -405,7 +423,7 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
             final OilAmountDistribute oilAmountDistribute = oilAmountDistributeList.get(position);
             TextView tCarNumber; //车牌号
             TextView tCardNumber; //卡号
-            EditText tAmount; //金额
+            final EditText tAmount; //金额
             View view = inflater.inflate(R.layout.distribute_user_item, null);
             tCarNumber = (TextView) view.findViewById(R.id.car_number);
             tCardNumber = (TextView) view.findViewById(R.id.card_id);
@@ -414,39 +432,60 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
             tAmount.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
                 }
 
                 @Override
                 public void onTextChanged(CharSequence s, int i, int i1, int i2) {
-                    //设置预分配卡数
-                    String s1 = s.toString();
-                    if (!TextUtils.isEmpty(s1)) {
-                        char c = s1.charAt(0);
-                        if (c == '.') {
-                            oilAmountDistribute.setAmount("");
-                            adapter.notifyDataSetChanged();
-                            return;
+                    //设置小数只能是两位
+                    if (s.toString().contains(".")) {
+                        if (s.length() - 1 - s.toString().indexOf(".") > 2) {
+                            s = s.toString().subSequence(0,
+                                    s.toString().indexOf(".") + 3);
+                            tAmount.setText(s);
+                            tAmount.setSelection(s.length());
                         }
                     }
-                    oilAmountDistribute.setAmount(s1);
+                    if (s.toString().trim().substring(0).equals(".")) {
+                        s = "0" + s;
+                        tAmount.setText(s);
+                        tAmount.setSelection(2);
+                    }
+                    if (s.toString().startsWith("0")
+                            && s.toString().trim().length() > 1) {
+                        if (!s.toString().substring(1, 2).equals(".")) {
+                            tAmount.setText(s.subSequence(0, 1));
+                            tAmount.setSelection(1);
+//                            return;
+                        }
+                    }
+
+                    //设置预分配卡数
+//                    String s1 = s.toString();
+//                    if (!TextUtils.isEmpty(s1)) {
+//                        char c = s1.charAt(0);
+//                        if (c == '.') {
+//                            oilAmountDistribute.setAmount("");
+//                            adapter.notifyDataSetChanged();
+//                            return;
+//                        }
+//                    }
+                    oilAmountDistribute.setAmount(tAmount.getText().toString());
                     sumCardNum();
                     sumMoneyNum();
-
                 }
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-
                 }
             });
+
+
             tCarNumber.setText(oilAmountDistribute.getCarNumber());
             tCardNumber.setText(oilAmountDistribute.getCardNumber());
             tAmount.setText(oilAmountDistribute.getAmount());
             return view;
         }
     }
-
 
     /**
      * 设置分配总金额
@@ -482,21 +521,6 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
         return bdl.doubleValue();
     }
 
-//    public static Double div(Double v1,Double v2,int scale){
-//        if(scale<0){
-//            throw new IllegalArgumentException(
-//                    "The scale must be a positive integer or zero");
-//        }
-//        BigDecimal b1 = new BigDecimal(v1.toString());
-//        BigDecimal b2 = new BigDecimal(v2.toString());
-//        return b1.divide(b2,scale,BigDecimal.ROUND_HALF_UP).doubleValue();
-//    }
-//    public double sub(double d1, double d2) {        // 进行减法运算
-//        BigDecimal b1 = new BigDecimal(d1);
-//        BigDecimal b2 = new BigDecimal(d2);
-//        return b1.subtract(b2).doubleValue();
-//    }
-
 
     private void sumCardNum() {
         int i = 0;
@@ -506,6 +530,5 @@ public class OilCardAmountDistributeActivity extends Activity implements View.On
             }
         }
         distributeCardNumber.setText(i + "");
-
     }
 }

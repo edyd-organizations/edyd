@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10sp"
                 android:layout_marginLeft="11dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="11dp"
                 android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
@@ -136,15 +136,12 @@
                         android:textSize="14sp" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="vertical">
+
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -164,19 +161,9 @@
                             android:textSize="16sp" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="vertical">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center">
-
                             <!-- 发货人信息 -->
                             <LinearLayout
+                                android:layout_marginTop="10dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
@@ -202,6 +189,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="8dp"
+                                    android:text="收货人"
                                     android:textColor="@color/gray_5d5d5d"
                                     android:textSize="16sp" />
 
@@ -210,14 +198,11 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="8dp"
-                                    android:layout_weight="1"
+                                    android:text="收货人"
                                     android:textColor="@color/gray_5d5d5d"
                                     android:textSize="16sp" />
                             </LinearLayout>
-                        </RelativeLayout>
-                    </LinearLayout>
 
-                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>

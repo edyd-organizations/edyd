@@ -10,6 +10,7 @@
         android:normalScreens="true"
         android:smallScreens="true"
         android:xlargeScreens="true" />
+
     <!-- 系统权限 -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -66,9 +67,9 @@
         <!-- 高德地图 正式地址-->
         <!-- gd 正式版 key-->
 
-        <!--  <meta-data
-              android:name="com.amap.api.v2.apikey"
-              android:value="391bb51068ef790c94b3f93fe9852186" />-->
+        <!--   <meta-data
+             android:name="com.amap.api.v2.apikey"
+               android:value="391bb51068ef790c94b3f93fe9852186" />-->
 
         <!-- lbz gd debug key -->
         <!--<meta-data

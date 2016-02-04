@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/gray_EDEDED">
+    android:background="@color/gray_EDEDED"
+    android:orientation="vertical">
 
     <!--<ImageView
         android:layout_width="match_parent"
@@ -16,13 +16,14 @@
         android:id="@+id/network_indicate_view"
         android:layout_width="match_parent"
         android:layout_height="120dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
-        android:layout_marginTop="12dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="3"
         android:background="@color/gray_EDEDED"
         android:orientation="vertical">
 
@@ -30,8 +31,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:background="@color/orange_FF6600">
+            android:background="@color/orange_FF6600"
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:id="@+id/driver"
                 android:layout_width="0dp"
@@ -39,23 +41,27 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="2"
-                    android:src="@mipmap/home_car"/>
+                    android:src="@mipmap/home_car" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:text="我是司机"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
-                    android:text="我是司机"/>
+                    android:textSize="15sp" />
             </LinearLayout>
+
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/white"/>
+                android:background="@color/white" />
+
             <LinearLayout
                 android:id="@+id/undertaker"
                 android:layout_width="0dp"
@@ -63,23 +69,27 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="2"
-                    android:src="@mipmap/home_undertake"/>
+                    android:src="@mipmap/home_undertake" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:text="我是承运商"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
-                    android:text="我是承运商"/>
+                    android:textSize="15sp" />
             </LinearLayout>
+
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/white"/>
+                android:background="@color/white" />
+
             <LinearLayout
                 android:id="@+id/ll_cargo_owner"
                 android:layout_width="0dp"
@@ -87,221 +97,253 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="2"
-                    android:src="@mipmap/home_goods"/>
+                    android:src="@mipmap/home_goods" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:text="我是货主"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
-                    android:text="我是货主"/>
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
             android:layout_marginTop="12dp"
+            android:layout_weight="2"
             android:background="@color/white"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+
                 <LinearLayout
                     android:id="@+id/oil_card_pay"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:scaleType="center"
-                        android:src="@mipmap/home_oil"/>
+                        android:src="@mipmap/home_oil" />
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:orientation="vertical"
                         android:gravity="left"
+                        android:orientation="vertical"
                         android:paddingRight="10dp">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:gravity="bottom"
                             android:layout_marginBottom="5dp"
-                            android:text="油卡充值"/>
+                            android:layout_weight="1"
+                            android:gravity="bottom"
+                            android:text="油卡充值"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:textSize="12sp"
-                            android:gravity="top"
                             android:layout_marginTop="5dp"
-                            android:text="全国中石化中石油"/>
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:text="全国中石化中石油"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <View
                     android:layout_width="1px"
                     android:layout_height="match_parent"
-                    android:background="@color/gray_AAAAAA"/>
+                    android:background="@color/gray_AAAAAA" />
+
                 <LinearLayout
                     android:id="@+id/transport_insurance"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:src="@mipmap/home_superscript"/>
+                            android:src="@mipmap/home_superscript" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
                             <ImageView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:scaleType="center"
-                                android:src="@mipmap/home_insurance"/>
+                                android:src="@mipmap/home_insurance" />
+
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="2"
-                                android:orientation="vertical"
                                 android:gravity="left"
+                                android:orientation="vertical"
                                 android:paddingRight="10dp">
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="0dp"
-                                    android:layout_weight="1"
-                                    android:textSize="15sp"
-                                    android:textStyle="bold"
-                                    android:gravity="bottom"
                                     android:layout_marginBottom="5dp"
-                                    android:text="货运保险"/>
+                                    android:layout_weight="1"
+                                    android:gravity="bottom"
+                                    android:text="货运保险"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="0dp"
-                                    android:layout_weight="1"
-                                    android:textSize="12sp"
-                                    android:gravity="top"
                                     android:layout_marginTop="5dp"
-                                    android:text="保障你的财产安全"/>
+                                    android:layout_weight="1"
+                                    android:gravity="top"
+                                    android:text="保障你的财产安全"
+                                    android:textSize="12sp" />
                             </LinearLayout>
                         </LinearLayout>
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gray_AAAAAA"/>
+                android:background="@color/gray_AAAAAA" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+
                 <LinearLayout
                     android:id="@+id/goods_order"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:scaleType="center"
                         android:layout_weight="1"
-                        android:src="@mipmap/home_order"/>
+                        android:scaleType="center"
+                        android:src="@mipmap/home_order" />
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:orientation="vertical"
                         android:gravity="left"
+                        android:orientation="vertical"
                         android:paddingRight="10dp">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:gravity="bottom"
                             android:layout_marginBottom="5dp"
-                            android:text="商品订单"/>
+                            android:layout_weight="1"
+                            android:gravity="bottom"
+                            android:text="商品订单"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:textSize="12sp"
-                            android:gravity="top"
                             android:layout_marginTop="5dp"
-                            android:text="查看全部订单"/>
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:text="查看全部订单"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <View
                     android:layout_width="1px"
                     android:layout_height="match_parent"
-                    android:background="@color/gray_AAAAAA"/>
+                    android:background="@color/gray_AAAAAA" />
+
                 <LinearLayout
                     android:id="@+id/invite_friends"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:scaleType="center"
                         android:layout_weight="1"
-                        android:src="@mipmap/home_invite_friends"/>
+                        android:scaleType="center"
+                        android:src="@mipmap/home_invite_friends" />
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:orientation="vertical"
                         android:gravity="left"
+                        android:orientation="vertical"
                         android:paddingRight="10dp">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:gravity="bottom"
                             android:layout_marginBottom="5dp"
-                            android:text="邀请朋友"/>
+                            android:layout_weight="1"
+                            android:gravity="bottom"
+                            android:text="邀请朋友"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:textSize="12sp"
-                            android:gravity="top"
                             android:layout_marginTop="5dp"
-                            android:text="大家一起来分享"/>
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:text="大家一起来分享"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -309,53 +351,68 @@
             android:background="@color/gray_EDEDED"
             android:gravity="center"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/icon_bx"
-                    android:scaleType="center"/>
+                    android:scaleType="center"
+                    android:src="@mipmap/icon_bx" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:text="交易平台通过认证平台担保，享受诚信首赔"/>
+                    android:text="交易平台通过认证平台担保，享受诚信首赔"
+                    android:textSize="14sp" />
             </LinearLayout>
+
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/user_icon_8"
-                    android:textSize="14sp"
-                    android:text="客服热线："/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/user_icon_8"
-                    android:textSize="14sp"
-                    android:text="4008-761-167"/>
-            </LinearLayout>
-            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-                <TextView
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/user_icon_8"
-                    android:textSize="14sp"
-                    android:text="客服QQ："/>
-                <TextView
+                    android:layout_marginTop="3dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="客服热线："
+                        android:textColor="@color/user_icon_8"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4008-761-167"
+                        android:textColor="@color/user_icon_8"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/user_icon_8"
-                    android:textSize="14sp"
-                    android:text="4008-761-167"/>
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="客服QQ："
+                        android:textColor="@color/user_icon_8"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4008-761-167"
+                        android:textColor="@color/user_icon_8"
+                        android:textSize="14sp" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -48,6 +48,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="40dp"
+                android:visibility="gone"
                 android:textColor="@color/gray_999999" />
         </LinearLayout>
 
