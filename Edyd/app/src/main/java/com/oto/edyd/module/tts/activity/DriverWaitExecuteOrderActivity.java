@@ -108,8 +108,9 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
                 //订单详情
                 DriverOrderBean driverOrderBean = driverOrderBeanList.get(position);
                 Intent intent = new Intent(context, OrderDetailActivity.class);
+                intent.putExtra("position", position);
                 intent.putExtra("primaryId", String.valueOf(driverOrderBean.getPrimary()));
-                startActivity(intent);
+                startActivityForResult(intent, 0x16);
             }
         });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -313,6 +314,13 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
             }
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == 0x15) {
+            requestWaitExecuteOrderData(1, 10, Constant.SECOND_LOAD);
+        }
+    }
 
     private class WaitExecuteOrderListAdapter extends BaseAdapter {
         private LayoutInflater inflater;

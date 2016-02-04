@@ -56,6 +56,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
     private Common common;
     private CusProgressDialog loadingDialog;
     private int page;
+    private final static int HANDLER_NO_DATA_CODE = 0x11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +128,9 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                 case 3: //分页加载
                     transportOrderAdapter.notifyDataSetChanged(); //通知ListView更新
                     break;
+                case HANDLER_NO_DATA_CODE: //暂无数据返回码
+                    mPullToRefreshScrollView.setRefreshing(false); //停止刷新
+                    break;
             }
         }
     };
@@ -154,6 +158,7 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                 JSONObject jsonObject;
                 JSONArray rowJson;
                 try {
+                    Message message = Message.obtain();
                     jsonObject = new JSONObject(response);
                     if(!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
                         Toast.makeText(getApplicationContext(), "获取调度信息失败", Toast.LENGTH_SHORT).show();
@@ -163,6 +168,8 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                     rowJson = jsonObject.getJSONArray("rows");
                     if(rowJson.length() == 0) {
                         Toast.makeText(TransportOrderDispatchActivity.this, "暂无数据", Toast.LENGTH_SHORT).show();
+                        message.what = HANDLER_NO_DATA_CODE;
+                        handler.sendMessage(message);
                         dissmissProgressDialog();
                         return;
                     }
@@ -190,8 +197,6 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                         transportDispatch.setGoodsName(jsonObjectItem.getString("goodsName"));
                         transportDispatchList.add(transportDispatch);
                     }
-
-                    Message message = Message.obtain();
                     switch (loadType) {
                         case 1:
                             message.what = 1; //首次加载
