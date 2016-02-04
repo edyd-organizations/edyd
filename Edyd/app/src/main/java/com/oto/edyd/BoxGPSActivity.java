@@ -328,8 +328,6 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
                 } else {
                     Common.showToast(mActivity, "请先进行相对应的路径规划，再进行导航");
                 }
-
-
             }
         });
     }
@@ -611,6 +609,7 @@ public class BoxGPSActivity extends Activity implements PoiSearch.OnPoiSearchLis
         mRouteOverLay.addToMap();
         mRouteOverLay.zoomToSpan();
         mIsCalculateRouteSuccess = true;
+        tv_navi.setVisibility(View.VISIBLE);
     }
 
     @Override

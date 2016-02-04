@@ -541,7 +541,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="米"
+                            android:text="公里"
                             android:textColor="@color/red_fe020e"
                             android:textSize="14sp" />
                     </LinearLayout>

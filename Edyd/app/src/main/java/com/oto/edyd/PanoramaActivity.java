@@ -26,6 +26,7 @@ import com.amap.api.services.geocoder.RegeocodeResult;
 import com.android.volley.toolbox.HttpClientStack;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 import com.amap.api.maps2d.AMap;
@@ -58,6 +59,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
     private Common fixedCommon;
     private LocationManagerProxy mAMapLocationManager;
     private int aspectType;
+    private PanoramaActivity mActivity;
 
 
     @Override
@@ -65,6 +67,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE); //不显示程序标题栏
         setContentView(R.layout.activity_panorama);
+        mActivity = this;
         Intent intent = getIntent();
         aspectType=intent.getIntExtra("aspectType",4);
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
@@ -83,6 +86,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
             switch (msg.what) {
                 case 0x20:
                     traverse();//遍历容器
+                    dissmissProgressDialog();
             }
         }
     };
@@ -102,16 +106,19 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
     }
 
     private void requestport() {
+        showProgressDialog();
         addInfo = new ArrayList<CarInfo>();
 //        String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
 
         location = Constant.ENTRANCE_PREFIX_v1 + "appViewTruckPanorama.json?" + "&sessionUuid=" + sessionUuid + "&aspectType=" + aspectType;//得到调度车辆的所有位置信息
         //location="http://www.edyd.cn/api/v1.0/" +"viewTruckPanorama.json?"+"&sessionUuid="+"879425d835d34ac183dddddf831ecdc7";//得到调度车辆的所有位置信息
+
         OkHttpClientManager.getAsyn(location, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
                 //Toast.makeText(PanoramaActivity.this, "", Toast.LENGTH_SHORT).show();
                 Common.showToast(PanoramaActivity.this, "请求失败");
+                dissmissProgressDialog();
             }
 
             @Override
@@ -122,6 +129,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
                     accountTypeJson = new JSONObject(response);
                     accountTypeArray = accountTypeJson.getJSONArray("rows");
                     if (accountTypeArray.length() == 0) {
+                        dissmissProgressDialog();
                         Common.showToast(PanoramaActivity.this, "暂时没数据");
                         return;
                     }
@@ -260,7 +268,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
         return latLngBounds.include(latLng);
     }
 
-
+    private CusProgressDialog loadingDialog; //页面切换过度
     /**
      * 方法必须重写
      */
@@ -270,6 +278,24 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
         mapView.onResume();
     }
 
+    /**
+     * 显示进度框
+     */
+
+    private void showProgressDialog() {
+        if (loadingDialog == null) {
+            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
+        }
+        loadingDialog.getLoadingDialog().show();
+
+    }
+
+    /**
+     * 隐藏进度框
+     */
+    private void dissmissProgressDialog() {
+        loadingDialog.getLoadingDialog().dismiss();
+    }
     /**
      * 对marker标注点点击响应事件
      */
@@ -341,19 +367,19 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
             titleUi.setText("");
         }
         TextView Scheduling = ((TextView) infoWindow.findViewById(R.id.Scheduling));//调度单号
-        Scheduling.setText("调度单号：" + carInfo.getControlNum());
+        Scheduling.setText(carInfo.getControlNum());
         TextView carNumber = (TextView) infoWindow.findViewById(R.id.carNumber);//车牌号
-        carNumber.setText("车  牌  号：" + carInfo.getTrunckNum());
+        carNumber.setText(carInfo.getTrunckNum());
         TextView driver = (TextView) infoWindow.findViewById(R.id.driver);//司机
-        driver.setText("司       机：" + carInfo.getDriverName());
+        driver.setText( carInfo.getDriverName());
         TextView phone = (TextView) infoWindow.findViewById(R.id.phone);//电话
-        phone.setText("电       话：" + carInfo.getDriverTel());
+        phone.setText(carInfo.getDriverTel());
         TextView state = (TextView) infoWindow.findViewById(R.id.state);//状态
-        state.setText("状       态：" + carInfo.getOrder());
-       /* TextView time = (TextView) infoWindow.findViewById(R.id.time);//时间
-        time.setText("时  间："+carInfo.getOperTime());*/
+        state.setText(carInfo.getOrder());
+       TextView time = (TextView) infoWindow.findViewById(R.id.time);//时间
+        time.setText(carInfo.getOperTime());
         TextView address = (TextView) infoWindow.findViewById(R.id.address);
-        address.setText("地       址：" + carInfo.getAddress());
+        address.setText( carInfo.getAddress());
      /*   LatLonPoint latLonPoint=new LatLonPoint(carInfo.getSlat(),carInfo.getSlng());
         RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 200,
                 GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
@@ -388,10 +414,7 @@ public class PanoramaActivity extends Activity implements OnMapLoadedListener, A
      */
     @Override
     public void onRegeocodeSearched(RegeocodeResult result, int rCode) {
-     /*   if (rCode == 0) {
-            String formatAddress = result.getRegeocodeAddress().getFormatAddress();
-            address.setText("地       址："+formatAddress);
-        }*/
+
     }
 
     /**

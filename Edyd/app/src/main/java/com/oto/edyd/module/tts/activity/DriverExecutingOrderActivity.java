@@ -372,7 +372,6 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
             ViewHolder viewHolder;
 
             if (convertView == null) {
-
                 convertView = inflater.inflate(R.layout.executing_order_item, null);
                 viewHolder = new ViewHolder();
                 viewHolder.orderNumber = (TextView) convertView.findViewById(R.id.order_number);

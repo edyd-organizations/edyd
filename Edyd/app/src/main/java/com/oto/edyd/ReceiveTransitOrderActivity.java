@@ -394,7 +394,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
             if (distance==0){
                 tvDistance.setVisibility(View.INVISIBLE);
             }else{
-                tvDistance.setText("距离装货地"+orderdetail.getDistance()+"米");
+                tvDistance.setText("距离装货地"+orderdetail.getDistance()+"公里");
                 tvDistance.setTextColor(Color.RED);
             }
             orderNumber.setText(orderdetail.getControlNum());

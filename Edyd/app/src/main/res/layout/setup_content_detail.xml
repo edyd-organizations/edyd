@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:textSize="16sp"
-            android:text="QQ营销号：4008-761-167"
+            android:text="客服QQ：4008-761-167"
             android:textStyle="bold"/>
         <View
             android:layout_width="match_parent"
