@@ -1,54 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageView
             android:id="@+id/order_status"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/finished_receive2"
-            android:layout_alignParentRight="true"/>
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/finished_receive2" />
 
         <RelativeLayout
             android:id="@+id/ll_num"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            >
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp">
+
             <ImageView
                 android:id="@+id/tv_order_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/order_number"/>
+                android:src="@mipmap/order_number" />
+
             <TextView
                 android:id="@+id/orderNumView"
-                android:layout_toRightOf="@+id/tv_order_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/tv_order_number"
                 android:text="1234567890"
                 android:textColor="@color/gray_5d5d5d" />
-            <TextView
-                android:id="@+id/tv_distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:visibility="gone"
-                android:layout_marginRight="40dp"
-                android:textColor="@color/gray_818181"
-                android:text="2015-11-11"/>
+
+
         </RelativeLayout>
 
         <View
@@ -60,110 +55,147 @@
             android:layerType="software" />
 
         <LinearLayout
-            android:layout_below="@id/tv_dashline_orange"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_below="@id/tv_dashline_orange"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:id="@+id/from_to"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/gray_818181"
-                    android:text="福建厦门"/>
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="30dp"
+                    android:id="@+id/from_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="福建厦门"
+                    android:textColor="@color/gray_818181" />
+
+                <TextView
                     android:id="@+id/line"
+                    android:layout_width="30dp"
+                    android:layout_height="1dp"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/from_to"
-                    android:layout_height="1dp"
-                    android:background="@color/gray_818181"
-                    />
+                    android:background="@color/gray_818181" />
+
                 <TextView
-                    android:layout_width="wrap_content"
                     android:id="@+id/from"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/line"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/gray_818181"
-                    android:text="福建晋江"/>
+                    android:text="福建晋江"
+                    android:textColor="@color/gray_818181" />
             </RelativeLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/icon_dw" />
+
+                <TextView
+                    android:id="@+id/tv_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/red_fe020e"
+                    android:text="距离装货地"
+                    android:layout_marginLeft="7dp"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
+
                 <LinearLayout
                     android:id="@+id/l_start_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="left">
+                    android:gravity="left"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center"
-                        android:src="@mipmap/receive_order_qi"/>
+                        android:src="@mipmap/receive_order_qi" />
+
                     <TextView
                         android:id="@+id/tv_addr_detail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="7dp"
-                        android:textSize="15sp"
                         android:text="晋江市"
-                        android:textColor="@color/gray_5d5d5d" />
+                        android:textColor="@color/gray_5d5d5d"
+                        android:textSize="15sp" />
                 </LinearLayout>
             </RelativeLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="5dp"
                         android:orientation="horizontal">
+
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_gravity="center"
-                            android:src="@mipmap/order_fa"/>
+                            android:src="@mipmap/order_fa" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="7dp"
-                            android:textSize="14sp"
+                            android:text="发货人"
                             android:textColor="@color/gray_5d5d5d"
-                            android:text="发货人"/>
+                            android:textSize="14sp" />
+
                         <TextView
                             android:id="@+id/shipper_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:text="张三"
                             android:layout_marginLeft="8dp"
-                            android:textColor="@color/gray_5d5d5d"/>
+                            android:text="张三"
+                            android:textColor="@color/gray_5d5d5d"
+                            android:textSize="14sp" />
+
                         <TextView
                             android:id="@+id/phone_number_one"
                             android:layout_width="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:text="15080212174"
-                            android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/gray_5d5d5d"/>
+                            android:layout_marginLeft="8dp"
+                            android:layout_weight="1"
+                            android:text="15080212174"
+                            android:textColor="@color/gray_5d5d5d" />
                     </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>

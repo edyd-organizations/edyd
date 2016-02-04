@@ -23,21 +23,27 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
 import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.http.HEAD;
+
 /**
  * 收货方在途订单
+ * 作者：zfh lbz
  */
-public class ReceiveTransitOrderActivity extends Activity implements View.OnClickListener, AbsListView.OnScrollListener{
+public class ReceiveTransitOrderActivity extends Activity implements View.OnClickListener, AbsListView.OnScrollListener {
     private LinearLayout historyTransportOrderBack; //返回
     private ListView receiveOrderList; //接单
     private CusProgressDialog receiveOrderDialog; //页面切换过度
@@ -48,11 +54,12 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
     private int visibleLastIndex = 0; //最后可视项索引
     private final static int ROWS = 10; //分页加载数据每页10
     ImageView imageDelete;//清空搜索
-    List<Orderdetail> addInfo= new ArrayList<Orderdetail>();
+    List<Orderdetail> addInfo = new ArrayList<Orderdetail>();
     private EditText et_input_ordernum;
     String enterpriseId;
     String orgCode;
     String aspectType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +73,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
             @Override
             public void onRefresh() {
                 String searchText = et_input_ordernum.getText().toString();
-                if(TextUtils.isEmpty(searchText)) {
+                if (TextUtils.isEmpty(searchText)) {
                     requestData("");
                 } else {
                     requestData(searchText);
@@ -89,6 +96,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
             }
         });
     }
+
     /**
      * 初始化数据
      */
@@ -102,7 +110,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
             }
         });
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
-        mPullToRefreshScrollView = (SwipeRefreshLayout)findViewById(R.id.swipe_container);
+        mPullToRefreshScrollView = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         et_input_ordernum = (EditText) findViewById(R.id.et_input_ordernum);
         et_input_ordernum.addTextChangedListener(new TextWatcher() {
             @Override
@@ -129,15 +137,16 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
             }
         });
     }
+
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         int lastIndex = receiveOrderListAdapter.getCount(); //数据集最后一项的索引
         //int lastIndex = itemsLastIndex + 1; //加上底部的loadMoreIndex项
-        if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE  && visibleLastIndex ==lastIndex){
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && visibleLastIndex == lastIndex) {
             //如果是自动加载,可以在这里放置异步加载数据的代码
-            if(loadFlag) {
+            if (loadFlag) {
                 loadFlag = false;
-                if(lastIndex % 10 == 0) {
+                if (lastIndex % 10 == 0) {
                     int page = lastIndex / ROWS + 1;
                     String searchText = et_input_ordernum.getText().toString();
                     pageLoadOrderData(page, ROWS, searchText);
@@ -148,6 +157,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
 
     /**
      * 获取sessionid
+     *
      * @return
      */
     private String getSessionUUID() {
@@ -156,14 +166,15 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
 
     /**
      * 分页加载数据
+     *
      * @param page
      * @param rows
-     * @param  searchText
+     * @param searchText
      */
     private void pageLoadOrderData(int page, int rows, String searchText) {
         String sessionUUID = getSessionUUID();
-        String url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderList.json?sessionUuid="+sessionUUID+"&page="+page+"&rows="+rows
-                +"&aspectType="+aspectType+"&enterpriseId="+enterpriseId+"&orgCode="+orgCode;
+        String url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderList.json?sessionUuid=" + sessionUUID + "&page=" + page + "&rows=" + rows
+                + "&aspectType=" + aspectType + "&enterpriseId=" + enterpriseId + "&orgCode=" + orgCode;
         OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
@@ -183,7 +194,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                     jsonArray = jsonObject.getJSONArray("rows");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tempJSON = jsonArray.getJSONObject(i);
-                        Orderdetail orderdetail=new Orderdetail();
+                        Orderdetail orderdetail = new Orderdetail();
                         orderdetail.setDistance(tempJSON.getString("distance"));
                         orderdetail.setControlNum(tempJSON.getString("controlNum"));//调度单
                         orderdetail.setOrderStatus(tempJSON.getInt("orderStatus"));
@@ -212,12 +223,12 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
     private void clearData() {
         addInfo.clear();
     }
+
     /**
-     *
      * @param view
      * @param firstVisibleItem 当前能看见的第一个列表项ID（从0开始）
      * @param visibleItemCount 当前能看见的列表项个数（小半个也算）
-     * @param totalItemCount 列表项共数
+     * @param totalItemCount   列表项共数
      */
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -226,6 +237,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
 
     /**
      * 加载数据
+     *
      * @param serachParames 查询文本
      */
     private void requestData(final String serachParames) {
@@ -237,12 +249,12 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
         enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
         String sessionUUID = getSessionUUID();
         String url = "";
-        if(serachParames == null) {
-            url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderList.json?sessionUuid="+sessionUUID+"&page=1"+"&rows=10"
-                    +"&aspectType="+aspectType+"&enterpriseId="+enterpriseId+"&orgCode="+orgCode;
+        if (serachParames == null) {
+            url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderList.json?sessionUuid=" + sessionUUID + "&page=1" + "&rows=10"
+                    + "&aspectType=" + aspectType + "&enterpriseId=" + enterpriseId + "&orgCode=" + orgCode;
         } else {
-            url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderList.json?sessionUuid="+sessionUUID+"&page=1"+"&rows=10"
-                    +"&aspectType="+aspectType+"&enterpriseId="+enterpriseId+"&orgCode="+orgCode+"&serachParames="+serachParames;
+            url = Constant.ENTRANCE_PREFIX_v1 + "appSenderAndReceiverOrderList.json?sessionUuid=" + sessionUUID + "&page=1" + "&rows=10"
+                    + "&aspectType=" + aspectType + "&enterpriseId=" + enterpriseId + "&orgCode=" + orgCode + "&serachParames=" + serachParames;
         }
 
         OkHttpClientManager.getAsyn(url, new ReceiveOrderCallback<String>(serachParames) {
@@ -250,6 +262,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
             public void onError(Request request, Exception e) {
                 Toast.makeText(getApplicationContext(), "获取订单数据异常", Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onResponse(String response) {
                 JSONObject jsonObject;
@@ -262,14 +275,14 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                     }
                     loadFlag = true;
                     jsonArray = jsonObject.getJSONArray("rows");
-                    if(jsonArray.length() == 0&&serachParames==null) {
+                    if (jsonArray.length() == 0 && serachParames == null) {
                         Toast.makeText(ReceiveTransitOrderActivity.this, "暂无数据", Toast.LENGTH_SHORT).show();
                     }
                     addInfo.clear();
                     ArrayList<Orderdetail> orderList = new ArrayList<Orderdetail>();
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tempJSON = jsonArray.getJSONObject(i);
-                        Orderdetail orderdetail=new Orderdetail();
+                        Orderdetail orderdetail = new Orderdetail();
                         orderdetail.setDistance(tempJSON.getString("distance"));//距离
                         orderdetail.setControlNum(tempJSON.getString("controlNum"));//调度单
                         orderdetail.setOrderStatus(tempJSON.getInt("orderStatus"));
@@ -284,7 +297,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                         addInfo.add(orderdetail);
                     }
                     Message message = Message.obtain();
-                    if(serachParames == null) {
+                    if (serachParames == null) {
                         //首次加载
                         message.what = 1;
                     } else {
@@ -298,17 +311,19 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
             }
         });
     }
-    public abstract class ReceiveOrderCallback<T> extends OkHttpClientManager.ResultCallback<T>{
+
+    public abstract class ReceiveOrderCallback<T> extends OkHttpClientManager.ResultCallback<T> {
 
         private String searchText;
 
         public ReceiveOrderCallback(String searchText) {
             this.searchText = searchText;
         }
+
         @Override
         public void onBefore() {
             //请求之前操作
-            if(searchText == null) {
+            if (searchText == null) {
                 receiveOrderDialog = new CusProgressDialog(ReceiveTransitOrderActivity.this, "正在加载订单数据...");
                 receiveOrderDialog.getLoadingDialog().show();
             }
@@ -317,15 +332,16 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
         @Override
         public void onAfter() {
             //请求之后要做的操作
-            if(searchText == null) {
+            if (searchText == null) {
                 receiveOrderDialog.dismissDialog();
             }
         }
     }
 
-    public void back(View view){//返回
+    public void back(View view) {//返回
         finish();
     }
+
     private class ReceiveOrderListAdapter extends BaseAdapter {
 
         private Context context;
@@ -350,6 +366,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
         public long getItemId(int position) {
             return position;
         }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView orderNumber; //订单号
@@ -390,6 +407,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
                     orderStatus.setImageResource(R.mipmap.finished_receive2);
                     break;
             }
+
 //            double distance = orderdetail.getDistance();
 //            if (distance==0){
 //                tvDistance.setVisibility(View.INVISIBLE);
@@ -397,6 +415,14 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
 //                tvDistance.setText("距离装货地"+orderdetail.getDistance()+"米");
 //                tvDistance.setTextColor(Color.RED);
 //            }
+
+            double distance = Double.parseDouble(orderdetail.getDistance());
+            if (distance == 0) {
+                tvDistance.setText("已经到达装货地");
+            } else {
+                tvDistance.setText("距离装货地" + orderdetail.getDistance() + "公里");
+            }
+
             orderNumber.setText(orderdetail.getControlNum());
             startProvince.setText(orderdetail.getStartAddrProviceAndCity());
             stopProvince.setText(orderdetail.getStopAddrProviceAndCity());
@@ -407,7 +433,7 @@ public class ReceiveTransitOrderActivity extends Activity implements View.OnClic
         }
     }
 
-    Handler handler = new Handler(){
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
