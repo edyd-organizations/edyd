@@ -115,9 +115,9 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            transportOrderAdapter = new TransportOrderAdapter(TransportOrderDispatchActivity.this);
             switch (msg.what) {
                 case 1: //首次加载
-                    transportOrderAdapter = new TransportOrderAdapter(TransportOrderDispatchActivity.this);
                     transportOrderList.setAdapter(transportOrderAdapter);
                     dissmissProgressDialog();
                     break;
@@ -129,7 +129,10 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                     transportOrderAdapter.notifyDataSetChanged(); //通知ListView更新
                     break;
                 case HANDLER_NO_DATA_CODE: //暂无数据返回码
+                    transportDispatchList.clear();
                     mPullToRefreshScrollView.setRefreshing(false); //停止刷新
+                    //transportOrderAdapter.notifyDataSetChanged(); //通知ListView更新
+                    transportOrderList.setAdapter(transportOrderAdapter);
                     break;
             }
         }
@@ -169,8 +172,8 @@ public class TransportOrderDispatchActivity extends Activity implements View.OnC
                     if(rowJson.length() == 0) {
                         Toast.makeText(TransportOrderDispatchActivity.this, "暂无数据", Toast.LENGTH_SHORT).show();
                         message.what = HANDLER_NO_DATA_CODE;
-                        handler.sendMessage(message);
                         dissmissProgressDialog();
+                        handler.sendMessage(message);
                         return;
                     }
                     JSONObject jsonObjectItem = new JSONObject();

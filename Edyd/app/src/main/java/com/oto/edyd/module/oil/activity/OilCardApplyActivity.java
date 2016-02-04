@@ -492,7 +492,7 @@ public class OilCardApplyActivity extends Activity implements View.OnClickListen
                     jsonArray = jsonObject.getJSONArray("rows");
                     Message message = Message.obtain();
                     if(jsonArray.length() > 0) {
-                        common.showToast(context, "卡号已注册");
+                        common.showToast(context, "车牌号已注册");
                     } else {
                         message.what = HANDLER_AUTH_CODE; //卡号不存在
                     }
