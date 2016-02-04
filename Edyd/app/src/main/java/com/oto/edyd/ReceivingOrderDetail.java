@@ -89,6 +89,7 @@ public class ReceivingOrderDetail extends Activity {
 
     private Common common; //common偏好设置
     private int reOrderStatus; //订单状态
+    private TextView distance; //距离装货地
 
     TrackBean infos;
     @Override
@@ -150,6 +151,8 @@ public class ReceivingOrderDetail extends Activity {
         tvFourTime = (TextView) findViewById(R.id.tv_four_time);
         tvFiveTime = (TextView) findViewById(R.id.tv_five_time);
         tvSixTime = (TextView) findViewById(R.id.tv_six_time);
+        distance = (TextView) findViewById(R.id.distance_load_goods);
+
 
         goodsName = (TextView) findViewById(R.id.goods_name);
         goodsTotalVolume = (TextView) findViewById(R.id.goods_total_volume);
@@ -426,6 +429,7 @@ public class ReceivingOrderDetail extends Activity {
         startPoint.setText(orderDetail.getStartPoint());
         shipper.setText(orderDetail.getShipper());
         phoneNumber.setText(orderDetail.getPhoneNumber());
+        distance.setText(String.valueOf(orderdetail.getDistance()));
 
         switch (orderStatusLists.get(0)) {
             case 17: //未接单

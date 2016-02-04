@@ -441,11 +441,48 @@
                             android:textColor="@color/gray_818181"
                             android:text="福建晋江"/>
                     </RelativeLayout>
-                    <RelativeLayout
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp">
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="40dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/icon_dw" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="12dp"
+                            android:text="距离装货地"
+                            android:textColor="@color/red_fe020e"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/distance_load_goods"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/red_fe020e"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="公里"
+                            android:textColor="@color/red_fe020e"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
                         <RelativeLayout
+                            android:layout_marginTop="15dp"
                             android:id="@+id/l_start_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -467,7 +504,6 @@
                                 android:text="晋江市"
                                 android:textColor="@color/gray_5d5d5d"/>
                         </RelativeLayout>
-                    </RelativeLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
