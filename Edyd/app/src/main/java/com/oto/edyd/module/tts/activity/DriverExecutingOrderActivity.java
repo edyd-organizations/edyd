@@ -565,12 +565,25 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
                     Intent intent = new Intent(context, DriverGPSPathActivity.class);
                     if (driverExecutingOrderBean.getOrderStatus() == 20) {
                         //装货在途,导航到装货地
-                        intent.putExtra("PrimaryId", driverExecutingOrderBean.getSenderPrimaryId());
+                        long senderPrimary = driverExecutingOrderBean.getSenderPrimaryId();
+                        if (senderPrimary > 0) {
+                            intent.putExtra("PrimaryId", senderPrimary);
+                            startActivity(intent);
+                        } else {
+                            Common.showToast(context, "没有发货地经纬度");
+                        }
                     } else {
                         //导航到卸货地
-                        intent.putExtra("PrimaryId", driverExecutingOrderBean.getReceiverPrimaryId());
+                        long receiverPrimary = driverExecutingOrderBean.getReceiverPrimaryId();
+                        if (receiverPrimary > 0) {
+                            intent.putExtra("PrimaryId", receiverPrimary);
+                            startActivity(intent);
+                        }else {
+                            Common.showToast(context,"没有收货方经纬度");
+                        }
+
                     }
-                    startActivity(intent);
+
                     break;
             }
         }
