@@ -68,6 +68,7 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
     private final static int HANDLER_PULL_DOWN_REQUEST_CODE = 0x11; //下拉刷新成功返回
     private final static int HANDLER_UP_DOWN_REQUEST_CODE = 0x12; //上拉加载
     private final static int HANDLER_UPDATE_ORDER_CODE = 0x13; //订单更新成功返回码
+    private TextView tv_order_detail_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,8 @@ public class DriverWaitExecuteOrderActivity extends Activity implements View.OnC
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_container);
         context = DriverWaitExecuteOrderActivity.this;
         common = new Common(getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
+        tv_order_detail_title=(TextView)findViewById(R.id.tv_order_detail_title);
+        tv_order_detail_title.setText("待执行订单");
     }
 
     /**

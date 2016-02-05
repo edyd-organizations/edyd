@@ -187,7 +187,7 @@ public class ShipperHistoryOrderActivity extends Activity {
     private void requestData(final int loadType, String serachParames) {
 
         Common fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
-        String aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        String aspectType = Constant.SHIPPER_ROLE_ID+"";
         String orgCode = common.getStringByKey(Constant.ORG_CODE);
         String enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);

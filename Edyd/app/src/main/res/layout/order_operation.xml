@@ -32,7 +32,7 @@
             android:id="@+id/tv_order_detail_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/receive_order_title"
+            android:text="执行中订单"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="20sp"

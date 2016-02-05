@@ -130,7 +130,7 @@ public class OrderOperateActivity extends Activity implements View.OnClickListen
         if (flag == 0) {
             orderTitle.setText("待执行订单");
         } else {
-            orderTitle.setText("执行中的订单");
+            orderTitle.setText("执行中订单");
         }
         mPullToRefreshScrollView = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
     }

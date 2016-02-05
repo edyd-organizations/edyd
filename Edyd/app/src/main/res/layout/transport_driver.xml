@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textStyle="bold"
-                    android:text="执行中的订单"/>
+                    android:text="执行中订单"/>
             </LinearLayout>
         </LinearLayout>
         <View

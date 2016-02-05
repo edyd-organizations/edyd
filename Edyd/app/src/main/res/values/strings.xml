@@ -149,7 +149,7 @@
 
     <!--订单详情-->
     <string name="order_detail_title">订单详情</string>
-    <string name="executing_order">执行中的订单</string>
+    <string name="executing_order">执行中订单</string>
     <string name="transport_service">运输服务</string>
     <string name="receive_order_title">订单操作</string>
     <string name="history_transport_order">历史订单</string>

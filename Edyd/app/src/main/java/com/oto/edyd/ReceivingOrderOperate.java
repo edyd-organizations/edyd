@@ -226,7 +226,7 @@ public class ReceivingOrderOperate extends Activity implements View.OnClickListe
     private void requestData(final String serachParames) {
         Common fixedCommon = new Common(getSharedPreferences(Constant.FIXED_FILE, Context.MODE_PRIVATE));
         String sessionUuid = common.getStringByKey(Constant.SESSION_UUID);
-        aspectType = fixedCommon.getStringByKey(Constant.TRANSPORT_ROLE);
+        aspectType = Constant.RECEIVER_ROLE_ID+"";
         orgCode = common.getStringByKey(Constant.ORG_CODE);
         enterpriseId = common.getStringByKey(Constant.ENTERPRISE_ID);
         String sessionUUID = getSessionUUID();
