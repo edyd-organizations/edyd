@@ -188,6 +188,11 @@ public class OkHttpClientManager {
         getInstance().getPostDelegate().post(url, bodyStr);
     }
 
+    //============post方式文件上传============
+    public static void postAsyn(String url, String[] fileKeys, File[] files, Param[] params, ResultCallback callback) {
+        getInstance()._getUploadDelegate().postAsyn(url, fileKeys, files, params, callback);
+    }
+
     private String guessMimeType(String path) {
         FileNameMap fileNameMap = URLConnection.getFileNameMap();
         String contentTypeFor = fileNameMap.getContentTypeFor(path);
