@@ -205,7 +205,8 @@ public class CarrierHisOrderActivity extends Activity{
             @Override
             public void onError(Request request, Exception e) {
                 dimissLoading();
-                Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
+                Common.showToast(getApplicationContext(), "获取信息失败");
             }
 
             @Override
@@ -215,7 +216,8 @@ public class CarrierHisOrderActivity extends Activity{
                 try {
                     jsonObject = new JSONObject(response);
                     if (!jsonObject.getString("status").equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        Toast.makeText(getApplicationContext(), "返回信息失败", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), "返回信息失败", Toast.LENGTH_SHORT).show();
+                        Common.showToast(getApplicationContext(), "返回信息失败");
                         dimissLoading();
                         return;
                     }

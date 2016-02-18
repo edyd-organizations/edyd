@@ -9,10 +9,15 @@ import android.support.v4.net.ConnectivityManagerCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.oto.edyd.R;
 import com.oto.edyd.model.TrackLineBean;
 
 import org.json.JSONException;
@@ -36,7 +41,8 @@ public class Common {
 
     private CustomSharedPreferences cusSharedPreferences;
 
-    public Common(){}
+    public Common() {
+    }
 
     public Common(SharedPreferences sharedPreferences) {
         this.cusSharedPreferences = new CustomSharedPreferences(sharedPreferences);
@@ -44,6 +50,7 @@ public class Common {
 
     /**
      * 验证用户是否登入
+     *
      * @return
      */
     public boolean isLogin() {
@@ -52,6 +59,7 @@ public class Common {
 
     /**
      * 验证是否保存成功
+     *
      * @param map
      * @return
      */
@@ -61,18 +69,21 @@ public class Common {
 
     /**
      * 获取偏好中的字符串值
+     *
      * @param key
      * @return
      */
-    public String getStringByKey (String key) {
+    public String getStringByKey(String key) {
         return cusSharedPreferences.getPreferencesStringByKey(key);
     }
+
     public int getIntByKey(String key) {
         return cusSharedPreferences.getPreferencesIntByKey(key);
     }
 
     /**
      * 获取boolean值
+     *
      * @return
      */
     public boolean getBooleanByKey(String key) {
@@ -81,6 +92,7 @@ public class Common {
 
     /**
      * 清除账户信息
+     *
      * @return
      */
     public boolean isClearAccount() {
@@ -89,6 +101,7 @@ public class Common {
 
     /**
      * 删除SharedPreferences文件
+     *
      * @param packName
      */
     public boolean isDeleteSharedPreferencesFile(String packName, String fileName) {
@@ -97,18 +110,18 @@ public class Common {
 
     /**
      * 判断网络连通性
+     *
      * @param context
      * @return
      */
     public boolean isNetworkAvailable(Context context) {
-        ConnectivityManager netWorkManager = (ConnectivityManager )context.getSystemService(context.CONNECTIVITY_SERVICE);
-        if(netWorkManager == null ){
+        ConnectivityManager netWorkManager = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+        if (netWorkManager == null) {
             return false;
         }
         boolean isActive = netWorkManager.getActiveNetworkInfo().isAvailable();
         return isActive;
     }
-
 
 
     public static void printLog(String content) {
@@ -120,7 +133,7 @@ public class Common {
 
     public static void printErrLog(String content) {
         if (content != null) {
-                Log.e(android.os.Build.MODEL, content);
+            Log.e(android.os.Build.MODEL, content);
         }
     }
 
@@ -131,7 +144,6 @@ public class Common {
     }
 
 
-
     public static boolean checkDataIsJson(String value) {
         try {
             new JSONObject(value);
@@ -140,8 +152,8 @@ public class Common {
         }
         return true;
     }
-    public static String createJsonString(Object value)
-    {
+
+    public static String createJsonString(Object value) {
         Gson gson = new Gson();
         String str = gson.toJson(value);
         return str;
@@ -160,12 +172,47 @@ public class Common {
         return result;
     }
 
-    public static void showToast(Context context, String Msg) {
-        Toast.makeText(context.getApplicationContext(), Msg, Toast.LENGTH_SHORT).show();
+    private static Toast mToast;
+
+    public static void showCusToast(Context context, String message) {
+        if (mToast == null) {
+            mToast = new Toast(context);
+        }
+        LayoutInflater inflate = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflate.inflate(R.layout.toast_layout, null);
+        TextView tv = (TextView) v.findViewById(R.id.toast_content);
+        tv.setText(message);
+
+        mToast.setView(v);
+        mToast.setDuration(Toast.LENGTH_SHORT);
+        mToast.setGravity(Gravity.BOTTOM, 0, 100);
+        mToast.show();
     }
 
-    public static void showToastlong(Context context, String Msg) {
-        Toast.makeText(context.getApplicationContext(), Msg, Toast.LENGTH_LONG).show();
+
+    public static void showCusToastlong(Context context, String message) {
+        if (mToast == null) {
+            mToast = new Toast(context);
+        }
+        LayoutInflater inflate = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflate.inflate(R.layout.toast_layout, null);
+        TextView tv = (TextView) v.findViewById(R.id.toast_content);
+        tv.setText(message);
+
+        mToast.setView(v);
+        mToast.setDuration(Toast.LENGTH_LONG);
+        mToast.setGravity(Gravity.BOTTOM, 0, 100);
+        mToast.show();
+    }
+
+    public static void showToastlong(Context context, String message) {
+        Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showToast(Context context, String message) {
+        Toast.makeText(context,message,Toast.LENGTH_LONG).show();
     }
 
     public static String getStringByUrl(String urlStr) {
@@ -216,6 +263,7 @@ public class Common {
 
     /**
      * 把json字符窜转化成对象；
+     *
      * @param jsonData
      * @return
      */
@@ -237,6 +285,7 @@ public class Common {
 
     /**
      * 设置小数只能是两位
+     *
      * @param editText
      */
     public static void setPricePoint(final EditText editText) {

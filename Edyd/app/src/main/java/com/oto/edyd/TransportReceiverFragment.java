@@ -117,7 +117,8 @@ public class TransportReceiverFragment extends Fragment implements View.OnClickL
             @Override
             public void onError(Request request, Exception e) {
                 dissmissProgressDialog();
-                Toast.makeText(getActivity(), "获取信息异常", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "获取信息异常", Toast.LENGTH_SHORT).show();
+                Common.showToast(getActivity(), "获取信息异常");
             }
 
             @Override

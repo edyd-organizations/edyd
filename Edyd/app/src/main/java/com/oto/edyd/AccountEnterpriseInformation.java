@@ -79,7 +79,8 @@ public class AccountEnterpriseInformation extends Fragment implements View.OnCli
                 switch (position) {
                     case 0:
                         if (confirmStatus == 2) {
-                            Toast.makeText(getActivity(), "企业已认证不能修改", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getActivity(), "企业已认证不能修改", Toast.LENGTH_SHORT).show();
+                            Common.showToast(getActivity(), "企业已认证不能修改");
                             return;
                         }
                         transaction.replace(R.id.common_frame, modifyEnterInfo);
@@ -112,7 +113,8 @@ public class AccountEnterpriseInformation extends Fragment implements View.OnCli
                         transaction.commit();
                         break;
                     case 6:
-                        Toast.makeText(getActivity(), "认证状态不能修改", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "认证状态不能修改", Toast.LENGTH_SHORT).show();
+                        Common.showToast(getActivity(), "认证状态不能修改");
                         break;
                 }
             }
@@ -201,7 +203,8 @@ public class AccountEnterpriseInformation extends Fragment implements View.OnCli
                     enterInfoJson = new JSONObject(response);
                     String status = enterInfoJson.getString("status");
                     if(!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        Toast.makeText(getActivity(), "获取企业信息失败", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "获取企业信息失败", Toast.LENGTH_SHORT).show();
+                           Common.showToast(getActivity(), "获取企业信息失败");
                     }
                     enterInfoArray = enterInfoJson.getJSONArray("rows");
                     JSONObject enterInfoDetailJson = enterInfoArray.getJSONObject(0);

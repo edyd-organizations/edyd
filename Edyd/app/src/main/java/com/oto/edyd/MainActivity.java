@@ -487,7 +487,7 @@ public class MainActivity extends SlidingFragmentActivity implements View.OnClic
                 break;
             case 3: //运输服务
                 if (!common.isLogin()) {
-                    Toast.makeText(context, "用户未登录，请先登录", Toast.LENGTH_LONG).show();
+                    common.showToast(context, "用户未登录，请先登录");
 //                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 //                    startActivityForResult(intent, 0x03);
                     return;

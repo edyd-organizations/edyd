@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
@@ -69,7 +70,8 @@ public class ChooseCity extends Activity {
 
             @Override
             public void onError(Request request, Exception e) {
-                Toast.makeText(ChooseCity.this, "下载失败", Toast.LENGTH_LONG).show();
+//                Toast.makeText(ChooseCity.this, "下载失败", Toast.LENGTH_LONG).show();
+                Common.showToast(ChooseCity.this, "下载失败");
             }
 
             @Override
@@ -107,7 +109,8 @@ public class ChooseCity extends Activity {
                     handler.sendMessage(msg);
                     dialog.dismissDialog();
                 } catch (JSONException e) {
-                    Toast.makeText(ChooseCity.this, "暂时未开通查询", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(ChooseCity.this, "暂时未开通查询", Toast.LENGTH_SHORT).show();
+                    Common.showToast(ChooseCity.this, "暂时未开通查询");
                     dialog.dismissDialog();
                     e.printStackTrace();
                 }

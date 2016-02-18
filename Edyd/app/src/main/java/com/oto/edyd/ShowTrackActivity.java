@@ -51,7 +51,8 @@ import java.util.List;
  * Created by liubaozhong on 2015/12/1.
  * 显示地图轨迹。
  */
-public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickListener, AMap.InfoWindowAdapter, AMap.OnInfoWindowClickListener, AMap.OnMapLoadedListener {
+public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickListener, AMap.InfoWindowAdapter,
+        AMap.OnMapLoadedListener, AMap.OnMapClickListener {
     private static final int SHOW_TRACK = 1;//显示轨迹
     private static final int SHOW_POLYLINE = 0;//显示折线
 
@@ -74,6 +75,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     private TextView tv_traffic_detail;
     private LinearLayout ll_switch_track;//轨迹图和折线图的切换按钮
     private boolean isTrack = false;//表示现在地图上显示的是否是轨迹
+    private List<Marker> markers = new ArrayList<Marker>();
 
     private boolean isShippingEndPoint = false;
 
@@ -93,7 +95,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                         markerOptions.position(senderPoint);
                         markerOptions.title("发货方公司").draggable(true).anchor(0.5f, 1.0f);
                         Marker marker = aMap.addMarker(markerOptions);
-//                        marker.showInfoWindow();
+                        markers.add(marker);
 
                         //收货人终点坐标
                         LatLng receiverPoint = new LatLng(tlb.getReceiverLat(), tlb.getReceiverLng());
@@ -103,7 +105,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
                         marOptions.position(receiverPoint);
                         marOptions.title("收货方公司").draggable(true).anchor(0.5f, 1.0f);
                         Marker receiverMarker = aMap.addMarker(marOptions);
-//                        receiverMarker.showInfoWindow();
+                        markers.add(receiverMarker);
                     }
                     //画轨迹线
                     PolylineOptions line = new PolylineOptions();
@@ -241,20 +243,20 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
         markerOptions.position(new LatLng(point.getLat(), point.getLng()));
         markerOptions.title("车辆信息").draggable(true).anchor(0.5f, 1.0f);
         Marker marker = aMap.addMarker(markerOptions);
-
         marker.setObject(point);
+        markers.add(marker);
 //        marker.showInfoWindow();
 
     }
-
 
     private void setUpMap() {
         aMap.setMapType(AMap.MAP_TYPE_NORMAL); // 矢量地图模式
         aMap.setOnMarkerClickListener(this);// 设置点击marker事件监听器
 //        aMap.setOnMapLoadedListener(this);// 设置amap加载成功事件监听器
         aMap.setMyLocationEnabled(true);//默认地图可以自动定位
-        aMap.setOnInfoWindowClickListener(this);// 设置点击infoWindow事件监听器
+//        aMap.setOnInfoWindowClickListener(this);// 设置点击infoWindow事件监听器
         aMap.setInfoWindowAdapter(this);// 设置自定义InfoWindow样式
+        aMap.setOnMapClickListener(this);//设置地图点击监听
     }
 
     /**
@@ -266,7 +268,6 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
             loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
         }
         loadingDialog.getLoadingDialog().show();
-
     }
 
     /**
@@ -479,6 +480,7 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        markers.clear();
         mapView.onDestroy();
     }
 
@@ -558,9 +560,9 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
     }
 
     @Override
-    public void onInfoWindowClick(Marker marker) {
-        marker.hideInfoWindow();
-    }
+//    public void onInfoWindowClick(Marker marker) {
+//        marker.hideInfoWindow();
+//    }
 
 
     public void
@@ -580,5 +582,13 @@ public class ShowTrackActivity extends Activity implements AMap.OnMarkerClickLis
             aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
         }
 
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        for (Marker marker : markers) {
+            marker.hideInfoWindow();
+
+        }
     }
 }

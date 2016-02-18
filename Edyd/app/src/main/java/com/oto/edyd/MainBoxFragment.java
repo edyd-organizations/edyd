@@ -74,7 +74,7 @@ public class MainBoxFragment extends Fragment implements View.OnClickListener {
             case R.id.violate_check: //违章查询
                 common = new Common(getActivity().getSharedPreferences(Constant.LOGIN_PREFERENCES_FILE, Context.MODE_PRIVATE));
                 if (!common.isLogin()) {
-                    Toast.makeText(getActivity(), "用户未登录，请先登录", Toast.LENGTH_LONG).show();
+                    common.showToast(getActivity(), "用户未登录，请先登录");
                     return;
                 }
                 intent = new Intent(getActivity(),ViolateCheckActivity.class);

@@ -76,7 +76,8 @@ public class AccountInformationFragment extends Fragment implements View.OnClick
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 switch (position) {
                     case 0:
-                        Toast.makeText(getActivity(), "手机号码不能修改", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "手机号码不能修改", Toast.LENGTH_SHORT).show();
+                        Common.showToast(getActivity(), "手机号码不能修改");
                         break;
                     case 1:
 //                        if (confirmStatus == 2) {
@@ -86,7 +87,8 @@ public class AccountInformationFragment extends Fragment implements View.OnClick
 //                        transaction.replace(R.id.common_frame, modifyPersonInfo);
 //                        transaction.addToBackStack(null);
 //                        transaction.commit();
-                        Toast.makeText(getActivity(), "用户名不能修改", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "用户名不能修改", Toast.LENGTH_SHORT).show();
+                        Common.showToast(getActivity(), "用户名不能修改");
                         break;
                     case 2:
                         ModifySex modifySex = ModifySex.newInstance(updatePerson);
@@ -100,7 +102,8 @@ public class AccountInformationFragment extends Fragment implements View.OnClick
                         transaction.commit();
                         break;
                     case 4:
-                        Toast.makeText(getActivity(), "认证状态不能修改", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "认证状态不能修改", Toast.LENGTH_SHORT).show();
+                        Common.showToast(getActivity(), "认证状态不能修改");
                         break;
                 }
             }
@@ -200,7 +203,8 @@ public class AccountInformationFragment extends Fragment implements View.OnClick
                     accountInfoJson = new JSONObject(response);
                     String status = accountInfoJson.getString("status");
                     if (!status.equals(Constant.LOGIN_SUCCESS_STATUS)) {
-                        Toast.makeText(getActivity(), "个人信息获取失败", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "个人信息获取失败", Toast.LENGTH_SHORT).show();
+                        Common.showToast(getActivity(), "个人信息获取失败");
                         return;
                     }
                     accountInfoArray = accountInfoJson.getJSONArray("rows");

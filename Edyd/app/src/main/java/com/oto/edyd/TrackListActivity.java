@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -174,7 +175,7 @@ public class TrackListActivity extends Activity {
             public void onError(Request request, Exception e) {
                 loadingDialog.getLoadingDialog().dismiss();
                 swipe_container.setRefreshing(false);
-                Toast.makeText(getApplicationContext(), "获取信息异常", Toast.LENGTH_SHORT).show();
+                Common.showToast(mActivity, "获取信息异常");
             }
 
             @Override
@@ -275,18 +276,28 @@ public class TrackListActivity extends Activity {
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            View v = View.inflate(mActivity, R.layout.track_list_item, null);
-            TextView tv_controlnum = (TextView) v.findViewById(R.id.tv_controlnum);
-            TextView tv_trucknum = (TextView) v.findViewById(R.id.tv_trucknum);
-            TextView tv_reservenum = (TextView) v.findViewById(R.id.tv_reservenum);
-            TextView tv_orderdate = (TextView) v.findViewById(R.id.tv_orderdate);
-            ImageView iv_track_status = (ImageView) v.findViewById(R.id.iv_track_status);
+        public View getView(int i, View convertView, ViewGroup viewGroup) {
+
+            View view;
+            ViewHolder holder;
+            if (convertView != null) {
+                view = convertView;
+                holder = (ViewHolder) view.getTag();
+            } else {
+                holder = new ViewHolder();
+                view=View.inflate(mActivity, R.layout.track_list_item, null);
+                holder.tv_controlnum = (TextView) view.findViewById(R.id.tv_controlnum);
+                holder.tv_trucknum = (TextView) view.findViewById(R.id.tv_trucknum);
+                holder.tv_reservenum = (TextView) view.findViewById(R.id.tv_reservenum);
+                holder.tv_orderdate = (TextView) view.findViewById(R.id.tv_orderdate);
+                holder.iv_track_status = (ImageView) view.findViewById(R.id.iv_track_status);
+                view.setTag(holder);
+            }
             TrackBean bean = infos.get(i);
-            tv_controlnum.setText(bean.getControlNum());
-            tv_trucknum.setText(bean.getTruckNum());
-            tv_reservenum.setText(bean.getReserveNum());
-            tv_orderdate.setText(bean.getOrderDate());
+            holder.tv_controlnum.setText(bean.getControlNum());
+            holder.tv_trucknum.setText(bean.getTruckNum());
+            holder.tv_reservenum.setText(bean.getReserveNum());
+            holder.tv_orderdate.setText(bean.getOrderDate());
             //设置状态背景
             int controlStatus = bean.getControlStatus();
             switch (controlStatus) {
@@ -296,46 +307,38 @@ public class TrackListActivity extends Activity {
                     break;
                 case 20:
 //                    "装货在途";
-                    iv_track_status.setImageResource(R.mipmap.tts_loading_way2); //装货在途icon
+                    holder.iv_track_status.setImageResource(R.mipmap.tts_loading_way2); //装货在途icon
                     break;
                 case 30:
 //                    "到达装货";
-                    iv_track_status.setImageResource(R.mipmap.tts_arrived_load2); //到达装货icon
+                    holder.iv_track_status.setImageResource(R.mipmap.tts_arrived_load2); //到达装货icon
                     break;
                 case 40:
 //                    "装货完成";
-                    iv_track_status.setImageResource(R.mipmap.tts_zhuanghuo_finish2); //装货完成icon
+                    holder.iv_track_status.setImageResource(R.mipmap.tts_zhuanghuo_finish2); //装货完成icon
                     break;
                 case 50:
 //                    "送货在途";
-                    iv_track_status.setImageResource(R.mipmap.tts_delivery_way2); //送货在途icon
+                    holder.iv_track_status.setImageResource(R.mipmap.tts_delivery_way2); //送货在途icon
                     break;
                 case 60:
 //                    "到达收货";
-                    iv_track_status.setImageResource(R.mipmap.tts_arrived_receive2); //到达收货icon
+                    holder.iv_track_status.setImageResource(R.mipmap.tts_arrived_receive2); //到达收货icon
                     break;
                 case 99:
 //                    "收货完成";
-                    iv_track_status.setImageResource(R.mipmap.finished_receive2);
+                    holder.iv_track_status.setImageResource(R.mipmap.finished_receive2);
                     break;
             }
-            return v;
+            return view;
         }
     }
 
-//    public abstract class FoginResultCallback<T> extends OkHttpClientManager.ResultCallback<T> {
-//
-//        @Override
-//        public void onAfter() {
-//            //super.onAfter();
-//            loadingDialog = new CusProgressDialog(mActivity, "正在获取数据...");
-//            loadingDialog.getLoadingDialog().show();
-//        }
-//
-//        @Override
-//        public void onBefore() {
-//            //super.onBefore();
-//            loadingDialog.getLoadingDialog().dismiss();
-//        }
-//    }
+    static class ViewHolder {
+        TextView tv_controlnum;
+        TextView tv_trucknum;
+        TextView tv_reservenum;
+        TextView tv_orderdate;
+        ImageView iv_track_status;
+    }
 }
