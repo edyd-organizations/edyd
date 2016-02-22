@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -124,7 +125,9 @@ public class FileUploadActivity extends Activity implements View.OnClickListener
             int columnIndex = cursor.getColumnIndexOrThrow(pojo[0]);
             cursor.moveToFirst();
             picPath = cursor.getString(columnIndex);
-            cursor.close();
+            if(Build.VERSION.SDK_INT < 14) {
+                cursor.close();
+            }
         }
         Log.i(TAG, "imagePath = " + picPath);
 
