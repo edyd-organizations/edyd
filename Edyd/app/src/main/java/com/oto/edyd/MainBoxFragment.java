@@ -77,7 +77,7 @@ public class MainBoxFragment extends Fragment implements View.OnClickListener {
                     common.showToast(getActivity(), "用户未登录，请先登录");
                     return;
                 }
-                intent = new Intent(getActivity(),ViolateCheckActivity.class);
+                intent = new Intent(getActivity(),QueryViolateActivity.class);
                 startActivity(intent);
                 break;
             case R.id.violate_payment: //违章缴费

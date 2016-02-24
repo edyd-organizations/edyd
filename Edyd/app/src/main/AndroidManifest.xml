@@ -367,6 +367,9 @@
         <activity
             android:name=".ShipperHisOrderDetailActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".QueryViolateActivity"
+            android:screenOrientation="portrait" />
         <!-- 社交分享 -->
         <activity
             android:name=".wxapi.WXEntryActivity"

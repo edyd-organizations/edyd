@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
 
-    signingConfigs {
-        release {
-            storeFile file("F:/key/key/edyd.keystore")
-            storePassword "123456"
-            keyAlias "android.keystore"
-            keyPassword "123456"
-        }
-    }
+//    signingConfigs {
+//        release {
+//            storeFile file("F:/key/key/edyd.keystore")
+//            storePassword "123456"
+//            keyAlias "android.keystore"
+//            keyPassword "123456"
+//        }
+//    }
     compileSdkVersion 23
     buildToolsVersion "23.0.0"
     defaultConfig {
@@ -20,13 +20,13 @@ android {
         versionName "2.0.3"
 //        multiDexEnabled true
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-    }
+//    buildTypes {
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.release
+//        }
+//    }
     sourceSets.main {
         jniLibs.srcDirs = ['libs']
     }
