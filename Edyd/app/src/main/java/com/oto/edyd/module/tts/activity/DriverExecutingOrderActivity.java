@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.oto.edyd.DriverGPSPathActivity;
 import com.oto.edyd.OrderDetailActivity;
 import com.oto.edyd.R;
+import com.oto.edyd.module.tts.components.MDialog;
 import com.oto.edyd.module.tts.model.DriverExecutingOrderBean;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -39,6 +40,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -489,28 +491,53 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
 
         @Override
         public void onClick(View v) {
-            DriverExecutingOrderBean driverExecutingOrderBean = driverExecutingOrderBeanList.get(position);
+            final DriverExecutingOrderBean driverExecutingOrderBean = driverExecutingOrderBeanList.get(position);
+            String operate = ((TextView)v).getText().toString();
             switch (v.getId()) {
                 case R.id.receive_order:
                     if ((((TextView) v).getText().toString().equals("完成订单"))) {
                         Toast.makeText(getApplicationContext(), "订单已完成，不能操作", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    new AlertDialog.Builder(context).setTitle("接单")
-                            .setMessage("确认" + ((TextView) v).getText().toString() + "吗？")
-                            .setPositiveButton("是", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    DriverExecutingOrderBean driverExecutingOrderBean = driverExecutingOrderBeanList.get(position);
-                                    updateExecutingOrder(String.valueOf(driverExecutingOrderBean.getId()), String.valueOf(driverExecutingOrderBean.getOrderStatus()));
-                                }
-                            })
-                            .setNegativeButton("否", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+//                    new AlertDialog.Builder(context).setTitle("接单")
+//                            .setMessage("确认" + ((TextView) v).getText().toString() + "吗？")
+//                            .setPositiveButton("是", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    DriverExecutingOrderBean driverExecutingOrderBean = driverExecutingOrderBeanList.get(position);
+//                                    updateExecutingOrder(String.valueOf(driverExecutingOrderBean.getId()), String.valueOf(driverExecutingOrderBean.getOrderStatus()));
+//                                }
+//                            })
+//                            .setNegativeButton("否", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//
+//                                }
+//                            }).show();
+                    final MDialog mDialog = new MDialog(context, "订单操作", operate, operate, "取消");
+                    mDialog.show();
+                    mDialog.setClickListener(new MDialog.ClickListenerInterface() {
+                        @Override
+                        public void firstButtonOperate() {
+                            updateExecutingOrder(String.valueOf(driverExecutingOrderBean.getId()), String.valueOf(driverExecutingOrderBean.getOrderStatus()));
+                            mDialog.dismiss();
+                        }
 
-                                }
-                            }).show();
+                        @Override
+                        public void secondButtonOperate() {
+                            Intent intent = new Intent(DriverExecutingOrderActivity.this, ImageCaptureActivity.class);
+                            intent.putExtra("controlId", driverExecutingOrderBean.getId());
+                            intent.putExtra("orderStatus", driverExecutingOrderBean.getOrderStatus());
+                            startActivityForResult(intent, 0x10);
+                            mDialog.dismiss();
+                        }
+
+                        @Override
+                        public void thirdButtonOperate() {
+                            //取消按钮
+                            mDialog.dismiss();
+                        }
+                    });
                     break;
                 case R.id.dialog_one:
                     final String content = driverExecutingOrderBean.getsMobilePhoneNumber();
@@ -626,6 +653,9 @@ public class DriverExecutingOrderActivity extends Activity implements View.OnCli
             driverExecutingOrderBean.setOrderStatus(controlStatus);
             driverExecutingOrderBeanList.set(position, driverExecutingOrderBean);
             executingOrderListAdapter.notifyDataSetChanged();
+        }
+        if(resultCode == 0x11) {
+            requestExecutingOrderData(1, ROWS, Constant.SECOND_LOAD);
         }
     }
 }

@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.amap.api.maps.LocationSource;
 import com.oto.edyd.model.OrderDetail;
 import com.oto.edyd.model.OrderPerTime;
+import com.oto.edyd.module.tts.activity.ImageCaptureActivity;
+import com.oto.edyd.module.tts.components.MDialog;
 import com.oto.edyd.service.TimerService;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
@@ -727,28 +729,59 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
         }
         @Override
         public void onClick(View v) {
+            String operate = ((TextView)v).getText().toString();
             switch (v.getId()) {
                 case R.id.detail_receive_order:
-                    if((((TextView)v).getText().toString().equals("完成订单"))) {
+                    if((operate.equals("完成订单"))) {
                         Toast.makeText(getApplicationContext(), "订单已完成，不能操作", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    new AlertDialog.Builder(OrderDetailActivity.this).setTitle("接单")
-                            .setMessage("确认"+((TextView)v).getText().toString()+"吗？")
-                            .setPositiveButton("是", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    operationOrder(orderDetail);
-                                }
-                            })
-                            .setNegativeButton("否", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+//                    new AlertDialog.Builder(OrderDetailActivity.this).setTitle("接单")
+//                            .setMessage("确认"+((TextView)v).getText().toString()+"吗？")
+//                            .setPositiveButton("是", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    operationOrder(orderDetail);
+//                                }
+//                            })
+//                            .setNegativeButton("否", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//
+//                                }
+//                            }).show();
+                    final MDialog mDialog = new MDialog(OrderDetailActivity.this, "订单操作", operate, operate, "取消");
+                    mDialog.show();
+                    mDialog.setClickListener(new MDialog.ClickListenerInterface() {
+                        @Override
+                        public void firstButtonOperate() {
+                            operationOrder(orderDetail);
+                            mDialog.dismiss();
+                        }
 
-                                }
-                            }).show();
+                        @Override
+                        public void secondButtonOperate() {
+                            Intent intent = new Intent(OrderDetailActivity.this, ImageCaptureActivity.class);
+                            intent.putExtra("controlId", orderDetail.getControlId());
+                            startActivityForResult(intent, 0x10);
+                            mDialog.dismiss();
+                        }
+
+                        @Override
+                        public void thirdButtonOperate() {
+                            //取消按钮
+                            mDialog.dismiss();
+                        }
+                    });
                     break;
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == 0x11) {
+            requestOrderDetailData(primaryId);
         }
     }
 }

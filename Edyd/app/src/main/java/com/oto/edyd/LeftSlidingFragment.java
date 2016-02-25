@@ -206,10 +206,8 @@ public class LeftSlidingFragment extends Fragment implements View.OnClickListene
                 intent.putExtra("wait_title", "我的钱包");
                 startActivity(intent);
             } else if(menuDes.equals("账户类型")){
-//                intent = new Intent(context, com.oto.edyd.module.usercenter.activity.AccountTypeActivity.class);
-//                startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
-                intent = new Intent(context, FileUploadActivity.class);
-                startActivity(intent);
+                intent = new Intent(context, com.oto.edyd.module.usercenter.activity.AccountTypeActivity.class);
+                startActivityForResult(intent, Constant.ACTIVITY_RETURN_CODE);
             } else if(menuDes.equals("公告通知")){
                 //intent = new Intent(getActivity().getApplicationContext(), WaitBuild.class);
                 //intent.putExtra("wait_title", "公告通知");
