@@ -21,6 +21,7 @@ import com.oto.edyd.model.DistributionBean;
 import com.oto.edyd.model.OilAmountDistribute;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 
@@ -45,6 +46,7 @@ public class DistributionDetailedSearchActivity extends Activity {
     private String enterpriseId;
     private DistributeDetailAdapter adapter;
     private Context mActivity;
+    private CusProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class DistributionDetailedSearchActivity extends Activity {
     private void initView() {
         listview_result = (ListView) findViewById(R.id.list_distribute_user_seek);
         input_number_or_card = (EditText) findViewById(R.id.input_number_or_card);
+        dialog = new CusProgressDialog(DistributionDetailedSearchActivity.this);
         input_number_or_card.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -148,8 +151,8 @@ public class DistributionDetailedSearchActivity extends Activity {
 
         String url = Constant.ENTRANCE_PREFIX + "inqueryOilBindingListInEnterpriseApp.json?sessionUuid="
                 + sessionUuid + "&enterpriseId=" + enterpriseId + "&cardId=" + cardId + "&OrgCode=" + orgCode;
-        Common.printErrLog(url);
-        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+        //Common.printErrLog(url);
+        OkHttpClientManager.getAsyn(url, new OilDistributeResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
                 Toast.makeText(getApplicationContext(), "获取信息失败", Toast.LENGTH_SHORT).show();
@@ -159,7 +162,7 @@ public class DistributionDetailedSearchActivity extends Activity {
             @Override
             public void onResponse(String response) {
 
-                Common.printErrLog("获取查询信息" + response);
+                //Common.printErrLog("获取查询信息" + response);
                 JSONObject jsonObject;
                 JSONArray jsonArray;
                 try {
@@ -214,6 +217,18 @@ public class DistributionDetailedSearchActivity extends Activity {
             balance_mon.setText(bean.getCardBalance() + "");
             tv_provisions.setText(bean.getProvisionsMoney()+"");
             return itemView;
+        }
+    }
+
+    abstract  class OilDistributeResultCallback<T> extends OkHttpClientManager.ResultCallback<T>{
+        @Override
+        public void onBefore() {
+            dialog.showDialog();
+        }
+
+        @Override
+        public void onAfter() {
+            dialog.dismissDialog();
         }
     }
 }

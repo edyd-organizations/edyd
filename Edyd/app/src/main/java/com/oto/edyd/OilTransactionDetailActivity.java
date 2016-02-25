@@ -24,6 +24,7 @@ import com.oto.edyd.model.OilTransactionDetailItem;
 import com.oto.edyd.module.oil.activity.OilCardApplyActivity;
 import com.oto.edyd.utils.Common;
 import com.oto.edyd.utils.Constant;
+import com.oto.edyd.utils.CusProgressDialog;
 import com.oto.edyd.utils.OkHttpClientManager;
 import com.squareup.okhttp.Request;
 
@@ -50,6 +51,7 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
     private ExpandableListView distributeDetailList; //分配明细列表
     private TextView tOilCardApply; //油卡申请
     private TextView tAmountDistribute; //金额分配
+    private CusProgressDialog dialog;
 
     private List<OilTransactionDetail> oilDistributeDetails = new ArrayList<OilTransactionDetail>(); //列表数据
     Map<Integer, OilTransactionDetailItem> oilTransactionDetailItemMap = new HashMap<Integer, OilTransactionDetailItem>();
@@ -83,6 +85,7 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
         distributeDetailList.setGroupIndicator(null);
         tOilCardApply = (TextView) findViewById(R.id.oil_card_apply);
         tAmountDistribute = (TextView) findViewById(R.id.oil_card_account_distribute);
+        dialog = new CusProgressDialog(OilTransactionDetailActivity.this);
     }
 
     @Override
@@ -141,7 +144,7 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
             url = Constant.ENTRANCE_PREFIX + "inquireOilCardDetail.json?sessionUuid=" + sessionUuid + "&enterpriseId=" + enterpriseId+
                     "&orgCode=" + orgCode + "&cardId=" + oilCardInfo.getCardId();
         }
-        OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+        OkHttpClientManager.getAsyn(url, new OilTransactionResultCallback<String> () {
             @Override
             public void onError(Request request, Exception e) {
 
@@ -384,6 +387,18 @@ public class OilTransactionDetailActivity extends Activity implements View.OnCli
         @Override
         public boolean isChildSelectable(int groupPosition, int childPosition) {
             return true;
+        }
+    }
+
+    abstract  class OilTransactionResultCallback<T> extends OkHttpClientManager.ResultCallback<T>{
+        @Override
+        public void onBefore() {
+            dialog.showDialog();
+        }
+
+        @Override
+        public void onAfter() {
+            dialog.dismissDialog();
         }
     }
 }

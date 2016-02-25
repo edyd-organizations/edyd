@@ -202,7 +202,7 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
             }
 
 
-            OkHttpClientManager.getAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+            OkHttpClientManager.getAsyn(url, new SelectCardResultCallback<String>() {
                 @Override
                 public void onError(Request request, Exception e) {
 
@@ -399,4 +399,5 @@ public class SelectCardActivity extends Activity implements View.OnClickListener
             cusProgressDialog.getLoadingDialog().dismiss();
         }
     }
+
 }
