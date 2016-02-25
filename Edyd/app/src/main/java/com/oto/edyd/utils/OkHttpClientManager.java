@@ -652,8 +652,7 @@ public class OkHttpClientManager {
             MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
 
             for (Param param : params) {
-                builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + param.key + "\""),
-                        RequestBody.create(null, param.value));
+                builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + param.key + "\""), RequestBody.create(null, param.value));
             }
             if (files != null) {
                 RequestBody fileBody = null;
