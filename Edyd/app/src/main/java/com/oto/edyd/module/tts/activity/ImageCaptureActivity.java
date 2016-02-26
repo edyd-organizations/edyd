@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -113,6 +115,8 @@ public class ImageCaptureActivity extends Activity implements View.OnClickListen
         //file = getOutputMediaFile(MEDIA_TYPE_IMAGE);
         if(sysCameraUri !=null) {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, sysCameraUri); //设置图片输出路径后，onActivityResult函数参数data将不会返回数据
+            intent.putExtra(MediaStore.Images.Media.ORIENTATION, 0);
+            intent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, 90);
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
     }
@@ -149,6 +153,7 @@ public class ImageCaptureActivity extends Activity implements View.OnClickListen
 
     private File getOutputMediaFile(int type){
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "EdydTmp"); //获取SD卡存储图片路径
+        delAllFile(mediaStorageDir.getAbsolutePath());
         totalPath = mediaStorageDir.getAbsolutePath();
         //判断路径是否存在
         if (!mediaStorageDir.exists()){
@@ -231,7 +236,8 @@ public class ImageCaptureActivity extends Activity implements View.OnClickListen
                 e.printStackTrace();
             }
         }
-        capturePicture.setImageBitmap(bm);
+        //int degrees = readPictureDegree(file.getAbsolutePath());
+        capturePicture.setImageBitmap(bm); //设置旋转角度
         //文件上传file对象, fileName, filePath
         String fileName =  file.getName();
         fileKey[0] = fileName;
@@ -352,11 +358,49 @@ public class ImageCaptureActivity extends Activity implements View.OnClickListen
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK) {
-            delAllFile(totalPath);
-            finish();
-            return false;
-        }
+        delAllFile(totalPath);
         return super.onKeyDown(keyCode, event);
+    }
+
+    /*
+    * 旋转图片
+    * @param angle
+    * @param bitmap
+    * @return Bitmap
+    */
+    public static Bitmap rotateImageView(int angle , Bitmap bitmap) {
+        //旋转图片 动作
+        Matrix matrix = new Matrix();;
+        matrix.postRotate(angle);
+        //System.out.println("angle2=" + angle);
+        // 创建新的图片
+        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        return resizedBitmap;
+    }
+    /**
+     * 读取图片属性：旋转的角度
+     * @param path 图片绝对路径
+     * @return degree旋转的角度
+     */
+    public static int readPictureDegree(String path) {
+        int degree  = 0;
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
     }
 }
